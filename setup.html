@@ -50,8 +50,11 @@
             10% {
                 opacity: 1;
             }
+            70% {
+                opacity: 1;
+            }
             90% {
-                opacity: 0.5;
+                opacity: 0.3;
             }
             100% {
                 transform: translateY(-100px) rotate(360deg);
@@ -131,6 +134,11 @@
         .form-group input:focus {
             outline: none;
             border-color: #fcb69f;
+        }
+
+        .form-group input:disabled {
+            background-color: #f8f9fa;
+            color: #6c757d;
         }
 
         .instagram-prefix {
@@ -425,6 +433,10 @@
             <button type="submit" class="submit-button" id="submitBtn">
                 Activate My Shirt 🚀
             </button>
+            
+            <button type="button" class="submit-button" id="editBtn" onclick="enableEditing()" style="display: none; background: linear-gradient(45deg, #6c757d, #adb5bd);">
+                Edit Information ✏️
+            </button>
         </form>
 
         <div class="bottom-text">
@@ -445,14 +457,16 @@
             <div class="qr-link-section">
                 <div class="qr-link-title">Your QR Code Link:</div>
                 <div class="qr-link" id="qrLinkText"></div>
-                <button class="copy-button" id="copyButton" onclick="copyQRLink()">
-                    📋 Copy Link
-                </button>
             </div>
             
-            <button class="close-popup" onclick="closeSuccessPopup()">
-                Go to Site 🚀
-            </button>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button class="copy-button" onclick="copyQRLink()" style="flex: 1;">
+                    📋 Copy Link
+                </button>
+                <button class="close-popup" onclick="openSiteAndClose()" style="flex: 1;">
+                    Go to Site 🚀
+                </button>
+            </div>
         </div>
     </div>
 
@@ -506,15 +520,18 @@
             try {
                 const shirtId = getShirtId();
                 
-                // שמירת הנתונים ב-Firebase
+                // שמירת/עדכון הנתונים ב-Firebase
                 await setDoc(doc(db, "shirts", shirtId), {
                     instagram: instagram,
                     message: message,
                     createdAt: new Date(),
                     lastUpdated: new Date()
-                });
+                }, { merge: true }); // merge: true מאפשר עדכון של רשומה קיימת
 
                 submitBtn.textContent = 'Saved! ✅';
+                
+                // הצגת כפתור העריכה
+                document.getElementById('editBtn').style.display = 'block';
                 
                 // הצגת הקישור הסופי
                 const finalUrl = `https://qr.wearablecode.com/index.html?id=${shirtId}`;
@@ -531,10 +548,28 @@
             }
         });
 
+        // אפשר עריכה שוב
+        function enableEditing() {
+            const submitBtn = document.getElementById('submitBtn');
+            const editBtn = document.getElementById('editBtn');
+            
+            submitBtn.textContent = 'Update My Shirt 🔄';
+            submitBtn.disabled = false;
+            editBtn.style.display = 'none';
+            
+            // אפשר עריכה של השדות
+            document.getElementById('instagram').disabled = false;
+            document.getElementById('message').disabled = false;
+        }
+
         // Success Popup Functions
         function showSuccessPopup(qrLink) {
             document.getElementById('qrLinkText').textContent = qrLink;
             document.getElementById('successOverlay').style.display = 'flex';
+            
+            // השבת עריכה של השדות אחרי השמירה
+            document.getElementById('instagram').disabled = true;
+            document.getElementById('message').disabled = true;
             
             // העתקה אוטומטית ללוח
             if (navigator.clipboard) {
@@ -546,19 +581,28 @@
             document.getElementById('successOverlay').style.display = 'none';
         }
 
+        function openSiteAndClose() {
+            const qrLink = document.getElementById('qrLinkText').textContent;
+            window.open(qrLink, '_blank');
+            closeSuccessPopup();
+        }
+
         function copyQRLink() {
             const qrLink = document.getElementById('qrLinkText').textContent;
-            const copyButton = document.getElementById('copyButton');
+            const copyButtons = document.querySelectorAll('.copy-button');
             
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(qrLink).then(() => {
-                    copyButton.textContent = '✅ Copied!';
-                    copyButton.classList.add('copied');
-                    
-                    setTimeout(() => {
-                        copyButton.textContent = '📋 Copy Link';
-                        copyButton.classList.remove('copied');
-                    }, 2000);
+                    copyButtons.forEach(button => {
+                        const originalText = button.textContent;
+                        button.textContent = '✅ Copied!';
+                        button.classList.add('copied');
+                        
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.classList.remove('copied');
+                        }, 2000);
+                    });
                 });
             }
         }
@@ -566,7 +610,9 @@
         // Make functions global
         window.showSuccessPopup = showSuccessPopup;
         window.closeSuccessPopup = closeSuccessPopup;
+        window.openSiteAndClose = openSiteAndClose;
         window.copyQRLink = copyQRLink;
+        window.enableEditing = enableEditing;
     </script>
 
     <script>
