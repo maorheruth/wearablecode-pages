@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WearableCode - Set Up Your Shirt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* אפקט הלבבות העולים */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: #ff6b6b;
+            font-size: 20px;
+            animation: floatUp 8s infinite ease-out;
+            opacity: 0.7;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.7;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            max-width: 200px;
+            width: 100%;
+            height: auto;
+        }
+
+        .logo a {
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+
+        .logo a:hover {
+            transform: scale(1.05);
+        }
+
+        .welcome-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .description {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 120px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            text-align: left;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #fcb69f;
+        }
+
+        .instagram-prefix {
+            position: relative;
+        }
+
+        .instagram-prefix::before {
+            content: '@';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 16px;
+            z-index: 5;
+        }
+
+        .instagram-prefix input {
+            padding-left: 35px;
+        }
+
+        .submit-button {
+            background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .preview-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .preview-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+
+        .preview-text {
+            font-size: 16px;
+            color: #333;
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .bottom-text {
+            margin-top: 40px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .bottom-link {
+            color: #833ab4;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+
+        .bottom-link:hover {
+            color: #fd1d1d;
+        }
+
+        /* תאימות למובייל */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .welcome-text {
+                font-size: 24px;
+            }
+            
+            .description {
+                font-size: 14px;
+            }
+            
+            .form-group input {
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            .submit-button {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+
+            .logo img {
+                max-width: 150px;
+            }
+            
+            .floating-heart {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .container {
+                padding: 25px 15px;
+            }
+            
+            .welcome-text {
+                font-size: 22px;
+            }
+            
+            .logo img {
+                max-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- קונטיינר הלבבות העולים -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <div class="container">
+        <div class="logo">
+            <a href="https://wearablecode.com" target="_blank">
+                <img src="wearablecode_logo_black.png" alt="WearableCode Logo">
+            </a>
+        </div>
+        
+        <div class="welcome-text">
+            Welcome to WearableCode! 🎉
+        </div>
+        
+        <div class="description">
+            Set up your shirt - anyone who scans your code will get your personal message!
+        </div>
+
+        <form id="setupForm">
+            <div class="form-group">
+                <label for="instagram">Your Instagram Username:</label>
+                <div class="instagram-prefix">
+                    <input type="text" id="instagram" name="instagram" placeholder="yourname" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Custom Message (Optional):</label>
+                <input type="text" id="message" name="message" placeholder="Thanks for scanning my shirt!">
+            </div>
+
+            <div class="preview-section">
+                <div class="preview-title">Preview:</div>
+                <div class="preview-text" id="previewText">@yourname</div>
+            </div>
+
+            <button type="submit" class="submit-button" id="submitBtn">
+                Activate My Shirt 🚀
+            </button>
+        </form>
+
+        <div class="bottom-text">
+            Want your own cool shirt? <a href="https://wearablecode.com" target="_blank" class="bottom-link">Visit WearableCode.com</a>
+        </div>
+    </div>
+
+    <script type="module">
+        // Firebase SDK
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'
+        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "your-app-id"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // קבלת ID החולצה מהURL
+        function getShirtId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id') || generateShirtId();
+        }
+
+        // יצירת ID ייחודי לחולצה
+        function generateShirtId() {
+            return 'shirt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // טיפול בטופס
+        document.getElementById('setupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const instagram = document.getElementById('instagram').value.trim();
+            const message = document.getElementById('message').value.trim();
+            
+            if (!instagram) {
+                alert('Please enter your Instagram username');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.textContent = 'Saving...';
+            submitBtn.disabled = true;
+
+            try {
+                const shirtId = getShirtId();
+                
+                // שמירת הנתונים ב-Firebase
+                await setDoc(doc(db, "shirts", shirtId), {
+                    instagram: instagram,
+                    message: message,
+                    createdAt: new Date(),
+                    lastUpdated: new Date()
+                });
+
+                submitBtn.textContent = 'Saved! ✅';
+                
+                // הצגת הקישור הסופי
+                const finalUrl = `${window.location.origin}/index.html?id=${shirtId}`;
+                
+                setTimeout(() => {
+                    alert(`Your shirt is ready! 🎉\n\nYour shirt's link:\n${finalUrl}\n\nAnyone who scans your code will now see your information`);
+                    
+                    // העתקה אוטומטית ללוח
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(finalUrl);
+                    }
+                }, 500);
+                
+            } catch (error) {
+                console.error("Error saving shirt data:", error);
+                submitBtn.textContent = 'Error - Try Again';
+                submitBtn.disabled = false;
+                alert('An error occurred while saving. Please try again.');
+            }
+        });
+    </script>
+
+    <script>
+        // יצירת אפקט הלבבות העולים
+        function createFloatingHeart() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            const heart = document.createElement('div');
+            
+            heart.className = 'floating-heart';
+            heart.innerHTML = '💗';
+            
+            const randomX = Math.random() * window.innerWidth;
+            heart.style.left = randomX + 'px';
+            
+            const randomDuration = 6 + Math.random() * 4;
+            heart.style.animationDuration = randomDuration + 's';
+            
+            const randomDelay = Math.random() * 2;
+            heart.style.animationDelay = randomDelay + 's';
+            
+            heartsContainer.appendChild(heart);
+            
+            setTimeout(() => {
+                if (heart.parentNode) {
+                    heart.parentNode.removeChild(heart);
+                }
+            }, (randomDuration + randomDelay) * 1000);
+        }
+
+        setInterval(createFloatingHeart, 1500);
+        
+        for (let i = 0; i < 3; i++) {
+            setTimeout(createFloatingHeart, i * 300);
+        }
+
+        // תצוגה מקדימה בזמן אמת
+        const instagramInput = document.getElementById('instagram');
+        const messageInput = document.getElementById('message');
+        const previewText = document.getElementById('previewText');
+
+        function updatePreview() {
+            const instagram = instagramInput.value || 'yourname';
+            previewText.textContent = '@' + instagram;
+        }
+
+        instagramInput.addEventListener('input', updatePreview);
+    </script>
+</body>
+</html>
