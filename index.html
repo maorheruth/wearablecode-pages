@@ -53,7 +53,7 @@
                 opacity: 0.3;
             }
             100% {
-                transform: translateY(-100px) rotate(var(--random-rotation));
+                transform: translateY(-100px) rotate(180deg);
                 opacity: 0;
             }
         }
@@ -418,4 +418,17 @@
                     heart.className = 'heart';
                     heart.textContent = '♥';
                     heart.style.left = Math.random() * 100 + '%';
-                    heart.style.animationDuration = (Math
+                    heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                    heart.style.fontSize = (Math.random() * 10 + 14) + 'px';
+                    
+                    // Random rotation direction for initial hearts too
+                    const rotationDirection = Math.random() > 0.5 ? 'floatUpRight' : 'floatUpLeft';
+                    heart.style.animationName = rotationDirection;
+                    
+                    heartsContainer.appendChild(heart);
+                }, i * 200);
+            }
+        }, 500);
+    </script>
+</body>
+</html>
