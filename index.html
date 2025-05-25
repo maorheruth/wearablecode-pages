@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanks for scanning! | WearableCode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(to bottom, #ffffff 0%, #ffdcdc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Floating hearts animation */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart {
+            position: absolute;
+            color: #723f3f;
+            font-size: 18px;
+            opacity: 0.6;
+            animation: floatUp linear infinite;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.6;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(var(--random-rotation));
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatUpLeft {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.6;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(-180deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatUpRight {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.6;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(180deg);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            width: calc(100% - 200px);
+            max-width: 400px;
+            height: 500px;
+            position: relative;
+            z-index: 10;
+            border: 12px solid #ffffff;
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .frame {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #723f3f;
+            border-radius: 8px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 30px 60px 30px;
+            text-align: center;
+            margin: 0;
+        }
+        
+        .main-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 30px;
+            line-height: 1.3;
+        }
+        
+        .instagram-handle {
+            font-size: 24px;
+            color: #000000;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .follow-button {
+            background: linear-gradient(45deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(131, 58, 180, 0.3);
+        }
+        
+        .follow-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(131, 58, 180, 0.4);
+        }
+        
+        .follow-button:active {
+            transform: translateY(0);
+        }
+        
+        .logo-section {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 15px;
+            text-align: center;
+            background: #ffffff;
+            border-radius: 4px;
+        }
+        
+        .logo {
+            margin-bottom: 8px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Logo placeholder - replace with your image */
+            border: 2px dashed #723f3f;
+            border-radius: 4px;
+            color: #723f3f;
+            font-size: 12px;
+        }
+        
+        .logo img {
+            height: 24px;
+            width: auto;
+        }
+        
+        .cta-text {
+            font-size: 12px;
+            color: #723f3f;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        
+        /* Mobile optimization */
+        @media (max-width: 768px) {
+            .container {
+                width: calc(100% - 40px);
+                height: 450px;
+                max-width: 350px;
+                border-width: 10px;
+                border-radius: 14px;
+                box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+            }
+            
+            .frame {
+                padding: 30px 25px 50px 25px;
+                border-radius: 6px;
+                border-width: 2px;
+            }
+            
+            .main-title {
+                font-size: 24px;
+                margin-bottom: 25px;
+            }
+            
+            .instagram-handle {
+                font-size: 20px;
+                margin-bottom: 25px;
+            }
+            
+            .follow-button {
+                padding: 12px 25px;
+                font-size: 15px;
+            }
+            
+            .logo-section {
+                bottom: -8px;
+                padding: 4px 12px;
+            }
+            
+            .logo {
+                height: 20px;
+            }
+            
+            .cta-text {
+                font-size: 11px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                width: calc(100% - 20px);
+                height: 400px;
+                border-width: 8px;
+                border-radius: 12px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            }
+            
+            .frame {
+                padding: 25px 20px 45px 20px;
+                border-radius: 5px;
+                border-width: 1.5px;
+            }
+            
+            .main-title {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+            
+            .instagram-handle {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+            
+            .logo-section {
+                bottom: -7px;
+                padding: 3px 10px;
+            }
+            
+            .logo {
+                height: 18px;
+            }
+            
+            .cta-text {
+                font-size: 10px;
+            }
+        }
+        
+        /* Landscape mobile optimization */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .container {
+                height: 350px;
+                border-width: 6px;
+                border-radius: 10px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            }
+            
+            .frame {
+                padding: 20px 25px 40px 25px;
+                border-radius: 4px;
+                border-width: 1.5px;
+            }
+            
+            .main-title {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .instagram-handle {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+            
+            .logo-section {
+                bottom: -6px;
+                padding: 3px 10px;
+            }
+            
+            .logo {
+                height: 16px;
+            }
+            
+            .cta-text {
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts -->
+    <div class="hearts" id="heartsContainer"></div>
+    
+    <div class="container">
+        <div class="frame">
+            <div class="main-title">
+                Thanks for scanning<br>my shirt!
+            </div>
+            
+            <div class="instagram-handle">
+                @YourInstagram
+            </div>
+            
+            <a href="https://instagram.com/yourusername" class="follow-button" target="_blank">
+                Follow Me on Instagram
+            </a>
+        </div>
+        
+        <div class="logo-section">
+            <div class="logo">
+                <!-- Replace this with: <img src="YOUR_LOGO_URL" alt="WearableCode Logo"> -->
+                Logo Here
+            </div>
+            <div class="cta-text">
+                Want a cool shirt like this?<br>
+                Visit WearableCode.com
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Floating hearts effect
+        function createHearts() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            const heartSymbols = ['♥', '💕', '💖', '💗', '💝', '💘', '❤️'];
+            
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                heart.style.fontSize = (Math.random() * 10 + 14) + 'px';
+                
+                // Random rotation direction
+                const rotationDirection = Math.random() > 0.5 ? 'floatUpRight' : 'floatUpLeft';
+                heart.style.animationName = rotationDirection;
+                
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                }, 10000);
+            }
+            
+            // Create hearts at intervals
+            setInterval(createHeart, 800);
+        }
+        
+        // Initialize effects
+        window.addEventListener('load', () => {
+            createHearts();
+        });
+        
+        // Add some initial hearts
+        setTimeout(() => {
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const heartsContainer = document.getElementById('heartsContainer');
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = '♥';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                    heart.style.fontSize = (Math.random() * 10 + 14) + 'px';
+                    
+                    // Random rotation direction for initial hearts too
+                    const rotationDirection = Math.random() > 0.5 ? 'floatUpRight' : 'floatUpLeft';
+                    heart.style.animationName = rotationDirection;
+                    
+                    heartsContainer.appendChild(heart);
+                }, i * 200);
+            }
+        }, 500);
+    </script>
+</body>
+</html>
