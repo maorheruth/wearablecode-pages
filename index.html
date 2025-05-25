@@ -277,4 +277,199 @@
                 font-size: 11px;
             }
             
-            .cta-l
+            .cta-link {
+                font-size: 11px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                width: calc(100% - 20px);
+                height: 400px;
+                border-width: 8px;
+                border-radius: 12px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            }
+            
+            .frame {
+                padding: 25px 20px 45px 20px;
+                border-radius: 5px;
+                border-width: 1.5px;
+            }
+            
+            .main-title {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+            
+            .instagram-handle {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+            
+            .logo-section {
+                top: -7px;
+                padding: 3px 10px;
+            }
+            
+            .logo {
+                height: 18px;
+            }
+            
+            .cta-section {
+                bottom: -7px;
+                padding: 3px 10px;
+            }
+            
+            .cta-text {
+                font-size: 10px;
+            }
+            
+            .cta-link {
+                font-size: 10px;
+            }
+        }
+        
+        /* Landscape mobile optimization */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .container {
+                height: 350px;
+                border-width: 6px;
+                border-radius: 10px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            }
+            
+            .frame {
+                padding: 20px 25px 40px 25px;
+                border-radius: 4px;
+                border-width: 1.5px;
+            }
+            
+            .main-title {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .instagram-handle {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+            
+            .logo-section {
+                top: -6px;
+                padding: 3px 10px;
+            }
+            
+            .logo {
+                height: 16px;
+            }
+            
+            .cta-section {
+                bottom: -6px;
+                padding: 3px 10px;
+            }
+            
+            .cta-text {
+                font-size: 9px;
+            }
+            
+            .cta-link {
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts -->
+    <div class="hearts" id="heartsContainer"></div>
+    
+    <div class="container">
+        <div class="frame">
+            <div class="main-title">
+                Thanks for scanning<br>my shirt!
+            </div>
+            
+            <div class="instagram-handle">
+                @YourInstagram
+            </div>
+            
+            <a href="https://instagram.com/yourusername" class="follow-button" target="_blank">
+                Follow Me on Instagram
+            </a>
+        </div>
+        
+        <div class="logo-section">
+            <a href="https://wearablecode.com" class="logo-link" target="_blank">
+                <div class="logo">
+                    <img src="./wearablecode_logo_black.png" alt="WearableCode Logo">
+                </div>
+            </a>
+        </div>
+        
+        <div class="cta-section">
+            <div class="cta-text">
+                Want a cool shirt like this?<br>
+                <a href="https://wearablecode.com" class="cta-link" target="_blank">Visit WearableCode.com</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Floating hearts effect
+        function createHearts() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            const heartSymbols = ['♥', '💕', '💖', '💗', '💝', '💘', '❤️'];
+            
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                heart.style.fontSize = (Math.random() * 10 + 14) + 'px';
+                
+                // Random rotation direction
+                const rotationDirection = Math.random() > 0.5 ? 'floatUpRight' : 'floatUpLeft';
+                heart.style.animationName = rotationDirection;
+                
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                }, 10000);
+            }
+            
+            // Create hearts at intervals
+            setInterval(createHeart, 800);
+        }
+        
+        // Initialize effects
+        window.addEventListener('load', () => {
+            createHearts();
+        });
+        
+        // Add some initial hearts
+        setTimeout(() => {
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const heartsContainer = document.getElementById('heartsContainer');
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = '♥';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                    heart.style.fontSize = (Math.random() * 10 + 14) + 'px';
+                    
+                    // Random rotation direction for initial hearts too
+                    const rotationDirection = Math.random() > 0.5 ? 'floatUpRight' : 'floatUpLeft';
+                    heart.style.animationName = rotationDirection;
+                    
+                    heartsContainer.appendChild(heart);
+                }, i * 200);
+            }
+        }, 500);
+    </script>
+</body>
+</html>
