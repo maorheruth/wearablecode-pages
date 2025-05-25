@@ -171,18 +171,26 @@
         }
         
         .logo {
-            margin-bottom: 8px;
             height: 24px;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Logo placeholder - replace with your image */
-            /* Logo styling removed - using actual image */
         }
         
         .logo img {
             height: 24px;
             width: auto;
+        }
+        
+        .cta-section {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 15px;
+            text-align: center;
+            background: #ffffff;
+            border-radius: 4px;
         }
         
         .cta-text {
@@ -226,9 +234,16 @@
             
             .logo-section {
                 top: -8px;
+                padding: 4px 12px;
+            }
             
             .logo {
                 height: 20px;
+            }
+            
+            .cta-section {
+                bottom: -8px;
+                padding: 4px 12px;
             }
             
             .cta-text {
@@ -262,12 +277,17 @@
             }
             
             .logo-section {
-                bottom: -7px;
+                top: -7px;
                 padding: 3px 10px;
             }
             
             .logo {
                 height: 18px;
+            }
+            
+            .cta-section {
+                bottom: -7px;
+                padding: 3px 10px;
             }
             
             .cta-text {
@@ -301,12 +321,17 @@
             }
             
             .logo-section {
-                bottom: -6px;
+                top: -6px;
                 padding: 3px 10px;
             }
             
             .logo {
                 height: 16px;
+            }
+            
+            .cta-section {
+                bottom: -6px;
+                padding: 3px 10px;
             }
             
             .cta-text {
@@ -336,9 +361,11 @@
         
         <div class="logo-section">
             <div class="logo">
-                <!-- Replace this with: <img src="YOUR_LOGO_URL" alt="WearableCode Logo"> -->
-                <img src="./wearablecode_logo_black.png" alt="WearableCode Logo">
+                <img src="./wearablecode_logo_white.png" alt="WearableCode Logo">
             </div>
+        </div>
+        
+        <div class="cta-section">
             <div class="cta-text">
                 Want a cool shirt like this?<br>
                 Visit WearableCode.com
@@ -391,17 +418,4 @@
                     heart.className = 'heart';
                     heart.textContent = '♥';
                     heart.style.left = Math.random() * 100 + '%';
-                    heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
-                    heart.style.fontSize = (Math.random() * 10 + 14) + 'px';
-                    
-                    // Random rotation direction for initial hearts too
-                    const rotationDirection = Math.random() > 0.5 ? 'floatUpRight' : 'floatUpLeft';
-                    heart.style.animationName = rotationDirection;
-                    
-                    heartsContainer.appendChild(heart);
-                }, i * 200);
-            }
-        }, 500);
-    </script>
-</body>
-</html>
+                    heart.style.animationDuration = (Math
