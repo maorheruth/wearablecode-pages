@@ -216,6 +216,117 @@
             color: #fd1d1d;
         }
 
+        /* Success Popup */
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .success-popup {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .success-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .qr-link-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .qr-link-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .qr-link {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #dee2e6;
+            word-break: break-all;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .copy-button {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .copy-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .copy-button.copied {
+            background: #6c757d;
+        }
+
+        .close-popup {
+            background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .close-popup:hover {
+            transform: translateY(-2px);
+        }
+
         /* תאימות למובייל */
         @media (max-width: 480px) {
             .container {
@@ -247,6 +358,15 @@
             
             .floating-heart {
                 font-size: 16px;
+            }
+
+            .success-popup {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+
+            .success-title {
+                font-size: 24px;
             }
         }
 
@@ -312,20 +432,44 @@
         </div>
     </div>
 
+    <!-- Success Popup -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-popup">
+            <div class="success-icon">🎉</div>
+            <div class="success-title">Perfect! Your Shirt is Ready!</div>
+            <div class="success-message">
+                Your personalized shirt link has been created successfully!<br>
+                Anyone who scans your QR code will see your custom message and Instagram profile.
+            </div>
+            
+            <div class="qr-link-section">
+                <div class="qr-link-title">Your QR Code Link:</div>
+                <div class="qr-link" id="qrLinkText"></div>
+                <button class="copy-button" id="copyButton" onclick="copyQRLink()">
+                    📋 Copy Link
+                </button>
+            </div>
+            
+            <button class="close-popup" onclick="closeSuccessPopup()">
+                Awesome! 🚀
+            </button>
+        </div>
+    </div>
+
     <script type="module">
         // Firebase SDK
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'
         import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'
 
-        // Your web app's Firebase configuration
+        // Your web app's Firebase configuration - החלף עם ההגדרות שלך
         const firebaseConfig = {
-          apiKey: "AIzaSyDnSY-2fRoZAZoZ6zobpiVjjXl7KsnLLeg",
-          authDomain: "wearablecode-d2311.firebaseapp.com",
-          projectId: "wearablecode-d2311",
-          storageBucket: "wearablecode-d2311.firebasestorage.app",
-          messagingSenderId: "426035858574",
-          appId: "1:426035858574:web:c4f96276dfc497f0db600b",
-          measurementId: "G-LTLDE0WM5G"
+            apiKey: "AIzaSyDnSY-2fRoZAZoZ6zobpiVjjXl7KsnLLeg",
+            authDomain: "wearablecode-d2311.firebaseapp.com",
+            projectId: "wearablecode-d2311",
+            storageBucket: "wearablecode-d2311.firebasestorage.app",
+            messagingSenderId: "426035858574",
+            appId: "1:426035858574:web:c4f96276dfc497f0db600b",
+            measurementId: "G-LTLDE0WM5G"
         };
 
         // Initialize Firebase
@@ -376,12 +520,7 @@
                 const finalUrl = `${window.location.origin}/index.html?id=${shirtId}`;
                 
                 setTimeout(() => {
-                    alert(`Your shirt is ready! 🎉\n\nYour shirt's link:\n${finalUrl}\n\nAnyone who scans your code will now see your information`);
-                    
-                    // העתקה אוטומטית ללוח
-                    if (navigator.clipboard) {
-                        navigator.clipboard.writeText(finalUrl);
-                    }
+                    showSuccessPopup(finalUrl);
                 }, 500);
                 
             } catch (error) {
@@ -391,6 +530,43 @@
                 alert('An error occurred while saving. Please try again.');
             }
         });
+
+        // Success Popup Functions
+        function showSuccessPopup(qrLink) {
+            document.getElementById('qrLinkText').textContent = qrLink;
+            document.getElementById('successOverlay').style.display = 'flex';
+            
+            // העתקה אוטומטית ללוח
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(qrLink);
+            }
+        }
+
+        function closeSuccessPopup() {
+            document.getElementById('successOverlay').style.display = 'none';
+        }
+
+        function copyQRLink() {
+            const qrLink = document.getElementById('qrLinkText').textContent;
+            const copyButton = document.getElementById('copyButton');
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(qrLink).then(() => {
+                    copyButton.textContent = '✅ Copied!';
+                    copyButton.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        copyButton.textContent = '📋 Copy Link';
+                        copyButton.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+        }
+
+        // Make functions global
+        window.showSuccessPopup = showSuccessPopup;
+        window.closeSuccessPopup = closeSuccessPopup;
+        window.copyQRLink = copyQRLink;
     </script>
 
     <script>
