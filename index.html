@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -98,6 +98,13 @@
             line-height: 1.3;
         }
 
+        .custom-message {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
         .instagram-handle {
             font-size: 18px;
             color: #666;
@@ -136,6 +143,19 @@
 
         .bottom-link:hover {
             color: #fd1d1d;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            font-size: 16px;
+        }
+
+        .error {
+            text-align: center;
+            color: #e74c3c;
+            font-size: 16px;
+            padding: 20px;
         }
 
         /* תאימות למובייל */
@@ -193,24 +213,115 @@
             </a>
         </div>
         
-        <div class="main-text">
-            Thanks for scanning<br>
-            my shirt!
-        </div>
-        
-        <div class="instagram-handle">
-            @YourInstagram
-        </div>
-        
-        <a href="#" class="follow-button">
-            Follow Me on Instagram
-        </a>
-        
-        <div class="bottom-text">
-            Want a cool shirt like this?<br>
-            <a href="https://wearablecode.com" target="_blank" class="bottom-link">Visit WearableCode.com</a>
+        <div id="content">
+            <div class="loading">Loading your information...</div>
         </div>
     </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'
+
+        // Your web app's Firebase configuration
+        // תחליף את זה בהגדרות Firebase שלך
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "your-app-id"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // קבלת ID מהURL
+        function getShirtId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id') || 'default';
+        }
+
+        // טעינת מידע החולצה
+        async function loadShirtData() {
+            const shirtId = getShirtId();
+            const contentDiv = document.getElementById('content');
+            
+            try {
+                const docRef = doc(db, "shirts", shirtId);
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    displayShirtContent(data);
+                } else {
+                    // אם אין מידע, נציג תוכן ברירת מחדל
+                    displayDefaultContent();
+                }
+            } catch (error) {
+                console.error("Error loading shirt data:", error);
+                displayDefaultContent();
+            }
+        }
+
+        // הצגת תוכן החולצה
+        function displayShirtContent(data) {
+            const contentDiv = document.getElementById('content');
+            const instagramHandle = data.instagram || 'YourInstagram';
+            const customMessage = data.message || '';
+            const instagramUrl = `https://instagram.com/${instagramHandle}`;
+            
+            contentDiv.innerHTML = `
+                <div class="main-text">
+                    ${customMessage || 'Thanks for scanning<br>my shirt!'}
+                </div>
+                
+                <div class="instagram-handle">
+                    @${instagramHandle}
+                </div>
+                
+                <a href="${instagramUrl}" target="_blank" class="follow-button">
+                    Follow Me on Instagram
+                </a>
+                
+                <div class="bottom-text">
+                    Want a cool shirt like this?<br>
+                    <a href="https://wearablecode.com" target="_blank" class="bottom-link">Visit WearableCode.com</a>
+                </div>
+            `;
+        }
+
+        // הצגת תוכן ברירת מחדל
+        function displayDefaultContent() {
+            const contentDiv = document.getElementById('content');
+            
+            contentDiv.innerHTML = `
+                <div class="main-text">
+                    Thanks for scanning<br>
+                    my shirt!
+                </div>
+                
+                <div class="instagram-handle">
+                    @YourInstagram
+                </div>
+                
+                <a href="#" class="follow-button">
+                    Follow Me on Instagram
+                </a>
+                
+                <div class="bottom-text">
+                    Want a cool shirt like this?<br>
+                    <a href="https://wearablecode.com" target="_blank" class="bottom-link">Visit WearableCode.com</a>
+                </div>
+            `;
+        }
+
+        // טעינת המידע כשהדף נטען
+        window.addEventListener('load', loadShirtData);
+    </script>
 
     <script>
         // יצירת אפקט הלבבות העולים
