@@ -2,6 +2,7 @@
   "name": "wearablecode-pages",
   "version": "1.0.0",
   "description": "QR Code T-Shirt Landing Pages",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "vercel dev",
@@ -10,11 +11,5 @@
   },
   "dependencies": {
     "firebase": "^10.7.1"
-  },
-  "devDependencies": {
-    "@vercel/node": "^3.0.0"
-  },
-  "engines": {
-    "node": "18.x"
   }
 }
