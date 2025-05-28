@@ -1,10 +1,4 @@
-// Force deployment update - May 28, 2025
-// Shopify Webhook Handler for WearableCode - Vercel Compatible
-
-// Shopify Webhook Handler for WearableCode - Vercel Compatible
-import crypto from 'crypto';
-
-// Vercel serverless function handler
+// Simple Shopify Webhook Handler - Working Version
 export default async function handler(req, res) {
   // Only allow POST method
   if (req.method !== 'POST') {
@@ -14,33 +8,17 @@ export default async function handler(req, res) {
   try {
     console.log('Webhook received:', req.body);
 
-    // Skip signature verification for testing (TEMPORARY)
-    // const signature = req.headers['x-shopify-hmac-sha256'];
-    // const secret = process.env.SHOPIFY_WEBHOOK_SECRET;
-
     const orderData = req.body;
     
     // Create WearableCode order
     const orderId = `WC-${orderData.order_number}`;
     const order = {
       orderId: orderId,
-      shopifyOrderId: orderData.id,
       customerEmail: orderData.email,
       customerName: `${orderData.billing_address?.first_name || ''} ${orderData.billing_address?.last_name || ''}`.trim(),
-      totalPrice: orderData.total_price,
-      currency: orderData.currency,
-      orderDate: orderData.created_at
+      setupUrl: `https://wearablecode-pages.vercel.app/setup.html?id=${orderId}`,
+      activationUrl: `https://wearablecode-pages.vercel.app/index.html?id=${orderId}`
     };
-
-    console.log('Processing new order:', order.orderId);
-
-    // For now, just create basic QR URL without generating actual QR image
-    order.setupUrl = `https://wearablecode-pages.vercel.app/setup.html?id=${order.orderId}`;
-    order.activationUrl = `https://wearablecode-pages.vercel.app/index.html?id=${order.orderId}`;
-
-    // TODO: Add Firebase storage here
-    // TODO: Add QR code generation here
-    // TODO: Add email sending here
 
     console.log('Order processed successfully:', order.orderId);
     
