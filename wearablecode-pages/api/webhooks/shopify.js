@@ -1,3 +1,6 @@
+// Force deployment update - May 28, 2025
+// Shopify Webhook Handler for WearableCode - Vercel Compatible
+
 // Shopify Webhook Handler for WearableCode - Vercel Compatible
 import crypto from 'crypto';
 
