@@ -32,7 +32,7 @@ function verifyShopifyWebhook(data, signature, secret) {
 
 // Generate QR code using QR Code Monkey
 async function generateQRCode(orderId) {
-  const qrUrl = `https://qr.wearablecode.com/activate/${orderId}`;
+  const qrUrl = `https://wearablecode-pages.vercel.app/setup.html?id=${orderId}`;
   
   try {
     const response = await fetch('https://api.qrcode-monkey.com/qr/custom', {
@@ -69,15 +69,24 @@ async function generateQRCode(orderId) {
   }
 }
 
-// Store order data in Firebase
+// Store order data in Firebase (shirts collection)
 async function storeOrderData(orderData) {
   try {
-    const orderRef = doc(db, 'orders', orderData.orderId);
-    await setDoc(orderRef, {
-      ...orderData,
+    const shirtRef = doc(db, 'shirts', orderData.orderId);
+    await setDoc(shirtRef, {
+      orderId: orderData.orderId,
+      shopifyOrderId: orderData.shopifyOrderId,
+      customerEmail: orderData.customerEmail,
+      customerName: orderData.customerName,
+      qrImageUrl: orderData.qrImageUrl,
+      activationUrl: orderData.activationUrl,
+      setupUrl: orderData.setupUrl,
       createdAt: new Date(),
       status: 'pending_activation',
-      activated: false
+      activated: false,
+      // Default values - customer will fill these during activation
+      instagram: '',
+      message: ''
     });
     
     console.log('Order stored successfully:', orderData.orderId);
@@ -86,6 +95,41 @@ async function storeOrderData(orderData) {
     console.error('Error storing order:', error);
     throw error;
   }
+}
+
+// Send welcome email to customer
+async function sendWelcomeEmail(customerEmail, orderId, customerName, setupUrl) {
+  // This is a placeholder - implement your preferred email service
+  const emailData = {
+    to: customerEmail,
+    from: 'hello@wearablecode.com',
+    subject: 'Your WearableCode shirt is on the way! 🎉',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h1 style="color: #333;">Welcome to WearableCode!</h1>
+        <p>Hi ${customerName},</p>
+        <p>Thank you for your order! Your personalized WearableCode shirt is being printed and will be shipped soon.</p>
+        
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3>What's Next?</h3>
+          <p>Once you receive your shirt:</p>
+          <ol>
+            <li>Scan the QR code on the back of your shirt</li>
+            <li>Set up your personal profile and message</li>
+            <li>Share your unique code with the world!</li>
+          </ol>
+          <p>Or set up directly: <strong><a href="${setupUrl}">${setupUrl}</a></strong></p>
+        </div>
+        
+        <p>We can't wait to see what you create with your WearableCode shirt!</p>
+        <p>Best regards,<br>The WearableCode Team</p>
+      </div>
+    `
+  };
+
+  // Implement your email sending logic here
+  console.log('Email would be sent:', emailData);
+  return true;
 }
 
 // Main webhook handler
@@ -110,8 +154,9 @@ export default async function handler(req, res) {
     const orderData = req.body;
     
     // Create WearableCode order
+    const orderId = `WC-${orderData.order_number}`;
     const order = {
-      orderId: `WC-${orderData.order_number}`,
+      orderId: orderId,
       shopifyOrderId: orderData.id,
       customerEmail: orderData.email,
       customerName: `${orderData.billing_address?.first_name || ''} ${orderData.billing_address?.last_name || ''}`.trim(),
@@ -122,17 +167,26 @@ export default async function handler(req, res) {
 
     console.log('Processing new order:', order.orderId);
 
-    // Generate QR code
+    // Generate QR code (points to setup page)
     const qrImageUrl = await generateQRCode(order.orderId);
     order.qrImageUrl = qrImageUrl;
-    order.activationUrl = `https://qr.wearablecode.com/activate/${order.orderId}`;
+    order.setupUrl = `https://wearablecode-pages.vercel.app/setup.html?id=${order.orderId}`;
+    order.activationUrl = `https://wearablecode-pages.vercel.app/index.html?id=${order.orderId}`;
 
-    // Store in Firebase
+    // Store in Firebase (shirts collection)
     await storeOrderData(order);
+
+    // Send welcome email to customer
+    await sendWelcomeEmail(order.customerEmail, order.orderId, order.customerName, order.setupUrl);
 
     console.log('Order processed successfully:', order.orderId);
     
-    return res.status(200).json({ success: true, orderId: order.orderId });
+    return res.status(200).json({ 
+      success: true, 
+      orderId: order.orderId,
+      setupUrl: order.setupUrl,
+      qrImageUrl: order.qrImageUrl
+    });
     
   } catch (error) {
     console.error('Webhook processing error:', error);
