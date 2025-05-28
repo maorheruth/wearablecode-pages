@@ -5,7 +5,7 @@ export default function handler(req, res) {
   // Handle GET requests for testing
   if (req.method === 'GET') {
     return res.status(200).json({
-      message: "Shopify webhook endpoint is active",
+      message: "Shopify webhook endpoint is active!",
       info: "Send POST request to process webhook",
       timestamp: new Date().toISOString(),
       status: "working"
