@@ -1,14 +1,10 @@
-import { db } from '../../firebase-config.js';
+import { db } from '../../../firebase-config.js';
 import { collection, addDoc } from 'firebase/firestore';
 
 export default async function handler(req, res) {
   // Only allow POST requests
   if (req.method !== 'POST') {
-    return res.status(405).json({ 
-      error: 'Method not allowed',
-      method: req.method,
-      message: 'This endpoint only accepts POST requests'
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
@@ -69,9 +65,7 @@ export default async function handler(req, res) {
     res.status(200).json({ 
       success: true, 
       message: 'Webhook processed successfully',
-      orderId: order.orderId,
-      orderNumber: order.orderNumber,
-      itemsProcessed: order.lineItems.length
+      orderId: order.orderId 
     });
 
   } catch (error) {
