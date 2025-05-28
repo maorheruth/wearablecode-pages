@@ -2,7 +2,6 @@
   "name": "wearablecode-pages",
   "version": "1.0.0",
   "description": "QR Code T-Shirt Landing Pages",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "vercel dev",
