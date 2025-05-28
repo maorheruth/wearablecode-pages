@@ -1,13 +1,7 @@
 {
   "functions": {
-    "api/**/*.js": {
-      "runtime": "@vercel/node"
+    "api/webhooks/shopify.js": {
+      "maxDuration": 10
     }
-  },
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    }
-  ]
+  }
 }
