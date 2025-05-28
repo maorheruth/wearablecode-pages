@@ -1,0 +1,12 @@
+{
+  "name": "wearablecode-pages",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Build completed'",
+    "start": "echo 'Start completed'"
+  },
+  "dependencies": {
+    "firebase": "^10.7.1"
+  }
+}
