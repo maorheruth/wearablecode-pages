@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     return res.status(200).json({
       message: "🎉 Shopify webhook is ACTIVE!",
-      info: "Ready to receive Shopify orders with hybrid approach",
+      info: "Using simple order notes for hybrid approach",
       timestamp: new Date().toISOString(),
       status: "working",
       endpoint: "/api/shopify"
@@ -39,18 +39,24 @@ export default async function handler(req, res) {
         orderId: orderData?.id,
         orderNumber: orderData?.order_number || orderData?.name,
         email: orderData?.email,
-        total: orderData?.total_price
+        total: orderData?.total_price,
+        note: orderData?.note
       });
 
-      // Check if customer provided a custom link
-      const customProperties = orderData?.note_attributes || [];
-      const customLink = customProperties.find(attr => 
-        attr.name === 'custom_link' || 
-        attr.name === 'instagram_link' || 
-        attr.name === 'social_link'
-      )?.value || '';
-
-      console.log('🔗 Custom link provided:', customLink || 'None');
+      // Check if customer provided a custom link in order notes
+      const orderNote = orderData?.note || '';
+      let customLink = '';
+      
+      // Look for links in the order note
+      const urlPattern = /(https?:\/\/[^\s]+)/gi;
+      const foundUrls = orderNote.match(urlPattern);
+      
+      if (foundUrls && foundUrls.length > 0) {
+        customLink = foundUrls[0]; // Take the first URL found
+        console.log('🔗 Custom link found in order notes:', customLink);
+      } else {
+        console.log('📝 No custom link found in order notes');
+      }
 
       // Generate unique QR code data for each line item
       const qrCodes = [];
@@ -86,6 +92,7 @@ export default async function handler(req, res) {
         totalPrice: orderData.total_price,
         currency: orderData.currency,
         createdAt: orderData.created_at,
+        orderNote: orderNote,
         
         // Customer details
         customer: {
@@ -113,7 +120,7 @@ export default async function handler(req, res) {
         
         // Processing info
         processedAt: new Date().toISOString(),
-        source: 'shopify_hybrid_webhook',
+        source: 'shopify_simple_webhook',
         status: 'processed'
       };
 
@@ -125,7 +132,7 @@ export default async function handler(req, res) {
       // Return success response to Shopify
       return res.status(200).json({
         success: true,
-        message: "✅ Order processed successfully with hybrid approach!",
+        message: "✅ Order processed with simple notes approach!",
         timestamp: new Date().toISOString(),
         order: {
           id: orderData.id,
@@ -133,6 +140,7 @@ export default async function handler(req, res) {
           firebaseId: docRef.id,
           hasCustomLink: !!customLink?.trim(),
           customLink: customLink || null,
+          orderNote: orderNote,
           qrCodesGenerated: qrCodes.length
         },
         qrCodes: qrCodes
