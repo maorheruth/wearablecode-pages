@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, doc, setDoc } from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     return res.status(200).json({
       message: "🎉 Shopify webhook is ACTIVE!",
-      info: "Using simple order notes for hybrid approach",
+      info: "Connected to existing QR pages",
       timestamp: new Date().toISOString(),
       status: "working",
       endpoint: "/api/shopify"
@@ -62,16 +62,17 @@ export default async function handler(req, res) {
       const qrCodes = [];
       
       for (const item of orderData?.line_items || []) {
-        const uniqueId = `${orderData.id}_${item.id}_${Date.now()}`;
+        const uniqueId = `shirt_${orderData.id}_${item.id}_${Date.now()}`;
         
-        // Determine QR code destination
+        // Determine QR code destination using existing pages
         let qrCodeUrl;
         if (customLink && customLink.trim()) {
-          // Customer provided a link - direct QR to ready page
-          qrCodeUrl = `https://wearablecode-pages.vercel.app/product/${uniqueId}?link=${encodeURIComponent(customLink.trim())}&ready=true`;
+          // Customer provided a link - create shirt record with ready link
+          await saveShirtData(uniqueId, customLink);
+          qrCodeUrl = `https://qr.wearablecode.com/index.html?id=${uniqueId}`;
         } else {
           // No link provided - QR to setup page
-          qrCodeUrl = `https://wearablecode-pages.vercel.app/product/${uniqueId}?setup=true`;
+          qrCodeUrl = `https://qr.wearablecode.com/setup.html?id=${uniqueId}`;
         }
         
         qrCodes.push({
@@ -79,7 +80,8 @@ export default async function handler(req, res) {
           itemTitle: item.title,
           uniqueId: uniqueId,
           qrCodeUrl: qrCodeUrl,
-          isReady: !!customLink?.trim()
+          isReady: !!customLink?.trim(),
+          customLink: customLink?.trim() || null
         });
       }
 
@@ -120,11 +122,11 @@ export default async function handler(req, res) {
         
         // Processing info
         processedAt: new Date().toISOString(),
-        source: 'shopify_simple_webhook',
+        source: 'shopify_webhook_v2',
         status: 'processed'
       };
 
-      // Save to Firebase
+      // Save to Firebase orders collection
       const docRef = await addDoc(collection(db, 'orders'), orderRecord);
       
       console.log('✅ Order saved to Firebase with ID:', docRef.id);
@@ -132,7 +134,7 @@ export default async function handler(req, res) {
       // Return success response to Shopify
       return res.status(200).json({
         success: true,
-        message: "✅ Order processed with simple notes approach!",
+        message: "✅ Order processed with existing QR pages!",
         timestamp: new Date().toISOString(),
         order: {
           id: orderData.id,
@@ -164,4 +166,32 @@ export default async function handler(req, res) {
     receivedMethod: req.method,
     timestamp: new Date().toISOString()
   });
+}
+
+// Helper function to save shirt data when custom link is provided
+async function saveShirtData(shirtId, customLink) {
+  try {
+    // Extract Instagram username from URL if it's an Instagram link
+    let instagram = '';
+    if (customLink.includes('instagram.com/')) {
+      const match = customLink.match(/instagram\.com\/([^\/\?\s]+)/);
+      if (match) {
+        instagram = match[1];
+      }
+    }
+    
+    // Save to shirts collection with specific ID for immediate use
+    await setDoc(doc(getFirestore(), 'shirts', shirtId), {
+      instagram: instagram || customLink,
+      message: 'Thanks for scanning my shirt!',
+      customLink: customLink,
+      createdAt: new Date(),
+      source: 'shopify_order_note',
+      lastUpdated: new Date()
+    });
+    
+    console.log('👤 Shirt data pre-saved for ID:', shirtId);
+  } catch (error) {
+    console.error('Error saving shirt data:', error);
+  }
 }
