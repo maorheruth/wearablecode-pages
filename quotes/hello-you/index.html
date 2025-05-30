@@ -105,32 +105,9 @@
             line-height: 0.9;
             position: relative;
             padding: 0 15px;
-            letter-spacing: -1px;
+            letter-spacing: 2px;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-            animation: creepyPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes creepyPulse {
-            0%, 85% {
-                text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-                transform: scale(1);
-                color: #222;
-            }
-            90% {
-                text-shadow: 0 0 20px rgba(255, 101, 47, 0.8), 3px 3px 6px rgba(0,0,0,0.5);
-                transform: scale(1.02);
-                color: #ff652f;
-            }
-            95% {
-                text-shadow: 0 0 30px rgba(255, 73, 253, 0.9), 3px 3px 6px rgba(0,0,0,0.5);
-                transform: scale(0.98);
-                color: #ff49fd;
-            }
-            100% {
-                text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-                transform: scale(1);
-                color: #222;
-            }
+            transition: all 0.3s ease;
         }
 
         .quote::before {
@@ -277,14 +254,14 @@
             }
             70% {
                 opacity: 0.7;
-                transform: translateY(30vh) rotate(270deg) scale(0.8);
+                transform: translateY(35vh) rotate(270deg) scale(0.8);
             }
             85% {
                 opacity: 0.3;
-                transform: translateY(20vh) rotate(320deg) scale(0.3);
+                transform: translateY(33vh) rotate(320deg) scale(0.3);
             }
             100% {
-                transform: translateY(-5vh) rotate(360deg) scale(0);
+                transform: translateY(30vh) rotate(360deg) scale(0);
                 opacity: 0;
             }
         }
@@ -315,6 +292,7 @@
                 line-height: 0.85;
                 padding: 0 5px;
                 font-family: 'Impact', 'Arial Black', sans-serif;
+                letter-spacing: 1px;
             }
             
             .quote::before {
@@ -377,6 +355,7 @@
                 padding: 0 3px;
                 line-height: 0.8;
                 font-family: 'Impact', 'Arial Black', sans-serif;
+                letter-spacing: 0.5px;
             }
 
             .quote::before {
@@ -453,6 +432,50 @@
             imageElement.textContent = 'Add your image here';
             imageElement.classList.remove('has-image');
         }
+        
+        // Random colors for creepy animation
+        const creepyColors = [
+            '#ff652f', '#ff49fd', '#ff0000', '#8b0000', '#ff4500', 
+            '#dc143c', '#ff1493', '#9400d3', '#4b0082', '#ff6347'
+        ];
+        
+        function getRandomColor() {
+            return creepyColors[Math.floor(Math.random() * creepyColors.length)];
+        }
+        
+        function creepyAnimation() {
+            const quoteElement = document.getElementById('mainQuote');
+            const color1 = getRandomColor();
+            const color2 = getRandomColor();
+            
+            // Start animation
+            quoteElement.style.color = color1;
+            quoteElement.style.textShadow = `0 0 20px ${color1}, 3px 3px 6px rgba(0,0,0,0.5)`;
+            quoteElement.style.transform = 'scale(1.02)';
+            
+            setTimeout(() => {
+                quoteElement.style.color = color2;
+                quoteElement.style.textShadow = `0 0 30px ${color2}, 3px 3px 6px rgba(0,0,0,0.5)`;
+                quoteElement.style.transform = 'scale(0.98)';
+            }, 150);
+            
+            setTimeout(() => {
+                quoteElement.style.color = '#222';
+                quoteElement.style.textShadow = '3px 3px 6px rgba(0,0,0,0.3)';
+                quoteElement.style.transform = 'scale(1)';
+            }, 300);
+        }
+        
+        function scheduleRandomAnimation() {
+            const randomDelay = Math.random() * 2000 + 2000; // 2-4 seconds
+            setTimeout(() => {
+                creepyAnimation();
+                scheduleRandomAnimation(); // Schedule next animation
+            }, randomDelay);
+        }
+        
+        // Start the random animation cycle
+        scheduleRandomAnimation();
         
         // Analytics tracking
         document.querySelector('.shop-button').addEventListener('click', function() {
