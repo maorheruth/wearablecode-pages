@@ -105,8 +105,14 @@
         }
 
         .logo {
-            margin-top: 15px;
+            margin-top: 8px;
+            margin-bottom: 0px;
             text-align: center;
+        }
+
+        .logo a {
+            text-decoration: none;
+            display: inline-block;
         }
 
         .logo img {
@@ -124,7 +130,7 @@
 
         .character-image {
             width: calc(100% - 40px);
-            height: 240px;
+            height: 280px;
             border-radius: 12px;
             margin: 0 auto 18px;
             background: #f8f9fa;
@@ -275,7 +281,7 @@
             
             .character-image {
                 width: calc(100% - 20px);
-                height: 250px;
+                height: 280px;
                 margin-bottom: 15px;
                 font-size: 14px;
             }
@@ -309,7 +315,7 @@
             
             .logo img {
                 height: 15px;
-                margin-top: 12px;
+                margin-top: 8px;
             }
             
             .cta-text {
@@ -343,7 +349,7 @@
             
             .character-image {
                 width: calc(100% - 15px);
-                height: 220px;
+                height: 260px;
                 font-size: 12px;
             }
             
@@ -372,6 +378,7 @@
             
             .logo img {
                 height: 14px;
+                margin-top: 6px;
             }
         }
     </style>
@@ -403,7 +410,9 @@
         </div>
         
         <div class="logo">
-            <img src="../../assets/logos/wearablecode_logo_black.png" alt="WearableCode">
+            <a href="https://wearablecode.com" target="_blank">
+                <img src="../../assets/logos/wearablecode_logo_black.png" alt="WearableCode">
+            </a>
         </div>
     </div>
 
@@ -412,7 +421,7 @@
         const pageData = {
             quote: "Hello, you.",
             source: "- Joe Goldberg",
-            image: "" // Add image URL here: "https://your-image-url.com/joe.jpg"
+            image: "../../assets/images/Hello you joe goldberg.png"
         };
         
         // Mystery emojis for background - Only the scariest ones
