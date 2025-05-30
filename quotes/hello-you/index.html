@@ -17,10 +17,12 @@
             width: 100%;
         }
 
+        /* Safari iOS specific fixes */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #ff652f 0%, #ff49fd 100%);
             height: 100vh;
+            height: 100dvh; /* Dynamic viewport height for iOS */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -28,6 +30,7 @@
             margin: 0;
             position: relative;
             overflow: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         .container {
@@ -271,7 +274,7 @@
                 transform: translateY(10vh) rotate(320deg);
             }
             100% {
-                transform: translateY(-20vh) rotate(360deg);
+                transform: translateY(-40vh) rotate(360deg);
                 opacity: 0;
             }
         }
@@ -431,9 +434,36 @@
             image: "" // Add image URL here: "https://your-image-url.com/joe.jpg"
         };
         
+        // Safari iOS font size fix
+        function applySafariFix() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
+            const screenWidth = window.innerWidth || screen.width;
+            
+            if (isMobile && isSafari) {
+                const quoteElement = document.getElementById('mainQuote');
+                if (screenWidth <= 375) {
+                    quoteElement.style.fontSize = '85px';
+                    quoteElement.style.lineHeight = '0.65';
+                } else if (screenWidth <= 480) {
+                    quoteElement.style.fontSize = '90px';
+                    quoteElement.style.lineHeight = '0.7';
+                }
+                quoteElement.style.fontFamily = "'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif";
+                quoteElement.style.fontWeight = '900';
+                quoteElement.style.textTransform = 'uppercase';
+                quoteElement.style.letterSpacing = '0px';
+                
+                console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
+            }
+        }
+        
         // Update the content
         document.getElementById('mainQuote').textContent = pageData.quote;
         document.getElementById('quoteSource').textContent = pageData.source;
+        
+        // Apply Safari fix after content is loaded
+        setTimeout(applySafariFix, 100);
         
         // Update character image
         const imageElement = document.getElementById('characterImage');
@@ -498,6 +528,15 @@
         // Analytics tracking
         document.querySelector('.shop-button').addEventListener('click', function() {
             console.log('Shop button clicked for quote:', pageData.quote);
+        });
+        
+        // Re-apply fix on orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(applySafariFix, 200);
+        });
+        
+        window.addEventListener('resize', function() {
+            setTimeout(applySafariFix, 100);
         });
     </script>
 </body>
