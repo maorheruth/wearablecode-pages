@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello, you. | WearableCode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #ff652f 0%, #ff49fd 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.6s ease-out;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-arrow {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-arrow:hover {
+            color: #ff652f;
+            transform: translateX(-2px);
+        }
+
+        .logo {
+            font-size: 14px;
+            font-weight: bold;
+            color: #999;
+            margin-top: 20px;
+            letter-spacing: -0.3px;
+        }
+
+        .logo::before {
+            content: "{ ";
+            color: #ff652f;
+        }
+
+        .logo::after {
+            content: " }";
+            color: #ff652f;
+        }
+
+        .character-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 12px;
+            margin: 0 auto 25px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            border: 2px dashed #ddd;
+            position: relative;
+            overflow: hidden;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .character-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .character-image.has-image {
+            border: none;
+            background: none;
+        }
+
+        .quote {
+            font-size: 50px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            position: relative;
+            padding: 0 10px;
+        }
+
+        .quote::before {
+            content: '"';
+            font-size: 60px;
+            color: #ff652f;
+            position: absolute;
+            left: -5px;
+            top: -10px;
+            opacity: 0.3;
+        }
+
+        .quote::after {
+            content: '"';
+            font-size: 60px;
+            color: #ff652f;
+            position: absolute;
+            right: -5px;
+            bottom: -15px;
+            opacity: 0.3;
+        }
+
+        .source {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        .cta-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .cta-text {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .shop-button {
+            background: linear-gradient(135deg, #ff652f, #ff49fd);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .shop-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 101, 47, 0.4);
+        }
+
+        /* Animated background elements */
+        .bg-element {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 101, 47, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .bg-element:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bg-element:nth-child(2) {
+            top: 20%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .bg-element:nth-child(3) {
+            bottom: 10%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 25px 20px;
+                border-radius: 16px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            .back-arrow {
+                top: 15px;
+                left: 15px;
+                font-size: 16px;
+            }
+            
+            .character-image {
+                width: 280px;
+                height: 280px;
+                margin-bottom: 20px;
+                font-size: 14px;
+            }
+            
+            .quote {
+                font-size: 50px;
+                margin-bottom: 12px;
+                line-height: 1.0;
+            }
+            
+            .source {
+                font-size: 13px;
+                margin-bottom: 25px;
+            }
+            
+            .logo {
+                font-size: 12px;
+                margin-top: 15px;
+            }
+            
+            .cta-text {
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+            
+            .cta-section {
+                padding: 18px;
+                margin-top: 20px;
+            }
+            
+            .shop-button {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+        }
+
+        /* iPhone SE and smaller */
+        @media (max-width: 375px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .character-image {
+                width: 260px;
+                height: 260px;
+                font-size: 13px;
+            }
+            
+            .quote {
+                font-size: 50px;
+                padding: 0 5px;
+                line-height: 0.95;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-element"></div>
+    <div class="bg-element"></div>
+    <div class="bg-element"></div>
+    
+    <div class="container">
+        <a href="../" class="back-arrow">← Back</a>
+        
+        <div class="character-image" id="characterImage">
+            Add your image here
+        </div>
+        
+        <div class="quote" id="mainQuote">
+            Hello, you.
+        </div>
+        
+        <div class="source" id="quoteSource">
+            - Joe Goldberg
+        </div>
+        
+        <div class="cta-section">
+            <div class="cta-text">
+                Want an awesome shirt like this?
+            </div>
+            
+            <a href="https://wearablecode.com" class="shop-button">
+                Visit WearableCode.com 🚀
+            </a>
+        </div>
+        
+        <div class="logo">WEARABLECODE</div>
+    </div>
+
+    <script>
+        // Page-specific data
+        const pageData = {
+            quote: "Hello, you.",
+            source: "- Joe Goldberg",
+            image: "" // Add image URL here: "https://your-image-url.com/joe.jpg"
+        };
+        
+        // Update the content
+        document.getElementById('mainQuote').textContent = pageData.quote;
+        document.getElementById('quoteSource').textContent = pageData.source;
+        
+        // Update character image
+        const imageElement = document.getElementById('characterImage');
+        if (pageData.image && pageData.image.startsWith('http')) {
+            imageElement.innerHTML = `<img src="${pageData.image}" alt="Character">`;
+            imageElement.classList.add('has-image');
+        } else {
+            imageElement.textContent = 'Add your image here';
+            imageElement.classList.remove('has-image');
+        }
+        
+        // Analytics tracking
+        document.querySelector('.shop-button').addEventListener('click', function() {
+            console.log('Shop button clicked for quote:', pageData.quote);
+        });
+    </script>
+</body>
+</html>
