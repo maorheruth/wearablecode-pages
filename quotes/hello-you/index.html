@@ -578,7 +578,7 @@
         
         // Update character image
         const imageElement = document.getElementById('characterImage');
-        if (pageData.image && pageData.image.startsWith('http')) {
+        if (pageData.image && pageData.image.length > 0) {
             imageElement.innerHTML = `<img src="${pageData.image}" alt="Character">`;
             imageElement.classList.add('has-image');
         } else {
