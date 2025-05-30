@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WearableCode | Quote Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #ff652f 0%, #ff49fd 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .logo::before {
+            content: "{ ";
+            color: #ff652f;
+        }
+
+        .logo::after {
+            content: " }";
+            color: #ff652f;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .quotes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .quote-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quote-card:hover {
+            border-color: #ff652f;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .quote-preview {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .quote-source {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .main-cta {
+            background: linear-gradient(135deg, #ff652f, #ff49fd);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .main-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 101, 47, 0.4);
+        }
+
+        .back-link {
+            display: block;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .back-link:hover {
+            color: #ff652f;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .quotes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">WEARABLECODE</div>
+        
+        <h1>Quote Collection</h1>
+        <p>Explore our collection of iconic quotes on wearable shirts. Each design tells a story.</p>
+        
+        <div class="quotes-grid">
+            <a href="hello-you/" class="quote-card">
+                <div class="quote-preview">"Hello, you."</div>
+                <div class="quote-source">- Joe Goldberg</div>
+            </a>
+            
+            <a href="winter-vibes/" class="quote-card">
+                <div class="quote-preview">"Winter vibes"</div>
+                <div class="quote-source">- Game of Thrones inspired</div>
+            </a>
+            
+            <a href="may-the-vibes/" class="quote-card">
+                <div class="quote-preview">"May the vibes be with you"</div>
+                <div class="quote-source">- Star Wars inspired</div>
+            </a>
+        </div>
+        
+        <a href="https://wearablecode.com" class="main-cta">
+            Shop All Shirts 🛒
+        </a>
+        
+        <a href="../" class="back-link">← Back to WearableCode</a>
+    </div>
+</body>
+</html>
