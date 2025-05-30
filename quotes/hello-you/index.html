@@ -105,21 +105,21 @@
         }
 
         .logo {
-            font-size: 14px;
-            font-weight: bold;
-            color: #999;
             margin-top: 15px;
-            letter-spacing: -0.3px;
+            text-align: center;
         }
 
-        .logo::before {
-            content: "{ ";
-            color: #ff652f;
+        .logo img {
+            height: 18px;
+            opacity: 0.8;
+            filter: grayscale(20%);
+            transition: all 0.3s ease;
         }
 
-        .logo::after {
-            content: " }";
-            color: #ff652f;
+        .logo img:hover {
+            opacity: 1;
+            filter: grayscale(0%);
+            transform: scale(1.05);
         }
 
         .character-image {
@@ -307,8 +307,8 @@
                 margin-bottom: 20px;
             }
             
-            .logo {
-                font-size: 12px;
+            .logo img {
+                height: 15px;
                 margin-top: 12px;
             }
             
@@ -369,6 +369,10 @@
                 color: rgba(255, 255, 255, 0.18);
                 text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
             }
+            
+            .logo img {
+                height: 14px;
+            }
         }
     </style>
 </head>
@@ -398,7 +402,9 @@
             </a>
         </div>
         
-        <div class="logo">WEARABLECODE</div>
+        <div class="logo">
+            <img src="../../assets/logos/wearablecode_logo_black.png" alt="WearableCode">
+        </div>
     </div>
 
     <script>
