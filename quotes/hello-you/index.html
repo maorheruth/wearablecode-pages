@@ -14,20 +14,20 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #ff652f 0%, #ff49fd 100%);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 15px;
-            overflow: hidden;
+            overflow-x: hidden;
             margin: 0;
         }
 
         .container {
             background: white;
             border-radius: 20px;
-            padding: 25px 20px;
-            max-width: 320px;
+            padding: 35px 30px;
+            max-width: 900px;
             width: 100%;
             box-shadow: 0 15px 35px rgba(0,0,0,0.12), 0 0 30px rgba(255, 255, 255, 0.8);
             text-align: center;
@@ -68,10 +68,12 @@
         }
 
         .character-image {
-            width: 250px;
-            height: 250px;
+            width: 800px;
+            height: 800px;
+            max-width: 90vw;
+            max-height: 90vw;
             border-radius: 12px;
-            margin: 0 auto 20px;
+            margin: 0 auto 25px;
             background: #f8f9fa;
             display: flex;
             align-items: center;
@@ -80,8 +82,9 @@
             border: 2px dashed #ddd;
             position: relative;
             overflow: hidden;
-            font-size: 14px;
+            font-size: 18px;
             font-weight: 500;
+            aspect-ratio: 1;
         }
 
         .character-image img {
@@ -97,33 +100,38 @@
         }
 
         .quote {
-            font-size: 40px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 12px;
-            line-height: 1.0;
+            font-size: 60px;
+            font-weight: 900;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: #222;
+            margin-bottom: 15px;
+            line-height: 0.9;
             position: relative;
-            padding: 0 10px;
+            padding: 0 15px;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         .quote::before {
             content: '"';
-            font-size: 50px;
+            font-size: 70px;
             color: #ff652f;
             position: absolute;
-            left: -5px;
-            top: -8px;
+            left: -8px;
+            top: -12px;
             opacity: 0.3;
+            font-family: Georgia, serif;
         }
 
         .quote::after {
             content: '"';
-            font-size: 50px;
+            font-size: 70px;
             color: #ff652f;
             position: absolute;
-            right: -5px;
-            bottom: -12px;
+            right: -8px;
+            bottom: -18px;
             opacity: 0.3;
+            font-family: Georgia, serif;
         }
 
         .source {
@@ -221,7 +229,7 @@
                 opacity: 0.4;
             }
             100% {
-                transform: translateY(-20vh) rotate(360deg) scale(0.3);
+                transform: translateY(-10vh) rotate(360deg) scale(0.3);
                 opacity: 0;
             }
         }
@@ -230,35 +238,41 @@
         @media (max-width: 480px) {
             body {
                 padding: 10px;
+                overflow-x: hidden;
             }
             
             .container {
-                padding: 20px 15px;
+                padding: 25px 20px;
                 border-radius: 16px;
-                max-width: 300px;
+                max-width: 90vw;
             }
             
             .character-image {
-                width: 200px;
-                height: 200px;
+                width: 70vw;
+                height: 70vw;
+                max-width: 350px;
+                max-height: 350px;
                 margin-bottom: 15px;
-                font-size: 12px;
+                font-size: 14px;
             }
             
             .quote {
                 font-size: 32px;
                 margin-bottom: 10px;
-                line-height: 0.95;
+                line-height: 0.85;
+                padding: 0 5px;
             }
             
             .quote::before {
                 font-size: 40px;
-                top: -6px;
+                top: -8px;
+                left: -4px;
             }
 
             .quote::after {
                 font-size: 40px;
-                bottom: -10px;
+                bottom: -12px;
+                right: -4px;
             }
             
             .source {
@@ -294,20 +308,30 @@
         /* iPhone SE and smaller */
         @media (max-width: 375px) {
             .container {
-                padding: 18px 12px;
-                max-width: 280px;
+                padding: 20px 15px;
+                max-width: 95vw;
             }
             
             .character-image {
-                width: 180px;
-                height: 180px;
-                font-size: 11px;
+                width: 65vw;
+                height: 65vw;
+                max-width: 300px;
+                max-height: 300px;
+                font-size: 12px;
             }
             
             .quote {
                 font-size: 28px;
-                padding: 0 5px;
-                line-height: 0.9;
+                padding: 0 3px;
+                line-height: 0.8;
+            }
+
+            .quote::before {
+                font-size: 36px;
+            }
+
+            .quote::after {
+                font-size: 36px;
             }
 
             .mystery-element {
