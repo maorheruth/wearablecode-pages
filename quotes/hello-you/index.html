@@ -251,7 +251,7 @@
 
         @keyframes mysteryFloat {
             0% {
-                transform: translateY(100vh) rotate(0deg);
+                transform: translateY(120vh) rotate(0deg);
                 opacity: 0;
             }
             15% {
@@ -271,10 +271,10 @@
             }
             85% {
                 opacity: 0.3;
-                transform: translateY(10vh) rotate(320deg);
+                transform: translateY(5vh) rotate(320deg);
             }
             100% {
-                transform: translateY(-40vh) rotate(360deg);
+                transform: translateY(-60vh) rotate(360deg);
                 opacity: 0;
             }
         }
@@ -443,16 +443,17 @@
             if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '85px';
-                    quoteElement.style.lineHeight = '0.65';
+                    quoteElement.style.fontSize = '55px';
+                    quoteElement.style.lineHeight = '0.75';
+                    quoteElement.style.letterSpacing = '-1px';
                 } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '90px';
-                    quoteElement.style.lineHeight = '0.7';
+                    quoteElement.style.fontSize = '65px';
+                    quoteElement.style.lineHeight = '0.8';
+                    quoteElement.style.letterSpacing = '-1px';
                 }
                 quoteElement.style.fontFamily = "'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif";
                 quoteElement.style.fontWeight = '900';
                 quoteElement.style.textTransform = 'uppercase';
-                quoteElement.style.letterSpacing = '0px';
                 
                 console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
             }
