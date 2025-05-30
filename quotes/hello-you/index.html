@@ -99,14 +99,38 @@
         .quote {
             font-size: 60px;
             font-weight: 900;
-            font-family: 'Georgia', 'Times New Roman', serif;
+            font-family: 'Impact', 'Arial Black', 'Helvetica Black', sans-serif;
             color: #222;
             margin-bottom: 15px;
             line-height: 0.9;
             position: relative;
             padding: 0 15px;
             letter-spacing: -1px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: creepyPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes creepyPulse {
+            0%, 85% {
+                text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+                transform: scale(1);
+                color: #222;
+            }
+            90% {
+                text-shadow: 0 0 20px rgba(255, 101, 47, 0.8), 3px 3px 6px rgba(0,0,0,0.5);
+                transform: scale(1.02);
+                color: #ff652f;
+            }
+            95% {
+                text-shadow: 0 0 30px rgba(255, 73, 253, 0.9), 3px 3px 6px rgba(0,0,0,0.5);
+                transform: scale(0.98);
+                color: #ff49fd;
+            }
+            100% {
+                text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+                transform: scale(1);
+                color: #222;
+            }
         }
 
         .quote::before {
@@ -187,27 +211,52 @@
 
         .mystery-element:nth-child(2) {
             left: 50%;
-            animation-delay: 3s;
+            animation-delay: 2s;
         }
 
         .mystery-element:nth-child(3) {
             right: 15%;
-            animation-delay: 6s;
+            animation-delay: 4s;
         }
 
         .mystery-element:nth-child(4) {
             left: 30%;
-            animation-delay: 1.5s;
+            animation-delay: 1s;
         }
 
         .mystery-element:nth-child(5) {
             right: 35%;
-            animation-delay: 4.5s;
+            animation-delay: 3s;
         }
 
         .mystery-element:nth-child(6) {
             left: 70%;
+            animation-delay: 5s;
+        }
+
+        .mystery-element:nth-child(7) {
+            left: 25%;
+            animation-delay: 6s;
+        }
+
+        .mystery-element:nth-child(8) {
+            right: 25%;
             animation-delay: 7s;
+        }
+
+        .mystery-element:nth-child(9) {
+            left: 60%;
+            animation-delay: 1.5s;
+        }
+
+        .mystery-element:nth-child(10) {
+            right: 60%;
+            animation-delay: 3.5s;
+        }
+
+        .mystery-element:nth-child(11) {
+            left: 40%;
+            animation-delay: 0.5s;
         }
 
         @keyframes mysteryFloat {
@@ -215,18 +264,27 @@
                 transform: translateY(100vh) rotate(0deg) scale(0.5);
                 opacity: 0;
             }
-            10% {
+            15% {
                 opacity: 0.6;
             }
-            50% {
+            30% {
                 opacity: 0.8;
-                transform: translateY(50vh) rotate(180deg) scale(1);
+                transform: translateY(70vh) rotate(90deg) scale(1);
             }
-            90% {
-                opacity: 0.4;
+            50% {
+                opacity: 0.9;
+                transform: translateY(40vh) rotate(180deg) scale(1.2);
+            }
+            70% {
+                opacity: 0.7;
+                transform: translateY(30vh) rotate(270deg) scale(0.8);
+            }
+            85% {
+                opacity: 0.3;
+                transform: translateY(20vh) rotate(320deg) scale(0.3);
             }
             100% {
-                transform: translateY(-10vh) rotate(360deg) scale(0.3);
+                transform: translateY(-5vh) rotate(360deg) scale(0);
                 opacity: 0;
             }
         }
@@ -256,6 +314,7 @@
                 margin-bottom: 10px;
                 line-height: 0.85;
                 padding: 0 5px;
+                font-family: 'Impact', 'Arial Black', sans-serif;
             }
             
             .quote::before {
@@ -296,7 +355,7 @@
             }
 
             .mystery-element {
-                font-size: 18px;
+                font-size: 16px;
             }
         }
 
@@ -317,6 +376,7 @@
                 font-size: 28px;
                 padding: 0 3px;
                 line-height: 0.8;
+                font-family: 'Impact', 'Arial Black', sans-serif;
             }
 
             .quote::before {
@@ -340,6 +400,11 @@
     <div class="mystery-element">💀</div>
     <div class="mystery-element">👻</div>
     <div class="mystery-element">🔮</div>
+    <div class="mystery-element">🕷️</div>
+    <div class="mystery-element">🖤</div>
+    <div class="mystery-element">⚡</div>
+    <div class="mystery-element">🗝️</div>
+    <div class="mystery-element">🕯️</div>
     
     <div class="container">
         <div class="character-image" id="characterImage">
