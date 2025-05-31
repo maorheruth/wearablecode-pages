@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code.io - מייצר QR קודים מתקדם</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f8fafb;
+            color: #1f2937;
+            line-height: 1.4;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #2563eb;
+            border-radius: 6px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+            padding: 4px;
+        }
+
+        .logo-icon > div {
+            background: white;
+            border-radius: 1px;
+        }
+
+        .main-container {
+            height: calc(100vh - 80px);
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            padding: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            overflow: hidden;
+        }
+
+        .url-input-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .controls-panel {
+            background: white;
+            border-radius: 12px;
+            overflow-y: auto;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+
+        .section {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            padding: 1rem 1.5rem;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .section-icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-title {
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .section-subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+            display: block;
+            margin-top: 0.1rem;
+        }
+
+        .collapse-icon {
+            color: #6b7280;
+            transition: transform 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .section.collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            padding: 1rem 1.5rem;
+        }
+
+        .section.collapsed .section-content {
+            display: none;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pattern-option {
+            aspect-ratio: 1;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            font-size: 0.7rem;
+        }
+
+        .pattern-option:hover {
+            border-color: #2563eb;
+        }
+
+        .pattern-option.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .color-section {
+            margin-bottom: 1rem;
+        }
+
+        .color-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .gradient-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .toggle {
+            width: 36px;
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle.active {
+            background: #2563eb;
+        }
+
+        .toggle-handle {
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .toggle.active .toggle-handle {
+            transform: translateX(16px);
+        }
+
+        .color-input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .color-input {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            background: none;
+            overflow: hidden;
+        }
+
+        .color-input::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .color-input::-webkit-color-swatch {
+            border: none;
+        }
+
+        .color-text {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+        }
+
+        .corners-section {
+            margin-bottom: 1rem;
+        }
+
+        .corners-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .corner-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.3rem;
+        }
+
+        .corner-option {
+            aspect-ratio: 1;
+            border: 2px solid #e5e7eb;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            font-size: 0.7rem;
+        }
+
+        .corner-option:hover {
+            border-color: #2563eb;
+        }
+
+        .corner-option.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .logo-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logo-upload:hover {
+            border-color: #2563eb;
+            background: #f8fafb;
+        }
+
+        .upload-icon {
+            font-size: 1.5rem;
+            color: #60a5fa;
+            margin-bottom: 0.25rem;
+        }
+
+        .upload-text {
+            color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        .upload-limit {
+            color: #9ca3af;
+            font-size: 0.7rem;
+            margin-top: 0.25rem;
+        }
+
+        .preview-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-tabs {
+            display: flex;
+            background: white;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .preview-tab {
+            flex: 1;
+            padding: 0.75rem;
+            background: #f3f4f6;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .preview-tab.active {
+            background: white;
+            color: #2563eb;
+        }
+
+        .phone-mockup {
+            background: white;
+            border-radius: 0 0 8px 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .phone-frame {
+            width: 240px;
+            height: 450px;
+            background: linear-gradient(145deg, #1f2937, #374151);
+            border-radius: 30px;
+            padding: 16px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 20px;
+            background: #1f2937;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .status-bar {
+            position: absolute;
+            top: 8px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .qr-display {
+            width: 160px;
+            height: 160px;
+            background: #f9fafb;
+            border: 2px dashed #d1d5db;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .qr-code-canvas {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 6px;
+        }
+
+        .placeholder-content {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        .placeholder-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .download-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .download-btn {
+            width: 100%;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .download-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .download-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        .format-options {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .format-btn {
+            flex: 1;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 0.4rem;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .format-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .info-note {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            padding: 0.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+            color: #1e40af;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.4rem;
+        }
+
+        .checkbox {
+            margin-right: 0.4rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .corner-color-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .corner-color-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .corner-color-group .color-label {
+            font-size: 0.7rem;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Scrollbar styling */
+        .controls-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .controls-panel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .controls-panel::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .controls-panel::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            QR code.io
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <!-- URL Input Section -->
+            <div class="url-input-section">
+                <input type="text" 
+                       class="url-input" 
+                       id="url-input"
+                       placeholder="הזן כתובת URL או טקסט..."
+                       value="https://example.com"
+                       oninput="updateQRText()">
+            </div>
+
+            <div class="controls-panel">
+                <!-- QR Code Pattern Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-icon">🎨</div>
+                        <div>
+                            <div class="section-title">QR Code Pattern</div>
+                            <span class="section-subtitle">Choose a pattern for your QR code and select colors.</span>
+                        </div>
+                        <div class="collapse-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="color-label">Pattern style</div>
+                        <div class="pattern-grid">
+                            <div class="pattern-option selected" data-pattern="square">⬛</div>
+                            <div class="pattern-option" data-pattern="rounded">⬜</div>
+                            <div class="pattern-option" data-pattern="extra-rounded">▢</div>
+                            <div class="pattern-option" data-pattern="circles">⚫</div>
+                            <div class="pattern-option" data-pattern="diamonds">♦</div>
+                            <div class="pattern-option" data-pattern="mixed">⬟</div>
+                        </div>
+
+                        <div class="color-section">
+                            <div class="color-label">Pattern color</div>
+                            <div class="gradient-toggle">
+                                <label>Use gradient</label>
+                                <div class="toggle" onclick="toggleGradient(this, 'pattern')">
+                                    <div class="toggle-handle"></div>
+                                </div>
+                            </div>
+                            <div class="color-input-group">
+                                <input type="color" class="color-input" id="pattern-color" value="#000000">
+                                <span class="color-text" id="pattern-color-text">#000000</span>
+                            </div>
+                        </div>
+
+                        <div class="color-section">
+                            <div class="color-label">Background color</div>
+                            <div class="gradient-toggle">
+                                <input type="checkbox" id="transparent-bg" class="checkbox">
+                                <label for="transparent-bg">Transparent</label>
+                            </div>
+                            <div class="color-input-group">
+                                <input type="color" class="color-input" id="bg-color" value="#ffffff">
+                                <span class="color-text" id="bg-color-text">#ffffff</span>
+                            </div>
+                        </div>
+
+                        <div class="info-note">
+                            <span>💡</span>
+                            <span>Use high-contrast colors for better scanning.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR Code Corners Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-icon">⬜</div>
+                        <div>
+                            <div class="section-title">QR Code Corners</div>
+                            <span class="section-subtitle">Select your QR code's corner style</span>
+                        </div>
+                        <div class="collapse-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="corners-grid">
+                            <div>
+                                <div class="color-label">Frame style</div>
+                                <div class="corner-group">
+                                    <div class="corner-option selected" data-corner-frame="square">⬜</div>
+                                    <div class="corner-option" data-corner-frame="circle">⚫</div>
+                                    <div class="corner-option" data-corner-frame="rounded">▢</div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="color-label">Dots type</div>
+                                <div class="corner-group">
+                                    <div class="corner-option selected" data-corner-dot="square">⬛</div>
+                                    <div class="corner-option" data-corner-dot="circle">⚫</div>
+                                    <div class="corner-option" data-corner-dot="diamond">♦</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="corner-color-inputs">
+                            <div class="corner-color-group">
+                                <div class="color-label">Frame color</div>
+                                <div class="color-input-group">
+                                    <input type="color" class="color-input" id="corner-frame-color" value="#000000">
+                                    <span class="color-text" id="corner-frame-color-text">#000000</span>
+                                </div>
+                            </div>
+                            <div class="corner-color-group">
+                                <div class="color-label">Dots color</div>
+                                <div class="color-input-group">
+                                    <input type="color" class="color-input" id="corner-dot-color" value="#000000">
+                                    <span class="color-text" id="corner-dot-color-text">#000000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Logo Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-icon">🖼️</div>
+                        <div>
+                            <div class="section-title">Add Logo</div>
+                            <span class="section-subtitle">Make your QR code unique by adding your logo</span>
+                        </div>
+                        <div class="collapse-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="logo-upload" onclick="document.getElementById('logo-input').click()">
+                            <div class="upload-icon">📷</div>
+                            <div class="upload-text">Upload logo</div>
+                            <div class="upload-limit">(Max: 1 MB)</div>
+                            <input type="file" id="logo-input" accept="image/*" style="display: none;" onchange="handleLogoUpload(this)">
+                        </div>
+                        <div id="logo-preview" class="hidden" style="margin-top: 0.75rem; text-align: center;">
+                            <img id="logo-image" style="max-width: 80px; max-height: 80px; border-radius: 6px;">
+                            <div style="margin-top: 0.5rem;">
+                                <button onclick="removeLogo()" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.7rem; cursor: pointer;">הסר</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-panel">
+            <div class="preview-tabs">
+                <button class="preview-tab active" onclick="switchTab(this, 'preview')">Preview</button>
+                <button class="preview-tab" onclick="switchTab(this, 'qr-code')">QR code</button>
+            </div>
+            
+            <div class="phone-mockup">
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 📶 📶 🔋</span>
+                        </div>
+                        <div class="qr-display" id="qr-container">
+                            <div class="placeholder-content">
+                                <div class="placeholder-icon">📱</div>
+                                <div>QR code preview</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="download-section">
+                    <button class="download-btn" id="download-btn" onclick="generateAndDownload()">
+                        Download QR code
+                    </button>
+                    <div class="format-options">
+                        <button class="format-btn" onclick="setFormat('png')">PNG</button>
+                        <button class="format-btn" onclick="setFormat('jpg')">JPG</button>
+                        <button class="format-btn" onclick="setFormat('svg')">SVG</button>
+                        <button class="format-btn" onclick="setFormat('pdf')">PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let qrSettings = {
+            text: 'https://example.com',
+            size: 160,
+            pattern: 'square',
+            patternColor: '#000000',
+            backgroundColor: '#ffffff',
+            transparentBg: false,
+            patternGradient: false,
+            backgroundGradient: false,
+            cornerFrame: 'square',
+            cornerDot: 'square',
+            cornerFrameColor: '#000000',
+            cornerDotColor: '#000000',
+            logo: null,
+            downloadFormat: 'png'
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateColorTexts();
+            generatePreviewQR();
+        });
+
+        function updateQRText() {
+            qrSettings.text = document.getElementById('url-input').value || 'https://example.com';
+            generatePreviewQR();
+        }
+
+        function toggleSection(header) {
+            const section = header.parentElement;
+            section.classList.toggle('collapsed');
+        }
+
+        function toggleGradient(toggle, type) {
+            toggle.classList.toggle('active');
+            qrSettings[type + 'Gradient'] = toggle.classList.contains('active');
+            generatePreviewQR();
+        }
+
+        function switchTab(tab, tabName) {
+            document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        }
+
+        // Pattern selection
+        document.querySelectorAll('.pattern-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.pattern-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                qrSettings.pattern = this.dataset.pattern;
+                generatePreviewQR();
+            });
+        });
+
+        // Corner selection
+        document.querySelectorAll('.corner-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const group = this.parentElement;
+                group.querySelectorAll('.corner-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                if (this.dataset.cornerFrame) {
+                    qrSettings.cornerFrame = this.dataset.cornerFrame;
+                }
+                if (this.dataset.cornerDot) {
+                    qrSettings.cornerDot = this.dataset.cornerDot;
+                }
+                generatePreviewQR();
+            });
+        });
+
+        // Color inputs
+        document.getElementById('pattern-color').addEventListener('change', function() {
+            qrSettings.patternColor = this.value;
+            updateColorTexts();
+            generatePreviewQR();
+        });
+
+        document.getElementById('bg-color').addEventListener('change', function() {
+            qrSettings.backgroundColor = this.value;
+            updateColorTexts();
+            generatePreviewQR();
+        });
+
+        document.getElementById('corner-frame-color').addEventListener('change', function() {
+            qrSettings.cornerFrameColor = this.value;
+            updateColorTexts();
+            generatePreviewQR();
+        });
+
+        document.getElementById('corner-dot-color').addEventListener('change', function() {
+            qrSettings.cornerDotColor = this.value;
+            updateColorTexts();
+            generatePreviewQR();
+        });
+
+        document.getElementById('transparent-bg').addEventListener('change', function() {
+            qrSettings.transparentBg = this.checked;
+            generatePreviewQR();
+        });
+
+        function updateColorTexts() {
+            document.getElementById('pattern-color-text').textContent = qrSettings.patternColor.toUpperCase();
+            document.getElementById('bg-color-text').textContent = qrSettings.backgroundColor.toUpperCase();
+            document.getElementById('corner-frame-color-text').textContent = qrSettings.cornerFrameColor.toUpperCase();
+            document.getElementById('corner-dot-color-text').textContent = qrSettings.cornerDotColor.toUpperCase();
+        }
+
+        function handleLogoUpload(input) {
+            const file = input.files[0];
+            if (file) {
+                if (file.size > 1024 * 1024) {
+                    alert('הקובץ גדול מדי. מקסימום 1MB');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    qrSettings.logo = e.target.result;
+                    document.getElementById('logo-image').src = e.target.result;
+                    document.getElementById('logo-preview').classList.remove('hidden');
+                    generatePreviewQR();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeLogo() {
+            qrSettings.logo = null;
+            document.getElementById('logo-preview').classList.add('hidden');
+            document.getElementById('logo-input').value = '';
+            generatePreviewQR();
+        }
+
+        function setFormat(format) {
+            qrSettings.downloadFormat = format;
+            document.querySelectorAll('.format-btn').forEach(btn => {
+                btn.style.background = '#f3f4f6';
+            });
+            event.target.style.background = '#dbeafe';
+        }
+
+        function generatePreviewQR() {
+            const canvas = document.createElement('canvas');
+            
+            QRCode.toCanvas(canvas, qrSettings.text, {
+                width: qrSettings.size,
+                height: qrSettings.size,
+                color: {
+                    dark: qrSettings.patternColor,
+                    light: qrSettings.transparentBg ? '#00000000' : qrSettings.backgroundColor
+                },
+                margin: 1,
+                errorCorrectionLevel: 'M'
+            }, function (error) {
+                if (error) {
+                    console.error(error);
+                    return;
+                }
+                
+                const container = document.getElementById('qr-container');
+                container.innerHTML = '';
+                canvas.className = 'qr-code-canvas';
+                container.appendChild(canvas);
+                
+                document.getElementById('download-btn').disabled = false;
+            });
+        }
+
+        function generateAndDownload() {
+            const canvas = document.querySelector('#qr-container canvas');
+            if (!canvas) {
+                alert('אנא צור QR קוד תחילה');
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.download = `qr-code.${qrSettings.downloadFormat}`;
+            link.href = canvas.toDataURL(`image/${qrSettings.downloadFormat === 'jpg' ? 'jpeg' : 'png'}`);
+            link.click();
+        }
+
+        // Auto-generate on page load
+        setTimeout(() => {
+            generatePreviewQR();
+        }, 300);
+    </script>
+</body>
+</html>
