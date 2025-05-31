@@ -610,9 +610,31 @@
                         </div>
 
                         <div class="color-section">
-                            <div class="color-label">Pattern color</div>
+                            <div class="color-label">Background color</div>
                             <div class="gradient-toggle">
-                                <label>Use gradient</label>
+                                <input type="checkbox" id="transparent-bg" class="checkbox">
+                                <label for="transparent-bg">Transparent background</label>
+                            </div>
+                            <div class="gradient-toggle">
+                                <label>Gradient</label>
+                                <div class="toggle" onclick="toggleGradient(this, 'background')">
+                                    <div class="toggle-handle"></div>
+                                </div>
+                            </div>
+                            <div class="color-input-group">
+                                <input type="color" class="color-input" id="bg-color" value="#ffffff">
+                                <span class="color-text" id="bg-color-text">#ffffff</span>
+                            </div>
+                            <div class="gradient-picker hidden" id="background-gradient">
+                                <input type="color" class="color-input" id="bg-color2" value="#f0f0f0">
+                                <span class="color-text" id="bg-color2-text">#f0f0f0</span>
+                            </div>
+                        </div>
+
+                        <div class="color-section">
+                            <div class="color-label">Shape color</div>
+                            <div class="gradient-toggle">
+                                <label>Gradient</label>
                                 <div class="toggle" onclick="toggleGradient(this, 'pattern')">
                                     <div class="toggle-handle"></div>
                                 </div>
@@ -621,17 +643,9 @@
                                 <input type="color" class="color-input" id="pattern-color" value="#000000">
                                 <span class="color-text" id="pattern-color-text">#000000</span>
                             </div>
-                        </div>
-
-                        <div class="color-section">
-                            <div class="color-label">Background color</div>
-                            <div class="gradient-toggle">
-                                <input type="checkbox" id="transparent-bg" class="checkbox">
-                                <label for="transparent-bg">Transparent</label>
-                            </div>
-                            <div class="color-input-group">
-                                <input type="color" class="color-input" id="bg-color" value="#ffffff">
-                                <span class="color-text" id="bg-color-text">#ffffff</span>
+                            <div class="gradient-picker hidden" id="pattern-gradient">
+                                <input type="color" class="color-input" id="pattern-color2" value="#333333">
+                                <span class="color-text" id="pattern-color2-text">#333333</span>
                             </div>
                         </div>
 
@@ -642,51 +656,102 @@
                     </div>
                 </div>
 
-                <!-- QR Code Corners Section -->
+                <!-- Border Style Section -->
                 <div class="section">
                     <div class="section-header" onclick="toggleSection(this)">
-                        <div class="section-icon">⬜</div>
+                        <div class="section-icon">🔲</div>
                         <div>
-                            <div class="section-title">QR Code Corners</div>
-                            <span class="section-subtitle">Select your QR code's corner style</span>
+                            <div class="section-title">Border Style</div>
+                            <span class="section-subtitle">Customize the corner detection patterns</span>
                         </div>
                         <div class="collapse-icon">▼</div>
                     </div>
                     <div class="section-content">
-                        <div class="corners-grid">
-                            <div>
-                                <div class="color-label">Frame style</div>
-                                <div class="corner-group">
-                                    <div class="corner-option selected" data-corner-frame="square">⬜</div>
-                                    <div class="corner-option" data-corner-frame="circle">⚫</div>
-                                    <div class="corner-option" data-corner-frame="rounded">▢</div>
-                                </div>
+                        <div class="color-label">Border style</div>
+                        <div class="pattern-grid" style="grid-template-columns: repeat(4, 1fr);">
+                            <div class="pattern-option selected" data-border="square">
+                                <div style="width: 20px; height: 20px; border: 3px solid #000; background: transparent;"></div>
                             </div>
-                            
-                            <div>
-                                <div class="color-label">Dots type</div>
-                                <div class="corner-group">
-                                    <div class="corner-option selected" data-corner-dot="square">⬛</div>
-                                    <div class="corner-option" data-corner-dot="circle">⚫</div>
-                                    <div class="corner-option" data-corner-dot="diamond">♦</div>
-                                </div>
+                            <div class="pattern-option" data-border="rounded">
+                                <div style="width: 20px; height: 20px; border: 3px solid #000; border-radius: 50%; background: transparent;"></div>
+                            </div>
+                            <div class="pattern-option" data-border="circle">
+                                <div style="width: 20px; height: 20px; border: 3px solid #000; border-radius: 50%; background: transparent;"></div>
+                            </div>
+                            <div class="pattern-option" data-border="half-circle">
+                                <div style="width: 20px; height: 20px; border: 3px solid #000; border-radius: 50% 0; background: transparent;"></div>
+                            </div>
+                            <div class="pattern-option" data-border="leaf">
+                                <div style="width: 20px; height: 20px; border: 3px solid #000; border-radius: 0 50% 0 50%; background: transparent;"></div>
+                            </div>
+                            <div class="pattern-option" data-border="diamond">
+                                <div style="width: 14px; height: 14px; border: 3px solid #000; transform: rotate(45deg); background: transparent; margin: 3px;"></div>
+                            </div>
+                            <div class="pattern-option" data-border="star">
+                                <div style="width: 20px; height: 20px; border: 3px solid #000; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); background: transparent;"></div>
+                            </div>
+                            <div class="pattern-option" data-border="rounded-square">
+                                <div style="width: 20px; height: 20px; border: 3px solid #000; border-radius: 20%; background: transparent;"></div>
                             </div>
                         </div>
 
-                        <div class="corner-color-inputs">
-                            <div class="corner-color-group">
-                                <div class="color-label">Frame color</div>
-                                <div class="color-input-group">
-                                    <input type="color" class="color-input" id="corner-frame-color" value="#000000">
-                                    <span class="color-text" id="corner-frame-color-text">#000000</span>
+                        <div class="color-section">
+                            <div class="color-label">Border color</div>
+                            <div class="color-input-group">
+                                <input type="color" class="color-input" id="border-color" value="#000000">
+                                <span class="color-text" id="border-color-text">#000000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center Style Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-icon">●</div>
+                        <div>
+                            <div class="section-title">Center Style</div>
+                            <span class="section-subtitle">Customize the center detection dots</span>
+                        </div>
+                        <div class="collapse-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="color-label">Center style</div>
+                        <div class="pattern-grid" style="grid-template-columns: repeat(4, 1fr);">
+                            <div class="pattern-option selected" data-center="square">
+                                <div style="width: 16px; height: 16px; background: #000;"></div>
+                            </div>
+                            <div class="pattern-option" data-center="rounded-square">
+                                <div style="width: 16px; height: 16px; background: #000; border-radius: 20%;"></div>
+                            </div>
+                            <div class="pattern-option" data-center="circle">
+                                <div style="width: 16px; height: 16px; background: #000; border-radius: 50%;"></div>
+                            </div>
+                            <div class="pattern-option" data-center="half-circle">
+                                <div style="width: 16px; height: 16px; background: #000; border-radius: 50% 0;"></div>
+                            </div>
+                            <div class="pattern-option" data-center="star">
+                                <div style="width: 16px; height: 16px; background: #000; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);"></div>
+                            </div>
+                            <div class="pattern-option" data-center="heart">
+                                <div style="width: 16px; height: 16px; background: #000; transform: rotate(-45deg); position: relative;">
+                                    <div style="position: absolute; width: 8px; height: 12px; background: #000; border-radius: 8px 8px 0 0; transform: rotate(-45deg) translate(-2px, 0);"></div>
+                                    <div style="position: absolute; width: 8px; height: 12px; background: #000; border-radius: 8px 8px 0 0; transform: rotate(45deg) translate(2px, 0);"></div>
                                 </div>
                             </div>
-                            <div class="corner-color-group">
-                                <div class="color-label">Dots color</div>
-                                <div class="color-input-group">
-                                    <input type="color" class="color-input" id="corner-dot-color" value="#000000">
-                                    <span class="color-text" id="corner-dot-color-text">#000000</span>
-                                </div>
+                            <div class="pattern-option" data-center="diamond">
+                                <div style="width: 12px; height: 12px; background: #000; transform: rotate(45deg); margin: 2px;"></div>
+                            </div>
+                            <div class="pattern-option" data-center="cross">
+                                <div style="width: 16px; height: 16px; background: linear-gradient(90deg, transparent 25%, #000 25%, #000 75%, transparent 75%), linear-gradient(0deg, transparent 25%, #000 25%, #000 75%, transparent 75%);"></div>
+                            </div>
+                        </div>
+
+                        <div class="color-section">
+                            <div class="color-label">Center color</div>
+                            <div class="color-input-group">
+                                <input type="color" class="color-input" id="center-color" value="#000000">
+                                <span class="color-text" id="center-color-text">#000000</span>
                             </div>
                         </div>
                     </div>
@@ -764,14 +829,16 @@
             size: 160,
             pattern: 'square',
             patternColor: '#000000',
+            patternColor2: '#333333',
             backgroundColor: '#ffffff',
+            backgroundColor2: '#f0f0f0',
             transparentBg: false,
             patternGradient: false,
             backgroundGradient: false,
-            cornerFrame: 'square',
-            cornerDot: 'square',
-            cornerFrameColor: '#000000',
-            cornerDotColor: '#000000',
+            borderStyle: 'square',
+            borderColor: '#000000',
+            centerStyle: 'square',
+            centerColor: '#000000',
             logo: null,
             downloadFormat: 'png'
         };
@@ -779,7 +846,23 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             updateColorTexts();
-            generatePreviewQR();
+            // Set PNG as default format
+            const firstFormatBtn = document.querySelector('.format-btn');
+            if (firstFormatBtn) {
+                firstFormatBtn.style.background = '#dbeafe';
+                firstFormatBtn.style.color = '#1e40af';
+            }
+            
+            // Initialize all color inputs with correct values
+            document.getElementById('pattern-color').value = qrSettings.patternColor;
+            document.getElementById('bg-color').value = qrSettings.backgroundColor;
+            document.getElementById('border-color').value = qrSettings.borderColor;
+            document.getElementById('center-color').value = qrSettings.centerColor;
+            
+            // Generate QR after short delay to ensure page is ready
+            setTimeout(() => {
+                generatePreviewQR();
+            }, 300);
         });
 
         function updateQRText() {
@@ -794,7 +877,26 @@
 
         function toggleGradient(toggle, type) {
             toggle.classList.toggle('active');
-            qrSettings[type + 'Gradient'] = toggle.classList.contains('active');
+            const gradientDiv = document.getElementById(type + '-gradient');
+            
+            if (toggle.classList.contains('active')) {
+                gradientDiv.classList.remove('hidden');
+                qrSettings[type + 'Gradient'] = true;
+                
+                // Add event listeners to gradient color pickers if they don't exist
+                const colorInput2 = document.getElementById(type + '-color2');
+                if (colorInput2 && !colorInput2.hasAttribute('data-listener')) {
+                    colorInput2.setAttribute('data-listener', 'true');
+                    colorInput2.addEventListener('change', function() {
+                        qrSettings[type + 'Color2'] = this.value;
+                        updateColorTexts();
+                        generatePreviewQR();
+                    });
+                }
+            } else {
+                gradientDiv.classList.add('hidden');
+                qrSettings[type + 'Gradient'] = false;
+            }
             generatePreviewQR();
         }
 
@@ -813,19 +915,21 @@
             });
         });
 
-        // Corner selection
-        document.querySelectorAll('.corner-option').forEach(option => {
+        // Border and Center selection
+        document.querySelectorAll('[data-border]').forEach(option => {
             option.addEventListener('click', function() {
-                const group = this.parentElement;
-                group.querySelectorAll('.corner-option').forEach(o => o.classList.remove('selected'));
+                this.parentElement.querySelectorAll('[data-border]').forEach(o => o.classList.remove('selected'));
                 this.classList.add('selected');
-                
-                if (this.dataset.cornerFrame) {
-                    qrSettings.cornerFrame = this.dataset.cornerFrame;
-                }
-                if (this.dataset.cornerDot) {
-                    qrSettings.cornerDot = this.dataset.cornerDot;
-                }
+                qrSettings.borderStyle = this.dataset.border;
+                generatePreviewQR();
+            });
+        });
+
+        document.querySelectorAll('[data-center]').forEach(option => {
+            option.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('[data-center]').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                qrSettings.centerStyle = this.dataset.center;
                 generatePreviewQR();
             });
         });
@@ -837,20 +941,32 @@
             generatePreviewQR();
         });
 
+        document.getElementById('pattern-color2')?.addEventListener('change', function() {
+            qrSettings.patternColor2 = this.value;
+            updateColorTexts();
+            generatePreviewQR();
+        });
+
         document.getElementById('bg-color').addEventListener('change', function() {
             qrSettings.backgroundColor = this.value;
             updateColorTexts();
             generatePreviewQR();
         });
 
-        document.getElementById('corner-frame-color').addEventListener('change', function() {
-            qrSettings.cornerFrameColor = this.value;
+        document.getElementById('bg-color2')?.addEventListener('change', function() {
+            qrSettings.backgroundColor2 = this.value;
             updateColorTexts();
             generatePreviewQR();
         });
 
-        document.getElementById('corner-dot-color').addEventListener('change', function() {
-            qrSettings.cornerDotColor = this.value;
+        document.getElementById('border-color').addEventListener('change', function() {
+            qrSettings.borderColor = this.value;
+            updateColorTexts();
+            generatePreviewQR();
+        });
+
+        document.getElementById('center-color').addEventListener('change', function() {
+            qrSettings.centerColor = this.value;
             updateColorTexts();
             generatePreviewQR();
         });
@@ -863,8 +979,19 @@
         function updateColorTexts() {
             document.getElementById('pattern-color-text').textContent = qrSettings.patternColor.toUpperCase();
             document.getElementById('bg-color-text').textContent = qrSettings.backgroundColor.toUpperCase();
-            document.getElementById('corner-frame-color-text').textContent = qrSettings.cornerFrameColor.toUpperCase();
-            document.getElementById('corner-dot-color-text').textContent = qrSettings.cornerDotColor.toUpperCase();
+            document.getElementById('border-color-text').textContent = qrSettings.borderColor.toUpperCase();
+            document.getElementById('center-color-text').textContent = qrSettings.centerColor.toUpperCase();
+            
+            // Update gradient colors if they exist
+            const patternColor2Text = document.getElementById('pattern-color2-text');
+            if (patternColor2Text) {
+                patternColor2Text.textContent = qrSettings.patternColor2.toUpperCase();
+            }
+            
+            const bgColor2Text = document.getElementById('bg-color2-text');
+            if (bgColor2Text) {
+                bgColor2Text.textContent = qrSettings.backgroundColor2.toUpperCase();
+            }
         }
 
         function handleLogoUpload(input) {
@@ -902,30 +1029,126 @@
         }
 
         function generatePreviewQR() {
+            const text = qrSettings.text.trim();
+            if (!text) {
+                document.getElementById('qr-container').innerHTML = `
+                    <div class="placeholder-content">
+                        <div class="placeholder-icon">📱</div>
+                        <div>הזן טקסט ליצירת QR</div>
+                    </div>
+                `;
+                document.getElementById('download-btn').disabled = true;
+                return;
+            }
+
             const canvas = document.createElement('canvas');
             
-            QRCode.toCanvas(canvas, qrSettings.text, {
-                width: qrSettings.size,
-                height: qrSettings.size,
-                color: {
-                    dark: qrSettings.patternColor,
-                    light: qrSettings.transparentBg ? '#00000000' : qrSettings.backgroundColor
-                },
-                margin: 1,
-                errorCorrectionLevel: 'M'
-            }, function (error) {
-                if (error) {
-                    console.error(error);
-                    return;
+            try {
+                // Generate basic QR code first
+                QRCode.toCanvas(canvas, text, {
+                    width: qrSettings.size,
+                    height: qrSettings.size,
+                    color: {
+                        dark: qrSettings.patternGradient ? '#000000' : qrSettings.patternColor,
+                        light: qrSettings.transparentBg ? 'rgba(255,255,255,0)' : 
+                               (qrSettings.backgroundGradient ? '#ffffff' : qrSettings.backgroundColor)
+                    },
+                    margin: 1,
+                    errorCorrectionLevel: 'M'
+                }, function (error) {
+                    if (error) {
+                        console.error('QR Generation error:', error);
+                        document.getElementById('qr-container').innerHTML = `
+                            <div class="placeholder-content">
+                                <div class="placeholder-icon">⚠️</div>
+                                <div>שגיאה ביצירת QR</div>
+                            </div>
+                        `;
+                        document.getElementById('download-btn').disabled = true;
+                        return;
+                    }
+                    
+                    // Apply advanced styling if gradients are enabled
+                    if (qrSettings.patternGradient || qrSettings.backgroundGradient) {
+                        applyAdvancedStyling(canvas);
+                    }
+                    
+                    const container = document.getElementById('qr-container');
+                    container.innerHTML = '';
+                    canvas.className = 'qr-code-canvas';
+                    container.appendChild(canvas);
+                    
+                    document.getElementById('download-btn').disabled = false;
+                });
+            } catch (error) {
+                console.error('QR Canvas error:', error);
+                document.getElementById('qr-container').innerHTML = `
+                    <div class="placeholder-content">
+                        <div class="placeholder-icon">⚠️</div>
+                        <div>שגיאה ביצירת QR</div>
+                    </div>
+                `;
+                document.getElementById('download-btn').disabled = true;
+            }
+        }
+
+        function applyAdvancedStyling(canvas) {
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            // Create gradients if enabled
+            if (qrSettings.patternGradient) {
+                const patternGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                patternGradient.addColorStop(0, qrSettings.patternColor);
+                patternGradient.addColorStop(1, qrSettings.patternColor2);
+                
+                // Apply pattern gradient to dark pixels
+                for (let i = 0; i < data.length; i += 4) {
+                    if (data[i] === 0 && data[i + 1] === 0 && data[i + 2] === 0) { // Black pixel
+                        // This is a simplified gradient application
+                        const x = (i / 4) % canvas.width;
+                        const y = Math.floor((i / 4) / canvas.width);
+                        const ratio = (x + y) / (canvas.width + canvas.height);
+                        
+                        const color1 = hexToRgb(qrSettings.patternColor);
+                        const color2 = hexToRgb(qrSettings.patternColor2);
+                        
+                        data[i] = Math.round(color1.r + (color2.r - color1.r) * ratio);
+                        data[i + 1] = Math.round(color1.g + (color2.g - color1.g) * ratio);
+                        data[i + 2] = Math.round(color1.b + (color2.b - color1.b) * ratio);
+                    }
                 }
-                
-                const container = document.getElementById('qr-container');
-                container.innerHTML = '';
-                canvas.className = 'qr-code-canvas';
-                container.appendChild(canvas);
-                
-                document.getElementById('download-btn').disabled = false;
-            });
+            }
+            
+            if (qrSettings.backgroundGradient && !qrSettings.transparentBg) {
+                // Apply background gradient to light pixels
+                for (let i = 0; i < data.length; i += 4) {
+                    if (data[i] === 255 && data[i + 1] === 255 && data[i + 2] === 255) { // White pixel
+                        const x = (i / 4) % canvas.width;
+                        const y = Math.floor((i / 4) / canvas.width);
+                        const ratio = (x + y) / (canvas.width + canvas.height);
+                        
+                        const color1 = hexToRgb(qrSettings.backgroundColor);
+                        const color2 = hexToRgb(qrSettings.backgroundColor2);
+                        
+                        data[i] = Math.round(color1.r + (color2.r - color1.r) * ratio);
+                        data[i + 1] = Math.round(color1.g + (color2.g - color1.g) * ratio);
+                        data[i + 2] = Math.round(color1.b + (color2.b - color1.b) * ratio);
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
         }
 
         function generateAndDownload() {
@@ -935,10 +1158,30 @@
                 return;
             }
 
-            const link = document.createElement('a');
-            link.download = `qr-code.${qrSettings.downloadFormat}`;
-            link.href = canvas.toDataURL(`image/${qrSettings.downloadFormat === 'jpg' ? 'jpeg' : 'png'}`);
-            link.click();
+            try {
+                // Create download with better error handling
+                const format = qrSettings.downloadFormat === 'jpg' ? 'jpeg' : 'png';
+                const dataURL = canvas.toDataURL(`image/${format}`, 0.9);
+                
+                // Create and trigger download
+                const link = document.createElement('a');
+                link.download = `qr-code-${Date.now()}.${qrSettings.downloadFormat}`;
+                link.href = dataURL;
+                link.style.display = 'none';
+                
+                // Add to document temporarily
+                document.body.appendChild(link);
+                link.click();
+                
+                // Clean up
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                }, 100);
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                alert('שגיאה בהורדת הקובץ. אנא נסה שוב.');
+            }
         }
 
         // Auto-generate on page load
