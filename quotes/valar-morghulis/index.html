@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valar morghulis | WearableCode</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&family=Bodoni+Moda+SC:wght@400;700;900&family=Rubik+Glitch&family=Federo&family=Rozha+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&family=Bodoni+Moda+SC:wght@400;700;900&family=Rubik+Glitch&family=Federo&family=Rozha+One&family=Cinzel:wght@400;500;600;700;800;900&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <!-- Preload main image for faster loading -->
     <link rel="preload" href="./assets/images/valar-morghulis.png" as="image">
     <style>
@@ -22,15 +22,13 @@
         /* Safari iOS specific fixes */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(90deg, 
-                /* Ice side (left) - Blue to White from top to bottom */
-                #1e3a8a 0%, 
-                #3b82f6 25%, 
-                #60a5fa 50%, 
-                /* Fire side (right) - Orange to Red from top to bottom */
-                #f97316 50%, 
-                #ea580c 75%, 
-                #dc2626 100%
+            background: linear-gradient(to bottom, 
+                /* Night sky - dark blue gradient */
+                #0c1445 0%, 
+                #1e2a5e 25%, 
+                #2d3a73 50%, 
+                #3b4a88 75%, 
+                #4a5a9d 100%
             );
             position: relative;
             height: 100vh;
@@ -44,7 +42,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Add vertical gradients overlay */
+        /* Remove the overlay effect since we only have snow now */
         body::before {
             content: '';
             position: absolute;
@@ -52,34 +50,21 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to bottom,
-                /* Left side - blue to white */
-                transparent 0%,
-                rgba(59, 130, 246, 0.3) 50%,
-                rgba(255, 255, 255, 0.4) 100%
-            ),
-            linear-gradient(to bottom,
-                /* Right side - orange to red */
-                rgba(249, 115, 22, 0.3) 0%,
-                rgba(234, 88, 12, 0.4) 50%,
-                rgba(220, 38, 38, 0.3) 100%
-            );
-            background-position: left, right;
-            background-size: 50% 100%, 50% 100%;
-            background-repeat: no-repeat;
+            background: radial-gradient(ellipse at top, rgba(173, 216, 230, 0.1) 0%, transparent 70%);
             pointer-events: none;
             z-index: 0;
         }
 
-        /* Snow emoji effects - Blizzard style */
+        /* Snow emoji effects - Blizzard style across entire screen */
         .snow-emoji {
             position: absolute;
             font-size: 16px;
             z-index: 1;
-            animation: snowBlizzard 10s linear infinite;
+            animation: snowBlizzard 12s linear infinite;
             pointer-events: none;
             user-select: none;
-            text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.9), 0 0 8px rgba(173, 216, 230, 0.6);
+            filter: brightness(1.1);
         }
 
         @keyframes snowBlizzard {
@@ -94,46 +79,7 @@
                 opacity: 0.9;
             }
             100% {
-                transform: translateY(120vh) translateX(-80px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Fire emoji effects - More visible with background */
-        .fire-emoji {
-            position: absolute;
-            font-size: 28px;
-            z-index: 2;
-            animation: fireRise 6s linear infinite;
-            pointer-events: none;
-            user-select: none;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 30%, rgba(255, 255, 255, 0.7) 60%, transparent 80%);
-            border-radius: 50%;
-            padding: 8px;
-            text-shadow: 
-                0 0 5px rgba(0, 0, 0, 0.8),
-                0 0 10px rgba(255, 255, 0, 1),
-                0 0 15px rgba(255, 69, 0, 0.8),
-                0 0 20px rgba(255, 0, 0, 0.6);
-            filter: brightness(1.5) contrast(1.4) drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
-            box-shadow: 
-                0 0 15px rgba(255, 255, 255, 0.8),
-                0 0 25px rgba(255, 69, 0, 0.6);
-        }
-
-        @keyframes fireRise {
-            0% {
-                transform: translateY(120vh) scale(0.3) translateX(0px);
-                opacity: 0;
-            }
-            15% {
-                opacity: 1;
-            }
-            85% {
-                opacity: 0.9;
-            }
-            100% {
-                transform: translateY(-20vh) scale(2.5) translateX(30px);
+                transform: translateY(120vh) translateX(-100px) rotate(360deg);
                 opacity: 0;
             }
         }
@@ -266,18 +212,19 @@
         }
 
         .quote {
-            font-size: 65px;
-            font-weight: 400;
-            font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', 'Arial Black', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            font-family: 'Cinzel', 'Uncial Antiqua', 'Rozha One', 'Federo', 'Bodoni Moda SC', serif;
             color: #222;
             margin-bottom: 15px;
-            line-height: 0.85;
+            line-height: 1;
             position: relative;
             padding: 0 15px;
             letter-spacing: 3px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3), 0 0 20px rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
         .quote::before {
@@ -400,13 +347,15 @@
             }
             
             .quote {
-                font-size: 26px;
+                font-size: 22px;
                 margin-bottom: 10px;
-                line-height: 0.85;
+                line-height: 1;
                 padding: 0 5px;
-                font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
+                font-family: 'Cinzel', 'Uncial Antiqua', 'Rozha One', 'Federo', 'Bodoni Moda SC', serif;
                 letter-spacing: 1.5px;
                 text-transform: uppercase;
+                font-weight: 700;
+                white-space: nowrap;
             }
             
             .quote::before {
@@ -468,12 +417,14 @@
             }
             
             .quote {
-                font-size: 22px;
+                font-size: 18px;
                 padding: 0 3px;
-                line-height: 0.8;
-                font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
-                letter-spacing: 0.5px;
+                line-height: 1;
+                font-family: 'Cinzel', 'Uncial Antiqua', 'Rozha One', 'Federo', 'Bodoni Moda SC', serif;
+                letter-spacing: 0.8px;
                 text-transform: uppercase;
+                font-weight: 700;
+                white-space: nowrap;
             }
 
             .quote::before {
@@ -593,79 +544,54 @@
             console.log(`Created ${numberOfElements} mystery elements`);
         }
 
-        // Create fire and snow emoji effects
-        function createIceAndFireEffects() {
-            // Create MORE snow emojis on the left side (blizzard effect)
-            const numberOfSnowflakes = Math.floor(Math.random() * 20) + 15; // 15-34 snowflakes
+        // Create snow effects across entire screen
+        function createSnowEffects() {
+            // Create LOTS of snow emojis across the entire screen
+            const numberOfSnowflakes = Math.floor(Math.random() * 25) + 20; // 20-44 snowflakes
             
             for (let i = 0; i < numberOfSnowflakes; i++) {
                 const snowflake = document.createElement('div');
                 snowflake.className = 'snow-emoji';
                 snowflake.textContent = '❄️';
                 
-                // Position on left side (0-50% of screen width for overlap)
-                snowflake.style.left = Math.random() * 50 + '%';
+                // Position across entire screen width (0-100%)
+                snowflake.style.left = Math.random() * 100 + '%';
                 snowflake.style.top = '-50px';
                 
-                // Random animation delay (0-8 seconds)
-                snowflake.style.animationDelay = Math.random() * 8 + 's';
+                // Random animation delay (0-10 seconds)
+                snowflake.style.animationDelay = Math.random() * 10 + 's';
                 
-                // Random animation duration (8-14 seconds)
-                snowflake.style.animationDuration = (Math.random() * 6 + 8) + 's';
+                // Random animation duration (10-16 seconds)
+                snowflake.style.animationDuration = (Math.random() * 6 + 10) + 's';
                 
-                // Random size (10-20px)
-                const snowSize = Math.random() * 10 + 10;
+                // Random size (10-22px)
+                const snowSize = Math.random() * 12 + 10;
                 snowflake.style.fontSize = snowSize + 'px';
                 
                 // Add to body
                 document.body.appendChild(snowflake);
             }
             
-            // Create MORE fire emojis on the right side (better visibility)
-            const numberOfFires = Math.floor(Math.random() * 12) + 8; // 8-19 fires
-            
-            for (let i = 0; i < numberOfFires; i++) {
-                const fire = document.createElement('div');
-                fire.className = 'fire-emoji';
-                fire.textContent = '🔥';
-                
-                // Position on right side (50-100% of screen width)
-                fire.style.left = (Math.random() * 50 + 50) + '%';
-                fire.style.bottom = '-50px';
-                
-                // Random animation delay (0-5 seconds)
-                fire.style.animationDelay = Math.random() * 5 + 's';
-                
-                // Random animation duration (5-8 seconds)
-                fire.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                
-                // Random size (24-32px) - even bigger for maximum visibility
-                const fireSize = Math.random() * 8 + 24;
-                fire.style.fontSize = fireSize + 'px';
-                
-                // Add to body
-                document.body.appendChild(fire);
-            }
-            
-            console.log(`Created ${numberOfSnowflakes} snowflakes and ${numberOfFires} fire emojis`);
+            console.log(`Created ${numberOfSnowflakes} snowflakes across entire screen`);
         }
 
-        // Create continuous fire and snow emoji effects
-        function startContinuousIceAndFire() {
+        // Create continuous snow effects across entire screen
+        function startContinuousSnow() {
             setInterval(() => {
-                // Add 2-3 snowflakes on left side (blizzard effect)
-                const snowCount = Math.floor(Math.random() * 2) + 2; // 2-3 snowflakes
+                // Add 3-5 snowflakes across entire screen
+                const snowCount = Math.floor(Math.random() * 3) + 3; // 3-5 snowflakes
                 for (let i = 0; i < snowCount; i++) {
                     const snowflake = document.createElement('div');
                     snowflake.className = 'snow-emoji';
                     snowflake.textContent = '❄️';
                     
-                    snowflake.style.left = Math.random() * 50 + '%';
+                    // Position across entire screen (0-100%)
+                    snowflake.style.left = Math.random() * 100 + '%';
                     snowflake.style.top = '-50px';
                     snowflake.style.animationDelay = Math.random() * 2 + 's';
-                    snowflake.style.animationDuration = (Math.random() * 6 + 8) + 's';
+                    snowflake.style.animationDuration = (Math.random() * 6 + 10) + 's';
                     
-                    const snowSize = Math.random() * 10 + 10;
+                    const snowSize = Math.random() * 12 + 10;
                     snowflake.style.fontSize = snowSize + 'px';
                     
                     document.body.appendChild(snowflake);
@@ -675,35 +601,10 @@
                         if (snowflake.parentNode) {
                             snowflake.parentNode.removeChild(snowflake);
                         }
-                    }, 14000);
+                    }, 16000);
                 }
                 
-                // Add 1-2 fire emojis on right side
-                const fireCount = Math.floor(Math.random() * 2) + 1; // 1-2 fires
-                for (let i = 0; i < fireCount; i++) {
-                    const fire = document.createElement('div');
-                    fire.className = 'fire-emoji';
-                    fire.textContent = '🔥';
-                    
-                    fire.style.left = (Math.random() * 50 + 50) + '%';
-                    fire.style.bottom = '-50px';
-                    fire.style.animationDelay = Math.random() * 1 + 's';
-                    fire.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                    
-                    const fireSize = Math.random() * 8 + 24;
-                    fire.style.fontSize = fireSize + 'px';
-                    
-                    document.body.appendChild(fire);
-                    
-                    // Remove after animation completes
-                    setTimeout(() => {
-                        if (fire.parentNode) {
-                            fire.parentNode.removeChild(fire);
-                        }
-                    }, 8000);
-                }
-                
-            }, 1500); // Every 1.5 seconds for more intense effect
+            }, 1200); // Every 1.2 seconds for dense snow effect
         }
         
         // Safari iOS font size fix
@@ -715,16 +616,16 @@
             if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '44px';
-                    quoteElement.style.lineHeight = '0.75';
-                    quoteElement.style.letterSpacing = '-1px';
+                    quoteElement.style.fontSize = '16px';
+                    quoteElement.style.lineHeight = '1';
+                    quoteElement.style.letterSpacing = '0.5px';
                 } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '52px';
-                    quoteElement.style.lineHeight = '0.8';
-                    quoteElement.style.letterSpacing = '-1px';
+                    quoteElement.style.fontSize = '20px';
+                    quoteElement.style.lineHeight = '1';
+                    quoteElement.style.letterSpacing = '1px';
                 }
-                quoteElement.style.fontFamily = "'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif";
-                quoteElement.style.fontWeight = '400';
+                quoteElement.style.fontFamily = "'Cinzel', 'Uncial Antiqua', 'Rozha One', 'Federo', 'Bodoni Moda SC', serif";
+                quoteElement.style.fontWeight = '700';
                 quoteElement.style.textTransform = 'uppercase';
                 
                 console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
@@ -762,11 +663,11 @@
         // Create mystery elements
         createMysteryElements();
         
-        // Create ice and fire effects
-        createIceAndFireEffects();
+        // Create snow effects across entire screen
+        createSnowEffects();
         
-        // Start continuous ice and fire effects
-        startContinuousIceAndFire();
+        // Start continuous snow effects
+        startContinuousSnow();
         
         // Update character image with loading state
         const imageElement = document.getElementById('characterImage');
