@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello, you. | WearableCode</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <!-- Preload main image for faster loading -->
+    <link rel="preload" href="./assets/images/hello-you.png" as="image">
     <style>
         * {
             margin: 0;
@@ -80,7 +82,7 @@
             background: white;
             border-radius: 20px;
             padding: 35px 30px;
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
             box-shadow: 0 15px 35px rgba(0,0,0,0.12), 0 0 30px rgba(255, 255, 255, 0.8);
             text-align: center;
@@ -88,7 +90,7 @@
             animation: slideUp 0.6s ease-out;
             height: auto;
             min-height: auto;
-            max-height: 90vh;
+            max-height: 95vh;
             z-index: 5;
             overflow: hidden;
         }
@@ -129,8 +131,8 @@
         }
 
         .character-image {
-            width: calc(100% - 40px);
-            height: 280px;
+            width: 450px;
+            height: 450px;
             border-radius: 12px;
             margin: 0 auto 18px;
             background: #f8f9fa;
@@ -155,6 +157,21 @@
         .character-image.has-image {
             border: none;
             background: none;
+        }
+
+        .character-image.loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
         }
 
         .quote {
@@ -206,6 +223,8 @@
             border-radius: 12px;
             padding: 15px;
             margin-top: 20px;
+            direction: rtl;
+            text-align: center;
         }
 
         .cta-text {
@@ -213,6 +232,8 @@
             color: #333;
             margin-bottom: 12px;
             font-weight: 500;
+            direction: rtl;
+            text-align: center;
         }
 
         .shop-button {
@@ -276,12 +297,13 @@
             .container {
                 padding: 25px 20px;
                 border-radius: 16px;
-                max-width: 90vw;
+                max-width: 95vw;
+                max-height: 95vh;
             }
             
             .character-image {
-                width: calc(100% - 20px);
-                height: 280px;
+                width: 400px;
+                height: 400px;
                 margin-bottom: 15px;
                 font-size: 14px;
             }
@@ -344,12 +366,13 @@
         @media (max-width: 375px) {
             .container {
                 padding: 20px 15px;
-                max-width: 95vw;
+                max-width: 98vw;
+                max-height: 95vh;
             }
             
             .character-image {
-                width: calc(100% - 15px);
-                height: 260px;
+                width: 350px;
+                height: 350px;
                 font-size: 12px;
             }
             
@@ -388,7 +411,7 @@
     
     <div class="container">
         <div class="character-image" id="characterImage">
-            Add your image here
+            טוען תמונה...
         </div>
         
         <div class="quote" id="mainQuote">
@@ -401,11 +424,11 @@
         
         <div class="cta-section">
             <div class="cta-text">
-                Want an awesome shirt like this?
+                טוען הודעה...
             </div>
             
             <a href="https://wearablecode.com" class="shop-button">
-                Visit WearableCode.com 🚀
+                כנסו ל-WearableCode.com 🚀
             </a>
         </div>
         
@@ -421,8 +444,22 @@
         const pageData = {
             quote: "Hello, you.",
             source: "- Joe Goldberg",
-            image: "../../assets/images/Hello_you_joe_goldberg.png"
+            image: "./assets/images/hello-you.png"
         };
+        
+        // Random CTA messages in Hebrew
+        const ctaMessages = [
+            "רוצה גם חולצה מגניבה כזאת? 👇",
+            "אהבתם? הזמינו את החולצה שלכם עוד היום 👇",
+            "מגניב נכון? רוצים גם? 👇",
+            "קלטנו שאהבתם את הקונספט! רוצים גם חולצה כזאת? 👇",
+            "איזה חולצה מגניבה הא? קנו את שלכם גם 👇",
+            "רוצים גם להיות מגניבים כמו ג'ו? 👇",
+            "החולצה הזאת יכולה להיות שלכם! 👇",
+            "מתאים לכם? בואו נזמין! 👇",
+            "זה הזמן להזמין את החולצה המושלמת 👇",
+            "חולצה כזאת חייבת להיות לכם בארון! 👇"
+        ];
         
         // Mystery emojis for background - Only the scariest ones
         const mysteryEmojis = [
@@ -560,12 +597,33 @@
             }
         }
         
+        // iPhone specific glow reduction
+        function reduceGlowForiPhone() {
+            const isIphone = /iPhone/i.test(navigator.userAgent);
+            if (isIphone) {
+                const container = document.querySelector('.container');
+                container.style.boxShadow = `
+                    0 15px 30px rgba(0,0,0,0.08), 
+                    0 0 25px rgba(255, 255, 255, 0.6)
+                `;
+                console.log('🍎 iPhone detected - optimized glow applied');
+            }
+        }
+        
         // Update the content
         document.getElementById('mainQuote').textContent = pageData.quote;
         document.getElementById('quoteSource').textContent = pageData.source;
         
-        // Apply Safari fix after content is loaded
+        // Set random CTA message
+        const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
+        document.querySelector('.cta-text').textContent = randomCtaMessage;
+        
+        // Store for analytics
+        window.currentCtaMessage = randomCtaMessage;
+        
+        // Apply fixes after content is loaded
         setTimeout(applySafariFix, 100);
+        reduceGlowForiPhone();
         
         // Create mystery elements
         createMysteryElements();
@@ -576,14 +634,76 @@
         // Start continuous blood drips
         startContinuousBloodDrips();
         
-        // Update character image
+        // Update character image with loading state
         const imageElement = document.getElementById('characterImage');
         if (pageData.image && pageData.image.length > 0) {
-            imageElement.innerHTML = `<img src="${pageData.image}" alt="Character">`;
-            imageElement.classList.add('has-image');
+            // Show loading state
+            imageElement.textContent = 'טוען תמונה...';
+            imageElement.classList.add('loading');
+            
+            const img = document.createElement('img');
+            img.src = pageData.image;
+            img.alt = "Character";
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.objectFit = "cover";
+            img.style.borderRadius = "10px";
+            
+            img.onload = function() {
+                console.log('✅ Image loaded successfully:', pageData.image);
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Image failed to load:', pageData.image);
+                console.log('Trying alternative paths...');
+                
+                // Try different paths
+                const alternativePaths = [
+                    "assets/images/hello-you.png",
+                    "/assets/images/hello-you.png",
+                    "./assets/images/hello-you.png",
+                    "assets/images/Hello_you_joe_goldberg.png",
+                    "/assets/images/Hello_you_joe_goldberg.png",
+                    "../../assets/images/Hello_you_joe_goldberg.png"
+                ];
+                
+                let currentIndex = 0;
+                function tryNextPath() {
+                    if (currentIndex < alternativePaths.length) {
+                        const testImg = document.createElement('img');
+                        testImg.src = alternativePaths[currentIndex];
+                        testImg.onload = function() {
+                            console.log('✅ Alternative path worked:', alternativePaths[currentIndex]);
+                            imageElement.innerHTML = '';
+                            imageElement.appendChild(testImg);
+                            imageElement.classList.remove('loading');
+                            imageElement.classList.add('has-image');
+                        };
+                        testImg.onerror = function() {
+                            console.log('❌ Alternative path failed:', alternativePaths[currentIndex]);
+                            currentIndex++;
+                            tryNextPath();
+                        };
+                        testImg.style.width = "100%";
+                        testImg.style.height = "100%";
+                        testImg.style.objectFit = "cover";
+                        testImg.style.borderRadius = "10px";
+                        testImg.alt = "Character";
+                    } else {
+                        console.log('❌ All paths failed. Keeping placeholder text.');
+                        imageElement.textContent = 'Add your image here';
+                        imageElement.classList.remove('loading', 'has-image');
+                    }
+                }
+                tryNextPath();
+            };
         } else {
             imageElement.textContent = 'Add your image here';
-            imageElement.classList.remove('has-image');
+            imageElement.classList.remove('loading', 'has-image');
         }
         
         // Random colors for creepy animation - Joe Goldberg themed
@@ -639,15 +759,18 @@
         // Analytics tracking
         document.querySelector('.shop-button').addEventListener('click', function() {
             console.log('Shop button clicked for quote:', pageData.quote);
+            console.log('CTA message shown:', window.currentCtaMessage);
         });
         
         // Re-apply fix on orientation change
         window.addEventListener('orientationchange', function() {
             setTimeout(applySafariFix, 200);
+            setTimeout(reduceGlowForiPhone, 200);
         });
         
         window.addEventListener('resize', function() {
             setTimeout(applySafariFix, 100);
+            setTimeout(reduceGlowForiPhone, 100);
         });
     </script>
 </body>
