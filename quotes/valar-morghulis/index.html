@@ -23,12 +23,12 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(to bottom, 
-                /* Night sky - dark blue gradient */
-                #0c1445 0%, 
-                #1e2a5e 25%, 
-                #2d3a73 50%, 
-                #3b4a88 75%, 
-                #4a5a9d 100%
+                /* Night sky - very dark gradient from almost black to dark blue */
+                #0a0a0a 0%, 
+                #1a1a2e 25%, 
+                #16213e 50%, 
+                #0f3460 75%, 
+                #0e4b99 100%
             );
             position: relative;
             height: 100vh;
@@ -212,7 +212,7 @@
         }
 
         .quote {
-            font-size: 36px;
+            font-size: 42px;
             font-weight: 600;
             font-family: 'Grenze Gotisch', 'Cinzel', 'Uncial Antiqua', serif;
             color: #222;
@@ -223,7 +223,6 @@
             letter-spacing: 2px;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.3), 0 0 20px rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
-            text-transform: uppercase;
             white-space: nowrap;
         }
 
@@ -347,13 +346,12 @@
             }
             
             .quote {
-                font-size: 18px;
+                font-size: 22px;
                 margin-bottom: 10px;
                 line-height: 1;
                 padding: 0 5px;
                 font-family: 'Grenze Gotisch', 'Cinzel', 'Uncial Antiqua', serif;
                 letter-spacing: 1px;
-                text-transform: uppercase;
                 font-weight: 600;
                 white-space: nowrap;
             }
@@ -421,12 +419,11 @@
             }
             
             .quote {
-                font-size: 16px;
+                font-size: 18px;
                 padding: 0 3px;
                 line-height: 1;
                 font-family: 'Grenze Gotisch', 'Cinzel', 'Uncial Antiqua', serif;
                 letter-spacing: 0.5px;
-                text-transform: uppercase;
                 font-weight: 600;
                 white-space: nowrap;
             }
@@ -628,17 +625,16 @@
             if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '14px';
+                    quoteElement.style.fontSize = '16px';
                     quoteElement.style.lineHeight = '1';
                     quoteElement.style.letterSpacing = '0.3px';
                 } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '16px';
+                    quoteElement.style.fontSize = '20px';
                     quoteElement.style.lineHeight = '1';
                     quoteElement.style.letterSpacing = '0.5px';
                 }
                 quoteElement.style.fontFamily = "'Grenze Gotisch', 'Cinzel', 'Uncial Antiqua', serif";
                 quoteElement.style.fontWeight = '600';
-                quoteElement.style.textTransform = 'uppercase';
                 
                 console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
             }
