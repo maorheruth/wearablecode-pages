@@ -416,7 +416,7 @@
         const pageData = {
             quote: "How you doin'?",
             source: "- Joey Tribbiani",
-            image: "assets/images/how you doin joe.png"
+            image: "./assets/images/how you doin joe.png"
         };
         
         // Friendly emojis for background - Joey/Friends themed
@@ -639,8 +639,62 @@
         // Update character image
         const imageElement = document.getElementById('characterImage');
         if (pageData.image && pageData.image.length > 0) {
-            imageElement.innerHTML = `<img src="${pageData.image}" alt="Character">`;
-            imageElement.classList.add('has-image');
+            const img = document.createElement('img');
+            img.src = pageData.image;
+            img.alt = "Character";
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.objectFit = "cover";
+            img.style.borderRadius = "10px";
+            
+            img.onload = function() {
+                console.log('✅ Image loaded successfully:', pageData.image);
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.add('has-image');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Image failed to load:', pageData.image);
+                console.log('Trying alternative paths...');
+                
+                // Try different paths
+                const alternativePaths = [
+                    "assets/images/how you doin joe.png",
+                    "/assets/images/how you doin joe.png",
+                    "assets/images/how%20you%20doin%20joe.png",
+                    "./assets/images/how%20you%20doin%20joe.png"
+                ];
+                
+                let currentIndex = 0;
+                function tryNextPath() {
+                    if (currentIndex < alternativePaths.length) {
+                        const testImg = document.createElement('img');
+                        testImg.src = alternativePaths[currentIndex];
+                        testImg.onload = function() {
+                            console.log('✅ Alternative path worked:', alternativePaths[currentIndex]);
+                            imageElement.innerHTML = '';
+                            imageElement.appendChild(testImg);
+                            imageElement.classList.add('has-image');
+                        };
+                        testImg.onerror = function() {
+                            console.log('❌ Alternative path failed:', alternativePaths[currentIndex]);
+                            currentIndex++;
+                            tryNextPath();
+                        };
+                        testImg.style.width = "100%";
+                        testImg.style.height = "100%";
+                        testImg.style.objectFit = "cover";
+                        testImg.style.borderRadius = "10px";
+                        testImg.alt = "Character";
+                    } else {
+                        console.log('❌ All paths failed. Keeping placeholder text.');
+                        imageElement.textContent = 'Add your image here';
+                        imageElement.classList.remove('has-image');
+                    }
+                }
+                tryNextPath();
+            };
         } else {
             imageElement.textContent = 'Add your image here';
             imageElement.classList.remove('has-image');
