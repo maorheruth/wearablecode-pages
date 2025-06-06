@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello, you. | WearableCode</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&family=Bodoni+Moda+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&family=Bodoni+Moda+SC:wght@400;700;900&family=Rubik+Glitch&display=swap" rel="stylesheet">
     <!-- Preload main image for faster loading -->
     <link rel="preload" href="./assets/images/hello-you.png" as="image">
     <style>
@@ -150,13 +150,13 @@
         .character-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             border-radius: 10px;
         }
 
         .character-image.has-image {
             border: none;
-            background: none;
+            background: white;
         }
 
         .character-image.loading {
@@ -176,8 +176,8 @@
 
         .quote {
             font-size: 65px;
-            font-weight: 900;
-            font-family: 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', 'Arial Black', sans-serif;
+            font-weight: 400;
+            font-family: 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', 'Arial Black', sans-serif;
             color: #222;
             margin-bottom: 15px;
             line-height: 0.85;
@@ -295,15 +295,15 @@
             }
             
             .container {
-                padding: 25px 20px;
+                padding: 20px 15px;
                 border-radius: 16px;
                 max-width: 95vw;
-                max-height: 95vh;
+                max-height: 90vh;
             }
             
             .character-image {
-                width: 400px;
-                height: 400px;
+                width: 320px;
+                height: 320px;
                 margin-bottom: 15px;
                 font-size: 14px;
             }
@@ -313,7 +313,7 @@
                 margin-bottom: 10px;
                 line-height: 0.85;
                 padding: 0 5px;
-                font-family: 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
+                font-family: 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
                 letter-spacing: 1.5px;
                 text-transform: uppercase;
             }
@@ -365,14 +365,14 @@
         /* iPhone SE and smaller */
         @media (max-width: 375px) {
             .container {
-                padding: 20px 15px;
+                padding: 15px 12px;
                 max-width: 98vw;
-                max-height: 95vh;
+                max-height: 88vh;
             }
             
             .character-image {
-                width: 350px;
-                height: 350px;
+                width: 280px;
+                height: 280px;
                 font-size: 12px;
             }
             
@@ -380,7 +380,7 @@
                 font-size: 22px;
                 padding: 0 3px;
                 line-height: 0.8;
-                font-family: 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
+                font-family: 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
                 letter-spacing: 0.5px;
                 text-transform: uppercase;
             }
@@ -589,8 +589,8 @@
                     quoteElement.style.lineHeight = '0.8';
                     quoteElement.style.letterSpacing = '-1px';
                 }
-                quoteElement.style.fontFamily = "'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif";
-                quoteElement.style.fontWeight = '900';
+                quoteElement.style.fontFamily = "'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif";
+                quoteElement.style.fontWeight = '400';
                 quoteElement.style.textTransform = 'uppercase';
                 
                 console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
@@ -646,7 +646,7 @@
             img.alt = "Character";
             img.style.width = "100%";
             img.style.height = "100%";
-            img.style.objectFit = "cover";
+            img.style.objectFit = "contain";
             img.style.borderRadius = "10px";
             
             img.onload = function() {
@@ -690,7 +690,7 @@
                         };
                         testImg.style.width = "100%";
                         testImg.style.height = "100%";
-                        testImg.style.objectFit = "cover";
+                        testImg.style.objectFit = "contain";
                         testImg.style.borderRadius = "10px";
                         testImg.alt = "Character";
                     } else {
