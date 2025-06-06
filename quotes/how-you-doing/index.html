@@ -65,7 +65,12 @@
             padding: 35px 30px;
             max-width: 600px;
             width: 100%;
-            box-shadow: 0 15px 35px rgba(255,255,255,0.1), 0 0 30px rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 15px 35px rgba(255,255,255,0.1), 
+                0 0 30px rgba(255, 255, 255, 0.2),
+                0 0 60px rgba(255, 215, 0, 0.6),
+                0 0 90px rgba(255, 215, 0, 0.4),
+                0 0 120px rgba(255, 215, 0, 0.2);
             text-align: center;
             position: relative;
             animation: slideUp 0.6s ease-out;
@@ -186,7 +191,7 @@
         }
 
         .cta-section {
-            background: linear-gradient(135deg, #4ECDC4, #45B7D1);
+            background: linear-gradient(135deg, #FFE66D, #FFEAA7);
             border-radius: 12px;
             padding: 15px;
             margin-top: 20px;
@@ -200,7 +205,7 @@
         }
 
         .shop-button {
-            background: linear-gradient(135deg, #4ECDC4, #45B7D1);
+            background: linear-gradient(135deg, #D2691E, #8B4513);
             color: white;
             border: none;
             border-radius: 10px;
@@ -211,13 +216,13 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+            box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3);
         }
 
         .shop-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.5);
-            background: linear-gradient(135deg, #FF6B6B, #FFE66D);
+            box-shadow: 0 8px 20px rgba(210, 105, 30, 0.5);
+            background: linear-gradient(135deg, #8B4513, #D2691E);
         }
 
         /* Animated friendly background elements */
@@ -262,6 +267,11 @@
                 border-radius: 16px;
                 max-width: 90vw;
                 border-width: 2px;
+                box-shadow: 
+                    0 15px 35px rgba(255,255,255,0.1), 
+                    0 0 30px rgba(255, 255, 255, 0.2),
+                    0 0 60px rgba(255, 215, 0, 0.6),
+                    0 0 90px rgba(255, 215, 0, 0.4);
             }
             
             .character-image {
@@ -541,7 +551,7 @@
                     quoteElement.style.lineHeight = '0.8';
                     quoteElement.style.letterSpacing = '1px';
                 }
-                quoteElement.style.fontFamily = "'Luckiest Guy', 'Chewy', 'Bubblegum Sans', cursive";
+                quoteElement.style.fontFamily = "'Permanent Marker', cursive";
                 quoteElement.style.fontWeight = '400';
                 
                 console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
