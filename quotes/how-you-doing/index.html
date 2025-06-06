@@ -117,7 +117,7 @@
 
         .character-image {
             width: 450px;
-            height: 280px;
+            height: 450px;
             border-radius: 12px;
             margin: 0 auto 18px;
             background: #f8f9fa;
@@ -346,8 +346,8 @@
             }
             
             .character-image {
-                width: 450px;
-                height: 280px;
+                width: 350px;
+                height: 350px;
                 font-size: 12px;
             }
             
@@ -419,7 +419,7 @@
         const pageData = {
             quote: "How you doin'?",
             source: "- Joey Tribbiani",
-            image: "./assets/images/how you doin joe.png"
+            image: "./assets/images/how-you-doin.png"
         };
         
         // Random CTA messages in Hebrew
@@ -684,10 +684,12 @@
                 
                 // Try different paths
                 const alternativePaths = [
+                    "assets/images/how-you-doin.png",
+                    "/assets/images/how-you-doin.png",
+                    "./assets/images/how-you-doin.png",
                     "assets/images/how you doin joe.png",
                     "/assets/images/how you doin joe.png",
-                    "assets/images/how%20you%20doin%20joe.png",
-                    "./assets/images/how%20you%20doin%20joe.png"
+                    "assets/images/how%20you%20doin%20joe.png"
                 ];
                 
                 let currentIndex = 0;
