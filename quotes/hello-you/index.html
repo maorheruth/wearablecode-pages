@@ -175,7 +175,7 @@
         }
 
         .quote {
-            font-size: 80px;
+            font-size: 65px;
             font-weight: 900;
             font-family: 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', 'Arial Black', sans-serif;
             color: #222;
@@ -183,7 +183,7 @@
             line-height: 0.85;
             position: relative;
             padding: 0 15px;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -191,7 +191,7 @@
 
         .quote::before {
             content: '"';
-            font-size: 90px;
+            font-size: 75px;
             color: #bbb;
             position: absolute;
             left: -8px;
@@ -202,7 +202,7 @@
 
         .quote::after {
             content: '"';
-            font-size: 90px;
+            font-size: 75px;
             color: #bbb;
             position: absolute;
             right: -8px;
@@ -309,23 +309,23 @@
             }
             
             .quote {
-                font-size: 32px;
+                font-size: 26px;
                 margin-bottom: 10px;
                 line-height: 0.85;
                 padding: 0 5px;
                 font-family: 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
-                letter-spacing: 2px;
+                letter-spacing: 1.5px;
                 text-transform: uppercase;
             }
             
             .quote::before {
-                font-size: 40px;
+                font-size: 32px;
                 top: -8px;
                 left: -4px;
             }
 
             .quote::after {
-                font-size: 40px;
+                font-size: 32px;
                 bottom: -12px;
                 right: -4px;
             }
@@ -377,20 +377,20 @@
             }
             
             .quote {
-                font-size: 28px;
+                font-size: 22px;
                 padding: 0 3px;
                 line-height: 0.8;
                 font-family: 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
-                letter-spacing: 1px;
+                letter-spacing: 0.5px;
                 text-transform: uppercase;
             }
 
             .quote::before {
-                font-size: 36px;
+                font-size: 28px;
             }
 
             .quote::after {
-                font-size: 36px;
+                font-size: 28px;
             }
 
             .mystery-element {
@@ -581,11 +581,11 @@
             if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '55px';
+                    quoteElement.style.fontSize = '44px';
                     quoteElement.style.lineHeight = '0.75';
                     quoteElement.style.letterSpacing = '-1px';
                 } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '65px';
+                    quoteElement.style.fontSize = '52px';
                     quoteElement.style.lineHeight = '0.8';
                     quoteElement.style.letterSpacing = '-1px';
                 }
