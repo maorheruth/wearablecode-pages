@@ -68,9 +68,8 @@
             box-shadow: 
                 0 15px 35px rgba(255,255,255,0.1), 
                 0 0 30px rgba(255, 255, 255, 0.2),
-                0 0 60px rgba(255, 215, 0, 0.6),
-                0 0 90px rgba(255, 215, 0, 0.4),
-                0 0 120px rgba(255, 215, 0, 0.2);
+                0 0 30px rgba(255, 215, 0, 0.4),
+                0 0 45px rgba(255, 215, 0, 0.3);
             text-align: center;
             position: relative;
             animation: slideUp 0.6s ease-out;
@@ -78,7 +77,6 @@
             min-height: auto;
             max-height: 90vh;
             z-index: 5;
-            overflow: hidden;
             border: 3px solid #FFD700;
         }
 
@@ -118,8 +116,8 @@
         }
 
         .character-image {
-            width: calc(100% - 40px);
-            height: 310px;
+            width: 450px;
+            height: 280px;
             border-radius: 12px;
             margin: 0 auto 18px;
             background: #f8f9fa;
@@ -137,7 +135,7 @@
         .character-image img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             border-radius: 10px;
         }
 
@@ -195,6 +193,8 @@
             border-radius: 12px;
             padding: 15px;
             margin-top: 20px;
+            direction: rtl;
+            text-align: center;
         }
 
         .cta-text {
@@ -202,6 +202,8 @@
             color: #333;
             margin-bottom: 12px;
             font-weight: 500;
+            direction: rtl;
+            text-align: center;
         }
 
         .shop-button {
@@ -339,12 +341,13 @@
         @media (max-width: 375px) {
             .container {
                 padding: 20px 15px;
-                max-width: 95vw;
+                max-width: 98vw;
+                overflow-x: auto;
             }
             
             .character-image {
-                width: calc(100% - 15px);
-                height: 290px;
+                width: 450px;
+                height: 280px;
                 font-size: 12px;
             }
             
@@ -396,11 +399,11 @@
         
         <div class="cta-section">
             <div class="cta-text">
-                Want an awesome shirt like this?
+                טוען הודעה...
             </div>
             
             <a href="https://wearablecode.com" class="shop-button">
-                Visit WearableCode.com 🚀
+                כנסו ל-WearableCode.com 🚀
             </a>
         </div>
         
@@ -418,6 +421,20 @@
             source: "- Joey Tribbiani",
             image: "./assets/images/how you doin joe.png"
         };
+        
+        // Random CTA messages in Hebrew
+        const ctaMessages = [
+            "רוצה גם חולצה מגניבה כזאת?",
+            "אהבתם? הזמינו את החולצה שלכם עוד היום",
+            "מגניב נכון? רוצים גם?",
+            "קלטנו שאהבתם את הקונספט! רוצים גם חולצה כזאת?",
+            "איזה חולצה מגניבה הא? קנו את שלכם גם",
+            "רוצים גם להיות מגניבים כמו ג'ואי?",
+            "החולצה הזאת יכולה להיות שלכם!",
+            "מתאים לכם? בואו נזמין!",
+            "זה הזמן להזמין את החולצה המושלמת",
+            "חולצה כזאת חייבת להיות לכם בארון!"
+        ];
         
         // Friendly emojis for background - Joey/Friends themed
         const friendlyEmojis = [
@@ -624,6 +641,13 @@
         document.getElementById('mainQuote').textContent = pageData.quote;
         document.getElementById('quoteSource').textContent = pageData.source;
         
+        // Set random CTA message
+        const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
+        document.querySelector('.cta-text').textContent = randomCtaMessage;
+        
+        // Store for analytics
+        window.currentCtaMessage = randomCtaMessage;
+        
         // Apply Safari fix after content is loaded
         setTimeout(applySafariFix, 100);
         
@@ -753,6 +777,7 @@
         // Analytics tracking
         document.querySelector('.shop-button').addEventListener('click', function() {
             console.log('Shop button clicked for quote:', pageData.quote);
+            console.log('CTA message shown:', window.currentCtaMessage);
         });
         
         // Re-apply fix on orientation change
