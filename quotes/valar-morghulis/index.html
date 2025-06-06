@@ -212,7 +212,7 @@
         }
 
         .quote {
-            font-size: 42px;
+            font-size: 52px;
             font-weight: 600;
             font-family: 'Grenze Gotisch', 'Cinzel', 'Uncial Antiqua', serif;
             color: #222;
@@ -346,7 +346,7 @@
             }
             
             .quote {
-                font-size: 28px;
+                font-size: 32px;
                 margin-bottom: 10px;
                 line-height: 1;
                 padding: 0 5px;
@@ -419,7 +419,7 @@
             }
             
             .quote {
-                font-size: 24px;
+                font-size: 28px;
                 padding: 0 3px;
                 line-height: 1;
                 font-family: 'Grenze Gotisch', 'Cinzel', 'Uncial Antiqua', serif;
@@ -625,11 +625,11 @@
             if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '22px';
+                    quoteElement.style.fontSize = '26px';
                     quoteElement.style.lineHeight = '1';
                     quoteElement.style.letterSpacing = '0.3px';
                 } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '26px';
+                    quoteElement.style.fontSize = '30px';
                     quoteElement.style.lineHeight = '1';
                     quoteElement.style.letterSpacing = '0.5px';
                 }
@@ -761,16 +761,14 @@
         
         function magicalAnimation() {
             const quoteElement = document.getElementById('mainQuote');
-            if (!quoteElement) return;
-            
             const color1 = getRandomColor();
             const color2 = getRandomColor();
             
             // Check if mobile for lighter shadow
             const isMobile = window.innerWidth <= 480;
-            const shadowStrength = isMobile ? '1px 1px 2px' : '3px 3px 6px';
-            const glowStrength = isMobile ? '0 0 12px' : '0 0 25px';
-            const scaleStrength = isMobile ? 1.008 : 1.02;
+            const shadowStrength = isMobile ? '2px 2px 4px' : '6px 6px 12px';
+            const glowStrength = isMobile ? '0 0 20px' : '0 0 40px';
+            const scaleStrength = isMobile ? 1.015 : 1.03;
             
             // Start animation
             quoteElement.style.color = color1;
@@ -781,15 +779,13 @@
                 quoteElement.style.color = color2;
                 quoteElement.style.textShadow = `${glowStrength} ${color2}, ${shadowStrength} rgba(0,0,0,0.3)`;
                 quoteElement.style.transform = `scale(${1/scaleStrength})`;
-            }, 200);
+            }, 150);
             
             setTimeout(() => {
                 quoteElement.style.color = '#222';
-                quoteElement.style.textShadow = isMobile ? '1px 1px 2px rgba(0,0,0,0.2)' : '3px 3px 6px rgba(0,0,0,0.3), 0 0 20px rgba(255, 255, 255, 0.1)';
+                quoteElement.style.textShadow = isMobile ? '2px 2px 4px rgba(0,0,0,0.2)' : '3px 3px 6px rgba(0,0,0,0.3), 0 0 20px rgba(255, 255, 255, 0.1)';
                 quoteElement.style.transform = 'scale(1)';
-            }, 400);
-            
-            console.log('Magical animation triggered with colors:', color1, color2);
+            }, 300);
         }
         
         function scheduleRandomAnimation() {
