@@ -7,8 +7,8 @@
     <!-- Google Fonts preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Google Font: Delicious Handrawn -->
-    <link href="https://fonts.googleapis.com/css2?family=Delicious+Handrawn&display=swap" rel="stylesheet">
+    <!-- Google Font: Playwrite Cuba -->
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+Cuba:wght@100..400&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -143,8 +143,8 @@
 
         .quote {
             font-size: 56px;
-            font-weight: 400;
-            font-family: 'Delicious Handrawn', cursive;
+            font-weight: 300;
+            font-family: 'Playwrite Cuba', cursive;
             color: #222;
             margin-bottom: 15px;
             line-height: 0.9;
@@ -276,7 +276,7 @@
                 margin-bottom: 10px;
                 line-height: 0.9;
                 padding: 0 15px;
-                font-family: 'Delicious Handrawn', cursive;
+                font-family: 'Playwrite Cuba', cursive;
                 letter-spacing: 0px;
                 white-space: nowrap;
             }
@@ -342,7 +342,7 @@
                 font-size: 20px;
                 padding: 0 12px;
                 line-height: 0.85;
-                font-family: 'Delicious Handrawn', cursive;
+                font-family: 'Playwrite Cuba', cursive;
                 letter-spacing: 0px;
                 white-space: nowrap;
             }
@@ -580,9 +580,9 @@
             // Check if Google Fonts is available
             if (document.fonts) {
                 document.fonts.ready.then(function() {
-                    // Test if Delicious Handrawn is loaded
+                    // Test if Playwrite Cuba is loaded
                     const testElement = document.createElement('span');
-                    testElement.style.fontFamily = "'Delicious Handrawn', cursive";
+                    testElement.style.fontFamily = "'Playwrite Cuba', cursive";
                     testElement.style.fontSize = '12px';
                     testElement.textContent = 'test';
                     testElement.style.position = 'absolute';
@@ -592,11 +592,11 @@
                     const computedStyle = window.getComputedStyle(testElement);
                     const actualFont = computedStyle.fontFamily;
                     
-                    if (actualFont.includes('Delicious Handrawn')) {
-                        console.log('✅ Google Font "Delicious Handrawn" loaded successfully!');
+                    if (actualFont.includes('Playwrite Cuba')) {
+                        console.log('✅ Google Font "Playwrite Cuba" loaded successfully!');
                         console.log('Font family:', actualFont);
                     } else {
-                        console.log('❌ Google Font "Delicious Handrawn" failed to load');
+                        console.log('❌ Google Font "Playwrite Cuba" failed to load');
                         console.log('Fallback font:', actualFont);
                     }
                     
