@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How you doing? | WearableCode</title>
+    <!-- Google Fonts preconnect for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Font: Delicious Handrawn -->
+    <link href="https://fonts.googleapis.com/css2?family=Delicious+Handrawn&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Safari iOS specific fixes */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            height: 100vh;
+            height: 100dvh; /* Dynamic viewport height for iOS */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Friends-style colored dots */
+        .friends-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            z-index: 0;
+            animation: friendsDotFloat 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes friendsDotFloat {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-20px) scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 35px 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(255,255,255,0.1), 0 0 30px rgba(255, 255, 255, 0.2);
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.6s ease-out;
+            height: auto;
+            min-height: auto;
+            max-height: 90vh;
+            z-index: 5;
+            overflow: hidden;
+            border: 3px solid #FFD700;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            margin-top: 12px;
+            margin-bottom: 0px;
+            text-align: center;
+        }
+
+        .logo a {
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logo img {
+            height: 18px;
+            opacity: 0.8;
+            filter: grayscale(20%);
+            transition: all 0.3s ease;
+        }
+
+        .logo img:hover {
+            opacity: 1;
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .character-image {
+            width: calc(100% - 40px);
+            height: 280px;
+            border-radius: 12px;
+            margin: 0 auto 18px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            border: 2px dashed #ddd;
+            position: relative;
+            overflow: hidden;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .character-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .character-image.has-image {
+            border: none;
+            background: none;
+        }
+
+        .quote {
+            font-size: 56px;
+            font-weight: 400;
+            font-family: 'Delicious Handrawn', cursive;
+            color: #222;
+            margin-bottom: 15px;
+            line-height: 0.9;
+            position: relative;
+            padding: 0 25px;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .quote::before {
+            content: '"';
+            font-size: 90px;
+            color: #4ECDC4;
+            position: absolute;
+            left: -8px;
+            top: -15px;
+            opacity: 0.7;
+            font-family: Georgia, serif;
+        }
+
+        .quote::after {
+            content: '"';
+            font-size: 90px;
+            color: #4ECDC4;
+            position: absolute;
+            right: -8px;
+            bottom: -20px;
+            opacity: 0.7;
+            font-family: Georgia, serif;
+        }
+
+        .source {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #4ECDC4, #45B7D1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .cta-text {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .shop-button {
+            background: linear-gradient(135deg, #4ECDC4, #45B7D1);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .shop-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.5);
+            background: linear-gradient(135deg, #FF6B6B, #FFE66D);
+        }
+
+        /* Animated friendly background elements */
+        .friendly-element {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            z-index: 1;
+            animation: friendlyFloat 5s ease-in-out infinite;
+            pointer-events: none;
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes friendlyFloat {
+            0%, 100% {
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                opacity: 0.4;
+            }
+            25% {
+                transform: translateX(10px) translateY(-8px) rotate(5deg);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateX(-8px) translateY(12px) rotate(-3deg);
+                opacity: 0.5;
+            }
+            75% {
+                transform: translateX(8px) translateY(-6px) rotate(4deg);
+                opacity: 0.7;
+            }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                overflow-x: hidden;
+            }
+            
+            .container {
+                padding: 25px 20px;
+                border-radius: 16px;
+                max-width: 90vw;
+                border-width: 2px;
+            }
+            
+            .character-image {
+                width: calc(100% - 20px);
+                height: 280px;
+                margin-bottom: 15px;
+                font-size: 14px;
+            }
+            
+            .quote {
+                font-size: 24px;
+                margin-bottom: 10px;
+                line-height: 0.9;
+                padding: 0 15px;
+                font-family: 'Delicious Handrawn', cursive;
+                letter-spacing: 0px;
+                white-space: nowrap;
+            }
+            
+            .quote::before {
+                font-size: 50px;
+                top: -8px;
+                left: -4px;
+            }
+
+            .quote::after {
+                font-size: 50px;
+                bottom: -12px;
+                right: -4px;
+            }
+            
+            .source {
+                font-size: 13px;
+                margin-bottom: 20px;
+            }
+            
+            .logo img {
+                height: 15px;
+                margin-top: 8px;
+            }
+            
+            .cta-text {
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+            
+            .cta-section {
+                padding: 12px;
+                margin-top: 15px;
+            }
+            
+            .shop-button {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+
+            .friendly-element {
+                font-size: 16px;
+                color: rgba(255, 255, 255, 0.35);
+                text-shadow: 0 0 3px rgba(255, 215, 0, 0.4);
+            }
+        }
+
+        /* iPhone SE and smaller */
+        @media (max-width: 375px) {
+            .container {
+                padding: 20px 15px;
+                max-width: 95vw;
+            }
+            
+            .character-image {
+                width: calc(100% - 15px);
+                height: 260px;
+                font-size: 12px;
+            }
+            
+            .quote {
+                font-size: 20px;
+                padding: 0 12px;
+                line-height: 0.85;
+                font-family: 'Delicious Handrawn', cursive;
+                letter-spacing: 0px;
+                white-space: nowrap;
+            }
+
+            .quote::before {
+                font-size: 42px;
+            }
+
+            .quote::after {
+                font-size: 42px;
+            }
+
+            .friendly-element {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.3);
+                text-shadow: 0 0 2px rgba(255, 215, 0, 0.3);
+            }
+            
+            .logo img {
+                height: 14px;
+                margin-top: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Friendly elements will be generated by JavaScript -->
+    
+    <div class="container">
+        <div class="character-image" id="characterImage">
+            Add your image here
+        </div>
+        
+        <div class="quote" id="mainQuote">
+            How you doing?
+        </div>
+        
+        <div class="source" id="quoteSource">
+            - Joey Tribbiani
+        </div>
+        
+        <div class="cta-section">
+            <div class="cta-text">
+                Want an awesome shirt like this?
+            </div>
+            
+            <a href="https://wearablecode.com" class="shop-button">
+                Visit WearableCode.com 🚀
+            </a>
+        </div>
+        
+        <div class="logo">
+            <a href="https://wearablecode.com" target="_blank">
+                <img src="../../assets/logos/wearablecode_logo_black.png" alt="WearableCode">
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Page-specific data
+        const pageData = {
+            quote: "How you doing?",
+            source: "- Joey Tribbiani",
+            image: "../../assets/images/How_you_doing_joey_tribbiani.png"
+        };
+        
+        // Friendly emojis for background - Joey/Friends themed
+        const friendlyEmojis = [
+            '😎', '🍕', '🎭', '📺', '☕', '🏠', '👔', '🎪',
+            '🎯', '🎮', '🍔', '🥪', '🎬', '🌟', '✨', '💫',
+            '🎊', '🎉', '😄', '👋', '👍', '🤝', '💛', '🧡'
+        ];
+        
+        // Create random friendly elements
+        function createFriendlyElements() {
+            const numberOfElements = Math.floor(Math.random() * 11) + 15; // 15-25 elements
+            
+            for (let i = 0; i < numberOfElements; i++) {
+                const element = document.createElement('div');
+                element.className = 'friendly-element';
+                
+                // Random emoji
+                const randomEmoji = friendlyEmojis[Math.floor(Math.random() * friendlyEmojis.length)];
+                element.textContent = randomEmoji;
+                
+                // Random position
+                element.style.top = Math.random() * 100 + '%';
+                element.style.left = Math.random() * 100 + '%';
+                
+                // No delay - start animation immediately
+                element.style.animationDelay = '0s';
+                
+                // Random animation duration (4-7 seconds)
+                element.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                
+                // Random font size variation
+                const baseFontSize = 20;
+                const randomSize = baseFontSize + (Math.random() * 8 - 4); // ±4px variation
+                element.style.fontSize = randomSize + 'px';
+                
+                // Add to body
+                document.body.appendChild(element);
+            }
+            
+            console.log(`Created ${numberOfElements} friendly elements`);
+        }
+
+        // Create Friends-style colored dots
+        function createFriendsDots() {
+            const friendsColors = ['#FF6B6B', '#FFE66D', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'];
+            const numberOfDots = Math.floor(Math.random() * 20) + 30; // 30-49 dots
+            
+            for (let i = 0; i < numberOfDots; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'friends-dot';
+                
+                // Random color from Friends palette
+                const randomColor = friendsColors[Math.floor(Math.random() * friendsColors.length)];
+                dot.style.backgroundColor = randomColor;
+                dot.style.boxShadow = `0 0 10px ${randomColor}`;
+                
+                // Random position
+                dot.style.top = Math.random() * 100 + '%';
+                dot.style.left = Math.random() * 100 + '%';
+                
+                // Random animation delay
+                dot.style.animationDelay = Math.random() * 4 + 's';
+                
+                // Random animation duration (3-6 seconds)
+                dot.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                
+                // Random size variation
+                const baseSize = 15;
+                const randomSize = baseSize + (Math.random() * 10 - 5); // ±5px variation
+                dot.style.width = randomSize + 'px';
+                dot.style.height = randomSize + 'px';
+                
+                // Add to body
+                document.body.appendChild(dot);
+            }
+            
+            console.log(`Created ${numberOfDots} Friends-style dots`);
+        }
+
+        // Create continuous Friends dots that refresh periodically
+        function startContinuousFriendsDots() {
+            const friendsColors = ['#FF6B6B', '#FFE66D', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'];
+            
+            setInterval(() => {
+                // Add a few more random dots every 5 seconds
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'friends-dot';
+                    
+                    const randomColor = friendsColors[Math.floor(Math.random() * friendsColors.length)];
+                    dot.style.backgroundColor = randomColor;
+                    dot.style.boxShadow = `0 0 10px ${randomColor}`;
+                    
+                    dot.style.top = Math.random() * 100 + '%';
+                    dot.style.left = Math.random() * 100 + '%';
+                    dot.style.animationDelay = '0s';
+                    dot.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                    
+                    // Random size for new dots too
+                    const baseSize = 15;
+                    const randomSize = baseSize + (Math.random() * 10 - 5);
+                    dot.style.width = randomSize + 'px';
+                    dot.style.height = randomSize + 'px';
+                    
+                    document.body.appendChild(dot);
+                    
+                    // Remove the dot after animation completes
+                    setTimeout(() => {
+                        if (dot.parentNode) {
+                            dot.parentNode.removeChild(dot);
+                        }
+                    }, 8000);
+                }
+            }, 5000);
+        }
+        
+        // Safari iOS font size fix
+        function applySafariFix() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
+            const screenWidth = window.innerWidth || screen.width;
+            
+            if (isMobile && isSafari) {
+                const quoteElement = document.getElementById('mainQuote');
+                if (screenWidth <= 375) {
+                    quoteElement.style.fontSize = '32px';
+                    quoteElement.style.lineHeight = '0.75';
+                    quoteElement.style.letterSpacing = '0px';
+                } else if (screenWidth <= 480) {
+                    quoteElement.style.fontSize = '38px';
+                    quoteElement.style.lineHeight = '0.8';
+                    quoteElement.style.letterSpacing = '1px';
+                }
+                quoteElement.style.fontFamily = "'Luckiest Guy', 'Chewy', 'Bubblegum Sans', cursive";
+                quoteElement.style.fontWeight = '400';
+                
+                console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
+            }
+        }
+        
+        // Google Fonts connection test
+        function testGoogleFontsConnection() {
+            const link = document.querySelector('link[href*="fonts.googleapis.com"]');
+            if (link) {
+                console.log('🔗 Google Fonts link found:', link.href);
+                
+                // Test if the CSS loads
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', link.href, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            console.log('✅ Google Fonts CSS loaded successfully');
+                        } else {
+                            console.log('❌ Google Fonts CSS failed to load. Status:', xhr.status);
+                        }
+                    }
+                };
+                xhr.send();
+            } else {
+                console.log('❌ No Google Fonts link found');
+            }
+        }
+        
+        // Font loading verification
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test Google Fonts connection
+            testGoogleFontsConnection();
+            
+            // Check if Google Fonts is available
+            if (document.fonts) {
+                document.fonts.ready.then(function() {
+                    // Test if Delicious Handrawn is loaded
+                    const testElement = document.createElement('span');
+                    testElement.style.fontFamily = "'Delicious Handrawn', cursive";
+                    testElement.style.fontSize = '12px';
+                    testElement.textContent = 'test';
+                    testElement.style.position = 'absolute';
+                    testElement.style.visibility = 'hidden';
+                    document.body.appendChild(testElement);
+                    
+                    const computedStyle = window.getComputedStyle(testElement);
+                    const actualFont = computedStyle.fontFamily;
+                    
+                    if (actualFont.includes('Delicious Handrawn')) {
+                        console.log('✅ Google Font "Delicious Handrawn" loaded successfully!');
+                        console.log('Font family:', actualFont);
+                    } else {
+                        console.log('❌ Google Font "Delicious Handrawn" failed to load');
+                        console.log('Fallback font:', actualFont);
+                    }
+                    
+                    document.body.removeChild(testElement);
+                });
+                
+                console.log('📊 Google Fonts API is accessible');
+                console.log('🔗 Font connection status: Connected');
+            } else {
+                console.log('❌ Document.fonts API not supported');
+            }
+        });
+        
+        // Update the content
+        document.getElementById('mainQuote').textContent = pageData.quote;
+        document.getElementById('quoteSource').textContent = pageData.source;
+        
+        // Apply Safari fix after content is loaded
+        setTimeout(applySafariFix, 100);
+        
+        // Create friendly elements
+        createFriendlyElements();
+        
+        // Create Friends-style dots
+        createFriendsDots();
+        
+        // Start continuous Friends dots
+        startContinuousFriendsDots();
+        
+        // Update character image
+        const imageElement = document.getElementById('characterImage');
+        if (pageData.image && pageData.image.length > 0) {
+            imageElement.innerHTML = `<img src="${pageData.image}" alt="Character">`;
+            imageElement.classList.add('has-image');
+        } else {
+            imageElement.textContent = 'Add your image here';
+            imageElement.classList.remove('has-image');
+        }
+        
+        // Random Friends colors for friendly animation
+        const friendlyColors = [
+            '#FF6B6B', '#FFE66D', '#4ECDC4', '#45B7D1', '#96CEB4', 
+            '#FFEAA7', '#FD79A8', '#6C5CE7', '#A29BFE', '#74B9FF'
+        ];
+        
+        function getRandomColor() {
+            return friendlyColors[Math.floor(Math.random() * friendlyColors.length)];
+        }
+        
+        function friendlyAnimation() {
+            const quoteElement = document.getElementById('mainQuote');
+            const color1 = getRandomColor();
+            const color2 = getRandomColor();
+            
+            // Check if mobile for lighter effects
+            const isMobile = window.innerWidth <= 480;
+            const shadowStrength = isMobile ? '0.5px 0.5px 1px' : '3px 3px 6px';
+            const glowStrength = isMobile ? '0 0 8px' : '0 0 15px';
+            const scaleStrength = isMobile ? 1.005 : 1.01;
+            
+            // Start animation
+            quoteElement.style.color = color1;
+            quoteElement.style.textShadow = `${glowStrength} ${color1}, ${shadowStrength} rgba(0,0,0,0.2)`;
+            quoteElement.style.transform = `scale(${scaleStrength})`;
+            
+            setTimeout(() => {
+                quoteElement.style.color = color2;
+                quoteElement.style.textShadow = `${glowStrength} ${color2}, ${shadowStrength} rgba(0,0,0,0.2)`;
+                quoteElement.style.transform = `scale(${1/scaleStrength})`;
+            }, 200);
+            
+            setTimeout(() => {
+                quoteElement.style.color = '#222';
+                quoteElement.style.textShadow = isMobile ? '0.5px 0.5px 1px rgba(0,0,0,0.1)' : '3px 3px 6px rgba(0,0,0,0.3)';
+                quoteElement.style.transform = 'scale(1)';
+            }, 400);
+        }
+        
+        function scheduleRandomAnimation() {
+            const randomDelay = Math.random() * 3000 + 3000; // 3-6 seconds
+            setTimeout(() => {
+                friendlyAnimation();
+                scheduleRandomAnimation(); // Schedule next animation
+            }, randomDelay);
+        }
+        
+        // Start the random animation cycle
+        scheduleRandomAnimation();
+        
+        // Analytics tracking
+        document.querySelector('.shop-button').addEventListener('click', function() {
+            console.log('Shop button clicked for quote:', pageData.quote);
+        });
+        
+        // Re-apply fix on orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(applySafariFix, 200);
+        });
+        
+        window.addEventListener('resize', function() {
+            setTimeout(applySafariFix, 100);
+        });
+    </script>
+</body>
+</html>
