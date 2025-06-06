@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How you doing? | WearableCode</title>
+    <title>How you doin'? | WearableCode</title>
     <!-- Google Fonts preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Google Font: Playwrite Cuba -->
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+Cuba:wght@100..400&display=swap" rel="stylesheet">
+    <!-- Google Font: Permanent Marker -->
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -143,8 +143,8 @@
 
         .quote {
             font-size: 56px;
-            font-weight: 300;
-            font-family: 'Playwrite Cuba', cursive;
+            font-weight: 400;
+            font-family: 'Permanent Marker', cursive;
             color: #222;
             margin-bottom: 15px;
             line-height: 0.9;
@@ -276,7 +276,7 @@
                 margin-bottom: 10px;
                 line-height: 0.9;
                 padding: 0 15px;
-                font-family: 'Playwrite Cuba', cursive;
+                font-family: 'Permanent Marker', cursive;
                 letter-spacing: 0px;
                 white-space: nowrap;
             }
@@ -342,7 +342,7 @@
                 font-size: 20px;
                 padding: 0 12px;
                 line-height: 0.85;
-                font-family: 'Playwrite Cuba', cursive;
+                font-family: 'Permanent Marker', cursive;
                 letter-spacing: 0px;
                 white-space: nowrap;
             }
@@ -377,7 +377,7 @@
         </div>
         
         <div class="quote" id="mainQuote">
-            How you doing?
+            How you doin'?
         </div>
         
         <div class="source" id="quoteSource">
@@ -404,7 +404,7 @@
     <script>
         // Page-specific data
         const pageData = {
-            quote: "How you doing?",
+            quote: "How you doin'?",
             source: "- Joey Tribbiani",
             image: "../../assets/images/How_you_doing_joey_tribbiani.png"
         };
@@ -580,9 +580,9 @@
             // Check if Google Fonts is available
             if (document.fonts) {
                 document.fonts.ready.then(function() {
-                    // Test if Playwrite Cuba is loaded
+                    // Test if Permanent Marker is loaded
                     const testElement = document.createElement('span');
-                    testElement.style.fontFamily = "'Playwrite Cuba', cursive";
+                    testElement.style.fontFamily = "'Permanent Marker', cursive";
                     testElement.style.fontSize = '12px';
                     testElement.textContent = 'test';
                     testElement.style.position = 'absolute';
@@ -592,11 +592,11 @@
                     const computedStyle = window.getComputedStyle(testElement);
                     const actualFont = computedStyle.fontFamily;
                     
-                    if (actualFont.includes('Playwrite Cuba')) {
-                        console.log('✅ Google Font "Playwrite Cuba" loaded successfully!');
+                    if (actualFont.includes('Permanent Marker')) {
+                        console.log('✅ Google Font "Permanent Marker" loaded successfully!');
                         console.log('Font family:', actualFont);
                     } else {
-                        console.log('❌ Google Font "Playwrite Cuba" failed to load');
+                        console.log('❌ Google Font "Permanent Marker" failed to load');
                         console.log('Fallback font:', actualFont);
                     }
                     
