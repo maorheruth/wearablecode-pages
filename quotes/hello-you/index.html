@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Are You Following Me | WearableCode</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Rubik:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Hello, you. | WearableCode</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&family=Bodoni+Moda+SC:wght@400;700;900&family=Rubik+Glitch&family=Federo&family=Rozha+One&display=swap" rel="stylesheet">
     <!-- Preload main image for faster loading -->
-    <link rel="preload" href="./assets/images/thats-what-she-said.png" as="image">
+    <link rel="preload" href="./assets/images/hello-you.png" as="image">
     <style>
         * {
             margin: 0;
@@ -19,18 +19,18 @@
             width: 100%;
         }
 
+        /* Safari iOS specific fixes */
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #8B0000 0%, #4A0000 50%, #220000 100%);
-            background-size: 400% 400%;
-            position: relative;
             height: 100vh;
-            height: 100dvh;
+            height: 100dvh; /* Dynamic viewport height for iOS */
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 10px;
             margin: 0;
+            position: relative;
             overflow: hidden;
             -webkit-overflow-scrolling: touch;
         }
@@ -78,65 +78,36 @@
             }
         }
 
-        /* Floating emoji effects */
-        .floating-emoji {
-            position: absolute;
-            font-size: 24px;
-            z-index: 1;
-            animation: floatUp 15s linear infinite;
-            pointer-events: none;
-            user-select: none;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(120vh) translateX(0px) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-20vh) translateX(50px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 40px 35px;
-            max-width: 700px;
+            background: white;
+            border-radius: 20px;
+            padding: 35px 30px;
+            max-width: 650px;
             width: 100%;
-            box-shadow: 
-                0 20px 60px rgba(0,0,0,0.1), 
-                0 0 40px rgba(255, 255, 255, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12), 0 0 30px rgba(255, 255, 255, 0.8);
             text-align: center;
             position: relative;
-            animation: slideUp 0.8s ease-out;
+            animation: slideUp 0.6s ease-out;
+            height: auto;
+            min-height: auto;
+            max-height: 95vh;
             z-index: 5;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
         }
 
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(30px) scale(0.95);
+                transform: translateY(15px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+                transform: translateY(0);
             }
         }
 
         .logo {
-            margin-top: 15px;
+            margin-top: 12px;
             margin-bottom: 0px;
             text-align: center;
         }
@@ -147,9 +118,9 @@
         }
 
         .logo img {
-            height: 20px;
+            height: 18px;
             opacity: 0.8;
-            filter: grayscale(10%);
+            filter: grayscale(20%);
             transition: all 0.3s ease;
         }
 
@@ -160,17 +131,16 @@
         }
 
         .character-image {
-            width: 100%; /* Full width of parent container */
-            min-height: 200px;
-            max-height: none; /* Remove height restrictions */
-            border-radius: 16px;
-            margin: 0 auto 20px;
-            background: transparent; /* Remove background */
+            width: 450px;
+            height: 450px;
+            border-radius: 12px;
+            margin: 0 auto 18px;
+            background: #f8f9fa;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #999;
-            border: none; /* Remove border */
+            color: #ccc;
+            border: 2px dashed #ddd;
             position: relative;
             overflow: hidden;
             font-size: 16px;
@@ -179,23 +149,14 @@
 
         .character-image img {
             width: 100%;
-            height: auto;
+            height: 100%;
             object-fit: contain;
-            border-radius: 16px;
+            border-radius: 10px;
         }
 
         .character-image.has-image {
             border: none;
-            background: transparent;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            height: auto;
-        }
-
-        .character-image.loading {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border: 2px dashed #ddd;
+            background: white;
         }
 
         .character-image.loading {
@@ -214,73 +175,69 @@
         }
 
         .quote {
-            font-size: 48px;
-            font-weight: 700;
-            font-family: 'Space Grotesk', 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: #333;
+            font-size: 65px;
+            font-weight: 400;
+            font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', 'Arial Black', sans-serif;
+            color: #222;
             margin-bottom: 15px;
-            line-height: 1.1;
+            line-height: 0.85;
             position: relative;
-            padding: 0 20px;
-            letter-spacing: -0.5px;
-            transition: all 0.4s ease;
+            padding: 0 15px;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
         }
 
         .quote::before {
             content: '"';
-            font-size: 36px;
-            color: #f093fb;
+            font-size: 75px;
+            color: #bbb;
             position: absolute;
-            left: -5px;
-            top: -8px;
+            left: -8px;
+            top: -15px;
             opacity: 0.7;
             font-family: Georgia, serif;
         }
 
         .quote::after {
             content: '"';
-            font-size: 36px;
-            color: #f093fb;
+            font-size: 75px;
+            color: #bbb;
             position: absolute;
-            right: -5px;
-            bottom: -12px;
+            right: -8px;
+            bottom: -20px;
             opacity: 0.7;
             font-family: Georgia, serif;
         }
 
         .source {
-            font-size: 16px;
+            font-size: 14px;
             color: #666;
             font-style: italic;
-            margin-bottom: 30px;
-            font-weight: 500;
+            margin-bottom: 25px;
         }
 
         .cta-section {
-            background: linear-gradient(135deg, rgba(30, 58, 138, 0.1), rgba(67, 56, 202, 0.1), rgba(109, 40, 217, 0.1));
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
             direction: rtl;
             text-align: center;
-            border: 1px solid rgba(30, 58, 138, 0.2);
         }
 
         .cta-text {
-            font-size: 18px;
+            font-size: 16px;
             color: #333;
-            margin-bottom: 15px;
-            font-weight: 600;
+            margin-bottom: 12px;
+            font-weight: 500;
             direction: rtl;
             text-align: center;
         }
 
         .shop-button {
-            background: linear-gradient(135deg, #1e3a8a, #3b4a88, #4338ca, #6d28d9);
+            background: linear-gradient(135deg, #8B0000, #B22222);
             color: white;
             border: none;
             border-radius: 10px;
@@ -291,203 +248,178 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .shop-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .shop-button:hover::before {
-            left: 100%;
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
         }
 
         .shop-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.5);
-            background: linear-gradient(135deg, #2d3a73, #4a5a9d, #5b21b6, #7c3aed);
+            box-shadow: 0 8px 20px rgba(139, 0, 0, 0.5);
+            background: linear-gradient(135deg, #A0522D, #DC143C);
         }
 
-        /* Bouncing emojis around the container */
-        .bounce-emoji {
+        /* Animated mysterious background elements */
+        .mystery-element {
             position: absolute;
-            font-size: 28px;
-            z-index: 2;
-            animation: bounce 3s ease-in-out infinite;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.25);
+            z-index: 1;
+            animation: wiggleFloat 6s ease-in-out infinite;
             pointer-events: none;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
         }
 
-        @keyframes bounce {
+        @keyframes wiggleFloat {
             0%, 100% {
-                transform: translateY(0px) rotate(0deg);
-                opacity: 0.7;
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                opacity: 0.25;
             }
             25% {
-                transform: translateY(-15px) rotate(5deg);
-                opacity: 1;
+                transform: translateX(8px) translateY(-6px) rotate(3deg);
+                opacity: 0.4;
             }
             50% {
-                transform: translateY(-30px) rotate(-3deg);
-                opacity: 0.8;
+                transform: translateX(-4px) translateY(10px) rotate(-2deg);
+                opacity: 0.3;
             }
             75% {
-                transform: translateY(-10px) rotate(2deg);
-                opacity: 0.9;
+                transform: translateX(6px) translateY(-5px) rotate(3deg);
+                opacity: 0.5;
             }
         }
 
         /* Mobile optimizations */
         @media (max-width: 480px) {
             body {
-                padding: 8px;
+                padding: 10px;
+                overflow-x: hidden;
             }
             
             .container {
-                padding: 25px 20px;
-                border-radius: 20px;
+                padding: 20px 15px;
+                border-radius: 16px;
                 max-width: 95vw;
                 max-height: 90vh;
             }
             
             .character-image {
-                width: 100%;
-                min-height: 150px;
+                width: 320px;
+                height: 320px;
                 margin-bottom: 15px;
                 font-size: 14px;
             }
             
             .quote {
-                font-size: 36px;
-                margin-bottom: 12px;
-                line-height: 1.1;
-                padding: 0 10px;
-                letter-spacing: -0.3px;
+                font-size: 26px;
+                margin-bottom: 10px;
+                line-height: 0.85;
+                padding: 0 5px;
+                font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
             }
             
             .quote::before {
-                font-size: 28px;
-                top: -6px;
-                left: -3px;
+                font-size: 32px;
+                top: -8px;
+                left: -4px;
             }
 
             .quote::after {
-                font-size: 28px;
-                bottom: -8px;
-                right: -3px;
+                font-size: 32px;
+                bottom: -12px;
+                right: -4px;
             }
             
             .source {
-                font-size: 14px;
-                margin-bottom: 25px;
+                font-size: 13px;
+                margin-bottom: 20px;
             }
             
             .logo img {
-                height: 16px;
-                margin-top: 10px;
+                height: 15px;
+                margin-top: 8px;
             }
             
             .cta-text {
-                font-size: 16px;
-                margin-bottom: 12px;
+                font-size: 15px;
+                margin-bottom: 10px;
             }
             
             .cta-section {
-                padding: 15px;
-                margin-top: 20px;
+                padding: 12px;
+                margin-top: 15px;
             }
             
             .shop-button {
-                padding: 12px 24px;
-                font-size: 14px;
+                padding: 10px 20px;
+                font-size: 13px;
             }
 
-            .bounce-emoji {
-                font-size: 20px;
-            }
-
-            .floating-emoji {
-                font-size: 18px;
+            .mystery-element {
+                font-size: 16px;
+                color: rgba(255, 255, 255, 0.2);
+                text-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
             }
         }
 
         /* iPhone SE and smaller */
         @media (max-width: 375px) {
             .container {
-                padding: 20px 15px;
+                padding: 15px 12px;
                 max-width: 98vw;
                 max-height: 88vh;
             }
             
             .character-image {
-                width: 100%;
-                min-height: 130px;
+                width: 280px;
+                height: 280px;
                 font-size: 12px;
             }
             
             .quote {
-                font-size: 32px;
-                padding: 0 8px;
-                line-height: 1.1;
-                letter-spacing: -0.2px;
+                font-size: 22px;
+                padding: 0 3px;
+                line-height: 0.8;
+                font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
             }
 
             .quote::before {
-                font-size: 24px;
-                top: -4px;
-                left: -2px;
+                font-size: 28px;
             }
 
             .quote::after {
-                font-size: 24px;
-                bottom: -6px;
-                right: -2px;
+                font-size: 28px;
             }
 
-            .bounce-emoji {
-                font-size: 18px;
-            }
-
-            .floating-emoji {
-                font-size: 16px;
+            .mystery-element {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.18);
+                text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
             }
             
             .logo img {
                 height: 14px;
-                margin-top: 8px;
+                margin-top: 6px;
             }
-        }
-
-        /* Pulsing glow effect for the quote */
-        @keyframes pulseGlow {
-            0%, 100% {
-                filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.3));
-            }
-            50% {
-                filter: drop-shadow(0 0 20px rgba(240, 147, 251, 0.6));
-            }
-        }
-
-        .quote.glowing {
-            animation: pulseGlow 2s ease-in-out infinite;
         }
     </style>
 </head>
 <body>
-    <!-- Floating and bouncing emojis will be generated by JavaScript -->
+    <!-- Mystery elements will be generated by JavaScript -->
     
     <div class="container">
         <div class="character-image" id="characterImage">
-            טוען מים...
+            טוען תמונה...
+        </div>
+        
+        <div class="quote" id="mainQuote">
+            Hello, you.
+        </div>
+        
+        <div class="source" id="quoteSource">
+            - Joe Goldberg
         </div>
         
         <div class="cta-section">
@@ -508,175 +440,68 @@
     </div>
 
     <script>
-        // Tenor API Configuration
-        const TENOR_API_KEY = 'AIzaSyCnsX-2fRoZAZoT6zobpVijxT7ksnLLeq';
-        const CLIENT_KEY = 'wearablecode_memes';
-        
-        // Specific GIF data for "Are You Following Me"
-        const specificGifData = {
-            id: '15996458',
-            url: 'https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458',
-            embedCode: `<div class="tenor-gif-embed" data-postid="15996458" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458">Are You Following Me Freaked Out GIF</a>from <a href="https://tenor.com/search/are+you+following+me-gifs">Are You Following Me GIFs</a></div>`
-        };
-        
-        // Load the specific "Are You Following Me" GIF
-        function loadSpecificMeme() {
-            const imageElement = document.getElementById('characterImage');
-            imageElement.innerHTML = ''; // Clear loading text
-            imageElement.classList.add('loading');
-            
-            // Create container for the Tenor embed
-            const embedContainer = document.createElement('div');
-            embedContainer.innerHTML = specificGifData.embedCode;
-            embedContainer.style.cssText = `
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 16px;
-                overflow: hidden;
-            `;
-            
-            // Style the embed to take full width with proper aspect ratio
-            const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
-            if (tenorEmbed) {
-                tenorEmbed.style.cssText = `
-                    width: 100% !important;
-                    height: auto !important;
-                    border-radius: 16px;
-                    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-                `;
-            }
-            
-            // Add to container
-            imageElement.appendChild(embedContainer);
-            imageElement.classList.remove('loading');
-            imageElement.classList.add('has-image');
-            
-            // Load Tenor's embed script
-            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
-                const script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.async = true;
-                script.src = 'https://tenor.com/embed.js';
-                document.body.appendChild(script);
-            }
-            
-            // Add Tenor attribution
-            addTenorAttribution(imageElement);
-            
-            // Store GIF ID for analytics
-            window.tenorGifId = specificGifData.id;
-            
-            console.log('✅ "Are You Following Me" GIF loaded - full width, responsive');
-        }
-        
-        // Load meme image (from Tenor or fallback)
-        function loadMemeImage(imageUrl) {
-            const imageElement = document.getElementById('characterImage');
-            imageElement.textContent = 'טוען מים מגניב...';
-            imageElement.classList.add('loading');
-            
-            const img = document.createElement('img');
-            img.src = imageUrl;
-            img.alt = "Funny Meme";
-            img.style.width = "100%";
-            img.style.height = "100%";
-            img.style.objectFit = "cover";
-            img.style.borderRadius = "14px";
-            
-            img.onload = function() {
-                console.log('✅ Meme image loaded successfully');
-                imageElement.innerHTML = '';
-                imageElement.appendChild(img);
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-                
-                // Add Tenor attribution
-                addTenorAttribution(imageElement);
-            };
-            
-            img.onerror = function() {
-                console.log('❌ Meme image failed to load, trying fallback');
-                loadFallbackImage();
-            };
-        }
-        
-        // Add Tenor attribution (required by API terms)
-        function addTenorAttribution(container) {
-            const attribution = document.createElement('div');
-            attribution.style.cssText = `
-                position: absolute;
-                top: 8px;
-                left: 8px;
-                font-size: 9px;
-                color: rgba(255,255,255,0.9);
-                background: rgba(0,0,0,0.6);
-                padding: 3px 7px;
-                border-radius: 6px;
-                text-decoration: none;
-                font-weight: 500;
-                backdrop-filter: blur(4px);
-                z-index: 10;
-            `;
-            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
-            container.style.position = 'relative';
-            container.appendChild(attribution);
-        }
-        
-        // Fallback to local image if API fails
-        function loadFallbackImage() {
-            const fallbackPaths = [
-                "./assets/images/funny-meme.gif",
-                "assets/images/funny-meme.gif",
-                "/assets/images/funny-meme.gif"
-            ];
-            
-            const imageElement = document.getElementById('characterImage');
-            let currentIndex = 0;
-            
-            function tryNextFallback() {
-                if (currentIndex < fallbackPaths.length) {
-                    loadMemeImage(fallbackPaths[currentIndex]);
-                    currentIndex++;
-                } else {
-                    // Show placeholder if all fails
-                    imageElement.textContent = 'הוסף מים כאן 😂';
-                    imageElement.classList.remove('loading', 'has-image');
-                }
-            }
-            
-            tryNextFallback();
-        }
-        
         // Page-specific data
         const pageData = {
-            quote: "",
-            source: "",
-            image: "./assets/images/funny-meme.gif" // Will be replaced by Tenor API
+            quote: "Hello, you.",
+            source: "- Joe Goldberg",
+            image: "./assets/images/hello-you.png"
         };
         
-        // Random CTA messages in Hebrew for "Are You Following Me" meme
+        // Random CTA messages in Hebrew
         const ctaMessages = [
-            "למה אתם עוקבים אחרי? קנו חולצה! 👇",
-            "תפסתם אתכם! רוצים את החולצה הזאת? 👇",
-            "מה אתם רוצים ממני? חולצה! 👇",
-            "די לעקוב! קנו חולצה במקום! 👇",
-            "אתם פה שוב? בסדר, הנה החולצה 👇",
-            "למה אתם לא קונים את החולצה כבר? 👇",
-            "מספיק לעקוב - קנו! 👇",
-            "אני רואה אתכם! רוצים חולצה? 👇",
-            "תפסתי אתכם בעקיבה! החולצה כאן 👇",
-            "מה זה הצריכה הזו? קנו חולצה! 👇"
+            "רוצה גם חולצה מגניבה כזאת? 👇",
+            "אהבתם? הזמינו את החולצה שלכם עוד היום 👇",
+            "מגניב נכון? רוצים גם? 👇",
+            "קלטנו שאהבתם את הקונספט! רוצים גם חולצה כזאת? 👇",
+            "איזה חולצה מגניבה הא? קנו את שלכם גם 👇",
+            "רוצים גם להיות מגניבים כמו ג'ו? 👇",
+            "החולצה הזאת יכולה להיות שלכם! 👇",
+            "מתאים לכם? בואו נזמין! 👇",
+            "זה הזמן להזמין את החולצה המושלמת 👇",
+            "חולצה כזאת חייבת להיות לכם בארון! 👇"
         ];
         
-        // Mystery emojis for background - creepy/stalker themed
+        // Mystery emojis for background - Only the scariest ones
         const mysteryEmojis = [
             '👁️', '🩸', '🔪', '🔍', '💀', '🖤', '🕯️', '🔐',
             '🗝️', '📖', '🚪', '📱', '💻', '🌃', '🌙', '⚡',
             '🔥', '👤', '🎭', '👻'
         ];
         
+        // Create random mystery elements
+        function createMysteryElements() {
+            const numberOfElements = Math.floor(Math.random() * 11) + 15; // 15-25 elements
+            
+            for (let i = 0; i < numberOfElements; i++) {
+                const element = document.createElement('div');
+                element.className = 'mystery-element';
+                
+                // Random emoji
+                const randomEmoji = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
+                element.textContent = randomEmoji;
+                
+                // Random position
+                element.style.top = Math.random() * 100 + '%';
+                element.style.left = Math.random() * 100 + '%';
+                
+                // No delay - start animation immediately
+                element.style.animationDelay = '0s';
+                
+                // Random animation duration (5-8 seconds)
+                element.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                
+                // Random font size variation
+                const baseFontSize = 20;
+                const randomSize = baseFontSize + (Math.random() * 8 - 4); // ±4px variation
+                element.style.fontSize = randomSize + 'px';
+                
+                // Add to body
+                document.body.appendChild(element);
+            }
+            
+            console.log(`Created ${numberOfElements} mystery elements`);
+        }
+
         // Create blood drips
         function createBloodDrips() {
             const numberOfDrips = Math.floor(Math.random() * 10) + 8; // 8-17 drips
@@ -695,8 +520,8 @@
                 // Random animation duration (8-12 seconds)
                 drip.style.animationDuration = (Math.random() * 4 + 8) + 's';
                 
-                // Random width with variation (3-28px range)
-                const minWidth = Math.random() * 4 + 3; // 3-7px minimum
+                // Random width with much more variation (3-28px range)
+                const minWidth = Math.random() * 4 + 3; // 3-7px (current minimum)
                 const maxWidth = minWidth * 4; // 4x the minimum width
                 const finalWidth = Math.random() * (maxWidth - minWidth) + minWidth;
                 drip.style.width = finalWidth + 'px';
@@ -712,7 +537,7 @@
             console.log(`Created ${numberOfDrips} blood drips`);
         }
 
-        // Create continuous blood drips
+        // Create continuous blood drips that refresh periodically
         function startContinuousBloodDrips() {
             setInterval(() => {
                 // Add a few more random drips every 3 seconds
@@ -746,124 +571,48 @@
                 }
             }, 3000);
         }
-
-        // Create bouncing emojis around container with creepy theme
-        function createBouncingEmojis() {
-            const bounceEmojis = ['👁️', '🩸', '🔍', '💀', '🖤', '🕯️'];
-            const positions = [
-                { top: '20%', left: '10%' },
-                { top: '30%', right: '8%' },
-                { bottom: '40%', left: '5%' },
-                { bottom: '30%', right: '12%' },
-                { top: '60%', left: '8%' },
-                { top: '70%', right: '6%' }
-            ];
-            
-            bounceEmojis.forEach((emoji, index) => {
-                const bounceElement = document.createElement('div');
-                bounceElement.className = 'bounce-emoji';
-                bounceElement.textContent = emoji;
-                
-                // Set position
-                const pos = positions[index % positions.length];
-                Object.assign(bounceElement.style, pos);
-                
-                // Random animation delay
-                bounceElement.style.animationDelay = Math.random() * 2 + 's';
-                
-                // Random animation duration
-                bounceElement.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
-                
-                document.body.appendChild(bounceElement);
-            });
-            
-            console.log('Created bouncing creepy emojis around container');
-        }
-
-        // Create floating emojis with creepy theme
-        function createFloatingEmojis() {
-            const numberOfEmojis = Math.floor(Math.random() * 15) + 10; // 10-24 emojis
-            
-            for (let i = 0; i < numberOfEmojis; i++) {
-                const emoji = document.createElement('div');
-                emoji.className = 'floating-emoji';
-                
-                // Random emoji from creepy collection
-                const randomEmoji = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
-                emoji.textContent = randomEmoji;
-                
-                // Random position across screen width
-                emoji.style.left = Math.random() * 100 + '%';
-                emoji.style.top = '100vh';
-                
-                // Random animation delay (0-10 seconds)
-                emoji.style.animationDelay = Math.random() * 10 + 's';
-                
-                // Random animation duration (12-18 seconds)
-                emoji.style.animationDuration = (Math.random() * 6 + 12) + 's';
-                
-                // Random size (18-30px)
-                const emojiSize = Math.random() * 12 + 18;
-                emoji.style.fontSize = emojiSize + 'px';
-                
-                document.body.appendChild(emoji);
-            }
-            
-            console.log(`Created ${numberOfEmojis} floating creepy emojis`);
-        }
-
-        // Update continuous floating to use creepy emojis
-        function startContinuousFloating() {
-            setInterval(() => {
-                const emojiCount = Math.floor(Math.random() * 3) + 2; // 2-4 emojis
-                for (let i = 0; i < emojiCount; i++) {
-                    const emoji = document.createElement('div');
-                    emoji.className = 'floating-emoji';
-                    emoji.textContent = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
-                    
-                    emoji.style.left = Math.random() * 100 + '%';
-                    emoji.style.top = '100vh';
-                    emoji.style.animationDelay = Math.random() * 2 + 's';
-                    emoji.style.animationDuration = (Math.random() * 6 + 12) + 's';
-                    
-                    const emojiSize = Math.random() * 12 + 18;
-                    emoji.style.fontSize = emojiSize + 'px';
-                    
-                    document.body.appendChild(emoji);
-                    
-                    // Remove after animation completes
-                    setTimeout(() => {
-                        if (emoji.parentNode) {
-                            emoji.parentNode.removeChild(emoji);
-                        }
-                    }, 18000);
-                }
-            }, 1500); // Every 1.5 seconds
-        }
         
-        // Mobile optimizations
-        function applyMobileOptimizations() {
+        // Safari iOS font size fix
+        function applySafariFix() {
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
             const screenWidth = window.innerWidth || screen.width;
             
-            if (isMobile) {
+            if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '30px';
-                    quoteElement.style.lineHeight = '1.1';
-                    quoteElement.style.letterSpacing = '-0.1px';
+                    quoteElement.style.fontSize = '44px';
+                    quoteElement.style.lineHeight = '0.75';
+                    quoteElement.style.letterSpacing = '-1px';
                 } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '34px';
-                    quoteElement.style.lineHeight = '1.1';
-                    quoteElement.style.letterSpacing = '-0.2px';
+                    quoteElement.style.fontSize = '52px';
+                    quoteElement.style.lineHeight = '0.8';
+                    quoteElement.style.letterSpacing = '-1px';
                 }
+                quoteElement.style.fontFamily = "'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif";
+                quoteElement.style.fontWeight = '400';
+                quoteElement.style.textTransform = 'uppercase';
                 
-                console.log('Mobile optimizations applied. Font size:', quoteElement.style.fontSize);
+                console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
             }
         }
         
-        // Update the content (no quote or source for memes)
-        // Content will be loaded by Tenor API
+        // iPhone specific glow reduction
+        function reduceGlowForiPhone() {
+            const isIphone = /iPhone/i.test(navigator.userAgent);
+            if (isIphone) {
+                const container = document.querySelector('.container');
+                container.style.boxShadow = `
+                    0 15px 30px rgba(0,0,0,0.08), 
+                    0 0 25px rgba(255, 255, 255, 0.6)
+                `;
+                console.log('🍎 iPhone detected - optimized glow applied');
+            }
+        }
+        
+        // Update the content
+        document.getElementById('mainQuote').textContent = pageData.quote;
+        document.getElementById('quoteSource').textContent = pageData.source;
         
         // Set random CTA message
         const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
@@ -872,103 +621,156 @@
         // Store for analytics
         window.currentCtaMessage = randomCtaMessage;
         
-        // Apply mobile optimizations
-        setTimeout(applyMobileOptimizations, 100);
+        // Apply fixes after content is loaded
+        setTimeout(applySafariFix, 100);
+        reduceGlowForiPhone();
         
-        // Load the specific "Are You Following Me" meme
-        loadSpecificMeme();
-        
-        // Create floating and bouncing emojis
-        createFloatingEmojis();
-        createBouncingEmojis();
+        // Create mystery elements
+        createMysteryElements();
         
         // Create blood drips
         createBloodDrips();
         
-        // Start continuous effects
-        startContinuousFloating();
+        // Start continuous blood drips
         startContinuousBloodDrips();
         
-        // Remove the old image loading code since we're using Tenor API
-        
-        // Fun quote effects (keep existing code but remove for memes)
-        // Since we removed quotes, we can remove these functions too
-        const funColors = [
-            '#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe',
-            '#43e97b', '#38f9d7', '#ffecd2', '#fcb69f', '#a8edea'
-        ];
-        
-        function getRandomFunColor() {
-            return funColors[Math.floor(Math.random() * funColors.length)];
+        // Update character image with loading state
+        const imageElement = document.getElementById('characterImage');
+        if (pageData.image && pageData.image.length > 0) {
+            // Show loading state
+            imageElement.textContent = 'טוען תמונה...';
+            imageElement.classList.add('loading');
+            
+            const img = document.createElement('img');
+            img.src = pageData.image;
+            img.alt = "Character";
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.objectFit = "contain";
+            img.style.borderRadius = "10px";
+            
+            img.onload = function() {
+                console.log('✅ Image loaded successfully:', pageData.image);
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Image failed to load:', pageData.image);
+                console.log('Trying alternative paths...');
+                
+                // Try different paths
+                const alternativePaths = [
+                    "assets/images/hello-you.png",
+                    "/assets/images/hello-you.png",
+                    "./assets/images/hello-you.png",
+                    "assets/images/Hello_you_joe_goldberg.png",
+                    "/assets/images/Hello_you_joe_goldberg.png",
+                    "../../assets/images/Hello_you_joe_goldberg.png"
+                ];
+                
+                let currentIndex = 0;
+                function tryNextPath() {
+                    if (currentIndex < alternativePaths.length) {
+                        const testImg = document.createElement('img');
+                        testImg.src = alternativePaths[currentIndex];
+                        testImg.onload = function() {
+                            console.log('✅ Alternative path worked:', alternativePaths[currentIndex]);
+                            imageElement.innerHTML = '';
+                            imageElement.appendChild(testImg);
+                            imageElement.classList.remove('loading');
+                            imageElement.classList.add('has-image');
+                        };
+                        testImg.onerror = function() {
+                            console.log('❌ Alternative path failed:', alternativePaths[currentIndex]);
+                            currentIndex++;
+                            tryNextPath();
+                        };
+                        testImg.style.width = "100%";
+                        testImg.style.height = "100%";
+                        testImg.style.objectFit = "contain";
+                        testImg.style.borderRadius = "10px";
+                        testImg.alt = "Character";
+                    } else {
+                        console.log('❌ All paths failed. Keeping placeholder text.');
+                        imageElement.textContent = 'Add your image here';
+                        imageElement.classList.remove('loading', 'has-image');
+                    }
+                }
+                tryNextPath();
+            };
+        } else {
+            imageElement.textContent = 'Add your image here';
+            imageElement.classList.remove('loading', 'has-image');
         }
         
-        function funAnimation() {
+        // Random colors for creepy animation - Joe Goldberg themed
+        const creepyColors = [
+            '#ff0000', '#8B0000', '#DC143C', '#B22222', '#A0522D', 
+            '#800000', '#CD5C5C', '#F08080', '#FA8072', '#E9967A'
+        ];
+        
+        function getRandomColor() {
+            return creepyColors[Math.floor(Math.random() * creepyColors.length)];
+        }
+        
+        function creepyAnimation() {
             const quoteElement = document.getElementById('mainQuote');
-            const color1 = getRandomFunColor();
-            const color2 = getRandomFunColor();
+            const color1 = getRandomColor();
+            const color2 = getRandomColor();
             
-            // Check if mobile for lighter effects
+            // Check if mobile for lighter shadow
             const isMobile = window.innerWidth <= 480;
-            const glowStrength = isMobile ? '0 0 15px' : '0 0 25px';
-            const scaleStrength = isMobile ? 1.02 : 1.05;
-            
-            // Add glowing class
-            quoteElement.classList.add('glowing');
+            const shadowStrength = isMobile ? '0.5px 0.5px 1px' : '3px 3px 6px';
+            const glowStrength = isMobile ? '0 0 8px' : '0 0 20px';
+            const scaleStrength = isMobile ? 1.005 : 1.01;
             
             // Start animation
-            quoteElement.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
-            quoteElement.style.backgroundClip = 'text';
-            quoteElement.style.webkitBackgroundClip = 'text';
-            quoteElement.style.filter = `drop-shadow(${glowStrength} ${color1})`;
+            quoteElement.style.color = color1;
+            quoteElement.style.textShadow = `${glowStrength} ${color1}, ${shadowStrength} rgba(0,0,0,0.2)`;
             quoteElement.style.transform = `scale(${scaleStrength})`;
             
             setTimeout(() => {
+                quoteElement.style.color = color2;
+                quoteElement.style.textShadow = `${glowStrength} ${color2}, ${shadowStrength} rgba(0,0,0,0.2)`;
+                quoteElement.style.transform = `scale(${1/scaleStrength})`;
+            }, 150);
+            
+            setTimeout(() => {
+                quoteElement.style.color = '#222';
+                quoteElement.style.textShadow = isMobile ? '0.5px 0.5px 1px rgba(0,0,0,0.1)' : '3px 3px 6px rgba(0,0,0,0.3)';
                 quoteElement.style.transform = 'scale(1)';
-                quoteElement.classList.remove('glowing');
-            }, 400);
+            }, 300);
         }
         
-        function scheduleRandomFunAnimation() {
-            const randomDelay = Math.random() * 3000 + 2000; // 2-5 seconds
+        function scheduleRandomAnimation() {
+            const randomDelay = Math.random() * 2000 + 2000; // 2-4 seconds
             setTimeout(() => {
-                funAnimation();
-                scheduleRandomFunAnimation();
+                creepyAnimation();
+                scheduleRandomAnimation(); // Schedule next animation
             }, randomDelay);
         }
         
-        // Start the fun animation cycle
-        scheduleRandomFunAnimation();
+        // Start the random animation cycle
+        scheduleRandomAnimation();
         
-        // Analytics tracking with Tenor share registration
+        // Analytics tracking
         document.querySelector('.shop-button').addEventListener('click', function() {
-            console.log('Shop button clicked for "Are You Following Me" meme');
+            console.log('Shop button clicked for quote:', pageData.quote);
             console.log('CTA message shown:', window.currentCtaMessage);
-            
-            // Register share with Tenor
-            if (window.tenorGifId) {
-                registerTenorShare(window.tenorGifId);
-            }
         });
         
-        // Register share with Tenor (optional but recommended)
-        async function registerTenorShare(gifId) {
-            try {
-                await fetch(
-                    `https://tenor.googleapis.com/v2/registershare?id=${gifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`
-                );
-                console.log('✅ Tenor share registered');
-            } catch (error) {
-                console.log('❌ Failed to register Tenor share:', error);
-            }
-        }
-        
-        // Re-apply optimizations on orientation/resize
+        // Re-apply fix on orientation change
         window.addEventListener('orientationchange', function() {
-            setTimeout(applyMobileOptimizations, 200);
+            setTimeout(applySafariFix, 200);
+            setTimeout(reduceGlowForiPhone, 200);
         });
         
         window.addEventListener('resize', function() {
-            setTimeout(applyMobileOptimizations, 100);
+            setTimeout(applySafariFix, 100);
+            setTimeout(reduceGlowForiPhone, 100);
         });
     </script>
 </body>
