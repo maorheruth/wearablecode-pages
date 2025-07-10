@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Are You Following Me | WearableCode</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Rubik:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Preload main image for faster loading -->
+    <link rel="preload" href="./assets/images/thats-what-she-said.png" as="image">
     <style>
         * {
             margin: 0;
@@ -19,7 +21,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #fff 0%, #FF9090 80%, #FF9090 100%);
+            background: linear-gradient(135deg, #fff 0%, #DC143C 50%, #DC143C 100%);
             background-size: 400% 400%;
             position: relative;
             height: 100vh;
@@ -33,11 +35,65 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        /* Blood drip animation with smooth fade */
+        .blood-drip {
+            position: absolute;
+            height: 100vh;
+            background: linear-gradient(to bottom, #ff1a1a 0%, #ff0000 30%, #cc0000 70%, #990000 100%);
+            z-index: 0;
+            animation: dripEndless 10s ease-in infinite;
+            pointer-events: none;
+            transform: translateY(-100vh);
+            box-shadow: 0 0 3px rgba(255, 0, 0, 0.6);
+            opacity: 0; /* Start invisible */
+        }
+
+        @keyframes dripEndless {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0; /* Start invisible */
+            }
+            5% {
+                opacity: 0.3; /* Gentle fade in */
+            }
+            10% {
+                opacity: 0.9; /* Reach normal opacity */
+            }
+            20% {
+                transform: translateY(-80vh);
+                opacity: 0.8;
+            }
+            40% {
+                transform: translateY(-60vh);
+                opacity: 0.7;
+            }
+            60% {
+                transform: translateY(-40vh);
+                opacity: 0.6;
+            }
+            80% {
+                transform: translateY(-20vh);
+                opacity: 0.4;
+            }
+            90% {
+                transform: translateY(-5vh);
+                opacity: 0.2; /* Start fading out */
+            }
+            95% {
+                transform: translateY(0);
+                opacity: 0.05; /* Almost invisible */
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 0; /* End invisible */
+            }
+        }
+
         .container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 24px;
-            padding: 40px 35px;
+            padding: 40px 35px; /* KEEPING ORIGINAL - NO EXTRA PADDING */
             max-width: 700px;
             width: 100%;
             box-shadow: 
@@ -90,8 +146,9 @@
         .character-image {
             width: 100%;
             min-height: 200px;
+            max-height: none;
             border-radius: 16px;
-            margin: 0 auto 150px;
+            margin: 0 auto 150px; /* Back to original top margin (0), 150px bottom */
             padding: 0;
             background: transparent;
             display: flex;
@@ -103,6 +160,13 @@
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
+        }
+
+        .character-image.has-image {
+            border: none;
+            background: transparent;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            height: auto;
         }
 
         .character-image.loading {
@@ -119,28 +183,6 @@
             100% {
                 background-position: -200% 0;
             }
-        }
-
-        .character-image.has-image {
-            background: transparent;
-            border: none;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-            height: auto;
-            min-height: auto;
-        }
-
-        /* Tenor embed specific styles */
-        .tenor-gif-embed {
-            width: 100% !important;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-        }
-
-        .tenor-gif-embed iframe {
-            width: 100% !important;
-            height: auto !important;
-            border-radius: 16px;
         }
 
         .cta-section {
@@ -183,6 +225,53 @@
             background: linear-gradient(135deg, #660000, #8B0000, #B22222);
         }
 
+        /* Animated mysterious background elements */
+        .mystery-element {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.25);
+            z-index: 1;
+            animation: wiggleFloat 6s ease-in-out infinite;
+            pointer-events: none;
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+            opacity: 0; /* Start invisible */
+        }
+
+        @keyframes wiggleFloat {
+            0% {
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                opacity: 0; /* Start invisible */
+            }
+            5% {
+                opacity: 0.15; /* Gentle fade in */
+            }
+            10% {
+                opacity: 0.25; /* Reach normal opacity */
+            }
+            25% {
+                transform: translateX(8px) translateY(-6px) rotate(3deg);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translateX(-4px) translateY(10px) rotate(-2deg);
+                opacity: 0.3;
+            }
+            75% {
+                transform: translateX(6px) translateY(-5px) rotate(3deg);
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.25; /* Start fading out */
+            }
+            95% {
+                opacity: 0.1; /* Almost invisible */
+            }
+            100% {
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                opacity: 0; /* End invisible */
+            }
+        }
+
         /* Mobile optimizations */
         @media (max-width: 480px) {
             body {
@@ -190,7 +279,7 @@
             }
             
             .container {
-                padding: 25px 20px;
+                padding: 25px 20px; /* Original mobile padding - NO CHANGE */
                 border-radius: 20px;
                 max-width: 95vw;
                 max-height: 90vh;
@@ -199,7 +288,7 @@
             .character-image {
                 width: 100%;
                 min-height: 150px;
-                margin: 0 auto 100px;
+                margin: 0 auto 100px; /* Back to original top, 100px bottom for mobile */
                 padding: 0;
                 font-size: 14px;
             }
@@ -223,12 +312,18 @@
                 padding: 12px 24px;
                 font-size: 14px;
             }
+
+            .mystery-element {
+                font-size: 16px;
+                color: rgba(255, 255, 255, 0.2);
+                text-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
+            }
         }
 
         /* iPhone SE and smaller */
         @media (max-width: 375px) {
             .container {
-                padding: 20px 15px;
+                padding: 20px 15px; /* Original small mobile padding - NO CHANGE */
                 max-width: 98vw;
                 max-height: 88vh;
             }
@@ -236,9 +331,15 @@
             .character-image {
                 width: 100%;
                 min-height: 130px;
-                margin: 0 auto 70px;
+                margin: 0 auto 70px; /* Back to original top, 70px bottom for small mobile */
                 padding: 0;
                 font-size: 12px;
+            }
+
+            .mystery-element {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.18);
+                text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
             }
             
             .logo img {
@@ -249,18 +350,19 @@
     </style>
 </head>
 <body>
+    <!-- Mystery elements will be generated by JavaScript -->
     
     <div class="container">
-        <div class="character-image loading" id="characterImage">
-            טוען GIF...
+        <div class="character-image" id="characterImage">
+            טוען מים...
         </div>
         
-        <div class="cta-section">
+        <div class="cta-section" style="background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(220, 53, 69, 0.1), rgba(178, 34, 34, 0.1)); border: 1px solid rgba(220, 53, 69, 0.2);">
             <div class="cta-text">
                 טוען הודעה...
             </div>
             
-            <a href="https://wearablecode.com" class="shop-button">
+            <a href="https://wearablecode.com" class="shop-button" style="background: linear-gradient(135deg, #8B0000, #B22222, #DC143C); box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);">
                 כנסו ל-WearableCode.com 🚀
             </a>
         </div>
@@ -273,81 +375,382 @@
     </div>
 
     <script>
-        // Random CTA messages in Hebrew
+        // Tenor API Configuration
+        const TENOR_API_KEY = 'AIzaSyCnsX-2fRoZAZoT6zobpVijxT7ksnLLeq';
+        const CLIENT_KEY = 'wearablecode_memes';
+        
+        // Specific GIF data for "Are You Following Me"
+        const specificGifData = {
+            id: '15996458',
+            url: 'https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458',
+            embedCode: `<div class="tenor-gif-embed" data-postid="15996458" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458">Are You Following Me Freaked Out GIF</a>from <a href="https://tenor.com/search/are+you+following+me-gifs">Are You Following Me GIFs</a></div>`
+        };
+        
+        // Random CTA messages in Hebrew for "Are You Following Me" meme
         const ctaMessages = [
             "למה אתם עוקבים אחרי? קנו חולצה! 👇",
-            "תפסתי אתכם! רוצים גם חולצה כזאת? 👇",
-            "רוצים גם חולצה כזאת? לקנייה! 👇",
-            "די לעקוב אחריי! קנו חולצה במקום! 👇",
-            "בא לכם גם? הנה לינק לחולצה 👇",
+            "תפסתם אתכם! רוצים את החולצה הזאת? 👇",
+            "מה אתם רוצים ממני? חולצה! 👇",
+            "די לעקוב! קנו חולצה במקום! 👇",
+            "אתם פה שוב? בסדר, הנה החולצה 👇",
             "למה אתם לא קונים את החולצה כבר? 👇",
-            "מספיק לעקוב - לקנות! 👇",
-            "סרקת? קנית! החולצה כאן 👇",
+            "מספיק לעקוב - קנו! 👇",
+            "אני רואה אתכם! רוצים חולצה? 👇",
+            "תפסתי אתכם בעקיבה! החולצה כאן 👇",
+            "מה זה הצריכה הזו? קנו חולצה! 👇"
         ];
-
-        // Update CTA message
-        const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
-        document.querySelector('.cta-text').textContent = randomCtaMessage;
-
-        // Load Tenor embed only
+        
+        // Mystery emojis for background - creepy/stalker themed
+        const mysteryEmojis = [
+            '👁️', '🩸', '🔪', '🔍', '💀', '🖤', '🕯️', '🔐',
+            '🗝️', '📖', '🚪', '📱', '💻', '🌃', '🌙', '⚡',
+            '🔥', '👤', '🎭', '👻'
+        ];
+        
+        // Load the specific "Are You Following Me" GIF
+        function loadSpecificMeme() {
+            const imageElement = document.getElementById('characterImage');
+            imageElement.innerHTML = ''; // Clear loading text
+            imageElement.classList.add('loading');
+            
+            // Try to load via Tenor API first, then fallback to embed
+            fetchSpecificGifFromTenor()
+                .then(gifUrl => {
+                    if (gifUrl) {
+                        loadGifFromUrl(gifUrl);
+                    } else {
+                        loadTenorEmbed();
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Tenor API failed, using embed fallback:', error);
+                    loadTenorEmbed();
+                });
+        }
+        
+        // Try to fetch the specific GIF from Tenor API
+        async function fetchSpecificGifFromTenor() {
+            try {
+                const response = await fetch(
+                    `https://tenor.googleapis.com/v2/posts?ids=${specificGifData.id}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}&media_filter=gif`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    const gif = data.results[0];
+                    window.tenorGifId = gif.id;
+                    return gif.media_formats.gif.url;
+                }
+                return null;
+            } catch (error) {
+                console.log('Tenor API error:', error);
+                return null;
+            }
+        }
+        
+        // Load GIF from direct URL
+        function loadGifFromUrl(gifUrl) {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = gifUrl;
+            img.alt = "Are You Following Me";
+            // Apply styling directly to the img element
+            img.style.width = '100%';
+            img.style.height = 'auto';
+            img.style.borderRadius = '16px';
+            img.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
+            
+            img.onload = function() {
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                addTenorAttribution(imageElement);
+                console.log('✅ Tenor API GIF loaded successfully');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Direct GIF URL failed, trying embed');
+                loadTenorEmbed();
+            };
+        }
+        
+        // Fallback to Tenor embed
         function loadTenorEmbed() {
             const imageElement = document.getElementById('characterImage');
             
-            // Clear loading state
-            imageElement.classList.remove('loading');
+            // Create container for the Tenor embed
+            const embedContainer = document.createElement('div');
+            embedContainer.innerHTML = specificGifData.embedCode;
+            embedContainer.style.cssText = `
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 16px;
+                overflow: hidden;
+            `;
+            
+            // Style the embed to take full width with proper aspect ratio
+            const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+            if (tenorEmbed) {
+                tenorEmbed.style.cssText = `
+                    width: 100% !important;
+                    height: auto !important;
+                    border-radius: 16px;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+                `;
+            }
+            
+            // Add to container
             imageElement.innerHTML = '';
-            
-            // Create the Tenor embed exactly as you provided
-            const embedHTML = `<div class="tenor-gif-embed" data-postid="15996458" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458">Are You Following Me Freaked Out GIF</a>from <a href="https://tenor.com/search/are+you+following+me-gifs">Are You Following Me GIFs</a></div>`;
-            
-            imageElement.innerHTML = embedHTML;
+            imageElement.appendChild(embedContainer);
+            imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
-            console.log('✅ Tenor embed HTML inserted');
+            // Load Tenor's embed script
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.async = true;
+                script.src = 'https://tenor.com/embed.js';
+                document.body.appendChild(script);
+            }
             
-            // Load the Tenor embed script
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.async = true;
-            script.src = 'https://tenor.com/embed.js';
+            // Add Tenor attribution
+            addTenorAttribution(imageElement);
             
-            script.onload = function() {
-                console.log('✅ Tenor embed script loaded successfully');
+            // Store GIF ID for analytics
+            window.tenorGifId = specificGifData.id;
+            
+            console.log('✅ "Are You Following Me" embed loaded as fallback');
+        }
+        
+        // Add Tenor attribution (required by API terms)
+        function addTenorAttribution(container) {
+            const attribution = document.createElement('div');
+            attribution.style.cssText = `
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                font-size: 9px;
+                color: rgba(255,255,255,0.9);
+                background: rgba(0,0,0,0.6);
+                padding: 3px 7px;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 500;
+                backdrop-filter: blur(4px);
+                z-index: 10;
+            `;
+            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+            container.style.position = 'relative';
+            container.appendChild(attribution);
+        }
+        
+        // Create random mystery elements (like snow but with creepy emojis)
+        function createMysteryElements() {
+            const numberOfElements = Math.floor(Math.random() * 11) + 15; // 15-25 elements
+            
+            for (let i = 0; i < numberOfElements; i++) {
+                const element = document.createElement('div');
+                element.className = 'mystery-element';
                 
-                // Give Tenor time to process the embed
-                setTimeout(() => {
-                    console.log('✅ Tenor embed should now be active');
-                }, 1000);
-            };
+                // Random emoji from creepy collection
+                const randomEmoji = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
+                element.textContent = randomEmoji;
+                
+                // Random position across entire screen
+                element.style.top = Math.random() * 100 + '%';
+                element.style.left = Math.random() * 100 + '%';
+                
+                // Random animation delay
+                element.style.animationDelay = Math.random() * 6 + 's';
+                
+                // Random animation duration (5-8 seconds)
+                element.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                
+                // Random font size variation
+                const baseFontSize = 20;
+                const randomSize = baseFontSize + (Math.random() * 8 - 4); // ±4px variation
+                element.style.fontSize = randomSize + 'px';
+                
+                // Add to body
+                document.body.appendChild(element);
+            }
             
-            script.onerror = function() {
-                console.error('❌ Failed to load Tenor embed script');
-                imageElement.innerHTML = '<div style="color: #666; font-size: 14px;">שגיאה בטעינת ה-GIF</div>';
-            };
-            
-            document.head.appendChild(script);
+            console.log(`Created ${numberOfElements} mystery elements floating around`);
         }
 
-        // Analytics tracking
+        // Create blood drips
+        function createBloodDrips() {
+            const numberOfDrips = Math.floor(Math.random() * 10) + 8; // 8-17 drips
+            
+            for (let i = 0; i < numberOfDrips; i++) {
+                const drip = document.createElement('div');
+                drip.className = 'blood-drip';
+                
+                // Random horizontal position
+                drip.style.left = Math.random() * 100 + '%';
+                drip.style.top = '0px';
+                
+                // Random animation delay for continuous effect (0-2 seconds)
+                drip.style.animationDelay = Math.random() * 2 + 's';
+                
+                // Random animation duration (8-12 seconds)
+                drip.style.animationDuration = (Math.random() * 4 + 8) + 's';
+                
+                // Random width with variation (3-28px range)
+                const minWidth = Math.random() * 4 + 3; // 3-7px minimum
+                const maxWidth = minWidth * 4; // 4x the minimum width
+                const finalWidth = Math.random() * (maxWidth - minWidth) + minWidth;
+                drip.style.width = finalWidth + 'px';
+                
+                // Adjust border-radius based on width
+                const radius = finalWidth / 2;
+                drip.style.borderRadius = `0 0 ${radius}px ${radius}px`;
+                
+                // Add to body
+                document.body.appendChild(drip);
+            }
+            
+            console.log(`Created ${numberOfDrips} blood drips`);
+        }
+
+        // Create continuous blood drips
+        function startContinuousBloodDrips() {
+            setInterval(() => {
+                // Add a few more random drips every 3 seconds
+                for (let i = 0; i < 2; i++) {
+                    const drip = document.createElement('div');
+                    drip.className = 'blood-drip';
+                    
+                    drip.style.left = Math.random() * 100 + '%';
+                    drip.style.top = '0px';
+                    drip.style.animationDelay = '0s';
+                    drip.style.animationDuration = (Math.random() * 4 + 8) + 's';
+                    
+                    // Random width with variation for new drips too
+                    const minWidth = Math.random() * 4 + 3;
+                    const maxWidth = minWidth * 4;
+                    const finalWidth = Math.random() * (maxWidth - minWidth) + minWidth;
+                    drip.style.width = finalWidth + 'px';
+                    
+                    // Adjust border-radius based on width
+                    const radius = finalWidth / 2;
+                    drip.style.borderRadius = `0 0 ${radius}px ${radius}px`;
+                    
+                    document.body.appendChild(drip);
+                    
+                    // Remove the drip after animation completes
+                    setTimeout(() => {
+                        if (drip.parentNode) {
+                            drip.parentNode.removeChild(drip);
+                        }
+                    }, 12000);
+                }
+            }, 3000);
+        }
+
+        // Start continuous mystery elements (like continuous snow)
+        function startContinuousMystery() {
+            setInterval(() => {
+                // Add 2-3 new mystery elements periodically
+                const elementCount = Math.floor(Math.random() * 2) + 2; // 2-3 elements
+                for (let i = 0; i < elementCount; i++) {
+                    const element = document.createElement('div');
+                    element.className = 'mystery-element';
+                    element.textContent = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
+                    
+                    // Random position across entire screen
+                    element.style.top = Math.random() * 100 + '%';
+                    element.style.left = Math.random() * 100 + '%';
+                    element.style.animationDelay = Math.random() * 2 + 's';
+                    element.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                    
+                    const elementSize = Math.random() * 8 + 16;
+                    element.style.fontSize = elementSize + 'px';
+                    
+                    document.body.appendChild(element);
+                    
+                    // Remove after animation cycle completes
+                    setTimeout(() => {
+                        if (element.parentNode) {
+                            element.parentNode.removeChild(element);
+                        }
+                    }, 8000);
+                }
+            }, 2000); // Every 2 seconds
+        }
+        
+        // Mobile optimizations
+        function applyMobileOptimizations() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const screenWidth = window.innerWidth || screen.width;
+            
+            if (isMobile) {
+                console.log('Mobile optimizations applied for screen width:', screenWidth);
+            }
+        }
+        
+        // Update CTA messages to use red theme
+        const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
+        document.querySelector('.cta-text').textContent = randomCtaMessage;
+        
+        // Store for analytics
+        window.currentCtaMessage = randomCtaMessage;
+        
+        // Apply mobile optimizations
+        setTimeout(applyMobileOptimizations, 100);
+        
+        // Create floating and mystery elements
+        createMysteryElements();
+        
+        // Create blood drips
+        createBloodDrips();
+        
+        // Start continuous effects
+        startContinuousMystery();
+        startContinuousBloodDrips();
+        
+        // Load the specific "Are You Following Me" meme
+        loadSpecificMeme();
+        
+        // Analytics tracking with Tenor share registration
         document.querySelector('.shop-button').addEventListener('click', function() {
             console.log('Shop button clicked for "Are You Following Me" meme');
-            console.log('CTA message shown:', randomCtaMessage);
-        });
-
-        // Load the Tenor embed when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, loading Tenor embed...');
-            loadTenorEmbed();
-        });
-
-        // Backup - also try loading after window load
-        window.addEventListener('load', function() {
-            console.log('Window loaded, checking if embed loaded...');
-            const embed = document.querySelector('.tenor-gif-embed');
-            if (embed && !embed.querySelector('iframe')) {
-                console.log('Embed found but no iframe, retrying...');
-                setTimeout(loadTenorEmbed, 500);
+            console.log('CTA message shown:', window.currentCtaMessage);
+            
+            // Register share with Tenor
+            if (window.tenorGifId) {
+                registerTenorShare(window.tenorGifId);
             }
+        });
+        
+        // Register share with Tenor (optional but recommended)
+        async function registerTenorShare(gifId) {
+            try {
+                await fetch(
+                    `https://tenor.googleapis.com/v2/registershare?id=${gifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`
+                );
+                console.log('✅ Tenor share registered');
+            } catch (error) {
+                console.log('❌ Failed to register Tenor share:', error);
+            }
+        }
+        
+        // Re-apply optimizations on orientation/resize
+        window.addEventListener('orientationchange', function() {
+            setTimeout(applyMobileOptimizations, 200);
+        });
+        
+        window.addEventListener('resize', function() {
+            setTimeout(applyMobileOptimizations, 100);
         });
     </script>
 </body>
