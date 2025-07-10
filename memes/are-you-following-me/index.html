@@ -93,7 +93,7 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 24px;
-            padding: 80px 35px 80px 35px;
+            padding: 40px 35px; /* Original padding - NO CHANGE */
             max-width: 700px;
             width: 100%;
             box-shadow: 
@@ -149,7 +149,7 @@
             max-height: none;
             border-radius: 16px;
             margin: 0 auto 20px;
-            padding: 0;
+            padding: 80px 0; /* 80px padding only top and bottom for the GIF */
             background: transparent;
             display: flex;
             align-items: center;
@@ -279,7 +279,7 @@
             }
             
             .container {
-                padding: 50px 20px 50px 20px;
+                padding: 25px 20px; /* Original mobile padding - NO CHANGE */
                 border-radius: 20px;
                 max-width: 95vw;
                 max-height: 90vh;
@@ -289,7 +289,7 @@
                 width: 100%;
                 min-height: 150px;
                 margin: 0 auto 15px;
-                padding: 0;
+                padding: 50px 0; /* 50px padding for mobile */
                 font-size: 14px;
             }
             
@@ -323,7 +323,7 @@
         /* iPhone SE and smaller */
         @media (max-width: 375px) {
             .container {
-                padding: 30px 15px 30px 15px;
+                padding: 20px 15px; /* Original small mobile padding - NO CHANGE */
                 max-width: 98vw;
                 max-height: 88vh;
             }
@@ -332,7 +332,7 @@
                 width: 100%;
                 min-height: 130px;
                 margin: 0 auto;
-                padding: 0;
+                padding: 30px 0; /* 30px padding for small mobile */
                 font-size: 12px;
             }
 
