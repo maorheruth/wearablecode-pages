@@ -928,9 +928,6 @@
         // Load the specific "Are You Following Me" meme
         loadSpecificMeme();
         
-        // Force red styling after page loads
-        setTimeout(forceRedStyling, 500);
-        
         // Create floating and mystery elements
         createMysteryElements();
         
@@ -941,56 +938,7 @@
         startContinuousMystery();
         startContinuousBloodDrips();
         
-        // Force red CTA styling with JavaScript
-        function forceRedStyling() {
-            const ctaSection = document.querySelector('.cta-section');
-            const shopButton = document.querySelector('.shop-button');
-            
-            if (ctaSection) {
-                ctaSection.style.cssText = `
-                    background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(220, 53, 69, 0.1), rgba(178, 34, 34, 0.1)) !important;
-                    border: 1px solid rgba(220, 53, 69, 0.2) !important;
-                    border-radius: 16px !important;
-                    padding: 20px !important;
-                    margin-top: 25px !important;
-                    direction: rtl !important;
-                    text-align: center !important;
-                `;
-                console.log('✅ CTA section forced to subtle red styling');
-            }
-            
-            if (shopButton) {
-                shopButton.style.cssText = `
-                    background: linear-gradient(135deg, #8B0000, #B22222, #DC143C) !important;
-                    color: white !important;
-                    border: none !important;
-                    border-radius: 10px !important;
-                    padding: 12px 25px !important;
-                    font-size: 14px !important;
-                    font-weight: 600 !important;
-                    cursor: pointer !important;
-                    transition: all 0.3s ease !important;
-                    text-decoration: none !important;
-                    display: inline-block !important;
-                    box-shadow: 0 4px 15px rgba(139, 0, 0, 0.5) !important;
-                `;
-                
-                // Add hover effect with event listeners
-                shopButton.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
-                    this.style.boxShadow = '0 8px 20px rgba(139, 0, 0, 0.7)';
-                    this.style.background = 'linear-gradient(135deg, #660000, #8B0000, #B22222)';
-                });
-                
-                shopButton.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                    this.style.boxShadow = '0 4px 15px rgba(139, 0, 0, 0.5)';
-                    this.style.background = 'linear-gradient(135deg, #8B0000, #B22222, #DC143C)';
-                });
-                
-                console.log('✅ Shop button forced to red styling with hover effects');
-            }
-        }
+        // Remove force styling function since we're using clean CSS now
         
         // Fun quote effects (keep existing code but remove for memes)
         // Since we removed quotes, we can remove these functions too
