@@ -90,7 +90,6 @@
         .character-image {
             width: 100%;
             min-height: 200px;
-            max-height: none;
             border-radius: 16px;
             margin: 0 auto 150px;
             padding: 0;
@@ -104,13 +103,6 @@
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
-        }
-
-        .character-image.has-image {
-            border: none;
-            background: transparent;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-            height: auto;
         }
 
         .character-image.loading {
@@ -129,11 +121,26 @@
             }
         }
 
-        .character-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 16px;
+        .character-image.has-image {
+            background: transparent;
+            border: none;
             box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            height: auto;
+            min-height: auto;
+        }
+
+        /* Tenor embed specific styles */
+        .tenor-gif-embed {
+            width: 100% !important;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+
+        .tenor-gif-embed iframe {
+            width: 100% !important;
+            height: auto !important;
+            border-radius: 16px;
         }
 
         .cta-section {
@@ -174,26 +181,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(139, 0, 0, 0.5);
             background: linear-gradient(135deg, #660000, #8B0000, #B22222);
-        }
-
-        .attribution {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            font-size: 9px;
-            color: rgba(255,255,255,0.9);
-            background: rgba(0,0,0,0.6);
-            padding: 3px 7px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            backdrop-filter: blur(4px);
-            z-index: 10;
-        }
-
-        .attribution a {
-            color: white;
-            text-decoration: none;
         }
 
         /* Mobile optimizations */
@@ -264,8 +251,8 @@
 <body>
     
     <div class="container">
-        <div class="character-image" id="characterImage">
-            טוען מים...
+        <div class="character-image loading" id="characterImage">
+            טוען GIF...
         </div>
         
         <div class="cta-section">
@@ -286,7 +273,7 @@
     </div>
 
     <script>
-        // Random CTA messages in Hebrew for "Are You Following Me" meme
+        // Random CTA messages in Hebrew
         const ctaMessages = [
             "למה אתם עוקבים אחרי? קנו חולצה! 👇",
             "תפסתי אתכם! רוצים גם חולצה כזאת? 👇",
@@ -302,84 +289,43 @@
         const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
         document.querySelector('.cta-text').textContent = randomCtaMessage;
 
-        // Known working GIF URLs to try
-        const gifUrls = [
-            'https://media.tenor.com/tXbmvdEcMTMAAAAC/are-you-following-me-freaked-out.gif',
-            'https://c.tenor.com/tXbmvdEcMTMAAAAC/are-you-following-me-freaked-out.gif',
-            'https://media1.tenor.com/m/tXbmvdEcMTMAAAAC/are-you-following-me-freaked-out.gif',
-            'https://media.tenor.com/images/tXbmvdEcMTMAAAAC/are-you-following-me-freaked-out.gif'
-        ];
-
-        // Try loading GIF from multiple URLs
-        function loadGif() {
-            const imageElement = document.getElementById('characterImage');
-            imageElement.classList.add('loading');
-            
-            let currentIndex = 0;
-            
-            function tryNextUrl() {
-                if (currentIndex >= gifUrls.length) {
-                    console.log('All direct URLs failed, trying embed');
-                    loadTenorEmbed();
-                    return;
-                }
-                
-                const img = document.createElement('img');
-                img.src = gifUrls[currentIndex];
-                img.alt = "Are You Following Me";
-                
-                img.onload = function() {
-                    imageElement.innerHTML = '';
-                    imageElement.appendChild(img);
-                    imageElement.classList.remove('loading');
-                    imageElement.classList.add('has-image');
-                    
-                    // Add attribution
-                    const attribution = document.createElement('div');
-                    attribution.className = 'attribution';
-                    attribution.innerHTML = '<a href="https://tenor.com" target="_blank">via Tenor</a>';
-                    imageElement.appendChild(attribution);
-                    
-                    console.log('✅ GIF loaded successfully from:', gifUrls[currentIndex]);
-                };
-                
-                img.onerror = function() {
-                    console.log('❌ Failed to load from:', gifUrls[currentIndex]);
-                    currentIndex++;
-                    tryNextUrl();
-                };
-            }
-            
-            tryNextUrl();
-        }
-
-        // Fallback to Tenor embed with complete script
+        // Load Tenor embed only
         function loadTenorEmbed() {
             const imageElement = document.getElementById('characterImage');
             
-            // Create the complete embed HTML
-            const embedHTML = `
-                <div class="tenor-gif-embed" data-postid="15996458" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%" style="width: 100%; border-radius: 16px; overflow: hidden;">
-                    <a href="https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458">Are You Following Me Freaked Out GIF</a>
-                    from <a href="https://tenor.com/search/are+you+following+me-gifs">Are You Following Me GIFs</a>
-                </div>
-            `;
+            // Clear loading state
+            imageElement.classList.remove('loading');
+            imageElement.innerHTML = '';
+            
+            // Create the Tenor embed exactly as you provided
+            const embedHTML = `<div class="tenor-gif-embed" data-postid="15996458" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458">Are You Following Me Freaked Out GIF</a>from <a href="https://tenor.com/search/are+you+following+me-gifs">Are You Following Me GIFs</a></div>`;
             
             imageElement.innerHTML = embedHTML;
-            imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
-            // Load Tenor's embed script
+            console.log('✅ Tenor embed HTML inserted');
+            
+            // Load the Tenor embed script
             const script = document.createElement('script');
             script.type = 'text/javascript';
             script.async = true;
             script.src = 'https://tenor.com/embed.js';
-            script.onload = function() {
-                console.log('✅ Tenor embed script loaded');
-            };
-            document.head.appendChild(script);
             
-            console.log('✅ Tenor embed loaded as fallback');
+            script.onload = function() {
+                console.log('✅ Tenor embed script loaded successfully');
+                
+                // Give Tenor time to process the embed
+                setTimeout(() => {
+                    console.log('✅ Tenor embed should now be active');
+                }, 1000);
+            };
+            
+            script.onerror = function() {
+                console.error('❌ Failed to load Tenor embed script');
+                imageElement.innerHTML = '<div style="color: #666; font-size: 14px;">שגיאה בטעינת ה-GIF</div>';
+            };
+            
+            document.head.appendChild(script);
         }
 
         // Analytics tracking
@@ -388,13 +334,21 @@
             console.log('CTA message shown:', randomCtaMessage);
         });
 
-        // Load the GIF when page loads
-        window.addEventListener('load', function() {
-            loadGif();
+        // Load the Tenor embed when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, loading Tenor embed...');
+            loadTenorEmbed();
         });
 
-        // Also try loading immediately
-        loadGif();
+        // Backup - also try loading after window load
+        window.addEventListener('load', function() {
+            console.log('Window loaded, checking if embed loaded...');
+            const embed = document.querySelector('.tenor-gif-embed');
+            if (embed && !embed.querySelector('iframe')) {
+                console.log('Embed found but no iframe, retrying...');
+                setTimeout(loadTenorEmbed, 500);
+            }
+        });
     </script>
 </body>
 </html>
