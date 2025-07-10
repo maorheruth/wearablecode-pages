@@ -140,7 +140,8 @@
 
         .character-image {
             width: 400px;
-            height: 400px;
+            min-height: 200px; /* Minimum height instead of fixed */
+            max-height: 400px; /* Maximum height to prevent too tall images */
             border-radius: 16px;
             margin: 0 auto 20px;
             background: linear-gradient(45deg, #f8f9fa, #e9ecef);
@@ -158,8 +159,8 @@
 
         .character-image img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto; /* Auto height to maintain aspect ratio */
+            object-fit: contain;
             border-radius: 14px;
         }
 
@@ -167,6 +168,7 @@
             border: none;
             background: white;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            height: auto; /* Dynamic height when image is loaded */
         }
 
         .character-image.loading {
@@ -315,7 +317,8 @@
             
             .character-image {
                 width: 300px;
-                height: 300px;
+                min-height: 150px;
+                max-height: 300px;
                 margin-bottom: 15px;
                 font-size: 14px;
             }
@@ -384,7 +387,8 @@
             
             .character-image {
                 width: 260px;
-                height: 260px;
+                min-height: 130px;
+                max-height: 260px;
                 font-size: 12px;
             }
             
@@ -484,7 +488,7 @@
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
                 width: 100%;
-                height: 100%;
+                min-height: 200px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -492,13 +496,14 @@
                 overflow: hidden;
             `;
             
-            // Style the embed to fit properly
+            // Style the embed to fit properly with aspect ratio
             const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
             if (tenorEmbed) {
                 tenorEmbed.style.cssText = `
                     width: 100% !important;
-                    height: 100% !important;
+                    height: auto !important;
                     border-radius: 14px;
+                    aspect-ratio: 1.77778;
                 `;
             }
             
@@ -506,6 +511,14 @@
             imageElement.appendChild(embedContainer);
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
+            
+            // Set dynamic height based on aspect ratio
+            setTimeout(() => {
+                const width = imageElement.offsetWidth;
+                const calculatedHeight = width / 1.77778; // aspect ratio from Tenor
+                imageElement.style.height = `${calculatedHeight}px`;
+                console.log(`📐 Dynamic sizing: width=${width}px, height=${calculatedHeight}px`);
+            }, 100);
             
             // Load Tenor's embed script
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
@@ -522,7 +535,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ Specific "Are You Following Me" GIF loaded');
+            console.log('✅ Specific "Are You Following Me" GIF loaded with dynamic sizing');
         }
         
         // Load meme image (from Tenor or fallback)
