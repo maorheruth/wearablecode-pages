@@ -93,7 +93,7 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 24px;
-            padding: 40px 35px; /* Original padding - NO CHANGE */
+            padding: 40px 35px; /* KEEPING ORIGINAL - NO EXTRA PADDING */
             max-width: 700px;
             width: 100%;
             box-shadow: 
@@ -148,8 +148,8 @@
             min-height: 200px;
             max-height: none;
             border-radius: 16px;
-            margin: 0 auto 20px;
-            padding: 80px 0; /* 80px padding only top and bottom for the GIF */
+            margin: 80px auto 80px; /* 80px margin top and bottom instead of padding */
+            padding: 0; /* NO PADDING ON CONTAINER */
             background: transparent;
             display: flex;
             align-items: center;
@@ -288,8 +288,8 @@
             .character-image {
                 width: 100%;
                 min-height: 150px;
-                margin: 0 auto 15px;
-                padding: 50px 0; /* 50px padding for mobile */
+                margin: 50px auto 50px; /* 50px margin for mobile */
+                padding: 0;
                 font-size: 14px;
             }
             
@@ -331,8 +331,8 @@
             .character-image {
                 width: 100%;
                 min-height: 130px;
-                margin: 0 auto;
-                padding: 30px 0; /* 30px padding for small mobile */
+                margin: 30px auto 30px; /* 30px margin for small mobile */
+                padding: 0;
                 font-size: 12px;
             }
 
