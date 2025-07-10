@@ -528,6 +528,78 @@
             imageElement.innerHTML = ''; // Clear loading text
             imageElement.classList.add('loading');
             
+            // Try to load via Tenor API first, then fallback to embed
+            fetchSpecificGifFromTenor()
+                .then(gifUrl => {
+                    if (gifUrl) {
+                        loadGifFromUrl(gifUrl);
+                    } else {
+                        loadTenorEmbed();
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Tenor API failed, using embed fallback:', error);
+                    loadTenorEmbed();
+                });
+        }
+        
+        // Try to fetch the specific GIF from Tenor API
+        async function fetchSpecificGifFromTenor() {
+            try {
+                const response = await fetch(
+                    `https://tenor.googleapis.com/v2/posts?ids=${specificGifData.id}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}&media_filter=gif`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    const gif = data.results[0];
+                    window.tenorGifId = gif.id;
+                    return gif.media_formats.gif.url;
+                }
+                return null;
+            } catch (error) {
+                console.log('Tenor API error:', error);
+                return null;
+            }
+        }
+        
+        // Load GIF from direct URL
+        function loadGifFromUrl(gifUrl) {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = gifUrl;
+            img.alt = "Are You Following Me";
+            img.style.cssText = `
+                width: 100%;
+                height: auto;
+                border-radius: 16px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            `;
+            
+            img.onload = function() {
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                addTenorAttribution(imageElement);
+                console.log('✅ Tenor API GIF loaded successfully');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Direct GIF URL failed, trying embed');
+                loadTenorEmbed();
+            };
+        }
+        
+        // Fallback to Tenor embed
+        function loadTenorEmbed() {
+            const imageElement = document.getElementById('characterImage');
+            
             // Create container for the Tenor embed
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = specificGifData.embedCode;
@@ -552,6 +624,7 @@
             }
             
             // Add to container
+            imageElement.innerHTML = '';
             imageElement.appendChild(embedContainer);
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
@@ -571,7 +644,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ "Are You Following Me" GIF loaded - full width, responsive');
+            console.log('✅ "Are You Following Me" embed loaded as fallback');
         }
         
         // Load meme image (from Tenor or fallback)
