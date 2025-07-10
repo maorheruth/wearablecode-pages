@@ -35,7 +35,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Blood drip animation */
+        /* Blood drip animation with smooth fade */
         .blood-drip {
             position: absolute;
             height: 100vh;
@@ -45,12 +45,19 @@
             pointer-events: none;
             transform: translateY(-100vh);
             box-shadow: 0 0 3px rgba(255, 0, 0, 0.6);
+            opacity: 0; /* Start invisible */
         }
 
         @keyframes dripEndless {
             0% {
                 transform: translateY(-100vh);
-                opacity: 0.9;
+                opacity: 0; /* Start invisible */
+            }
+            5% {
+                opacity: 0.3; /* Gentle fade in */
+            }
+            10% {
+                opacity: 0.9; /* Reach normal opacity */
             }
             20% {
                 transform: translateY(-80vh);
@@ -68,13 +75,17 @@
                 transform: translateY(-20vh);
                 opacity: 0.4;
             }
+            90% {
+                transform: translateY(-5vh);
+                opacity: 0.2; /* Start fading out */
+            }
             95% {
                 transform: translateY(0);
-                opacity: 0.2;
+                opacity: 0.05; /* Almost invisible */
             }
             100% {
                 transform: translateY(0);
-                opacity: 0;
+                opacity: 0; /* End invisible */
             }
         }
 
@@ -165,7 +176,7 @@
             min-height: 200px;
             max-height: none; /* Remove height restrictions */
             border-radius: 16px;
-            margin: 0 auto 20px;
+            margin: 40px auto 40px; /* Increased top and bottom margin */
             background: transparent; /* Remove background */
             display: flex;
             align-items: center;
@@ -327,12 +338,19 @@
             animation: wiggleFloat 6s ease-in-out infinite;
             pointer-events: none;
             text-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+            opacity: 0; /* Start invisible */
         }
 
         @keyframes wiggleFloat {
-            0%, 100% {
+            0% {
                 transform: translateX(0px) translateY(0px) rotate(0deg);
-                opacity: 0.25;
+                opacity: 0; /* Start invisible */
+            }
+            5% {
+                opacity: 0.15; /* Gentle fade in */
+            }
+            10% {
+                opacity: 0.25; /* Reach normal opacity */
             }
             25% {
                 transform: translateX(8px) translateY(-6px) rotate(3deg);
@@ -345,6 +363,16 @@
             75% {
                 transform: translateX(6px) translateY(-5px) rotate(3deg);
                 opacity: 0.5;
+            }
+            90% {
+                opacity: 0.25; /* Start fading out */
+            }
+            95% {
+                opacity: 0.1; /* Almost invisible */
+            }
+            100% {
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                opacity: 0; /* End invisible */
             }
         }
 
@@ -366,7 +394,7 @@
             .character-image {
                 width: 100%;
                 min-height: 150px;
-                margin-bottom: 15px;
+                margin: 30px auto 30px; /* Responsive spacing for mobile */
                 font-size: 14px;
             }
             
@@ -435,6 +463,7 @@
             .character-image {
                 width: 100%;
                 min-height: 130px;
+                margin: 25px auto 25px; /* Responsive spacing for small mobile */
                 font-size: 12px;
             }
             
