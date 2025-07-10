@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+.character-image img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 16px;
+        }<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -121,7 +126,7 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 24px;
-            padding: 100px 35px 40px 35px; /* 100px top, 35px sides, 40px bottom */
+            padding: 80px 35px 80px 35px;
             max-width: 700px;
             width: 100%;
             box-shadow: 
@@ -172,35 +177,36 @@
         }
 
         .character-image {
-            width: 100%; /* Full width of parent container */
+            width: 100%;
             min-height: 200px;
-            max-height: none; /* Remove height restrictions */
+            max-height: none;
             border-radius: 16px;
-            margin: 0 auto 20px; /* Back to simple margin */
-            padding: 0; /* Remove padding from image container */
-            background: transparent; /* Remove background */
+            margin: 0 auto 20px;
+            padding: 0;
+            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #999;
-            border: none; /* Remove border */
+            border: none;
             position: relative;
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
-        }
-
-        .character-image img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            border-radius: 16px;
+            /* Add shadow back to GIF container */
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.12), 
+                0 0 30px rgba(255, 255, 255, 0.8),
+                0 0 60px rgba(255, 255, 255, 0.4);
         }
 
         .character-image.has-image {
             border: none;
             background: transparent;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.12), 
+                0 0 30px rgba(255, 255, 255, 0.8),
+                0 0 60px rgba(255, 255, 255, 0.4);
             height: auto;
         }
 
