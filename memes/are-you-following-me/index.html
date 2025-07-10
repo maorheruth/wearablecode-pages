@@ -1,9 +1,4 @@
-.character-image img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            border-radius: 16px;
-        }<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -94,34 +89,6 @@
             }
         }
 
-        /* Floating emoji effects */
-        .floating-emoji {
-            position: absolute;
-            font-size: 24px;
-            z-index: 1;
-            animation: floatUp 15s linear infinite;
-            pointer-events: none;
-            user-select: none;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(120vh) translateX(0px) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-20vh) translateX(50px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
         .container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -193,20 +160,12 @@
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
-            /* Add shadow back to GIF container */
-            box-shadow: 
-                0 15px 35px rgba(0,0,0,0.12), 
-                0 0 30px rgba(255, 255, 255, 0.8),
-                0 0 60px rgba(255, 255, 255, 0.4);
         }
 
         .character-image.has-image {
             border: none;
             background: transparent;
-            box-shadow: 
-                0 15px 35px rgba(0,0,0,0.12), 
-                0 0 30px rgba(255, 255, 255, 0.8),
-                0 0 60px rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             height: auto;
         }
 
@@ -215,12 +174,6 @@
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
             border: 2px dashed #ddd;
-        }
-
-        .character-image.loading {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
         }
 
         @keyframes loading {
@@ -232,61 +185,14 @@
             }
         }
 
-        .quote {
-            font-size: 48px;
-            font-weight: 700;
-            font-family: 'Space Grotesk', 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: #333;
-            margin-bottom: 15px;
-            line-height: 1.1;
-            position: relative;
-            padding: 0 20px;
-            letter-spacing: -0.5px;
-            transition: all 0.4s ease;
-        }
-
-        .quote::before {
-            content: '"';
-            font-size: 36px;
-            color: #f093fb;
-            position: absolute;
-            left: -5px;
-            top: -8px;
-            opacity: 0.7;
-            font-family: Georgia, serif;
-        }
-
-        .quote::after {
-            content: '"';
-            font-size: 36px;
-            color: #f093fb;
-            position: absolute;
-            right: -5px;
-            bottom: -12px;
-            opacity: 0.7;
-            font-family: Georgia, serif;
-        }
-
-        .source {
-            font-size: 16px;
-            color: #666;
-            font-style: italic;
-            margin-bottom: 30px;
-            font-weight: 500;
-        }
-
         .cta-section {
-            background: linear-gradient(135deg, rgba(30, 58, 138, 0.1), rgba(67, 56, 202, 0.1), rgba(109, 40, 217, 0.1));
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(220, 53, 69, 0.1), rgba(178, 34, 34, 0.1));
             border-radius: 16px;
             padding: 20px;
             margin-top: 25px;
             direction: rtl;
             text-align: center;
-            border: 1px solid rgba(30, 58, 138, 0.2);
+            border: 1px solid rgba(220, 53, 69, 0.2);
         }
 
         .cta-text {
@@ -299,7 +205,7 @@
         }
 
         .shop-button {
-            background: linear-gradient(135deg, #1e3a8a, #3b4a88, #4338ca, #6d28d9);
+            background: linear-gradient(135deg, #8B0000, #B22222, #DC143C);
             color: white;
             border: none;
             border-radius: 10px;
@@ -310,30 +216,13 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .shop-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .shop-button:hover::before {
-            left: 100%;
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
         }
 
         .shop-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.5);
-            background: linear-gradient(135deg, #2d3a73, #4a5a9d, #5b21b6, #7c3aed);
+            box-shadow: 0 8px 20px rgba(139, 0, 0, 0.5);
+            background: linear-gradient(135deg, #660000, #8B0000, #B22222);
         }
 
         /* Animated mysterious background elements */
@@ -383,8 +272,6 @@
             }
         }
 
-        /* Remove old bounce-emoji and floating-emoji styles since we're not using them */
-
         /* Mobile optimizations */
         @media (max-width: 480px) {
             body {
@@ -392,7 +279,7 @@
             }
             
             .container {
-                padding: 25px 20px;
+                padding: 50px 20px 50px 20px;
                 border-radius: 20px;
                 max-width: 95vw;
                 max-height: 90vh;
@@ -401,34 +288,9 @@
             .character-image {
                 width: 100%;
                 min-height: 150px;
-                margin: 0 auto 15px; /* Back to original mobile margin */
-                padding: 60px 0; /* Responsive padding for mobile */
+                margin: 0 auto 15px;
+                padding: 0;
                 font-size: 14px;
-            }
-            
-            .quote {
-                font-size: 36px;
-                margin-bottom: 12px;
-                line-height: 1.1;
-                padding: 0 10px;
-                letter-spacing: -0.3px;
-            }
-            
-            .quote::before {
-                font-size: 28px;
-                top: -6px;
-                left: -3px;
-            }
-
-            .quote::after {
-                font-size: 28px;
-                bottom: -8px;
-                right: -3px;
-            }
-            
-            .source {
-                font-size: 14px;
-                margin-bottom: 25px;
             }
             
             .logo img {
@@ -451,19 +313,17 @@
                 font-size: 14px;
             }
 
-            .bounce-emoji {
-                font-size: 20px;
-            }
-
-            .floating-emoji {
-                font-size: 18px;
+            .mystery-element {
+                font-size: 16px;
+                color: rgba(255, 255, 255, 0.2);
+                text-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
             }
         }
 
         /* iPhone SE and smaller */
         @media (max-width: 375px) {
             .container {
-                padding: 20px 15px;
+                padding: 30px 15px 30px 15px;
                 max-width: 98vw;
                 max-height: 88vh;
             }
@@ -471,36 +331,15 @@
             .character-image {
                 width: 100%;
                 min-height: 130px;
-                margin: 0 auto; /* Back to original small mobile margin */
-                padding: 40px 0; /* Responsive padding for small mobile */
+                margin: 0 auto;
+                padding: 0;
                 font-size: 12px;
             }
-            
-            .quote {
-                font-size: 32px;
-                padding: 0 8px;
-                line-height: 1.1;
-                letter-spacing: -0.2px;
-            }
 
-            .quote::before {
-                font-size: 24px;
-                top: -4px;
-                left: -2px;
-            }
-
-            .quote::after {
-                font-size: 24px;
-                bottom: -6px;
-                right: -2px;
-            }
-
-            .bounce-emoji {
-                font-size: 18px;
-            }
-
-            .floating-emoji {
-                font-size: 16px;
+            .mystery-element {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.18);
+                text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
             }
             
             .logo img {
@@ -508,24 +347,10 @@
                 margin-top: 8px;
             }
         }
-
-        /* Pulsing glow effect for the quote */
-        @keyframes pulseGlow {
-            0%, 100% {
-                filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.3));
-            }
-            50% {
-                filter: drop-shadow(0 0 20px rgba(240, 147, 251, 0.6));
-            }
-        }
-
-        .quote.glowing {
-            animation: pulseGlow 2s ease-in-out infinite;
-        }
     </style>
 </head>
 <body>
-    <!-- Floating and bouncing emojis will be generated by JavaScript -->
+    <!-- Mystery elements will be generated by JavaScript -->
     
     <div class="container">
         <div class="character-image" id="characterImage">
@@ -560,6 +385,27 @@
             url: 'https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458',
             embedCode: `<div class="tenor-gif-embed" data-postid="15996458" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458">Are You Following Me Freaked Out GIF</a>from <a href="https://tenor.com/search/are+you+following+me-gifs">Are You Following Me GIFs</a></div>`
         };
+        
+        // Random CTA messages in Hebrew for "Are You Following Me" meme
+        const ctaMessages = [
+            "למה אתם עוקבים אחרי? קנו חולצה! 👇",
+            "תפסתם אתכם! רוצים את החולצה הזאת? 👇",
+            "מה אתם רוצים ממני? חולצה! 👇",
+            "די לעקוב! קנו חולצה במקום! 👇",
+            "אתם פה שוב? בסדר, הנה החולצה 👇",
+            "למה אתם לא קונים את החולצה כבר? 👇",
+            "מספיק לעקוב - קנו! 👇",
+            "אני רואה אתכם! רוצים חולצה? 👇",
+            "תפסתי אתכם בעקיבה! החולצה כאן 👇",
+            "מה זה הצריכה הזו? קנו חולצה! 👇"
+        ];
+        
+        // Mystery emojis for background - creepy/stalker themed
+        const mysteryEmojis = [
+            '👁️', '🩸', '🔪', '🔍', '💀', '🖤', '🕯️', '🔐',
+            '🗝️', '📖', '🚪', '📱', '💻', '🌃', '🌙', '⚡',
+            '🔥', '👤', '🎭', '👻'
+        ];
         
         // Load the specific "Are You Following Me" GIF
         function loadSpecificMeme() {
@@ -613,12 +459,11 @@
             const img = document.createElement('img');
             img.src = gifUrl;
             img.alt = "Are You Following Me";
-            img.style.cssText = `
-                width: 100%;
-                height: auto;
-                border-radius: 16px;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-            `;
+            // Apply styling directly to the img element
+            img.style.width = '100%';
+            img.style.height = 'auto';
+            img.style.borderRadius = '16px';
+            img.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
             
             img.onload = function() {
                 imageElement.innerHTML = '';
@@ -686,37 +531,6 @@
             console.log('✅ "Are You Following Me" embed loaded as fallback');
         }
         
-        // Load meme image (from Tenor or fallback)
-        function loadMemeImage(imageUrl) {
-            const imageElement = document.getElementById('characterImage');
-            imageElement.textContent = 'טוען מים מגניב...';
-            imageElement.classList.add('loading');
-            
-            const img = document.createElement('img');
-            img.src = imageUrl;
-            img.alt = "Funny Meme";
-            img.style.width = "100%";
-            img.style.height = "100%";
-            img.style.objectFit = "cover";
-            img.style.borderRadius = "14px";
-            
-            img.onload = function() {
-                console.log('✅ Meme image loaded successfully');
-                imageElement.innerHTML = '';
-                imageElement.appendChild(img);
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-                
-                // Add Tenor attribution
-                addTenorAttribution(imageElement);
-            };
-            
-            img.onerror = function() {
-                console.log('❌ Meme image failed to load, trying fallback');
-                loadFallbackImage();
-            };
-        }
-        
         // Add Tenor attribution (required by API terms)
         function addTenorAttribution(container) {
             const attribution = document.createElement('div');
@@ -739,59 +553,40 @@
             container.appendChild(attribution);
         }
         
-        // Fallback to local image if API fails
-        function loadFallbackImage() {
-            const fallbackPaths = [
-                "./assets/images/funny-meme.gif",
-                "assets/images/funny-meme.gif",
-                "/assets/images/funny-meme.gif"
-            ];
+        // Create random mystery elements (like snow but with creepy emojis)
+        function createMysteryElements() {
+            const numberOfElements = Math.floor(Math.random() * 11) + 15; // 15-25 elements
             
-            const imageElement = document.getElementById('characterImage');
-            let currentIndex = 0;
-            
-            function tryNextFallback() {
-                if (currentIndex < fallbackPaths.length) {
-                    loadMemeImage(fallbackPaths[currentIndex]);
-                    currentIndex++;
-                } else {
-                    // Show placeholder if all fails
-                    imageElement.textContent = 'הוסף מים כאן 😂';
-                    imageElement.classList.remove('loading', 'has-image');
-                }
+            for (let i = 0; i < numberOfElements; i++) {
+                const element = document.createElement('div');
+                element.className = 'mystery-element';
+                
+                // Random emoji from creepy collection
+                const randomEmoji = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
+                element.textContent = randomEmoji;
+                
+                // Random position across entire screen
+                element.style.top = Math.random() * 100 + '%';
+                element.style.left = Math.random() * 100 + '%';
+                
+                // Random animation delay
+                element.style.animationDelay = Math.random() * 6 + 's';
+                
+                // Random animation duration (5-8 seconds)
+                element.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                
+                // Random font size variation
+                const baseFontSize = 20;
+                const randomSize = baseFontSize + (Math.random() * 8 - 4); // ±4px variation
+                element.style.fontSize = randomSize + 'px';
+                
+                // Add to body
+                document.body.appendChild(element);
             }
             
-            tryNextFallback();
+            console.log(`Created ${numberOfElements} mystery elements floating around`);
         }
-        
-        // Page-specific data
-        const pageData = {
-            quote: "",
-            source: "",
-            image: "./assets/images/funny-meme.gif" // Will be replaced by Tenor API
-        };
-        
-        // Random CTA messages in Hebrew for "Are You Following Me" meme
-        const ctaMessages = [
-            "למה אתם עוקבים אחרי? קנו חולצה! 👇",
-            "תפסתם אתכם! רוצים את החולצה הזאת? 👇",
-            "מה אתם רוצים ממני? חולצה! 👇",
-            "די לעקוב! קנו חולצה במקום! 👇",
-            "אתם פה שוב? בסדר, הנה החולצה 👇",
-            "למה אתם לא קונים את החולצה כבר? 👇",
-            "מספיק לעקוב - קנו! 👇",
-            "אני רואה אתכם! רוצים חולצה? 👇",
-            "תפסתי אתכם בעקיבה! החולצה כאן 👇",
-            "מה זה הצריכה הזו? קנו חולצה! 👇"
-        ];
-        
-        // Mystery emojis for background - creepy/stalker themed
-        const mysteryEmojis = [
-            '👁️', '🩸', '🔪', '🔍', '💀', '🖤', '🕯️', '🔐',
-            '🗝️', '📖', '🚪', '📱', '💻', '🌃', '🌙', '⚡',
-            '🔥', '👤', '🎭', '👻'
-        ];
-        
+
         // Create blood drips
         function createBloodDrips() {
             const numberOfDrips = Math.floor(Math.random() * 10) + 8; // 8-17 drips
@@ -862,42 +657,6 @@
             }, 3000);
         }
 
-        // Remove bouncing emojis function since we're using floating mystery elements instead
-
-        // Create random mystery elements (like snow but with creepy emojis)
-        function createMysteryElements() {
-            const numberOfElements = Math.floor(Math.random() * 11) + 15; // 15-25 elements
-            
-            for (let i = 0; i < numberOfElements; i++) {
-                const element = document.createElement('div');
-                element.className = 'mystery-element';
-                
-                // Random emoji from creepy collection
-                const randomEmoji = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
-                element.textContent = randomEmoji;
-                
-                // Random position across entire screen
-                element.style.top = Math.random() * 100 + '%';
-                element.style.left = Math.random() * 100 + '%';
-                
-                // Random animation delay
-                element.style.animationDelay = Math.random() * 6 + 's';
-                
-                // Random animation duration (5-8 seconds)
-                element.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                
-                // Random font size variation
-                const baseFontSize = 20;
-                const randomSize = baseFontSize + (Math.random() * 8 - 4); // ±4px variation
-                element.style.fontSize = randomSize + 'px';
-                
-                // Add to body
-                document.body.appendChild(element);
-            }
-            
-            console.log(`Created ${numberOfElements} mystery elements floating around`);
-        }
-
         // Start continuous mystery elements (like continuous snow)
         function startContinuousMystery() {
             setInterval(() => {
@@ -935,25 +694,11 @@
             const screenWidth = window.innerWidth || screen.width;
             
             if (isMobile) {
-                const quoteElement = document.getElementById('mainQuote');
-                if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '30px';
-                    quoteElement.style.lineHeight = '1.1';
-                    quoteElement.style.letterSpacing = '-0.1px';
-                } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '34px';
-                    quoteElement.style.lineHeight = '1.1';
-                    quoteElement.style.letterSpacing = '-0.2px';
-                }
-                
-                console.log('Mobile optimizations applied. Font size:', quoteElement.style.fontSize);
+                console.log('Mobile optimizations applied for screen width:', screenWidth);
             }
         }
         
-        // Update the content (no quote or source for memes)
-        // Content will be loaded by Tenor API
-        
-        // Set random CTA message
+        // Update CTA messages to use red theme
         const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
         document.querySelector('.cta-text').textContent = randomCtaMessage;
         
@@ -962,9 +707,6 @@
         
         // Apply mobile optimizations
         setTimeout(applyMobileOptimizations, 100);
-        
-        // Load the specific "Are You Following Me" meme
-        loadSpecificMeme();
         
         // Create floating and mystery elements
         createMysteryElements();
@@ -976,55 +718,8 @@
         startContinuousMystery();
         startContinuousBloodDrips();
         
-        // Remove force styling function since we're using clean CSS now
-        
-        // Fun quote effects (keep existing code but remove for memes)
-        // Since we removed quotes, we can remove these functions too
-        const funColors = [
-            '#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe',
-            '#43e97b', '#38f9d7', '#ffecd2', '#fcb69f', '#a8edea'
-        ];
-        
-        function getRandomFunColor() {
-            return funColors[Math.floor(Math.random() * funColors.length)];
-        }
-        
-        function funAnimation() {
-            const quoteElement = document.getElementById('mainQuote');
-            const color1 = getRandomFunColor();
-            const color2 = getRandomFunColor();
-            
-            // Check if mobile for lighter effects
-            const isMobile = window.innerWidth <= 480;
-            const glowStrength = isMobile ? '0 0 15px' : '0 0 25px';
-            const scaleStrength = isMobile ? 1.02 : 1.05;
-            
-            // Add glowing class
-            quoteElement.classList.add('glowing');
-            
-            // Start animation
-            quoteElement.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
-            quoteElement.style.backgroundClip = 'text';
-            quoteElement.style.webkitBackgroundClip = 'text';
-            quoteElement.style.filter = `drop-shadow(${glowStrength} ${color1})`;
-            quoteElement.style.transform = `scale(${scaleStrength})`;
-            
-            setTimeout(() => {
-                quoteElement.style.transform = 'scale(1)';
-                quoteElement.classList.remove('glowing');
-            }, 400);
-        }
-        
-        function scheduleRandomFunAnimation() {
-            const randomDelay = Math.random() * 3000 + 2000; // 2-5 seconds
-            setTimeout(() => {
-                funAnimation();
-                scheduleRandomFunAnimation();
-            }, randomDelay);
-        }
-        
-        // Start the fun animation cycle
-        scheduleRandomFunAnimation();
+        // Load the specific "Are You Following Me" meme
+        loadSpecificMeme();
         
         // Analytics tracking with Tenor share registration
         document.querySelector('.shop-button').addEventListener('click', function() {
