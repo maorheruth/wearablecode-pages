@@ -171,17 +171,20 @@
             background: linear-gradient(135deg, #660000, #8B0000, #B22222);
         }
 
-        /* Animated mysterious background elements */
+       /* Animated mysterious background elements */
         .mystery-element {
             position: absolute;
-            font-size: 24px;
-            color: rgba(255, 255, 255, 0.7);
-            z-index: 1;
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.85);
+            z-index: 10;
             animation: wiggleFloat 6s ease-in-out infinite;
             pointer-events: none;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.5);
+            text-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.9), 
+                0 0 20px rgba(255, 255, 255, 0.6),
+                0 0 30px rgba(255, 255, 255, 0.3);
             opacity: 0; /* Start invisible */
-            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
         }
 
         @keyframes wiggleFloat {
