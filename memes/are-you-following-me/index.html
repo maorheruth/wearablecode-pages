@@ -22,7 +22,7 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(180deg, #dda2ff 0%, #ff5757 100%);
-            background-size: 400% 400%;
+            background-size: 200% 200%;
             position: relative;
             height: 100vh;
             height: 100dvh;
@@ -174,13 +174,14 @@
         /* Animated mysterious background elements */
         .mystery-element {
             position: absolute;
-            font-size: 20px;
-            color: rgba(255, 255, 255, 0.25);
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
             z-index: 1;
             animation: wiggleFloat 6s ease-in-out infinite;
             pointer-events: none;
-            text-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.5);
             opacity: 0; /* Start invisible */
+            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
         }
 
         @keyframes wiggleFloat {
@@ -189,28 +190,28 @@
                 opacity: 0; /* Start invisible */
             }
             5% {
-                opacity: 0.15; /* Gentle fade in */
+                opacity: 0.4; /* Stronger fade in */
             }
             10% {
-                opacity: 0.25; /* Reach normal opacity */
+                opacity: 0.7; /* Much more visible */
             }
             25% {
                 transform: translateX(8px) translateY(-6px) rotate(3deg);
-                opacity: 0.4;
+                opacity: 0.8;
             }
             50% {
                 transform: translateX(-4px) translateY(10px) rotate(-2deg);
-                opacity: 0.3;
+                opacity: 0.9;
             }
             75% {
                 transform: translateX(6px) translateY(-5px) rotate(3deg);
-                opacity: 0.5;
+                opacity: 0.8;
             }
             90% {
-                opacity: 0.25; /* Start fading out */
+                opacity: 0.6; /* Still quite visible */
             }
             95% {
-                opacity: 0.1; /* Almost invisible */
+                opacity: 0.3; /* Gradual fade out */
             }
             100% {
                 transform: translateX(0px) translateY(0px) rotate(0deg);
