@@ -23,6 +23,7 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(180deg, #dda2ff 0%, #ff5757 100%);
             background-size: 200% 200%;
+            animation: gradientShift 8s ease-in-out infinite;
             position: relative;
             height: 100vh;
             height: 100dvh;
@@ -35,11 +36,23 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         .container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 24px;
-            padding: 40px 35px; /* KEEPING ORIGINAL - NO EXTRA PADDING */
+            padding: 40px 35px;
             max-width: 700px;
             width: 100%;
             box-shadow: 
@@ -94,7 +107,7 @@
             min-height: 200px;
             max-height: none;
             border-radius: 16px;
-            margin: 0 auto 150px; /* Back to original top margin (0), 150px bottom */
+            margin: 0 auto 150px;
             padding: 0;
             background: transparent;
             display: flex;
@@ -171,57 +184,6 @@
             background: linear-gradient(135deg, #660000, #8B0000, #B22222);
         }
 
-       /* Animated mysterious background elements */
-        .mystery-element {
-            position: absolute;
-            font-size: 28px;
-            color: rgba(255, 255, 255, 0.85);
-            z-index: 10;
-            animation: wiggleFloat 6s ease-in-out infinite;
-            pointer-events: none;
-            text-shadow: 
-                0 0 10px rgba(255, 255, 255, 0.9), 
-                0 0 20px rgba(255, 255, 255, 0.6),
-                0 0 30px rgba(255, 255, 255, 0.3);
-            opacity: 0; /* Start invisible */
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
-        }
-
-        @keyframes wiggleFloat {
-            0% {
-                transform: translateX(0px) translateY(0px) rotate(0deg);
-                opacity: 0; /* Start invisible */
-            }
-            5% {
-                opacity: 0.4; /* Stronger fade in */
-            }
-            10% {
-                opacity: 0.7; /* Much more visible */
-            }
-            25% {
-                transform: translateX(8px) translateY(-6px) rotate(3deg);
-                opacity: 0.8;
-            }
-            50% {
-                transform: translateX(-4px) translateY(10px) rotate(-2deg);
-                opacity: 0.9;
-            }
-            75% {
-                transform: translateX(6px) translateY(-5px) rotate(3deg);
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.6; /* Still quite visible */
-            }
-            95% {
-                opacity: 0.3; /* Gradual fade out */
-            }
-            100% {
-                transform: translateX(0px) translateY(0px) rotate(0deg);
-                opacity: 0; /* End invisible */
-            }
-        }
-
         /* Mobile optimizations */
         @media (max-width: 480px) {
             body {
@@ -229,7 +191,7 @@
             }
             
             .container {
-                padding: 25px 20px; /* Original mobile padding - NO CHANGE */
+                padding: 25px 20px;
                 border-radius: 20px;
                 max-width: 95vw;
                 max-height: 90vh;
@@ -238,7 +200,7 @@
             .character-image {
                 width: 100%;
                 min-height: 150px;
-                margin: 0 auto 100px; /* Back to original top, 100px bottom for mobile */
+                margin: 0 auto 100px;
                 padding: 0;
                 font-size: 14px;
             }
@@ -262,18 +224,12 @@
                 padding: 12px 24px;
                 font-size: 14px;
             }
-
-            .mystery-element {
-                font-size: 16px;
-                color: rgba(255, 255, 255, 0.2);
-                text-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
-            }
         }
 
         /* iPhone SE and smaller */
         @media (max-width: 375px) {
             .container {
-                padding: 20px 15px; /* Original small mobile padding - NO CHANGE */
+                padding: 20px 15px;
                 max-width: 98vw;
                 max-height: 88vh;
             }
@@ -281,15 +237,9 @@
             .character-image {
                 width: 100%;
                 min-height: 130px;
-                margin: 0 auto 70px; /* Back to original top, 70px bottom for small mobile */
+                margin: 0 auto 70px;
                 padding: 0;
                 font-size: 12px;
-            }
-
-            .mystery-element {
-                font-size: 14px;
-                color: rgba(255, 255, 255, 0.18);
-                text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
             }
             
             .logo img {
@@ -300,8 +250,6 @@
     </style>
 </head>
 <body>
-    <!-- Mystery elements will be generated by JavaScript -->
-    
     <div class="container">
         <div class="character-image" id="characterImage">
             טוען מים...
@@ -346,13 +294,6 @@
             "למה אתם לא קונים את החולצה כבר? 👇",
             "מספיק לעקוב - לקנות! 👇",
             "סרקת? קנית! החולצה כאן 👇",
-        ];
-        
-        // Mystery emojis for background - creepy/stalker themed
-        const mysteryEmojis = [
-            '👁️', '🩸', '🔪', '🔍', '💀', '🖤', '🕯️', '🔐',
-            '🗝️', '📖', '🚪', '📱', '💻', '🌃', '🌙', '⚡',
-            '🔥', '👤', '🎭', '👻'
         ];
         
         // Load the specific "Are You Following Me" GIF
@@ -501,71 +442,6 @@
             container.appendChild(attribution);
         }
         
-        // Create random mystery elements (like snow but with creepy emojis)
-        function createMysteryElements() {
-            const numberOfElements = Math.floor(Math.random() * 11) + 15; // 15-25 elements
-            
-            for (let i = 0; i < numberOfElements; i++) {
-                const element = document.createElement('div');
-                element.className = 'mystery-element';
-                
-                // Random emoji from creepy collection
-                const randomEmoji = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
-                element.textContent = randomEmoji;
-                
-                // Random position across entire screen
-                element.style.top = Math.random() * 100 + '%';
-                element.style.left = Math.random() * 100 + '%';
-                
-                // Random animation delay
-                element.style.animationDelay = Math.random() * 6 + 's';
-                
-                // Random animation duration (5-8 seconds)
-                element.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                
-                // Random font size variation
-                const baseFontSize = 20;
-                const randomSize = baseFontSize + (Math.random() * 8 - 4); // ±4px variation
-                element.style.fontSize = randomSize + 'px';
-                
-                // Add to body
-                document.body.appendChild(element);
-            }
-            
-            console.log(`Created ${numberOfElements} mystery elements floating around`);
-        }
-
-        // Start continuous mystery elements (like continuous snow)
-        function startContinuousMystery() {
-            setInterval(() => {
-                // Add 2-3 new mystery elements periodically
-                const elementCount = Math.floor(Math.random() * 2) + 2; // 2-3 elements
-                for (let i = 0; i < elementCount; i++) {
-                    const element = document.createElement('div');
-                    element.className = 'mystery-element';
-                    element.textContent = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
-                    
-                    // Random position across entire screen
-                    element.style.top = Math.random() * 100 + '%';
-                    element.style.left = Math.random() * 100 + '%';
-                    element.style.animationDelay = Math.random() * 2 + 's';
-                    element.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                    
-                    const elementSize = Math.random() * 8 + 16;
-                    element.style.fontSize = elementSize + 'px';
-                    
-                    document.body.appendChild(element);
-                    
-                    // Remove after animation cycle completes
-                    setTimeout(() => {
-                        if (element.parentNode) {
-                            element.parentNode.removeChild(element);
-                        }
-                    }, 8000);
-                }
-            }, 2000); // Every 2 seconds
-        }
-        
         // Mobile optimizations
         function applyMobileOptimizations() {
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -585,12 +461,6 @@
         
         // Apply mobile optimizations
         setTimeout(applyMobileOptimizations, 100);
-        
-        // Create floating and mystery elements
-        createMysteryElements();
-        
-        // Start continuous effects
-        startContinuousMystery();
         
         // Load the specific "Are You Following Me" meme
         loadSpecificMeme();
