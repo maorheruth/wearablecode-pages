@@ -157,6 +157,30 @@
             object-fit: cover;
         }
 
+        /* Simple iframe styling - FORCE 323px height */
+        .character-image iframe {
+            width: 378px !important;
+            height: 323px !important;
+            border: none !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            display: block !important;
+        }
+
+        /* Force styling with specific class */
+        .gif-iframe {
+            width: 378px !important;
+            height: 323px !important;
+            border: none !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            display: block !important;
+            max-width: 378px !important;
+            max-height: 323px !important;
+            min-width: 378px !important;
+            min-height: 323px !important;
+        }
+
         .character-image.has-image {
             border: none;
             background: transparent;
@@ -164,6 +188,14 @@
             height: auto;
             padding: 0;
             display: block;
+        }
+
+        .character-image.has-image {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            height: auto;
+            padding: 0;
         }
 
         .character-image.has-image img,
@@ -594,6 +626,33 @@
                 imageElement.classList.remove('loading');
                 imageElement.classList.add('has-image');
                 
+                // Force styling again after load with exact dimensions
+                img.style.cssText = `
+                    width: 378px !important;
+                    height: auto !important;
+                    border-radius: 12px !important;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                    display: block !important;
+                    margin: 0 auto !important;
+                    padding: 0 !important;
+                    object-fit: cover !important;
+                    max-width: 378px !important;
+                `;
+                
+                // Also force styling on any wrapper elements
+                setTimeout(() => {
+                    const allInnerElements = imageElement.querySelectorAll('*');
+                    allInnerElements.forEach(el => {
+                        if (el.tagName === 'IMG' || el.id === 'content') {
+                            el.style.setProperty('width', '378px', 'important');
+                            el.style.setProperty('height', 'auto', 'important');
+                            el.style.setProperty('max-width', '378px', 'important');
+                            el.style.setProperty('margin', '0 auto', 'important');
+                            el.style.setProperty('display', 'block', 'important');
+                        }
+                    });
+                }, 100);
+                
                 addTenorAttribution(imageElement);
                 console.log('✅ Tenor API GIF loaded successfully with 378px width');
             };
@@ -627,13 +686,62 @@
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
+            // Force styling on Tenor elements after they load
+            function forceTenorStyling() {
+                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                const iframe = embedContainer.querySelector('iframe');
+                const innerDiv = embedContainer.querySelector('div[style*="padding-top"]');
+                
+                if (tenorEmbed) {
+                    tenorEmbed.style.setProperty('width', '378px', 'important');
+                    tenorEmbed.style.setProperty('position', 'relative', 'important');
+                }
+                
+                if (innerDiv) {
+                    innerDiv.style.setProperty('width', '378px', 'important');
+                    innerDiv.style.setProperty('height', 'auto', 'important');
+                    innerDiv.style.setProperty('padding-top', '0', 'important');
+                    innerDiv.style.setProperty('position', 'relative', 'important');
+                }
+                
+                if (iframe) {
+                    iframe.style.setProperty('width', '378px', 'important');
+                    iframe.style.setProperty('height', '323px', 'important'); // 378 / 1.7647 aspect ratio
+                    iframe.style.setProperty('position', 'relative', 'important');
+                    iframe.style.setProperty('top', '0', 'important');
+                    iframe.style.setProperty('left', '0', 'important');
+                }
+            }
+            
+            // Run styling multiple times to catch when elements are created
+            setTimeout(forceTenorStyling, 100);
+            setTimeout(forceTenorStyling, 500);
+            setTimeout(forceTenorStyling, 1000);
+            setTimeout(forceTenorStyling, 2000);
+            
+            // Load Tenor's embed script
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.async = true;
+                script.src = 'https://tenor.com/embed.js';
+                document.body.appendChild(script);
+                
+                // Apply styling again after script loads
+                script.onload = () => {
+                    setTimeout(forceTenorStyling, 100);
+                    setTimeout(forceTenorStyling, 500);
+                    setTimeout(forceTenorStyling, 1000);
+                };
+            }
+            
             // Add Tenor attribution
             addTenorAttribution(imageElement);
             
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ Joe Goldberg embed loaded successfully');
+            console.log('✅ Joe Goldberg "Wave" embed loaded with forced 378px width');
         }
         
         // Add Tenor attribution (required by API terms)
@@ -879,7 +987,7 @@
         
         // Analytics tracking with Tenor share registration
         document.querySelector('.shop-button').addEventListener('click', function() {
-            console.log('Shop button clicked for Joe Goldberg GIF');
+            console.log('Shop button clicked for Joe Goldberg wave GIF');
             console.log('CTA message shown:', window.currentCtaMessage);
             
             // Register share with Tenor
