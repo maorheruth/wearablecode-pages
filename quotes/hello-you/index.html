@@ -562,19 +562,76 @@
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Try to load via Tenor API first for direct image control
-            fetchSpecificGifFromTenor()
-                .then(gifUrl => {
-                    if (gifUrl) {
-                        loadGifFromUrl(gifUrl);
-                    } else {
-                        loadTenorEmbed();
-                    }
-                })
-                .catch(error => {
-                    console.log('❌ Tenor API failed, using embed fallback:', error);
-                    loadTenorEmbed();
-                });
+            // Try direct GIF URL first - much cleaner approach
+            const directGifUrl = 'https://media.tenor.com/gZq077jOQ8AAAAAM/wave-joe-goldberg.gif';
+            loadDirectGif(directGifUrl);
+        }
+        
+        // Load direct GIF URL - no API complications
+        function loadDirectGif(gifUrl) {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = gifUrl;
+            img.alt = "Joe Goldberg Wave";
+            
+            // Force exact styling
+            img.style.cssText = `
+                width: 378px !important;
+                height: 378px !important;
+                border-radius: 12px !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                display: block !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                object-fit: cover !important;
+                object-position: center !important;
+            `;
+            
+            img.onload = function() {
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                
+                // Add our custom attribution instead of Tenor
+                const attribution = document.createElement('div');
+                attribution.style.cssText = `
+                    position: absolute;
+                    top: 8px;
+                    left: 8px;
+                    font-size: 9px;
+                    color: rgba(255,255,255,0.9);
+                    background: rgba(0,0,0,0.6);
+                    padding: 3px 7px;
+                    border-radius: 6px;
+                    text-decoration: none;
+                    font-weight: 500;
+                    backdrop-filter: blur(4px);
+                    z-index: 10;
+                `;
+                attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+                imageElement.style.position = 'relative';
+                imageElement.appendChild(attribution);
+                
+                console.log('✅ Direct GIF loaded successfully with 378x378px dimensions');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Direct GIF URL failed, trying API fallback');
+                fetchSpecificGifFromTenor()
+                    .then(gifUrl => {
+                        if (gifUrl) {
+                            loadDirectGif(gifUrl);
+                        } else {
+                            loadTenorEmbed();
+                        }
+                    })
+                    .catch(error => {
+                        console.log('❌ All methods failed:', error);
+                        imageElement.innerHTML = 'Failed to load GIF';
+                        imageElement.classList.remove('loading');
+                    });
+            };
         }
         
         // Try to fetch the specific GIF from Tenor API
@@ -612,7 +669,7 @@
             // Force exact width styling on the image element
             img.style.cssText = `
                 width: 378px !important;
-                height: 378px !important;
+                height: auto !important;
                 border-radius: 12px !important;
                 box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                 display: block !important;
@@ -631,7 +688,7 @@
                 // Force styling again after load with exact dimensions
                 img.style.cssText = `
                     width: 378px !important;
-                    height: 378px !important;
+                    height: auto !important;
                     border-radius: 12px !important;
                     box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                     display: block !important;
@@ -674,7 +731,7 @@
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
                 width: 378px !important;
-                height: 378px !important;
+                height: auto !important;
                 display: block !important;
                 border-radius: 12px;
                 overflow: hidden;
