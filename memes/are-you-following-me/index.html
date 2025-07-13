@@ -148,7 +148,8 @@
 
         .character-image img {
             width: 378px !important;
-            height: 378px !important;
+            height: auto !important;
+            max-height: 215px !important;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             display: block;
@@ -237,15 +238,15 @@
         }
 
         .quote {
-            font-size: 65px;
+            font-size: 48px;
             font-weight: 400;
             font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', 'Arial Black', sans-serif;
             color: #222;
             margin-bottom: 15px;
-            line-height: 0.85;
+            line-height: 0.9;
             position: relative;
             padding: 0 15px;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -253,22 +254,22 @@
 
         .quote::before {
             content: '"';
-            font-size: 75px;
+            font-size: 55px;
             color: #bbb;
             position: absolute;
             left: -8px;
-            top: -15px;
+            top: -12px;
             opacity: 0.7;
             font-family: Georgia, serif;
         }
 
         .quote::after {
             content: '"';
-            font-size: 75px;
+            font-size: 55px;
             color: #bbb;
             position: absolute;
             right: -8px;
-            bottom: -20px;
+            bottom: -16px;
             opacity: 0.7;
             font-family: Georgia, serif;
         }
@@ -375,12 +376,12 @@
             }
             
             .quote {
-                font-size: 26px;
+                font-size: 22px;
                 margin-bottom: 10px;
-                line-height: 0.85;
+                line-height: 0.9;
                 padding: 0 5px;
                 font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
-                letter-spacing: 1.5px;
+                letter-spacing: 1px;
                 text-transform: uppercase;
             }
             
@@ -453,9 +454,9 @@
             }
             
             .quote {
-                font-size: 22px;
+                font-size: 18px;
                 padding: 0 3px;
-                line-height: 0.8;
+                line-height: 0.85;
                 font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
                 letter-spacing: 0.5px;
                 text-transform: uppercase;
@@ -611,6 +612,7 @@
             img.style.cssText = `
                 width: 378px !important;
                 height: auto !important;
+                max-height: 215px !important;
                 border-radius: 12px !important;
                 box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                 display: block !important;
@@ -630,6 +632,7 @@
                 img.style.cssText = `
                     width: 378px !important;
                     height: auto !important;
+                    max-height: 215px !important;
                     border-radius: 12px !important;
                     box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                     display: block !important;
@@ -879,13 +882,13 @@
             if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '44px';
-                    quoteElement.style.lineHeight = '0.75';
-                    quoteElement.style.letterSpacing = '-1px';
-                } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '52px';
+                    quoteElement.style.fontSize = '32px';
                     quoteElement.style.lineHeight = '0.8';
-                    quoteElement.style.letterSpacing = '-1px';
+                    quoteElement.style.letterSpacing = '0px';
+                } else if (screenWidth <= 480) {
+                    quoteElement.style.fontSize = '38px';
+                    quoteElement.style.lineHeight = '0.85';
+                    quoteElement.style.letterSpacing = '0.5px';
                 }
                 quoteElement.style.fontFamily = "'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif";
                 quoteElement.style.fontWeight = '400';
