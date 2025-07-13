@@ -157,36 +157,50 @@
             object-fit: cover;
         }
 
-        /* Target the specific content ID that might be interfering */
-        #content {
+        /* Target Tenor embed specifically */
+        .tenor-gif-embed {
             width: 378px !important;
-            height: auto !important;
             max-width: 378px !important;
+            position: relative !important;
             margin: 0 auto !important;
-            display: block !important;
         }
 
-        #content img {
+        .tenor-gif-embed div {
             width: 378px !important;
             height: auto !important;
-            max-width: 378px !important;
-            margin: 0 auto !important;
-            display: block !important;
-            border-radius: 12px !important;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+            padding-top: 0 !important;
+            position: relative !important;
         }
 
-        /* Target any img inside characterImage specifically */
-        #characterImage img,
-        #characterImage #content,
-        #characterImage #content img {
+        .tenor-gif-embed iframe {
+            width: 378px !important;
+            height: 214px !important;
+            position: relative !important;
+            top: 0 !important;
+            left: 0 !important;
+            margin: 0 auto !important;
+        }
+
+        /* Override any Tenor styling */
+        div[data-postid="23566737"] {
+            width: 378px !important;
+            max-width: 378px !important;
+            position: relative !important;
+        }
+
+        div[data-postid="23566737"] div {
             width: 378px !important;
             height: auto !important;
-            max-width: 378px !important;
-            margin: 0 auto !important;
-            display: block !important;
-            border-radius: 12px !important;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+            padding-top: 0 !important;
+            position: relative !important;
+        }
+
+        div[data-postid="23566737"] iframe {
+            width: 378px !important;
+            height: 214px !important;
+            position: relative !important;
+            top: 0 !important;
+            left: 0 !important;
         }
 
         .character-image.has-image {
@@ -681,34 +695,57 @@
         function loadTenorEmbed() {
             const imageElement = document.getElementById('characterImage');
             
-            // Create container for the Tenor embed
+            // Create container for the Tenor embed with fixed width
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                width: 378px !important;
+                height: auto !important;
+                display: block !important;
                 border-radius: 12px;
                 overflow: hidden;
+                margin: 0 auto !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             `;
-            
-            // Style the embed to take full width with proper aspect ratio
-            const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
-            if (tenorEmbed) {
-                tenorEmbed.style.cssText = `
-                    width: 100% !important;
-                    height: auto !important;
-                    border-radius: 12px;
-                    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-                `;
-            }
             
             // Add to container
             imageElement.innerHTML = '';
             imageElement.appendChild(embedContainer);
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
+            
+            // Force styling on Tenor elements after they load
+            function forceTenorStyling() {
+                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                const iframe = embedContainer.querySelector('iframe');
+                const innerDiv = embedContainer.querySelector('div[style*="padding-top"]');
+                
+                if (tenorEmbed) {
+                    tenorEmbed.style.setProperty('width', '378px', 'important');
+                    tenorEmbed.style.setProperty('position', 'relative', 'important');
+                }
+                
+                if (innerDiv) {
+                    innerDiv.style.setProperty('width', '378px', 'important');
+                    innerDiv.style.setProperty('height', 'auto', 'important');
+                    innerDiv.style.setProperty('padding-top', '0', 'important');
+                    innerDiv.style.setProperty('position', 'relative', 'important');
+                }
+                
+                if (iframe) {
+                    iframe.style.setProperty('width', '378px', 'important');
+                    iframe.style.setProperty('height', '214px', 'important'); // 378 / 1.7647 aspect ratio
+                    iframe.style.setProperty('position', 'relative', 'important');
+                    iframe.style.setProperty('top', '0', 'important');
+                    iframe.style.setProperty('left', '0', 'important');
+                }
+            }
+            
+            // Run styling multiple times to catch when elements are created
+            setTimeout(forceTenorStyling, 100);
+            setTimeout(forceTenorStyling, 500);
+            setTimeout(forceTenorStyling, 1000);
+            setTimeout(forceTenorStyling, 2000);
             
             // Load Tenor's embed script
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
@@ -717,6 +754,13 @@
                 script.async = true;
                 script.src = 'https://tenor.com/embed.js';
                 document.body.appendChild(script);
+                
+                // Apply styling again after script loads
+                script.onload = () => {
+                    setTimeout(forceTenorStyling, 100);
+                    setTimeout(forceTenorStyling, 500);
+                    setTimeout(forceTenorStyling, 1000);
+                };
             }
             
             // Add Tenor attribution
@@ -725,7 +769,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ Joe Goldberg "Wave" embed loaded as fallback');
+            console.log('✅ Joe Goldberg "Wave" embed loaded with forced 378px width');
         }
         
         // Add Tenor attribution (required by API terms)
