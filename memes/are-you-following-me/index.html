@@ -521,11 +521,11 @@
         const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
         const CLIENT_KEY = 'wearablecode_memes';
         
-        // Updated GIF data for the new "Are you following me?" GIF
+        // Updated GIF data for the new "Wait what" GIF
         const specificGifData = {
-            id: '15996458',
-            url: 'https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458',
-            embedCode: `<div class="tenor-gif-embed" data-postid="15996458" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/are-you-following-me-freaked-out-why-are-you-here-what-do-you-want-stalking-gif-15996458">Are You Following Me GIF</a>from <a href="https://tenor.com/search/joe+goldberg-gifs">Joe Goldberg GIFs</a></div>`
+            id: '15989664',
+            url: 'https://tenor.com/view/wait-what-huh-excuse-me-what-is-that-what-do-you-say-gif-15989664',
+            embedCode: `<div class="tenor-gif-embed" data-postid="15989664" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/wait-what-huh-excuse-me-what-is-that-what-do-you-say-gif-15989664">Wait What Huh GIF</a>from <a href="https://tenor.com/search/wait+what-gifs">Wait What GIFs</a></div>`
         };
         
         // Page-specific data
@@ -606,7 +606,7 @@
             const imageElement = document.getElementById('characterImage');
             const img = document.createElement('img');
             img.src = gifUrl;
-            img.alt = "Are you following me?";
+            img.alt = "Wait what";
             
             // Force exact width styling on the image element
             img.style.cssText = `
@@ -744,7 +744,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ "Are you following me?" embed loaded with forced 378px width');
+            console.log('✅ "Wait what" embed loaded with forced 378px width');
         }
         
         // Add Tenor attribution (required by API terms)
@@ -990,7 +990,7 @@
         
         // Analytics tracking with Tenor share registration
         document.querySelector('.shop-button').addEventListener('click', function() {
-            console.log('Shop button clicked for "Are you following me?" GIF');
+            console.log('Shop button clicked for "Wait what" GIF');
             console.log('CTA message shown:', window.currentCtaMessage);
             
             // Register share with Tenor
