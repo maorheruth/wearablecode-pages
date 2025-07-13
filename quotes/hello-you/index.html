@@ -157,14 +157,28 @@
             object-fit: cover;
         }
 
-        /* Simple iframe styling - no complex Tenor overrides */
+        /* Simple iframe styling - FORCE 323px height */
         .character-image iframe {
             width: 378px !important;
-            height: 378px !important;
+            height: 323px !important;
             border: none !important;
             border-radius: 12px !important;
             margin: 0 auto !important;
             display: block !important;
+        }
+
+        /* Force styling with specific class */
+        .gif-iframe {
+            width: 378px !important;
+            height: 323px !important;
+            border: none !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            display: block !important;
+            max-width: 378px !important;
+            max-height: 323px !important;
+            min-width: 378px !important;
+            min-height: 323px !important;
         }
 
         .character-image.has-image {
