@@ -134,7 +134,9 @@
             border-radius: 12px;
             margin: 0 auto 18px;
             background: transparent;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #999;
             border: none;
             position: relative;
@@ -144,42 +146,24 @@
             padding: 0;
         }
 
-        /* Force all content inside character-image to full width - Super aggressive */
-        .character-image *,
-        .character-image img,
-        .character-image iframe,
-        .character-image div,
-        .character-image .tenor-gif-embed,
-        #characterImage *,
-        #characterImage img,
-        #characterImage iframe,
-        #characterImage div {
+        .character-image img {
             width: 100% !important;
-            min-width: 100% !important;
-            max-width: 100% !important;
             height: auto !important;
-            display: block !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            border-radius: 12px !important;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
-            border: none !important;
-            object-fit: cover !important;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: block;
+            margin: 0;
+            padding: 0;
+            object-fit: cover;
         }
 
-        /* Target Tenor specific elements */
-        div[id*="23566737"],
-        img[id*="23566737"],
-        iframe[id*="23566737"],
-        .tenor-gif-embed[data-postid="23566737"],
-        img[src*="23566737"],
-        img[src*="tenor"],
-        img[src*="wave-joe-goldberg"] {
-            width: 100% !important;
-            min-width: 100% !important;
-            max-width: 100% !important;
-            height: auto !important;
-            object-fit: cover !important;
+        .character-image.has-image {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            height: auto;
+            padding: 0;
+            display: block;
         }
 
         .character-image.has-image {
@@ -546,8 +530,19 @@
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Skip API and go directly to embed for more control
-            loadTenorEmbed();
+            // Try to load via Tenor API first for direct image control
+            fetchSpecificGifFromTenor()
+                .then(gifUrl => {
+                    if (gifUrl) {
+                        loadGifFromUrl(gifUrl);
+                    } else {
+                        loadTenorEmbed();
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Tenor API failed, using embed fallback:', error);
+                    loadTenorEmbed();
+                });
         }
         
         // Try to fetch the specific GIF from Tenor API
@@ -610,60 +605,30 @@
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
-                width: 100% !important;
-                height: auto !important;
-                display: block !important;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 border-radius: 12px;
                 overflow: hidden;
-                margin: 0 !important;
-                padding: 0 !important;
             `;
             
-            // Add to container first
+            // Style the embed to take full width with proper aspect ratio
+            const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+            if (tenorEmbed) {
+                tenorEmbed.style.cssText = `
+                    width: 100% !important;
+                    height: auto !important;
+                    border-radius: 12px;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+                `;
+            }
+            
+            // Add to container
             imageElement.innerHTML = '';
             imageElement.appendChild(embedContainer);
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
-            imageElement.style.display = 'block';
-            
-            // Aggressive styling that runs multiple times
-            function forceFullWidth() {
-                // Target everything possible
-                const allElements = imageElement.querySelectorAll('*');
-                allElements.forEach(el => {
-                    el.style.setProperty('width', '100%', 'important');
-                    el.style.setProperty('min-width', '100%', 'important');
-                    el.style.setProperty('max-width', '100%', 'important');
-                    el.style.setProperty('height', 'auto', 'important');
-                    el.style.setProperty('display', 'block', 'important');
-                    el.style.setProperty('object-fit', 'cover', 'important');
-                    el.style.setProperty('border-radius', '12px', 'important');
-                });
-                
-                // Target specific Tenor elements
-                const tenorEmbed = imageElement.querySelector('.tenor-gif-embed');
-                const iframe = imageElement.querySelector('iframe');
-                const imgs = imageElement.querySelectorAll('img');
-                
-                [tenorEmbed, iframe, ...imgs].forEach(el => {
-                    if (el) {
-                        el.style.setProperty('width', '100%', 'important');
-                        el.style.setProperty('min-width', '100%', 'important');
-                        el.style.setProperty('max-width', '100%', 'important');
-                        el.style.setProperty('height', 'auto', 'important');
-                        el.style.setProperty('object-fit', 'cover', 'important');
-                    }
-                });
-            }
-            
-            // Run immediately
-            forceFullWidth();
-            
-            // Run after delays
-            setTimeout(forceFullWidth, 100);
-            setTimeout(forceFullWidth, 500);
-            setTimeout(forceFullWidth, 1000);
-            setTimeout(forceFullWidth, 2000);
             
             // Load Tenor's embed script
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
@@ -672,13 +637,6 @@
                 script.async = true;
                 script.src = 'https://tenor.com/embed.js';
                 document.body.appendChild(script);
-                
-                // Apply styling again after script loads
-                script.onload = () => {
-                    setTimeout(forceFullWidth, 100);
-                    setTimeout(forceFullWidth, 500);
-                    setTimeout(forceFullWidth, 1000);
-                };
             }
             
             // Add Tenor attribution
