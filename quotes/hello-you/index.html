@@ -155,8 +155,19 @@
         .character-image.has-image {
             border: none;
             background: transparent;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            box-shadow: none;
             height: auto;
+            padding: 0;
+        }
+
+        .character-image.has-image img,
+        .character-image.has-image iframe,
+        .character-image.has-image .tenor-gif-embed {
+            width: 100% !important;
+            height: auto !important;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: block;
         }
 
         .character-image.loading {
@@ -319,7 +330,6 @@
                 height: auto;
                 margin-bottom: 15px;
                 font-size: 14px;
-                min-height: 150px;
             }
             
             .loading-text {
@@ -392,7 +402,6 @@
                 width: 100%;
                 height: auto;
                 font-size: 12px;
-                min-height: 130px;
             }
             
             .loading-text {
@@ -599,6 +608,15 @@
                     border-radius: 12px;
                     box-shadow: 0 8px 32px rgba(0,0,0,0.15);
                 `;
+                
+                // Also style the iframe inside if it exists
+                setTimeout(() => {
+                    const iframe = tenorEmbed.querySelector('iframe');
+                    if (iframe) {
+                        iframe.style.width = '100% !important';
+                        iframe.style.height = 'auto !important';
+                    }
+                }, 1000);
             }
             
             // Add to container
