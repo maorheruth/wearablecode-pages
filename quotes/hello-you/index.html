@@ -157,6 +157,38 @@
             object-fit: cover;
         }
 
+        /* Target the specific content ID that might be interfering */
+        #content {
+            width: 378px !important;
+            height: auto !important;
+            max-width: 378px !important;
+            margin: 0 auto !important;
+            display: block !important;
+        }
+
+        #content img {
+            width: 378px !important;
+            height: auto !important;
+            max-width: 378px !important;
+            margin: 0 auto !important;
+            display: block !important;
+            border-radius: 12px !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+        }
+
+        /* Target any img inside characterImage specifically */
+        #characterImage img,
+        #characterImage #content,
+        #characterImage #content img {
+            width: 378px !important;
+            height: auto !important;
+            max-width: 378px !important;
+            margin: 0 auto !important;
+            display: block !important;
+            border-radius: 12px !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+        }
+
         .character-image.has-image {
             border: none;
             background: transparent;
@@ -346,6 +378,12 @@
                 font-size: 14px;
             }
             
+            .character-image img {
+                width: 320px !important;
+                height: auto !important;
+                margin: 0 auto !important;
+            }
+            
             .loading-text {
                 font-size: 16px;
             }
@@ -416,6 +454,12 @@
                 width: 100%;
                 height: auto;
                 font-size: 12px;
+            }
+            
+            .character-image img {
+                width: 280px !important;
+                height: auto !important;
+                margin: 0 auto !important;
             }
             
             .loading-text {
@@ -577,18 +621,17 @@
             img.src = gifUrl;
             img.alt = "Joe Goldberg Wave";
             
-            // Force full width styling on the image element
+            // Force exact width styling on the image element
             img.style.cssText = `
-                width: 100% !important;
+                width: 378px !important;
                 height: auto !important;
                 border-radius: 12px !important;
                 box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                 display: block !important;
-                margin: 0 !important;
+                margin: 0 auto !important;
                 padding: 0 !important;
-                max-width: 100% !important;
-                min-width: 100% !important;
                 object-fit: cover !important;
+                max-width: 378px !important;
             `;
             
             img.onload = function() {
@@ -597,22 +640,35 @@
                 imageElement.classList.remove('loading');
                 imageElement.classList.add('has-image');
                 
-                // Force styling again after load
+                // Force styling again after load with exact dimensions
                 img.style.cssText = `
-                    width: 100% !important;
+                    width: 378px !important;
                     height: auto !important;
                     border-radius: 12px !important;
                     box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                     display: block !important;
-                    margin: 0 !important;
+                    margin: 0 auto !important;
                     padding: 0 !important;
-                    max-width: 100% !important;
-                    min-width: 100% !important;
                     object-fit: cover !important;
+                    max-width: 378px !important;
                 `;
                 
+                // Also force styling on any wrapper elements
+                setTimeout(() => {
+                    const allInnerElements = imageElement.querySelectorAll('*');
+                    allInnerElements.forEach(el => {
+                        if (el.tagName === 'IMG' || el.id === 'content') {
+                            el.style.setProperty('width', '378px', 'important');
+                            el.style.setProperty('height', 'auto', 'important');
+                            el.style.setProperty('max-width', '378px', 'important');
+                            el.style.setProperty('margin', '0 auto', 'important');
+                            el.style.setProperty('display', 'block', 'important');
+                        }
+                    });
+                }, 100);
+                
                 addTenorAttribution(imageElement);
-                console.log('✅ Tenor API GIF loaded successfully');
+                console.log('✅ Tenor API GIF loaded successfully with 378px width');
             };
             
             img.onerror = function() {
