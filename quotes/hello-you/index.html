@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello, you. | WearableCode</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&family=Bodoni+Moda+SC:wght@400;700;900&family=Rubik+Glitch&family=Federo&family=Rozha+One&display=swap" rel="stylesheet">
-    <!-- Preload main image for faster loading -->
-    <link rel="preload" href="./assets/images/hello-you.png" as="image">
     <style>
         * {
             margin: 0;
@@ -135,42 +133,50 @@
             height: 450px;
             border-radius: 12px;
             margin: 0 auto 18px;
-            background: #f8f9fa;
+            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ccc;
-            border: 2px dashed #ddd;
+            color: #999;
+            border: none;
             position: relative;
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
         }
 
-        .character-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 10px;
-        }
-
         .character-image.has-image {
             border: none;
-            background: white;
+            background: transparent;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            height: auto;
         }
 
         .character-image.loading {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes loading {
+        .loading-text {
+            font-size: 18px;
+            color: #b0b0b0;
+            font-weight: 500;
+            animation: fadeInOut 2s ease-in-out infinite;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInOut {
             0% {
-                background-position: 200% 0;
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
             }
             100% {
-                background-position: -200% 0;
+                opacity: 0.3;
             }
         }
 
@@ -308,6 +314,10 @@
                 font-size: 14px;
             }
             
+            .loading-text {
+                font-size: 16px;
+            }
+            
             .quote {
                 font-size: 26px;
                 margin-bottom: 10px;
@@ -376,6 +386,10 @@
                 font-size: 12px;
             }
             
+            .loading-text {
+                font-size: 14px;
+            }
+            
             .quote {
                 font-size: 22px;
                 padding: 0 3px;
@@ -411,7 +425,7 @@
     
     <div class="container">
         <div class="character-image" id="characterImage">
-            טוען תמונה...
+            <div class="loading-text">Loading</div>
         </div>
         
         <div class="quote" id="mainQuote">
@@ -440,11 +454,21 @@
     </div>
 
     <script>
+        // Tenor API Configuration
+        const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
+        const CLIENT_KEY = 'wearablecode_memes';
+        
+        // Specific GIF data for Joe Goldberg "Wave"
+        const specificGifData = {
+            id: '23566737',
+            url: 'https://tenor.com/view/wave-joe-goldberg-you-hey-hi-gif-23566737',
+            embedCode: `<div class="tenor-gif-embed" data-postid="23566737" data-share-method="host" data-aspect-ratio="1.7647" data-width="100%"><a href="https://tenor.com/view/wave-joe-goldberg-you-hey-hi-gif-23566737">Wave Joe Goldberg GIF</a>from <a href="https://tenor.com/search/wave-gifs">Wave GIFs</a></div>`
+        };
+        
         // Page-specific data
         const pageData = {
             quote: "Hello, you.",
-            source: "- Joe Goldberg",
-            image: "./assets/images/hello-you.png"
+            source: "- Joe Goldberg"
         };
         
         // Random CTA messages in Hebrew
@@ -467,6 +491,152 @@
             '🗝️', '📖', '🚪', '📱', '💻', '🌃', '🌙', '⚡',
             '🔥', '👤', '🎭', '👻'
         ];
+        
+        // Load the specific Joe Goldberg GIF
+        function loadSpecificMeme() {
+            const imageElement = document.getElementById('characterImage');
+            imageElement.innerHTML = '<div class="loading-text">Loading</div>';
+            imageElement.classList.add('loading');
+            
+            // Try to load via Tenor API first, then fallback to embed
+            fetchSpecificGifFromTenor()
+                .then(gifUrl => {
+                    if (gifUrl) {
+                        loadGifFromUrl(gifUrl);
+                    } else {
+                        loadTenorEmbed();
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Tenor API failed, using embed fallback:', error);
+                    loadTenorEmbed();
+                });
+        }
+        
+        // Try to fetch the specific GIF from Tenor API
+        async function fetchSpecificGifFromTenor() {
+            try {
+                const response = await fetch(
+                    `https://tenor.googleapis.com/v2/posts?ids=${specificGifData.id}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}&media_filter=gif`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    const gif = data.results[0];
+                    window.tenorGifId = gif.id;
+                    return gif.media_formats.gif.url;
+                }
+                return null;
+            } catch (error) {
+                console.log('Tenor API error:', error);
+                return null;
+            }
+        }
+        
+        // Load GIF from direct URL
+        function loadGifFromUrl(gifUrl) {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = gifUrl;
+            img.alt = "Joe Goldberg Wave";
+            // Apply styling directly to the img element
+            img.style.width = '100%';
+            img.style.height = 'auto';
+            img.style.borderRadius = '12px';
+            img.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
+            
+            img.onload = function() {
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                addTenorAttribution(imageElement);
+                console.log('✅ Tenor API GIF loaded successfully');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Direct GIF URL failed, trying embed');
+                loadTenorEmbed();
+            };
+        }
+        
+        // Fallback to Tenor embed
+        function loadTenorEmbed() {
+            const imageElement = document.getElementById('characterImage');
+            
+            // Create container for the Tenor embed
+            const embedContainer = document.createElement('div');
+            embedContainer.innerHTML = specificGifData.embedCode;
+            embedContainer.style.cssText = `
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+                overflow: hidden;
+            `;
+            
+            // Style the embed to take full width with proper aspect ratio
+            const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+            if (tenorEmbed) {
+                tenorEmbed.style.cssText = `
+                    width: 100% !important;
+                    height: auto !important;
+                    border-radius: 12px;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+                `;
+            }
+            
+            // Add to container
+            imageElement.innerHTML = '';
+            imageElement.appendChild(embedContainer);
+            imageElement.classList.remove('loading');
+            imageElement.classList.add('has-image');
+            
+            // Load Tenor's embed script
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.async = true;
+                script.src = 'https://tenor.com/embed.js';
+                document.body.appendChild(script);
+            }
+            
+            // Add Tenor attribution
+            addTenorAttribution(imageElement);
+            
+            // Store GIF ID for analytics
+            window.tenorGifId = specificGifData.id;
+            
+            console.log('✅ Joe Goldberg "Wave" embed loaded as fallback');
+        }
+        
+        // Add Tenor attribution (required by API terms)
+        function addTenorAttribution(container) {
+            const attribution = document.createElement('div');
+            attribution.style.cssText = `
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                font-size: 9px;
+                color: rgba(255,255,255,0.9);
+                background: rgba(0,0,0,0.6);
+                padding: 3px 7px;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 500;
+                backdrop-filter: blur(4px);
+                z-index: 10;
+            `;
+            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+            container.style.position = 'relative';
+            container.appendChild(attribution);
+        }
         
         // Create random mystery elements
         function createMysteryElements() {
@@ -634,77 +804,8 @@
         // Start continuous blood drips
         startContinuousBloodDrips();
         
-        // Update character image with loading state
-        const imageElement = document.getElementById('characterImage');
-        if (pageData.image && pageData.image.length > 0) {
-            // Show loading state
-            imageElement.textContent = 'טוען תמונה...';
-            imageElement.classList.add('loading');
-            
-            const img = document.createElement('img');
-            img.src = pageData.image;
-            img.alt = "Character";
-            img.style.width = "100%";
-            img.style.height = "100%";
-            img.style.objectFit = "contain";
-            img.style.borderRadius = "10px";
-            
-            img.onload = function() {
-                console.log('✅ Image loaded successfully:', pageData.image);
-                imageElement.innerHTML = '';
-                imageElement.appendChild(img);
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-            };
-            
-            img.onerror = function() {
-                console.log('❌ Image failed to load:', pageData.image);
-                console.log('Trying alternative paths...');
-                
-                // Try different paths
-                const alternativePaths = [
-                    "assets/images/hello-you.png",
-                    "/assets/images/hello-you.png",
-                    "./assets/images/hello-you.png",
-                    "assets/images/Hello_you_joe_goldberg.png",
-                    "/assets/images/Hello_you_joe_goldberg.png",
-                    "../../assets/images/Hello_you_joe_goldberg.png"
-                ];
-                
-                let currentIndex = 0;
-                function tryNextPath() {
-                    if (currentIndex < alternativePaths.length) {
-                        const testImg = document.createElement('img');
-                        testImg.src = alternativePaths[currentIndex];
-                        testImg.onload = function() {
-                            console.log('✅ Alternative path worked:', alternativePaths[currentIndex]);
-                            imageElement.innerHTML = '';
-                            imageElement.appendChild(testImg);
-                            imageElement.classList.remove('loading');
-                            imageElement.classList.add('has-image');
-                        };
-                        testImg.onerror = function() {
-                            console.log('❌ Alternative path failed:', alternativePaths[currentIndex]);
-                            currentIndex++;
-                            tryNextPath();
-                        };
-                        testImg.style.width = "100%";
-                        testImg.style.height = "100%";
-                        testImg.style.objectFit = "contain";
-                        testImg.style.borderRadius = "10px";
-                        testImg.alt = "Character";
-                    } else {
-                        console.log('❌ All paths failed. Keeping placeholder text.');
-                        imageElement.textContent = 'Add your image here';
-                        imageElement.classList.remove('loading', 'has-image');
-                    }
-                }
-                tryNextPath();
-            };
-        } else {
-            imageElement.textContent = 'Add your image here';
-            imageElement.classList.remove('loading', 'has-image');
-        }
+        // Load the specific Joe Goldberg GIF
+        loadSpecificMeme();
         
         // Random colors for creepy animation - Joe Goldberg themed
         const creepyColors = [
@@ -756,11 +857,28 @@
         // Start the random animation cycle
         scheduleRandomAnimation();
         
-        // Analytics tracking
+        // Analytics tracking with Tenor share registration
         document.querySelector('.shop-button').addEventListener('click', function() {
-            console.log('Shop button clicked for quote:', pageData.quote);
+            console.log('Shop button clicked for Joe Goldberg wave GIF');
             console.log('CTA message shown:', window.currentCtaMessage);
+            
+            // Register share with Tenor
+            if (window.tenorGifId) {
+                registerTenorShare(window.tenorGifId);
+            }
         });
+        
+        // Register share with Tenor (optional but recommended)
+        async function registerTenorShare(gifId) {
+            try {
+                await fetch(
+                    `https://tenor.googleapis.com/v2/registershare?id=${gifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`
+                );
+                console.log('✅ Tenor share registered');
+            } catch (error) {
+                console.log('❌ Failed to register Tenor share:', error);
+            }
+        }
         
         // Re-apply fix on orientation change
         window.addEventListener('orientationchange', function() {
