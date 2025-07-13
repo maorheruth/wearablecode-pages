@@ -134,22 +134,37 @@
             border-radius: 12px;
             margin: 0 auto 18px;
             background: transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: block;
             color: #999;
             border: none;
             position: relative;
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
+            padding: 0;
         }
 
         .character-image img {
-            width: 100%;
-            height: auto;
+            width: 100% !important;
+            height: auto !important;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: block;
+            margin: 0;
+            padding: 0;
+            max-width: 100%;
+        }
+
+        .character-image .tenor-gif-embed,
+        .character-image iframe {
+            width: 100% !important;
+            height: auto !important;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: block !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            max-width: 100% !important;
         }
 
         .character-image.has-image {
@@ -591,39 +606,54 @@
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                width: 100% !important;
+                height: auto !important;
+                display: block !important;
                 border-radius: 12px;
                 overflow: hidden;
+                margin: 0 !important;
+                padding: 0 !important;
             `;
             
-            // Style the embed to take full width with proper aspect ratio
-            const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
-            if (tenorEmbed) {
-                tenorEmbed.style.cssText = `
-                    width: 100% !important;
-                    height: auto !important;
-                    border-radius: 12px;
-                    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-                `;
-                
-                // Also style the iframe inside if it exists
-                setTimeout(() => {
-                    const iframe = tenorEmbed.querySelector('iframe');
-                    if (iframe) {
-                        iframe.style.width = '100% !important';
-                        iframe.style.height = 'auto !important';
-                    }
-                }, 1000);
-            }
-            
-            // Add to container
+            // Add to container first
             imageElement.innerHTML = '';
             imageElement.appendChild(embedContainer);
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
+            imageElement.style.display = 'block';
+            
+            // Force full width styling after a delay
+            setTimeout(() => {
+                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                const iframe = embedContainer.querySelector('iframe');
+                
+                if (tenorEmbed) {
+                    tenorEmbed.style.cssText = `
+                        width: 100% !important;
+                        height: auto !important;
+                        border-radius: 12px !important;
+                        box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                        display: block !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        max-width: 100% !important;
+                    `;
+                }
+                
+                if (iframe) {
+                    iframe.style.cssText = `
+                        width: 100% !important;
+                        height: auto !important;
+                        border-radius: 12px !important;
+                        box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                        display: block !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        max-width: 100% !important;
+                        border: none !important;
+                    `;
+                }
+            }, 100);
             
             // Load Tenor's embed script
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
@@ -632,6 +662,24 @@
                 script.async = true;
                 script.src = 'https://tenor.com/embed.js';
                 document.body.appendChild(script);
+                
+                // Apply styling again after script loads
+                script.onload = () => {
+                    setTimeout(() => {
+                        const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                        const iframe = embedContainer.querySelector('iframe');
+                        
+                        if (tenorEmbed) {
+                            tenorEmbed.style.width = '100% !important';
+                            tenorEmbed.style.height = 'auto !important';
+                        }
+                        
+                        if (iframe) {
+                            iframe.style.width = '100% !important';
+                            iframe.style.height = 'auto !important';
+                        }
+                    }, 500);
+                };
             }
             
             // Add Tenor attribution
