@@ -144,6 +144,19 @@
             padding: 0;
         }
 
+        /* Force all content inside character-image to full width */
+        .character-image * {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100% !important;
+            display: block !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-radius: 12px !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+            border: none !important;
+        }
+
         .character-image img {
             width: 100% !important;
             height: auto !important;
@@ -531,19 +544,8 @@
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Try to load via Tenor API first, then fallback to embed
-            fetchSpecificGifFromTenor()
-                .then(gifUrl => {
-                    if (gifUrl) {
-                        loadGifFromUrl(gifUrl);
-                    } else {
-                        loadTenorEmbed();
-                    }
-                })
-                .catch(error => {
-                    console.log('❌ Tenor API failed, using embed fallback:', error);
-                    loadTenorEmbed();
-                });
+            // Skip API and go directly to embed for more control
+            loadTenorEmbed();
         }
         
         // Try to fetch the specific GIF from Tenor API
