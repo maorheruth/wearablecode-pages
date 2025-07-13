@@ -576,17 +576,41 @@
             const img = document.createElement('img');
             img.src = gifUrl;
             img.alt = "Joe Goldberg Wave";
-            // Apply styling directly to the img element
-            img.style.width = '100%';
-            img.style.height = 'auto';
-            img.style.borderRadius = '12px';
-            img.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
+            
+            // Force full width styling on the image element
+            img.style.cssText = `
+                width: 100% !important;
+                height: auto !important;
+                border-radius: 12px !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                min-width: 100% !important;
+                object-fit: cover !important;
+            `;
             
             img.onload = function() {
                 imageElement.innerHTML = '';
                 imageElement.appendChild(img);
                 imageElement.classList.remove('loading');
                 imageElement.classList.add('has-image');
+                
+                // Force styling again after load
+                img.style.cssText = `
+                    width: 100% !important;
+                    height: auto !important;
+                    border-radius: 12px !important;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                    display: block !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    max-width: 100% !important;
+                    min-width: 100% !important;
+                    object-fit: cover !important;
+                `;
+                
                 addTenorAttribution(imageElement);
                 console.log('✅ Tenor API GIF loaded successfully');
             };
