@@ -148,10 +148,9 @@
         .character-image iframe {
             width: 100% !important;
             height: auto !important;
-            min-height: 200px !important;
             border: none !important;
             border-radius: 12px !important;
-            margin: 0 auto !important;
+            margin: 0 !important;
             display: block !important;
         }
 
@@ -161,7 +160,20 @@
             height: auto !important;
             border: none !important;
             border-radius: 12px !important;
-            margin: 0 auto !important;
+            margin: 0 !important;
+            display: block !important;
+        }
+
+        /* Target all Tenor embed elements */
+        .tenor-gif-embed,
+        .tenor-gif-embed > div,
+        .tenor-gif-embed iframe {
+            width: 100% !important;
+            height: auto !important;
+            border: none !important;
+            border-radius: 12px !important;
+            margin: 0 !important;
+            padding: 0 !important;
             display: block !important;
         }
 
@@ -670,42 +682,61 @@
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
-            // Force styling on Tenor elements after they load
+            // Force styling on Tenor elements after they load - AGGRESSIVE APPROACH
             function forceTenorStyling() {
+                // Get all possible Tenor elements
                 const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
                 const iframe = embedContainer.querySelector('iframe');
                 const innerDiv = embedContainer.querySelector('div[style*="padding-top"]');
+                const allDivs = embedContainer.querySelectorAll('div');
                 
+                // Force styling on main embed container
                 if (tenorEmbed) {
                     tenorEmbed.style.setProperty('width', '100%', 'important');
                     tenorEmbed.style.setProperty('height', 'auto', 'important');
                     tenorEmbed.style.setProperty('position', 'relative', 'important');
+                    tenorEmbed.style.setProperty('margin', '0', 'important');
+                    tenorEmbed.style.setProperty('padding', '0', 'important');
                 }
                 
-                if (innerDiv) {
-                    innerDiv.style.setProperty('width', '100%', 'important');
-                    innerDiv.style.setProperty('height', 'auto', 'important');
-                    innerDiv.style.setProperty('padding-top', '0', 'important');
-                    innerDiv.style.setProperty('position', 'relative', 'important');
-                }
+                // Force styling on all inner divs
+                allDivs.forEach(div => {
+                    div.style.setProperty('width', '100%', 'important');
+                    div.style.setProperty('height', 'auto', 'important');
+                    div.style.setProperty('padding-top', '0', 'important');
+                    div.style.setProperty('position', 'relative', 'important');
+                    div.style.setProperty('margin', '0', 'important');
+                });
                 
+                // Force styling on iframe
                 if (iframe) {
                     iframe.style.setProperty('width', '100%', 'important');
                     iframe.style.setProperty('height', 'auto', 'important');
-                    iframe.style.setProperty('min-height', '200px', 'important');
                     iframe.style.setProperty('position', 'relative', 'important');
                     iframe.style.setProperty('top', '0', 'important');
                     iframe.style.setProperty('left', '0', 'important');
                     iframe.style.setProperty('border-radius', '12px', 'important');
                     iframe.style.setProperty('border', 'none', 'important');
+                    iframe.style.setProperty('margin', '0', 'important');
+                    iframe.style.setProperty('padding', '0', 'important');
                 }
+                
+                // Remove any aspect ratio constraints
+                const aspectRatioElements = embedContainer.querySelectorAll('[style*="padding-top"]');
+                aspectRatioElements.forEach(el => {
+                    el.style.setProperty('padding-top', '0', 'important');
+                    el.style.setProperty('height', 'auto', 'important');
+                });
             }
             
             // Run styling multiple times to catch when elements are created
+            setTimeout(forceTenorStyling, 50);
             setTimeout(forceTenorStyling, 100);
+            setTimeout(forceTenorStyling, 300);
             setTimeout(forceTenorStyling, 500);
             setTimeout(forceTenorStyling, 1000);
             setTimeout(forceTenorStyling, 2000);
+            setTimeout(forceTenorStyling, 3000);
             
             // Load Tenor's embed script
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
@@ -717,9 +748,31 @@
                 
                 // Apply styling again after script loads
                 script.onload = () => {
+                    setTimeout(forceTenorStyling, 50);
                     setTimeout(forceTenorStyling, 100);
+                    setTimeout(forceTenorStyling, 300);
                     setTimeout(forceTenorStyling, 500);
                     setTimeout(forceTenorStyling, 1000);
+                    setTimeout(forceTenorStyling, 2000);
+                    
+                    // Add a global CSS rule to override Tenor's styles
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        .tenor-gif-embed,
+                        .tenor-gif-embed > div,
+                        .tenor-gif-embed iframe {
+                            width: 100% !important;
+                            height: auto !important;
+                            border: none !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            position: relative !important;
+                        }
+                        .tenor-gif-embed div[style*="padding-top"] {
+                            padding-top: 0 !important;
+                        }
+                    `;
+                    document.head.appendChild(style);
                 };
             }
             
