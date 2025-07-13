@@ -158,10 +158,10 @@
             object-fit: cover;
         }
 
-        /* Simple iframe styling - FORCE 323px height */
+        /* Simple iframe styling - FORCE specific dimensions */
         .character-image iframe {
             width: 378px !important;
-            height: 323px !important;
+            height: 215px !important;
             border: none !important;
             border-radius: 12px !important;
             margin: 0 auto !important;
@@ -171,15 +171,15 @@
         /* Force styling with specific class */
         .gif-iframe {
             width: 378px !important;
-            height: 323px !important;
+            height: 215px !important;
             border: none !important;
             border-radius: 12px !important;
             margin: 0 auto !important;
             display: block !important;
             max-width: 378px !important;
-            max-height: 323px !important;
+            max-height: 215px !important;
             min-width: 378px !important;
-            min-height: 323px !important;
+            min-height: 215px !important;
         }
 
         .character-image.has-image {
@@ -238,7 +238,7 @@
         }
 
         .quote {
-            font-size: 48px;
+            font-size: 38px;
             font-weight: 400;
             font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', 'Arial Black', sans-serif;
             color: #222;
@@ -246,7 +246,7 @@
             line-height: 0.9;
             position: relative;
             padding: 0 15px;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -254,22 +254,22 @@
 
         .quote::before {
             content: '"';
-            font-size: 55px;
+            font-size: 45px;
             color: #bbb;
             position: absolute;
             left: -8px;
-            top: -12px;
+            top: -10px;
             opacity: 0.7;
             font-family: Georgia, serif;
         }
 
         .quote::after {
             content: '"';
-            font-size: 55px;
+            font-size: 45px;
             color: #bbb;
             position: absolute;
             right: -8px;
-            bottom: -16px;
+            bottom: -14px;
             opacity: 0.7;
             font-family: Georgia, serif;
         }
@@ -376,12 +376,12 @@
             }
             
             .quote {
-                font-size: 22px;
+                font-size: 18px;
                 margin-bottom: 10px;
                 line-height: 0.9;
                 padding: 0 5px;
                 font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
-                letter-spacing: 1px;
+                letter-spacing: 0.5px;
                 text-transform: uppercase;
             }
             
@@ -454,11 +454,11 @@
             }
             
             .quote {
-                font-size: 18px;
+                font-size: 16px;
                 padding: 0 3px;
-                line-height: 0.85;
+                line-height: 0.9;
                 font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
-                letter-spacing: 0.5px;
+                letter-spacing: 0px;
                 text-transform: uppercase;
             }
 
@@ -675,7 +675,7 @@
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
                 width: 378px !important;
-                height: auto !important;
+                height: 215px !important;
                 display: block !important;
                 border-radius: 12px;
                 overflow: hidden;
@@ -702,17 +702,19 @@
                 
                 if (innerDiv) {
                     innerDiv.style.setProperty('width', '378px', 'important');
-                    innerDiv.style.setProperty('height', 'auto', 'important');
+                    innerDiv.style.setProperty('height', '215px', 'important');
                     innerDiv.style.setProperty('padding-top', '0', 'important');
                     innerDiv.style.setProperty('position', 'relative', 'important');
                 }
                 
                 if (iframe) {
                     iframe.style.setProperty('width', '378px', 'important');
-                    iframe.style.setProperty('height', '323px', 'important'); // 378 / 1.7647 aspect ratio
+                    iframe.style.setProperty('height', '215px', 'important'); // Fixed aspect ratio
                     iframe.style.setProperty('position', 'relative', 'important');
                     iframe.style.setProperty('top', '0', 'important');
                     iframe.style.setProperty('left', '0', 'important');
+                    iframe.style.setProperty('border-radius', '12px', 'important');
+                    iframe.style.setProperty('border', 'none', 'important');
                 }
             }
             
@@ -882,12 +884,12 @@
             if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '32px';
-                    quoteElement.style.lineHeight = '0.8';
+                    quoteElement.style.fontSize = '26px';
+                    quoteElement.style.lineHeight = '0.85';
                     quoteElement.style.letterSpacing = '0px';
                 } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '38px';
-                    quoteElement.style.lineHeight = '0.85';
+                    quoteElement.style.fontSize = '30px';
+                    quoteElement.style.lineHeight = '0.9';
                     quoteElement.style.letterSpacing = '0.5px';
                 }
                 quoteElement.style.fontFamily = "'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif";
