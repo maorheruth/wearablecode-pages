@@ -157,50 +157,14 @@
             object-fit: cover;
         }
 
-        /* Target Tenor embed specifically */
-        .tenor-gif-embed {
-            width: 378px !important;
-            max-width: 378px !important;
-            position: relative !important;
-            margin: 0 auto !important;
-        }
-
-        .tenor-gif-embed div {
-            width: 378px !important;
-            height: auto !important;
-            padding-top: 0 !important;
-            position: relative !important;
-        }
-
-        .tenor-gif-embed iframe {
+        /* Simple iframe styling - no complex Tenor overrides */
+        .character-image iframe {
             width: 378px !important;
             height: 214px !important;
-            position: relative !important;
-            top: 0 !important;
-            left: 0 !important;
+            border: none !important;
+            border-radius: 12px !important;
             margin: 0 auto !important;
-        }
-
-        /* Override any Tenor styling */
-        div[data-postid="23566737"] {
-            width: 378px !important;
-            max-width: 378px !important;
-            position: relative !important;
-        }
-
-        div[data-postid="23566737"] div {
-            width: 378px !important;
-            height: auto !important;
-            padding-top: 0 !important;
-            position: relative !important;
-        }
-
-        div[data-postid="23566737"] iframe {
-            width: 378px !important;
-            height: 214px !important;
-            position: relative !important;
-            top: 0 !important;
-            left: 0 !important;
+            display: block !important;
         }
 
         .character-image.has-image {
