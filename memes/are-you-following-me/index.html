@@ -238,9 +238,9 @@
         }
 
         .quote {
-            font-size: 38px;
+            font-size: 32px;
             font-weight: 400;
-            font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', 'Arial Black', sans-serif;
+            font-family: 'Bebas Neue';
             color: #222;
             margin-bottom: 15px;
             line-height: 0.9;
@@ -254,24 +254,24 @@
 
         .quote::before {
             content: '"';
-            font-size: 45px;
+            font-size: 32px;
             color: #bbb;
             position: absolute;
             left: -8px;
             top: -10px;
             opacity: 0.7;
-            font-family: Georgia, serif;
+            font-family: 'Bebas Neue';
         }
 
         .quote::after {
             content: '"';
-            font-size: 45px;
+            font-size: 32px;
             color: #bbb;
             position: absolute;
             right: -8px;
             bottom: -14px;
             opacity: 0.7;
-            font-family: Georgia, serif;
+            font-family: 'Bebas Neue';
         }
 
         .source {
@@ -376,11 +376,11 @@
             }
             
             .quote {
-                font-size: 18px;
+                font-size: 14px;
                 margin-bottom: 10px;
                 line-height: 0.9;
                 padding: 0 5px;
-                font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
+                font-family: font-family: 'Bebas Neue';
                 letter-spacing: 0.5px;
                 text-transform: uppercase;
             }
@@ -454,20 +454,20 @@
             }
             
             .quote {
-                font-size: 16px;
+                font-size: 14px;
                 padding: 0 3px;
                 line-height: 0.9;
-                font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
+                font-family: font-family: 'Bebas Neue';
                 letter-spacing: 0px;
                 text-transform: uppercase;
             }
 
             .quote::before {
-                font-size: 28px;
+                font-size: 14px;
             }
 
             .quote::after {
-                font-size: 28px;
+                font-size: 14px;
             }
 
             .mystery-element {
@@ -884,7 +884,7 @@
             if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '26px';
+                    quoteElement.style.fontSize = '16px';
                     quoteElement.style.lineHeight = '0.85';
                     quoteElement.style.letterSpacing = '0px';
                 } else if (screenWidth <= 480) {
