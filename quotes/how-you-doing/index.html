@@ -269,7 +269,7 @@
         }
 
         .cta-section {
-            background: linear-gradient(135deg, #FFE66D, #FFEAA7);
+            background: #FFFACD;
             border-radius: 12px;
             padding: 15px;
             margin-top: 20px;
@@ -553,25 +553,14 @@
             '🎊', '🎉', '😄', '👋', '👍', '🤝', '💛', '🧡'
         ];
         
-        // Load the specific Friends GIF
+        // Load the specific Friends GIF - TRY DIRECT APPROACH FIRST
         function loadSpecificMeme() {
             const imageElement = document.getElementById('characterImage');
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Try to load via Tenor API first, then fallback to embed
-            fetchSpecificGifFromTenor()
-                .then(gifUrl => {
-                    if (gifUrl) {
-                        loadGifFromUrl(gifUrl);
-                    } else {
-                        loadTenorEmbed();
-                    }
-                })
-                .catch(error => {
-                    console.log('❌ Tenor API failed, using embed fallback:', error);
-                    loadTenorEmbed();
-                });
+            // Try direct GIF URL first (bypass Tenor API)
+            loadManualGifUrl();
         }
         
         // Try to fetch the specific GIF from Tenor API
@@ -599,21 +588,21 @@
             }
         }
         
-        // Load GIF from direct URL
+        // Load GIF from direct URL - FORCE as regular image
         function loadGifFromUrl(gifUrl) {
             const imageElement = document.getElementById('characterImage');
             const img = document.createElement('img');
             img.src = gifUrl;
             img.alt = "How you doin'?";
             
-            // Force exact width styling on the image element
+            // Force full width styling
             img.style.cssText = `
                 width: 100% !important;
                 height: auto !important;
                 border-radius: 12px !important;
                 box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                 display: block !important;
-                margin: 0 auto !important;
+                margin: 0 !important;
                 padding: 0 !important;
                 object-fit: cover !important;
             `;
@@ -624,39 +613,79 @@
                 imageElement.classList.remove('loading');
                 imageElement.classList.add('has-image');
                 
-                // Force styling again after load with exact dimensions
-                img.style.cssText = `
-                    width: 100% !important;
-                    height: auto !important;
-                    border-radius: 12px !important;
-                    box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
-                    display: block !important;
-                    margin: 0 auto !important;
-                    padding: 0 !important;
-                    object-fit: cover !important;
-                `;
-                
-                // Also force styling on any wrapper elements
-                setTimeout(() => {
-                    const allInnerElements = imageElement.querySelectorAll('*');
-                    allInnerElements.forEach(el => {
-                        if (el.tagName === 'IMG' || el.id === 'content') {
-                            el.style.setProperty('width', '100%', 'important');
-                            el.style.setProperty('height', 'auto', 'important');
-                            el.style.setProperty('margin', '0 auto', 'important');
-                            el.style.setProperty('display', 'block', 'important');
-                        }
-                    });
-                }, 100);
-                
-                addTenorAttribution(imageElement);
-                console.log('✅ Tenor API GIF loaded successfully with full width');
+                console.log('✅ Direct GIF loaded as image with full width');
             };
             
             img.onerror = function() {
-                console.log('❌ Direct GIF URL failed, trying embed');
-                loadTenorEmbed();
+                console.log('❌ Direct GIF URL failed, trying manual GIF URL');
+                // Try to construct manual GIF URL
+                loadManualGifUrl();
             };
+        }
+        
+        // Try manual GIF URL construction
+        function loadManualGifUrl() {
+            // Common GIF URL patterns for this specific GIF ID
+            const gifUrls = [
+                `https://media.tenor.com/images/${specificGifData.id}/tenor.gif`,
+                `https://c.tenor.com/${specificGifData.id}/${specificGifData.id}.gif`,
+                `https://media1.tenor.com/images/${specificGifData.id}/tenor.gif`,
+                `https://media.tenor.com/${specificGifData.id}.gif`,
+                // Also try the Tenor API as backup
+                null // This will trigger the API call
+            ];
+            
+            let currentIndex = 0;
+            
+            function tryNextUrl() {
+                if (currentIndex < gifUrls.length - 1) {
+                    const img = document.createElement('img');
+                    img.src = gifUrls[currentIndex];
+                    img.alt = "How you doin'?";
+                    
+                    img.style.cssText = `
+                        width: 100% !important;
+                        height: auto !important;
+                        border-radius: 12px !important;
+                        box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                        display: block !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        object-fit: cover !important;
+                    `;
+                    
+                    img.onload = function() {
+                        const imageElement = document.getElementById('characterImage');
+                        imageElement.innerHTML = '';
+                        imageElement.appendChild(img);
+                        imageElement.classList.remove('loading');
+                        imageElement.classList.add('has-image');
+                        console.log('✅ Manual GIF URL worked:', gifUrls[currentIndex]);
+                    };
+                    
+                    img.onerror = function() {
+                        console.log('❌ Manual URL failed:', gifUrls[currentIndex]);
+                        currentIndex++;
+                        tryNextUrl();
+                    };
+                } else {
+                    // Try Tenor API as last resort
+                    fetchSpecificGifFromTenor()
+                        .then(gifUrl => {
+                            if (gifUrl) {
+                                loadGifFromUrl(gifUrl);
+                            } else {
+                                loadTenorEmbed();
+                            }
+                        })
+                        .catch(error => {
+                            console.log('❌ Tenor API failed, using embed fallback:', error);
+                            loadTenorEmbed();
+                        });
+                }
+            }
+            
+            tryNextUrl();
         }
         
         // Fallback to Tenor embed
