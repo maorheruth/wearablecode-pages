@@ -574,7 +574,7 @@
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
                 width: 378px !important;
-                height: 215px !important;
+                height: auto !important;
                 display: block !important;
                 border-radius: 12px;
                 overflow: hidden;
@@ -601,14 +601,14 @@
                 
                 if (innerDiv) {
                     innerDiv.style.setProperty('width', '378px', 'important');
-                    innerDiv.style.setProperty('height', '215px', 'important');
+                    innerDiv.style.setProperty('height', 'auto', 'important');
                     innerDiv.style.setProperty('padding-top', '0', 'important');
                     innerDiv.style.setProperty('position', 'relative', 'important');
                 }
                 
                 if (iframe) {
                     iframe.style.setProperty('width', '378px', 'important');
-                    iframe.style.setProperty('height', '215px', 'important');
+                    iframe.style.setProperty('height', 'auto', 'important');
                     iframe.style.setProperty('position', 'relative', 'important');
                     iframe.style.setProperty('top', '0', 'important');
                     iframe.style.setProperty('left', '0', 'important');
