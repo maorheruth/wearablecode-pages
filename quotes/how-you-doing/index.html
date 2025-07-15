@@ -553,36 +553,32 @@
             '🎊', '🎉', '😄', '👋', '👍', '🤝', '💛', '🧡'
         ];
         
-        // Load the specific Friends GIF - TRY SIMPLE WORKING GIF
+        // Load the specific Friends GIF - EXACT GIF YOU WANT
         function loadSpecificMeme() {
-            console.log('🚀 Starting to load Friends GIF...');
+            console.log('🚀 Starting to load the EXACT Friends GIF...');
             const imageElement = document.getElementById('characterImage');
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Try simple, known working GIF URLs - CORRECT JOEY FRIENDS GIFS
-            const workingGifUrls = [
-                'https://media.giphy.com/media/l0HlNQ03J5JxX6lva/giphy.gif', // Joey How you doin Friends
-                'https://media.giphy.com/media/l0HlQ174OdhDGJTK0/giphy.gif', // Joey Friends nodding
-                'https://media.giphy.com/media/l0HlN5gabMevKI0J6/giphy.gif', // Joey Friends how you doin
-                'https://media.giphy.com/media/l0HlMSVVw9zqmClLq/giphy.gif', // Joey Friends classic
-                'https://i.giphy.com/l0HlNQ03J5JxX6lva.gif',
-                'https://i.giphy.com/l0HlQ174OdhDGJTK0.gif',
-                // Also try some tenor URLs that might work
-                'https://c.tenor.com/xNkJLYfW0cYAAAAC/joey-tribbiani-friends.gif',
-                'https://c.tenor.com/wvDqCKGdEq8AAAAC/joey-tribbiani-friends.gif'
+            // Try different URL patterns for the EXACT GIF ID: 16802333
+            const exactGifUrls = [
+                'https://media.tenor.com/VCLq3KRGwYgAAAAM/friends-joey-tribbiani.gif',
+                'https://c.tenor.com/VCLq3KRGwYgAAAAC/friends-joey-tribbiani.gif',
+                'https://media1.tenor.com/images/VCLq3KRGwYgAAAAM/tenor.gif',
+                'https://media.tenor.com/VCLq3KRGwYgAAAAi/friends-joey-tribbiani.gif',
+                'https://c.tenor.com/VCLq3KRGwYg/friends-joey-tribbiani.gif'
             ];
             
             let currentIndex = 0;
             
-            function tryNextWorkingUrl() {
-                if (currentIndex < workingGifUrls.length) {
-                    console.log(`🔄 Trying working URL ${currentIndex + 1}:`, workingGifUrls[currentIndex]);
+            function tryExactGif() {
+                if (currentIndex < exactGifUrls.length) {
+                    console.log(`🎯 Trying exact GIF URL ${currentIndex + 1}:`, exactGifUrls[currentIndex]);
                     
                     const img = document.createElement('img');
-                    img.src = workingGifUrls[currentIndex];
+                    img.src = exactGifUrls[currentIndex];
                     img.alt = "How you doin'?";
-                    img.crossOrigin = "anonymous"; // Add CORS support
+                    img.crossOrigin = "anonymous";
                     
                     img.style.width = '100%';
                     img.style.height = 'auto';
@@ -594,13 +590,13 @@
                     img.style.objectFit = 'cover';
                     
                     img.onload = function() {
-                        console.log('✅ Working GIF loaded successfully!');
+                        console.log('✅ EXACT GIF loaded successfully!');
                         imageElement.innerHTML = '';
                         imageElement.appendChild(img);
                         imageElement.classList.remove('loading');
                         imageElement.classList.add('has-image');
                         
-                        // Add simple attribution
+                        // Add Tenor attribution
                         const attribution = document.createElement('div');
                         attribution.style.cssText = `
                             position: absolute;
@@ -616,45 +612,24 @@
                             backdrop-filter: blur(4px);
                             z-index: 10;
                         `;
-                        attribution.innerHTML = '<a href="https://giphy.com" target="_blank" style="color: white; text-decoration: none;">via GIPHY</a>';
+                        attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
                         imageElement.style.position = 'relative';
                         imageElement.appendChild(attribution);
                     };
                     
                     img.onerror = function() {
-                        console.log(`❌ Working URL ${currentIndex + 1} failed`);
+                        console.log(`❌ Exact URL ${currentIndex + 1} failed`);
                         currentIndex++;
-                        tryNextWorkingUrl();
+                        tryExactGif();
                     };
                 } else {
-                    console.log('❌ All working URLs failed, using simple placeholder...');
-                    // If everything fails, show a simple image placeholder
-                    const placeholderDiv = document.createElement('div');
-                    placeholderDiv.style.cssText = `
-                        width: 100%;
-                        height: 200px;
-                        background: linear-gradient(135deg, #FFE66D, #FFEAA7);
-                        border-radius: 12px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 24px;
-                        font-weight: bold;
-                        color: #8B4513;
-                        font-family: 'Permanent Marker', cursive;
-                        text-align: center;
-                        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-                    `;
-                    placeholderDiv.innerHTML = 'How you doin\'?<br><small style="font-size: 14px;">- Joey Tribbiani</small>';
-                    
-                    imageElement.innerHTML = '';
-                    imageElement.appendChild(placeholderDiv);
-                    imageElement.classList.remove('loading');
-                    imageElement.classList.add('has-image');
+                    console.log('❌ All exact URLs failed, trying Tenor embed...');
+                    // If direct URLs fail, try the embed with the exact ID
+                    loadTenorEmbed();
                 }
             }
             
-            tryNextWorkingUrl();
+            tryExactGif();
         }
         
         // Try to fetch the specific GIF from Tenor API
