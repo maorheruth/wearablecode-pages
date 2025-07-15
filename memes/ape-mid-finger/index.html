@@ -116,7 +116,7 @@
         /* Simple iframe styling - FORCE specific dimensions */
         .character-image iframe {
             width: 378px !important;
-            height: auto !important;
+            height: 490px !important;
             border: none !important;
             border-radius: 12px !important;
             margin: 0 auto !important;
@@ -126,7 +126,7 @@
         /* Force styling with specific class */
         .gif-iframe {
             width: 378px !important;
-            height: auto !important;
+            height: 490px !important;
             border: none !important;
             border-radius: 12px !important;
             margin: 0 auto !important;
@@ -155,7 +155,7 @@
         .character-image.has-image iframe,
         .character-image.has-image .tenor-gif-embed {
             width: 100% !important;
-            height: auto;
+            height: 490px;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             display: block;
@@ -574,7 +574,7 @@
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
                 width: 378px !important;
-                height: auto !important;
+                height: 490px;
                 display: block !important;
                 border-radius: 12px;
                 overflow: hidden;
@@ -601,14 +601,14 @@
                 
                 if (innerDiv) {
                     innerDiv.style.setProperty('width', '378px', 'important');
-                    innerDiv.style.setProperty('height', 'auto', 'important');
+                    innerDiv.style.setProperty('height', '490px');
                     innerDiv.style.setProperty('padding-top', '0', 'important');
                     innerDiv.style.setProperty('position', 'relative', 'important');
                 }
                 
                 if (iframe) {
                     iframe.style.setProperty('width', '378px', 'important');
-                    iframe.style.setProperty('height', 'auto', 'important');
+                    iframe.style.setProperty('height', '490px');
                     iframe.style.setProperty('position', 'relative', 'important');
                     iframe.style.setProperty('top', '0', 'important');
                     iframe.style.setProperty('left', '0', 'important');
