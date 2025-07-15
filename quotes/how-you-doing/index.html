@@ -154,6 +154,28 @@
             justify-content: center;
         }
 
+        .tenor-link {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            text-decoration: none;
+            z-index: 10;
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .tenor-link:hover {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.05);
+        }
+
         .loading-text {
             font-size: 18px;
             color: #b0b0b0;
@@ -307,6 +329,13 @@
                 font-size: 14px;
             }
             
+            .tenor-link {
+                font-size: 10px;
+                padding: 3px 6px;
+                top: 6px;
+                left: 6px;
+            }
+            
             .loading-text {
                 font-size: 16px;
             }
@@ -435,6 +464,15 @@
             img.onload = function() {
                 imageElement.innerHTML = '';
                 imageElement.appendChild(img);
+                
+                // Add Tenor link
+                const tenorLink = document.createElement('a');
+                tenorLink.href = 'https://tenor.com';
+                tenorLink.target = '_blank';
+                tenorLink.className = 'tenor-link';
+                tenorLink.textContent = 'via Tenor';
+                
+                imageElement.appendChild(tenorLink);
                 imageElement.classList.remove('loading');
                 imageElement.classList.add('has-image');
             };
