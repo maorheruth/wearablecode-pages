@@ -519,11 +519,11 @@
         const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
         const CLIENT_KEY = 'wearablecode_memes';
         
-        // Specific GIF data for Friends/Joey - Updated GIF
+        // Specific GIF data for Friends/Joey - USING YOUR EXACT EMBED CODE
         const specificGifData = {
             id: '16802333',
             url: 'https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-how-are-you-nod-gif-16802333',
-            embedCode: `<div class="tenor-gif-embed" data-postid="16802333" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-how-are-you-nod-gif-16802333">Friends Joey GIF</a>from <a href="https://tenor.com/search/friends-gifs">Friends GIFs</a></div>`
+            embedCode: `<div class="tenor-gif-embed" data-postid="16802333" data-share-method="host" data-aspect-ratio="1.37931" data-width="100%"><a href="https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-how-are-you-nod-gif-16802333">Friends Joey Tribbiani GIF</a>from <a href="https://tenor.com/search/friends-gifs">Friends GIFs</a></div>`
         };
         
         // Page-specific data
@@ -553,83 +553,15 @@
             '🎊', '🎉', '😄', '👋', '👍', '🤝', '💛', '🧡'
         ];
         
-        // Load the specific Friends GIF - EXACT GIF YOU WANT
+        // Load the specific Friends GIF - USE EMBED DIRECTLY
         function loadSpecificMeme() {
-            console.log('🚀 Starting to load the EXACT Friends GIF...');
+            console.log('🚀 Loading the exact GIF using your embed code...');
             const imageElement = document.getElementById('characterImage');
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Try different URL patterns for the EXACT GIF ID: 16802333
-            const exactGifUrls = [
-                'https://media.tenor.com/VCLq3KRGwYgAAAAM/friends-joey-tribbiani.gif',
-                'https://c.tenor.com/VCLq3KRGwYgAAAAC/friends-joey-tribbiani.gif',
-                'https://media1.tenor.com/images/VCLq3KRGwYgAAAAM/tenor.gif',
-                'https://media.tenor.com/VCLq3KRGwYgAAAAi/friends-joey-tribbiani.gif',
-                'https://c.tenor.com/VCLq3KRGwYg/friends-joey-tribbiani.gif'
-            ];
-            
-            let currentIndex = 0;
-            
-            function tryExactGif() {
-                if (currentIndex < exactGifUrls.length) {
-                    console.log(`🎯 Trying exact GIF URL ${currentIndex + 1}:`, exactGifUrls[currentIndex]);
-                    
-                    const img = document.createElement('img');
-                    img.src = exactGifUrls[currentIndex];
-                    img.alt = "How you doin'?";
-                    img.crossOrigin = "anonymous";
-                    
-                    img.style.width = '100%';
-                    img.style.height = 'auto';
-                    img.style.borderRadius = '12px';
-                    img.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
-                    img.style.display = 'block';
-                    img.style.margin = '0';
-                    img.style.padding = '0';
-                    img.style.objectFit = 'cover';
-                    
-                    img.onload = function() {
-                        console.log('✅ EXACT GIF loaded successfully!');
-                        imageElement.innerHTML = '';
-                        imageElement.appendChild(img);
-                        imageElement.classList.remove('loading');
-                        imageElement.classList.add('has-image');
-                        
-                        // Add Tenor attribution
-                        const attribution = document.createElement('div');
-                        attribution.style.cssText = `
-                            position: absolute;
-                            top: 8px;
-                            left: 8px;
-                            font-size: 9px;
-                            color: rgba(255,255,255,0.9);
-                            background: rgba(0,0,0,0.6);
-                            padding: 3px 7px;
-                            border-radius: 6px;
-                            text-decoration: none;
-                            font-weight: 500;
-                            backdrop-filter: blur(4px);
-                            z-index: 10;
-                        `;
-                        attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
-                        imageElement.style.position = 'relative';
-                        imageElement.appendChild(attribution);
-                    };
-                    
-                    img.onerror = function() {
-                        console.log(`❌ Exact URL ${currentIndex + 1} failed`);
-                        currentIndex++;
-                        tryExactGif();
-                    };
-                } else {
-                    console.log('❌ All exact URLs failed, trying Tenor embed...');
-                    // If direct URLs fail, try the embed with the exact ID
-                    loadTenorEmbed();
-                }
-            }
-            
-            tryExactGif();
+            // Go straight to the embed - no API calls needed
+            loadTenorEmbed();
         }
         
         // Try to fetch the specific GIF from Tenor API
@@ -764,12 +696,12 @@
             tryNextUrl();
         }
         
-        // Fallback to Tenor embed - SIMPLIFIED
+        // Fallback to Tenor embed - USING YOUR EXACT EMBED CODE
         function loadTenorEmbed() {
-            console.log('🔄 Loading Tenor embed as fallback...');
+            console.log('🔄 Loading Tenor embed with your exact code...');
             const imageElement = document.getElementById('characterImage');
             
-            // Create a simple container
+            // Create container using your exact embed code
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.width = '100%';
@@ -784,14 +716,34 @@
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
-            // Load Tenor's embed script
+            // Load Tenor's embed script (from your code)
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
                 console.log('📜 Loading Tenor embed script...');
                 const script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.async = true;
                 script.src = 'https://tenor.com/embed.js';
-                script.onload = () => console.log('✅ Tenor script loaded');
+                script.onload = () => {
+                    console.log('✅ Tenor script loaded successfully');
+                    
+                    // Force styling after script loads
+                    setTimeout(() => {
+                        const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                        const iframe = embedContainer.querySelector('iframe');
+                        
+                        if (tenorEmbed) {
+                            tenorEmbed.style.width = '100%';
+                            tenorEmbed.style.height = 'auto';
+                        }
+                        
+                        if (iframe) {
+                            iframe.style.width = '100%';
+                            iframe.style.height = 'auto';
+                            iframe.style.borderRadius = '12px';
+                            iframe.style.border = 'none';
+                        }
+                    }, 500);
+                };
                 script.onerror = () => console.log('❌ Tenor script failed to load');
                 document.body.appendChild(script);
             }
@@ -802,7 +754,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ Tenor embed loaded as fallback');
+            console.log('✅ Tenor embed loaded with your exact code');
         }
         
         // Add Tenor attribution (required by API terms)
