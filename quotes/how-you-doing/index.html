@@ -696,7 +696,7 @@
             tryNextUrl();
         }
         
-        // Fallback to Tenor embed - USING YOUR EXACT EMBED CODE
+        // Fallback to Tenor embed - ENHANCED WITH DEBUGGING
         function loadTenorEmbed() {
             console.log('🔄 Loading Tenor embed with your exact code...');
             const imageElement = document.getElementById('characterImage');
@@ -716,6 +716,10 @@
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
+            // Check if embed elements exist
+            const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+            console.log('📦 Tenor embed element found:', tenorEmbed);
+            
             // Load Tenor's embed script (from your code)
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
                 console.log('📜 Loading Tenor embed script...');
@@ -726,14 +730,18 @@
                 script.onload = () => {
                     console.log('✅ Tenor script loaded successfully');
                     
-                    // Force styling after script loads
+                    // Force styling and debugging after script loads
                     setTimeout(() => {
-                        const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                        const tenorEmbedAfter = embedContainer.querySelector('.tenor-gif-embed');
                         const iframe = embedContainer.querySelector('iframe');
                         
-                        if (tenorEmbed) {
-                            tenorEmbed.style.width = '100%';
-                            tenorEmbed.style.height = 'auto';
+                        console.log('🔍 After script load - Tenor embed:', tenorEmbedAfter);
+                        console.log('🔍 After script load - iframe:', iframe);
+                        
+                        if (tenorEmbedAfter) {
+                            tenorEmbedAfter.style.width = '100%';
+                            tenorEmbedAfter.style.height = 'auto';
+                            console.log('✅ Styled tenor embed');
                         }
                         
                         if (iframe) {
@@ -741,11 +749,80 @@
                             iframe.style.height = 'auto';
                             iframe.style.borderRadius = '12px';
                             iframe.style.border = 'none';
+                            console.log('✅ Styled iframe');
+                        }
+                        
+                        // If still no iframe, try to manually trigger Tenor
+                        if (!iframe) {
+                            console.log('⚠️ No iframe found, trying manual trigger...');
+                            if (window.TenorEmbed) {
+                                window.TenorEmbed.init();
+                            }
                         }
                     }, 500);
+                    
+                    // Also try after a longer delay
+                    setTimeout(() => {
+                        const iframe = embedContainer.querySelector('iframe');
+                        if (iframe) {
+                            console.log('✅ Iframe found after delay');
+                            iframe.style.width = '100%';
+                            iframe.style.height = 'auto';
+                        } else {
+                            console.log('❌ Still no iframe after delay');
+                            // Show fallback if nothing works
+                            showFallbackContent();
+                        }
+                    }, 2000);
                 };
-                script.onerror = () => console.log('❌ Tenor script failed to load');
+                script.onerror = () => {
+                    console.log('❌ Tenor script failed to load');
+                    showFallbackContent();
+                };
                 document.body.appendChild(script);
+            } else {
+                console.log('📜 Tenor script already loaded, checking for iframe...');
+                setTimeout(() => {
+                    const iframe = embedContainer.querySelector('iframe');
+                    if (!iframe) {
+                        console.log('❌ No iframe found with existing script');
+                        showFallbackContent();
+                    }
+                }, 1000);
+            }
+            
+            // Fallback content function
+            function showFallbackContent() {
+                console.log('🎨 Showing fallback content...');
+                const fallbackDiv = document.createElement('div');
+                fallbackDiv.style.cssText = `
+                    width: 100%;
+                    height: 250px;
+                    background: linear-gradient(135deg, #FFE66D, #FFEAA7);
+                    border-radius: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 32px;
+                    font-weight: bold;
+                    color: #8B4513;
+                    font-family: 'Permanent Marker', cursive;
+                    text-align: center;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+                    position: relative;
+                    overflow: hidden;
+                `;
+                
+                fallbackDiv.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 10px;">😎</div>
+                    <div style="font-size: 24px; line-height: 1.2;">How you doin'?</div>
+                    <div style="font-size: 14px; margin-top: 10px; opacity: 0.7;">- Joey Tribbiani</div>
+                `;
+                
+                embedContainer.innerHTML = '';
+                embedContainer.appendChild(fallbackDiv);
+                console.log('✅ Fallback content displayed');
             }
             
             // Add Tenor attribution
@@ -754,7 +831,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ Tenor embed loaded with your exact code');
+            console.log('✅ Tenor embed setup complete');
         }
         
         // Add Tenor attribution (required by API terms)
