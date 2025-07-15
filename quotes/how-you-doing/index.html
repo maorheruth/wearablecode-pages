@@ -560,13 +560,17 @@
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Try simple, known working GIF URLs
+            // Try simple, known working GIF URLs - CORRECT JOEY FRIENDS GIFS
             const workingGifUrls = [
-                'https://media.giphy.com/media/3o7TKnO6Wve6502iJ2/giphy.gif', // Joey How you doin
-                'https://media.giphy.com/media/l378bu6ZYmzS6nBrW/giphy.gif', // Joey Friends
-                'https://media.giphy.com/media/3oEjHGnY8oB4BHVTP2/giphy.gif', // Joey nod
-                'https://i.giphy.com/3o7TKnO6Wve6502iJ2.gif',
-                'https://i.giphy.com/l378bu6ZYmzS6nBrW.gif'
+                'https://media.giphy.com/media/l0HlNQ03J5JxX6lva/giphy.gif', // Joey How you doin Friends
+                'https://media.giphy.com/media/l0HlQ174OdhDGJTK0/giphy.gif', // Joey Friends nodding
+                'https://media.giphy.com/media/l0HlN5gabMevKI0J6/giphy.gif', // Joey Friends how you doin
+                'https://media.giphy.com/media/l0HlMSVVw9zqmClLq/giphy.gif', // Joey Friends classic
+                'https://i.giphy.com/l0HlNQ03J5JxX6lva.gif',
+                'https://i.giphy.com/l0HlQ174OdhDGJTK0.gif',
+                // Also try some tenor URLs that might work
+                'https://c.tenor.com/xNkJLYfW0cYAAAAC/joey-tribbiani-friends.gif',
+                'https://c.tenor.com/wvDqCKGdEq8AAAAC/joey-tribbiani-friends.gif'
             ];
             
             let currentIndex = 0;
