@@ -553,29 +553,95 @@
             '🎊', '🎉', '😄', '👋', '👍', '🤝', '💛', '🧡'
         ];
         
-        // Load the specific Friends GIF - BACK TO RELIABLE METHOD
+        // Load the specific Friends GIF - TRY FALLBACK FIRST
         function loadSpecificMeme() {
             console.log('🚀 Starting to load Friends GIF...');
             const imageElement = document.getElementById('characterImage');
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Go straight to Tenor API
-            fetchSpecificGifFromTenor()
-                .then(gifUrl => {
-                    if (gifUrl) {
-                        console.log('🎯 Got GIF URL from API, loading...');
-                        loadGifFromUrl(gifUrl);
-                    } else {
-                        console.log('⚠️ No GIF URL from API, trying embed...');
-                        loadTenorEmbed();
-                    }
-                })
-                .catch(error => {
-                    console.log('❌ Tenor API failed completely:', error);
-                    console.log('🔄 Using embed fallback...');
-                    loadTenorEmbed();
-                });
+            // Try a working Joey GIF URL directly first
+            const fallbackGifUrls = [
+                'https://media.tenor.com/wvDqCKGdEq8AAAAM/joey-tribbiani-friends.gif',
+                'https://media.tenor.com/s8qV-DoMGKcAAAAM/joey-tribbiani-how-you-doin.gif',
+                'https://media.tenor.com/wvDqCKGdEq8AAAAM/how-you-doin-joey.gif',
+                'https://media1.tenor.com/images/wvDqCKGdEq8AAAAM/tenor.gif'
+            ];
+            
+            let currentIndex = 0;
+            
+            function tryNextFallbackUrl() {
+                if (currentIndex < fallbackGifUrls.length) {
+                    console.log(`🔄 Trying fallback URL ${currentIndex + 1}:`, fallbackGifUrls[currentIndex]);
+                    
+                    const img = document.createElement('img');
+                    img.src = fallbackGifUrls[currentIndex];
+                    img.alt = "How you doin'?";
+                    
+                    img.style.width = '100%';
+                    img.style.height = 'auto';
+                    img.style.borderRadius = '12px';
+                    img.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
+                    img.style.display = 'block';
+                    img.style.margin = '0';
+                    img.style.padding = '0';
+                    img.style.objectFit = 'cover';
+                    
+                    img.onload = function() {
+                        console.log('✅ Fallback GIF loaded successfully!');
+                        imageElement.innerHTML = '';
+                        imageElement.appendChild(img);
+                        imageElement.classList.remove('loading');
+                        imageElement.classList.add('has-image');
+                        
+                        // Add simple attribution
+                        const attribution = document.createElement('div');
+                        attribution.style.cssText = `
+                            position: absolute;
+                            top: 8px;
+                            left: 8px;
+                            font-size: 9px;
+                            color: rgba(255,255,255,0.9);
+                            background: rgba(0,0,0,0.6);
+                            padding: 3px 7px;
+                            border-radius: 6px;
+                            text-decoration: none;
+                            font-weight: 500;
+                            backdrop-filter: blur(4px);
+                            z-index: 10;
+                        `;
+                        attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+                        imageElement.style.position = 'relative';
+                        imageElement.appendChild(attribution);
+                    };
+                    
+                    img.onerror = function() {
+                        console.log(`❌ Fallback URL ${currentIndex + 1} failed`);
+                        currentIndex++;
+                        tryNextFallbackUrl();
+                    };
+                } else {
+                    console.log('❌ All fallback URLs failed, trying original API...');
+                    // If all fallbacks fail, try original API
+                    fetchSpecificGifFromTenor()
+                        .then(gifUrl => {
+                            if (gifUrl) {
+                                console.log('🎯 Got GIF URL from API, loading...');
+                                loadGifFromUrl(gifUrl);
+                            } else {
+                                console.log('⚠️ No GIF URL from API, trying embed...');
+                                loadTenorEmbed();
+                            }
+                        })
+                        .catch(error => {
+                            console.log('❌ Tenor API failed completely:', error);
+                            console.log('🔄 Using embed fallback...');
+                            loadTenorEmbed();
+                        });
+                }
+            }
+            
+            tryNextFallbackUrl();
         }
         
         // Try to fetch the specific GIF from Tenor API
