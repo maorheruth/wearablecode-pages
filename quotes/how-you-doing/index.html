@@ -553,30 +553,32 @@
             '🎊', '🎉', '😄', '👋', '👍', '🤝', '💛', '🧡'
         ];
         
-        // Load the specific Friends GIF - TRY FALLBACK FIRST
+        // Load the specific Friends GIF - TRY SIMPLE WORKING GIF
         function loadSpecificMeme() {
             console.log('🚀 Starting to load Friends GIF...');
             const imageElement = document.getElementById('characterImage');
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Try a working Joey GIF URL directly first
-            const fallbackGifUrls = [
-                'https://media.tenor.com/wvDqCKGdEq8AAAAM/joey-tribbiani-friends.gif',
-                'https://media.tenor.com/s8qV-DoMGKcAAAAM/joey-tribbiani-how-you-doin.gif',
-                'https://media.tenor.com/wvDqCKGdEq8AAAAM/how-you-doin-joey.gif',
-                'https://media1.tenor.com/images/wvDqCKGdEq8AAAAM/tenor.gif'
+            // Try simple, known working GIF URLs
+            const workingGifUrls = [
+                'https://media.giphy.com/media/3o7TKnO6Wve6502iJ2/giphy.gif', // Joey How you doin
+                'https://media.giphy.com/media/l378bu6ZYmzS6nBrW/giphy.gif', // Joey Friends
+                'https://media.giphy.com/media/3oEjHGnY8oB4BHVTP2/giphy.gif', // Joey nod
+                'https://i.giphy.com/3o7TKnO6Wve6502iJ2.gif',
+                'https://i.giphy.com/l378bu6ZYmzS6nBrW.gif'
             ];
             
             let currentIndex = 0;
             
-            function tryNextFallbackUrl() {
-                if (currentIndex < fallbackGifUrls.length) {
-                    console.log(`🔄 Trying fallback URL ${currentIndex + 1}:`, fallbackGifUrls[currentIndex]);
+            function tryNextWorkingUrl() {
+                if (currentIndex < workingGifUrls.length) {
+                    console.log(`🔄 Trying working URL ${currentIndex + 1}:`, workingGifUrls[currentIndex]);
                     
                     const img = document.createElement('img');
-                    img.src = fallbackGifUrls[currentIndex];
+                    img.src = workingGifUrls[currentIndex];
                     img.alt = "How you doin'?";
+                    img.crossOrigin = "anonymous"; // Add CORS support
                     
                     img.style.width = '100%';
                     img.style.height = 'auto';
@@ -588,7 +590,7 @@
                     img.style.objectFit = 'cover';
                     
                     img.onload = function() {
-                        console.log('✅ Fallback GIF loaded successfully!');
+                        console.log('✅ Working GIF loaded successfully!');
                         imageElement.innerHTML = '';
                         imageElement.appendChild(img);
                         imageElement.classList.remove('loading');
@@ -610,38 +612,45 @@
                             backdrop-filter: blur(4px);
                             z-index: 10;
                         `;
-                        attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+                        attribution.innerHTML = '<a href="https://giphy.com" target="_blank" style="color: white; text-decoration: none;">via GIPHY</a>';
                         imageElement.style.position = 'relative';
                         imageElement.appendChild(attribution);
                     };
                     
                     img.onerror = function() {
-                        console.log(`❌ Fallback URL ${currentIndex + 1} failed`);
+                        console.log(`❌ Working URL ${currentIndex + 1} failed`);
                         currentIndex++;
-                        tryNextFallbackUrl();
+                        tryNextWorkingUrl();
                     };
                 } else {
-                    console.log('❌ All fallback URLs failed, trying original API...');
-                    // If all fallbacks fail, try original API
-                    fetchSpecificGifFromTenor()
-                        .then(gifUrl => {
-                            if (gifUrl) {
-                                console.log('🎯 Got GIF URL from API, loading...');
-                                loadGifFromUrl(gifUrl);
-                            } else {
-                                console.log('⚠️ No GIF URL from API, trying embed...');
-                                loadTenorEmbed();
-                            }
-                        })
-                        .catch(error => {
-                            console.log('❌ Tenor API failed completely:', error);
-                            console.log('🔄 Using embed fallback...');
-                            loadTenorEmbed();
-                        });
+                    console.log('❌ All working URLs failed, using simple placeholder...');
+                    // If everything fails, show a simple image placeholder
+                    const placeholderDiv = document.createElement('div');
+                    placeholderDiv.style.cssText = `
+                        width: 100%;
+                        height: 200px;
+                        background: linear-gradient(135deg, #FFE66D, #FFEAA7);
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 24px;
+                        font-weight: bold;
+                        color: #8B4513;
+                        font-family: 'Permanent Marker', cursive;
+                        text-align: center;
+                        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+                    `;
+                    placeholderDiv.innerHTML = 'How you doin\'?<br><small style="font-size: 14px;">- Joey Tribbiani</small>';
+                    
+                    imageElement.innerHTML = '';
+                    imageElement.appendChild(placeholderDiv);
+                    imageElement.classList.remove('loading');
+                    imageElement.classList.add('has-image');
                 }
             }
             
-            tryNextFallbackUrl();
+            tryNextWorkingUrl();
         }
         
         // Try to fetch the specific GIF from Tenor API
