@@ -134,8 +134,9 @@
         }
 
         .character-image img {
-            width: 100% !important;
+            width: 378px !important;
             height: auto !important;
+            max-height: 215px !important;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             display: block;
@@ -144,37 +145,28 @@
             object-fit: cover;
         }
 
-        /* Simple iframe styling - FORCE full width */
+        /* Simple iframe styling - FORCE specific dimensions */
         .character-image iframe {
-            width: 100% !important;
-            height: auto !important;
+            width: 378px !important;
+            height: 215px !important;
             border: none !important;
             border-radius: 12px !important;
-            margin: 0 !important;
+            margin: 0 auto !important;
             display: block !important;
         }
 
         /* Force styling with specific class */
         .gif-iframe {
-            width: 100% !important;
-            height: auto !important;
+            width: 378px !important;
+            height: 215px !important;
             border: none !important;
             border-radius: 12px !important;
-            margin: 0 !important;
+            margin: 0 auto !important;
             display: block !important;
-        }
-
-        /* Target all Tenor embed elements */
-        .tenor-gif-embed,
-        .tenor-gif-embed > div,
-        .tenor-gif-embed iframe {
-            width: 100% !important;
-            height: auto !important;
-            border: none !important;
-            border-radius: 12px !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            display: block !important;
+            max-width: 378px !important;
+            max-height: 215px !important;
+            min-width: 378px !important;
+            min-height: 215px !important;
         }
 
         .character-image.has-image {
@@ -519,11 +511,11 @@
         const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
         const CLIENT_KEY = 'wearablecode_memes';
         
-        // Specific GIF data for Friends/Joey - Updated GIF
+        // Specific GIF data for Friends/Joey
         const specificGifData = {
-            id: '16802333',
-            url: 'https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-how-are-you-nod-gif-16802333',
-            embedCode: `<div class="tenor-gif-embed" data-postid="16802333" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-how-are-you-nod-gif-16802333">Friends Joey GIF</a>from <a href="https://tenor.com/search/friends-gifs">Friends GIFs</a></div>`
+            id: '14299391565815201601',
+            url: 'https://tenor.com/view/friends-friendstv-friends-tv-tv-friends-tvfriends-gif-14299391565815201601',
+            embedCode: `<div class="tenor-gif-embed" data-postid="14299391565815201601" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/friends-friendstv-friends-tv-tv-friends-tvfriends-gif-14299391565815201601">Friends GIF</a>from <a href="https://tenor.com/search/friends-gifs">Friends GIFs</a></div>`
         };
         
         // Page-specific data
@@ -608,14 +600,16 @@
             
             // Force exact width styling on the image element
             img.style.cssText = `
-                width: 100% !important;
+                width: 378px !important;
                 height: auto !important;
+                max-height: 215px !important;
                 border-radius: 12px !important;
                 box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                 display: block !important;
                 margin: 0 auto !important;
                 padding: 0 !important;
                 object-fit: cover !important;
+                max-width: 378px !important;
             `;
             
             img.onload = function() {
@@ -626,14 +620,16 @@
                 
                 // Force styling again after load with exact dimensions
                 img.style.cssText = `
-                    width: 100% !important;
+                    width: 378px !important;
                     height: auto !important;
+                    max-height: 215px !important;
                     border-radius: 12px !important;
                     box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                     display: block !important;
                     margin: 0 auto !important;
                     padding: 0 !important;
                     object-fit: cover !important;
+                    max-width: 378px !important;
                 `;
                 
                 // Also force styling on any wrapper elements
@@ -641,8 +637,9 @@
                     const allInnerElements = imageElement.querySelectorAll('*');
                     allInnerElements.forEach(el => {
                         if (el.tagName === 'IMG' || el.id === 'content') {
-                            el.style.setProperty('width', '100%', 'important');
+                            el.style.setProperty('width', '378px', 'important');
                             el.style.setProperty('height', 'auto', 'important');
+                            el.style.setProperty('max-width', '378px', 'important');
                             el.style.setProperty('margin', '0 auto', 'important');
                             el.style.setProperty('display', 'block', 'important');
                         }
@@ -650,7 +647,7 @@
                 }, 100);
                 
                 addTenorAttribution(imageElement);
-                console.log('✅ Tenor API GIF loaded successfully with full width');
+                console.log('✅ Tenor API GIF loaded successfully with 378px width');
             };
             
             img.onerror = function() {
@@ -663,12 +660,12 @@
         function loadTenorEmbed() {
             const imageElement = document.getElementById('characterImage');
             
-            // Create container for the Tenor embed with full width
+            // Create container for the Tenor embed with fixed width
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
-                width: 100% !important;
-                height: auto !important;
+                width: 378px !important;
+                height: 215px !important;
                 display: block !important;
                 border-radius: 12px;
                 overflow: hidden;
@@ -682,61 +679,40 @@
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
-            // Force styling on Tenor elements after they load - AGGRESSIVE APPROACH
+            // Force styling on Tenor elements after they load
             function forceTenorStyling() {
-                // Get all possible Tenor elements
                 const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
                 const iframe = embedContainer.querySelector('iframe');
                 const innerDiv = embedContainer.querySelector('div[style*="padding-top"]');
-                const allDivs = embedContainer.querySelectorAll('div');
                 
-                // Force styling on main embed container
                 if (tenorEmbed) {
-                    tenorEmbed.style.setProperty('width', '100%', 'important');
-                    tenorEmbed.style.setProperty('height', 'auto', 'important');
+                    tenorEmbed.style.setProperty('width', '378px', 'important');
                     tenorEmbed.style.setProperty('position', 'relative', 'important');
-                    tenorEmbed.style.setProperty('margin', '0', 'important');
-                    tenorEmbed.style.setProperty('padding', '0', 'important');
                 }
                 
-                // Force styling on all inner divs
-                allDivs.forEach(div => {
-                    div.style.setProperty('width', '100%', 'important');
-                    div.style.setProperty('height', 'auto', 'important');
-                    div.style.setProperty('padding-top', '0', 'important');
-                    div.style.setProperty('position', 'relative', 'important');
-                    div.style.setProperty('margin', '0', 'important');
-                });
+                if (innerDiv) {
+                    innerDiv.style.setProperty('width', '378px', 'important');
+                    innerDiv.style.setProperty('height', '215px', 'important');
+                    innerDiv.style.setProperty('padding-top', '0', 'important');
+                    innerDiv.style.setProperty('position', 'relative', 'important');
+                }
                 
-                // Force styling on iframe
                 if (iframe) {
-                    iframe.style.setProperty('width', '100%', 'important');
-                    iframe.style.setProperty('height', 'auto', 'important');
+                    iframe.style.setProperty('width', '378px', 'important');
+                    iframe.style.setProperty('height', '215px', 'important'); // Fixed aspect ratio
                     iframe.style.setProperty('position', 'relative', 'important');
                     iframe.style.setProperty('top', '0', 'important');
                     iframe.style.setProperty('left', '0', 'important');
                     iframe.style.setProperty('border-radius', '12px', 'important');
                     iframe.style.setProperty('border', 'none', 'important');
-                    iframe.style.setProperty('margin', '0', 'important');
-                    iframe.style.setProperty('padding', '0', 'important');
                 }
-                
-                // Remove any aspect ratio constraints
-                const aspectRatioElements = embedContainer.querySelectorAll('[style*="padding-top"]');
-                aspectRatioElements.forEach(el => {
-                    el.style.setProperty('padding-top', '0', 'important');
-                    el.style.setProperty('height', 'auto', 'important');
-                });
             }
             
             // Run styling multiple times to catch when elements are created
-            setTimeout(forceTenorStyling, 50);
             setTimeout(forceTenorStyling, 100);
-            setTimeout(forceTenorStyling, 300);
             setTimeout(forceTenorStyling, 500);
             setTimeout(forceTenorStyling, 1000);
             setTimeout(forceTenorStyling, 2000);
-            setTimeout(forceTenorStyling, 3000);
             
             // Load Tenor's embed script
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
@@ -748,31 +724,9 @@
                 
                 // Apply styling again after script loads
                 script.onload = () => {
-                    setTimeout(forceTenorStyling, 50);
                     setTimeout(forceTenorStyling, 100);
-                    setTimeout(forceTenorStyling, 300);
                     setTimeout(forceTenorStyling, 500);
                     setTimeout(forceTenorStyling, 1000);
-                    setTimeout(forceTenorStyling, 2000);
-                    
-                    // Add a global CSS rule to override Tenor's styles
-                    const style = document.createElement('style');
-                    style.textContent = `
-                        .tenor-gif-embed,
-                        .tenor-gif-embed > div,
-                        .tenor-gif-embed iframe {
-                            width: 100% !important;
-                            height: auto !important;
-                            border: none !important;
-                            margin: 0 !important;
-                            padding: 0 !important;
-                            position: relative !important;
-                        }
-                        .tenor-gif-embed div[style*="padding-top"] {
-                            padding-top: 0 !important;
-                        }
-                    `;
-                    document.head.appendChild(style);
                 };
             }
             
@@ -782,7 +736,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ Friends Joey GIF embed loaded with full width');
+            console.log('✅ Friends GIF embed loaded with forced 378px width');
         }
         
         // Add Tenor attribution (required by API terms)
