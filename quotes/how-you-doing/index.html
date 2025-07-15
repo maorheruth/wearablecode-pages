@@ -3,14 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How you doin'? | WearableCode</title>
-    <!-- Google Fonts preconnect for faster loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Google Font: Permanent Marker -->
-    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
-    <!-- Preload main image for faster loading -->
-    <link rel="preload" href="./assets/images/how-you-doin.png" as="image">
+    <title>Hello, you. | WearableCode</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&family=Bodoni+Moda+SC:wght@400;700;900&family=Rubik+Glitch&family=Federo&family=Rozha+One&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -26,7 +20,7 @@
         /* Safari iOS specific fixes */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000000;
+            background: linear-gradient(135deg, #8B0000 0%, #4A0000 50%, #220000 100%);
             height: 100vh;
             height: 100dvh; /* Dynamic viewport height for iOS */
             display: flex;
@@ -39,25 +33,46 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Friends-style colored dots */
-        .friends-dot {
+        /* Blood drip animation */
+        .blood-drip {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+            height: 100vh;
+            background: linear-gradient(to bottom, #ff1a1a 0%, #ff0000 30%, #cc0000 70%, #990000 100%);
             z-index: 0;
-            animation: friendsDotFloat 4s ease-in-out infinite;
+            animation: dripEndless 10s ease-in infinite;
             pointer-events: none;
+            transform: translateY(-100vh);
+            box-shadow: 0 0 3px rgba(255, 0, 0, 0.6);
         }
 
-        @keyframes friendsDotFloat {
-            0%, 100% {
-                transform: translateY(0px) scale(1);
+        @keyframes dripEndless {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0.9;
+            }
+            20% {
+                transform: translateY(-80vh);
                 opacity: 0.8;
             }
-            50% {
-                transform: translateY(-20px) scale(1.1);
-                opacity: 1;
+            40% {
+                transform: translateY(-60vh);
+                opacity: 0.7;
+            }
+            60% {
+                transform: translateY(-40vh);
+                opacity: 0.6;
+            }
+            80% {
+                transform: translateY(-20vh);
+                opacity: 0.4;
+            }
+            95% {
+                transform: translateY(0);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 0;
             }
         }
 
@@ -67,11 +82,7 @@
             padding: 35px 30px;
             max-width: 650px;
             width: 100%;
-            box-shadow: 
-                0 15px 35px rgba(255,255,255,0.1), 
-                0 0 30px rgba(255, 255, 255, 0.2),
-                0 0 30px rgba(255, 215, 0, 0.4),
-                0 0 45px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12), 0 0 30px rgba(255, 255, 255, 0.8);
             text-align: center;
             position: relative;
             animation: slideUp 0.6s ease-out;
@@ -79,7 +90,7 @@
             min-height: auto;
             max-height: 95vh;
             z-index: 5;
-            border: 3px solid #FFD700;
+            overflow: hidden;
         }
 
         @keyframes slideUp {
@@ -118,68 +129,132 @@
         }
 
         .character-image {
-            width: 450px;
-            height: 450px;
+            width: 100%;
+            height: auto;
             border-radius: 12px;
             margin: 0 auto 18px;
-            background: #f8f9fa;
+            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ccc;
-            border: 2px dashed #ddd;
+            color: #999;
+            border: none;
             position: relative;
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
+            padding: 0;
         }
 
         .character-image img {
-            width: 100%;
-            height: 100%;
+            width: 378px !important;
+            height: 378px !important;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: block;
+            margin: 0 auto;
+            padding: 0;
             object-fit: cover;
-            border-radius: 10px;
+        }
+
+        /* Simple iframe styling - FORCE 323px height */
+        .character-image iframe {
+            width: 378px !important;
+            height: 323px !important;
+            border: none !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            display: block !important;
+        }
+
+        /* Force styling with specific class */
+        .gif-iframe {
+            width: 378px !important;
+            height: 323px !important;
+            border: none !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            display: block !important;
+            max-width: 378px !important;
+            max-height: 323px !important;
+            min-width: 378px !important;
+            min-height: 323px !important;
         }
 
         .character-image.has-image {
             border: none;
-            background: none;
+            background: transparent;
+            box-shadow: none;
+            height: auto;
+            padding: 0;
+            display: block;
+        }
+
+        .character-image.has-image {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            height: auto;
+            padding: 0;
+        }
+
+        .character-image.has-image img,
+        .character-image.has-image iframe,
+        .character-image.has-image .tenor-gif-embed {
+            width: 100% !important;
+            height: auto !important;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: block;
         }
 
         .character-image.loading {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes loading {
+        .loading-text {
+            font-size: 18px;
+            color: #b0b0b0;
+            font-weight: 500;
+            animation: fadeInOut 2s ease-in-out infinite;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInOut {
             0% {
-                background-position: 200% 0;
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
             }
             100% {
-                background-position: -200% 0;
+                opacity: 0.3;
             }
         }
 
         .quote {
-            font-size: 56px;
+            font-size: 65px;
             font-weight: 400;
-            font-family: 'Permanent Marker', cursive;
+            font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', 'Arial Black', sans-serif;
             color: #222;
             margin-bottom: 15px;
-            line-height: 0.9;
+            line-height: 0.85;
             position: relative;
-            padding: 0 25px;
-            letter-spacing: 1px;
+            padding: 0 15px;
+            letter-spacing: 3px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
-            white-space: nowrap;
+            text-transform: uppercase;
         }
 
         .quote::before {
             content: '"';
-            font-size: 90px;
-            color: #D2691E;
+            font-size: 75px;
+            color: #bbb;
             position: absolute;
             left: -8px;
             top: -15px;
@@ -189,8 +264,8 @@
 
         .quote::after {
             content: '"';
-            font-size: 90px;
-            color: #D2691E;
+            font-size: 75px;
+            color: #bbb;
             position: absolute;
             right: -8px;
             bottom: -20px;
@@ -206,7 +281,7 @@
         }
 
         .cta-section {
-            background: linear-gradient(135deg, #FFE66D, #FFEAA7);
+            background: #f8f9fa;
             border-radius: 12px;
             padding: 15px;
             margin-top: 20px;
@@ -224,7 +299,7 @@
         }
 
         .shop-button {
-            background: linear-gradient(135deg, #D2691E, #8B4513);
+            background: linear-gradient(135deg, #8B0000, #B22222);
             color: white;
             border: none;
             border-radius: 10px;
@@ -235,42 +310,42 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3);
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
         }
 
         .shop-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(210, 105, 30, 0.5);
-            background: linear-gradient(135deg, #8B4513, #D2691E);
+            box-shadow: 0 8px 20px rgba(139, 0, 0, 0.5);
+            background: linear-gradient(135deg, #A0522D, #DC143C);
         }
 
-        /* Animated friendly background elements */
-        .friendly-element {
+        /* Animated mysterious background elements */
+        .mystery-element {
             position: absolute;
             font-size: 20px;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.25);
             z-index: 1;
-            animation: friendlyFloat 5s ease-in-out infinite;
+            animation: wiggleFloat 6s ease-in-out infinite;
             pointer-events: none;
             text-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
         }
 
-        @keyframes friendlyFloat {
+        @keyframes wiggleFloat {
             0%, 100% {
                 transform: translateX(0px) translateY(0px) rotate(0deg);
-                opacity: 0.4;
+                opacity: 0.25;
             }
             25% {
-                transform: translateX(10px) translateY(-8px) rotate(5deg);
-                opacity: 0.6;
+                transform: translateX(8px) translateY(-6px) rotate(3deg);
+                opacity: 0.4;
             }
             50% {
-                transform: translateX(-8px) translateY(12px) rotate(-3deg);
-                opacity: 0.5;
+                transform: translateX(-4px) translateY(10px) rotate(-2deg);
+                opacity: 0.3;
             }
             75% {
-                transform: translateX(8px) translateY(-6px) rotate(4deg);
-                opacity: 0.7;
+                transform: translateX(6px) translateY(-5px) rotate(3deg);
+                opacity: 0.5;
             }
         }
 
@@ -282,42 +357,41 @@
             }
             
             .container {
-                padding: 25px 20px;
+                padding: 20px 15px;
                 border-radius: 16px;
-                max-width: 90vw;
-                border-width: 2px;
-                box-shadow: 
-                    0 15px 35px rgba(255,255,255,0.1), 
-                    0 0 30px rgba(255, 255, 255, 0.2),
-                    0 0 60px rgba(255, 215, 0, 0.6),
-                    0 0 90px rgba(255, 215, 0, 0.4);
+                max-width: 95vw;
+                max-height: 90vh;
             }
             
             .character-image {
-                width: calc(100% - 20px);
-                height: 310px;
+                width: 100%;
+                height: auto;
                 margin-bottom: 15px;
                 font-size: 14px;
             }
             
+            .loading-text {
+                font-size: 16px;
+            }
+            
             .quote {
-                font-size: 24px;
+                font-size: 26px;
                 margin-bottom: 10px;
-                line-height: 0.9;
-                padding: 0 15px;
-                font-family: 'Permanent Marker', cursive;
-                letter-spacing: 0px;
-                white-space: nowrap;
+                line-height: 0.85;
+                padding: 0 5px;
+                font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
             }
             
             .quote::before {
-                font-size: 50px;
+                font-size: 32px;
                 top: -8px;
                 left: -4px;
             }
 
             .quote::after {
-                font-size: 50px;
+                font-size: 32px;
                 bottom: -12px;
                 right: -4px;
             }
@@ -347,54 +421,58 @@
                 font-size: 13px;
             }
 
-            .friendly-element {
+            .mystery-element {
                 font-size: 16px;
-                color: rgba(255, 255, 255, 0.35);
-                text-shadow: 0 0 3px rgba(255, 215, 0, 0.4);
+                color: rgba(255, 255, 255, 0.2);
+                text-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
             }
         }
 
         /* iPhone SE and smaller */
         @media (max-width: 375px) {
             .container {
-                padding: 20px 15px;
+                padding: 15px 12px;
                 max-width: 98vw;
-                overflow-x: auto;
-                max-height: 95vh;
-                box-shadow: 
-                    0 10px 25px rgba(255,255,255,0.1), 
-                    0 0 20px rgba(255, 255, 255, 0.15),
-                    0 0 10px rgba(255, 215, 0, 0.2),
-                    0 0 15px rgba(255, 215, 0, 0.1);
+                max-height: 88vh;
             }
             
             .character-image {
-                width: 350px;
-                height: 350px;
+                width: 100%;
+                height: auto;
                 font-size: 12px;
             }
             
+            .character-image img {
+                width: 280px !important;
+                height: 280px !important;
+                margin: 0 auto !important;
+            }
+            
+            .loading-text {
+                font-size: 14px;
+            }
+            
             .quote {
-                font-size: 20px;
-                padding: 0 12px;
-                line-height: 0.85;
-                font-family: 'Permanent Marker', cursive;
-                letter-spacing: 0px;
-                white-space: nowrap;
+                font-size: 22px;
+                padding: 0 3px;
+                line-height: 0.8;
+                font-family: 'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
             }
 
             .quote::before {
-                font-size: 42px;
+                font-size: 28px;
             }
 
             .quote::after {
-                font-size: 42px;
+                font-size: 28px;
             }
 
-            .friendly-element {
+            .mystery-element {
                 font-size: 14px;
-                color: rgba(255, 255, 255, 0.3);
-                text-shadow: 0 0 2px rgba(255, 215, 0, 0.3);
+                color: rgba(255, 255, 255, 0.18);
+                text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
             }
             
             .logo img {
@@ -405,19 +483,19 @@
     </style>
 </head>
 <body>
-    <!-- Friendly elements will be generated by JavaScript -->
+    <!-- Mystery elements will be generated by JavaScript -->
     
     <div class="container">
         <div class="character-image" id="characterImage">
-            Add your image here
+            <div class="loading-text">Loading</div>
         </div>
         
         <div class="quote" id="mainQuote">
-            How you doin'?
+            Hello, you.
         </div>
         
         <div class="source" id="quoteSource">
-            - Joey Tribbiani
+            - Joe Goldberg
         </div>
         
         <div class="cta-section">
@@ -438,11 +516,21 @@
     </div>
 
     <script>
+        // Tenor API Configuration
+        const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
+        const CLIENT_KEY = 'wearablecode_memes';
+        
+        // Specific GIF data for Joe Goldberg new GIF
+        const specificGifData = {
+            id: '27002005',
+            url: 'https://tenor.com/view/joe-goldberg-gif-27002005',
+            embedCode: `<div class="tenor-gif-embed" data-postid="27002005" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/joe-goldberg-gif-27002005">Joe Goldberg GIF</a>from <a href="https://tenor.com/search/joe+goldberg-gifs">Joe Goldberg GIFs</a></div>`
+        };
+        
         // Page-specific data
         const pageData = {
-            quote: "How you doin'?",
-            source: "- Joey Tribbiani",
-            image: "./assets/images/how-you-doin.png"
+            quote: "Hello, you.",
+            source: "- Joe Goldberg"
         };
         
         // Random CTA messages in Hebrew
@@ -452,30 +540,242 @@
             "מגניב נכון? רוצים גם? 👇",
             "קלטנו שאהבתם את הקונספט! רוצים גם חולצה כזאת? 👇",
             "איזה חולצה מגניבה הא? קנו את שלכם גם 👇",
-            "רוצים גם להיות מגניבים כמו ג'ואי? 👇",
+            "רוצים גם להיות מגניבים כמו ג'ו? 👇",
             "החולצה הזאת יכולה להיות שלכם! 👇",
             "מתאים לכם? בואו נזמין! 👇",
             "זה הזמן להזמין את החולצה המושלמת 👇",
             "חולצה כזאת חייבת להיות לכם בארון! 👇"
         ];
         
-        // Friendly emojis for background - Joey/Friends themed
-        const friendlyEmojis = [
-            '😎', '🍕', '🎭', '📺', '☕', '🏠', '👔', '🎪',
-            '🎯', '🎮', '🍔', '🥪', '🎬', '🌟', '✨', '💫',
-            '🎊', '🎉', '😄', '👋', '👍', '🤝', '💛', '🧡'
+        // Mystery emojis for background - Only the scariest ones
+        const mysteryEmojis = [
+            '👁️', '🩸', '🔪', '🔍', '💀', '🖤', '🕯️', '🔐',
+            '🗝️', '📖', '🚪', '📱', '💻', '🌃', '🌙', '⚡',
+            '🔥', '👤', '🎭', '👻'
         ];
         
-        // Create random friendly elements
-        function createFriendlyElements() {
+        // Load the specific Joe Goldberg GIF
+        function loadSpecificMeme() {
+            const imageElement = document.getElementById('characterImage');
+            imageElement.innerHTML = '<div class="loading-text">Loading</div>';
+            imageElement.classList.add('loading');
+            
+            // Try to load via Tenor API first, then fallback to embed
+            fetchSpecificGifFromTenor()
+                .then(gifUrl => {
+                    if (gifUrl) {
+                        loadGifFromUrl(gifUrl);
+                    } else {
+                        loadTenorEmbed();
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Tenor API failed, using embed fallback:', error);
+                    loadTenorEmbed();
+                });
+        }
+        
+        // Try to fetch the specific GIF from Tenor API
+        async function fetchSpecificGifFromTenor() {
+            try {
+                const response = await fetch(
+                    `https://tenor.googleapis.com/v2/posts?ids=${specificGifData.id}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}&media_filter=gif`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    const gif = data.results[0];
+                    window.tenorGifId = gif.id;
+                    return gif.media_formats.gif.url;
+                }
+                return null;
+            } catch (error) {
+                console.log('Tenor API error:', error);
+                return null;
+            }
+        }
+        
+        // Load GIF from direct URL
+        function loadGifFromUrl(gifUrl) {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = gifUrl;
+            img.alt = "Joe Goldberg Wave";
+            
+            // Force exact width styling on the image element
+            img.style.cssText = `
+                width: 378px !important;
+                height: auto !important;
+                border-radius: 12px !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                display: block !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                object-fit: cover !important;
+                max-width: 378px !important;
+            `;
+            
+            img.onload = function() {
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                
+                // Force styling again after load with exact dimensions
+                img.style.cssText = `
+                    width: 378px !important;
+                    height: auto !important;
+                    border-radius: 12px !important;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                    display: block !important;
+                    margin: 0 auto !important;
+                    padding: 0 !important;
+                    object-fit: cover !important;
+                    max-width: 378px !important;
+                `;
+                
+                // Also force styling on any wrapper elements
+                setTimeout(() => {
+                    const allInnerElements = imageElement.querySelectorAll('*');
+                    allInnerElements.forEach(el => {
+                        if (el.tagName === 'IMG' || el.id === 'content') {
+                            el.style.setProperty('width', '378px', 'important');
+                            el.style.setProperty('height', 'auto', 'important');
+                            el.style.setProperty('max-width', '378px', 'important');
+                            el.style.setProperty('margin', '0 auto', 'important');
+                            el.style.setProperty('display', 'block', 'important');
+                        }
+                    });
+                }, 100);
+                
+                addTenorAttribution(imageElement);
+                console.log('✅ Tenor API GIF loaded successfully with 378px width');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Direct GIF URL failed, trying embed');
+                loadTenorEmbed();
+            };
+        }
+        
+        // Fallback to Tenor embed
+        function loadTenorEmbed() {
+            const imageElement = document.getElementById('characterImage');
+            
+            // Create container for the Tenor embed with fixed width
+            const embedContainer = document.createElement('div');
+            embedContainer.innerHTML = specificGifData.embedCode;
+            embedContainer.style.cssText = `
+                width: 378px !important;
+                height: auto !important;
+                display: block !important;
+                border-radius: 12px;
+                overflow: hidden;
+                margin: 0 auto !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            `;
+            
+            // Add to container
+            imageElement.innerHTML = '';
+            imageElement.appendChild(embedContainer);
+            imageElement.classList.remove('loading');
+            imageElement.classList.add('has-image');
+            
+            // Force styling on Tenor elements after they load
+            function forceTenorStyling() {
+                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                const iframe = embedContainer.querySelector('iframe');
+                const innerDiv = embedContainer.querySelector('div[style*="padding-top"]');
+                
+                if (tenorEmbed) {
+                    tenorEmbed.style.setProperty('width', '378px', 'important');
+                    tenorEmbed.style.setProperty('position', 'relative', 'important');
+                }
+                
+                if (innerDiv) {
+                    innerDiv.style.setProperty('width', '378px', 'important');
+                    innerDiv.style.setProperty('height', 'auto', 'important');
+                    innerDiv.style.setProperty('padding-top', '0', 'important');
+                    innerDiv.style.setProperty('position', 'relative', 'important');
+                }
+                
+                if (iframe) {
+                    iframe.style.setProperty('width', '378px', 'important');
+                    iframe.style.setProperty('height', '323px', 'important'); // 378 / 1.7647 aspect ratio
+                    iframe.style.setProperty('position', 'relative', 'important');
+                    iframe.style.setProperty('top', '0', 'important');
+                    iframe.style.setProperty('left', '0', 'important');
+                }
+            }
+            
+            // Run styling multiple times to catch when elements are created
+            setTimeout(forceTenorStyling, 100);
+            setTimeout(forceTenorStyling, 500);
+            setTimeout(forceTenorStyling, 1000);
+            setTimeout(forceTenorStyling, 2000);
+            
+            // Load Tenor's embed script
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.async = true;
+                script.src = 'https://tenor.com/embed.js';
+                document.body.appendChild(script);
+                
+                // Apply styling again after script loads
+                script.onload = () => {
+                    setTimeout(forceTenorStyling, 100);
+                    setTimeout(forceTenorStyling, 500);
+                    setTimeout(forceTenorStyling, 1000);
+                };
+            }
+            
+            // Add Tenor attribution
+            addTenorAttribution(imageElement);
+            
+            // Store GIF ID for analytics
+            window.tenorGifId = specificGifData.id;
+            
+            console.log('✅ Joe Goldberg "Wave" embed loaded with forced 378px width');
+        }
+        
+        // Add Tenor attribution (required by API terms)
+        function addTenorAttribution(container) {
+            const attribution = document.createElement('div');
+            attribution.style.cssText = `
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                font-size: 9px;
+                color: rgba(255,255,255,0.9);
+                background: rgba(0,0,0,0.6);
+                padding: 3px 7px;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 500;
+                backdrop-filter: blur(4px);
+                z-index: 10;
+            `;
+            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+            container.style.position = 'relative';
+            container.appendChild(attribution);
+        }
+        
+        // Create random mystery elements
+        function createMysteryElements() {
             const numberOfElements = Math.floor(Math.random() * 11) + 15; // 15-25 elements
             
             for (let i = 0; i < numberOfElements; i++) {
                 const element = document.createElement('div');
-                element.className = 'friendly-element';
+                element.className = 'mystery-element';
                 
                 // Random emoji
-                const randomEmoji = friendlyEmojis[Math.floor(Math.random() * friendlyEmojis.length)];
+                const randomEmoji = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
                 element.textContent = randomEmoji;
                 
                 // Random position
@@ -485,8 +785,8 @@
                 // No delay - start animation immediately
                 element.style.animationDelay = '0s';
                 
-                // Random animation duration (4-7 seconds)
-                element.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                // Random animation duration (5-8 seconds)
+                element.style.animationDuration = (Math.random() * 3 + 5) + 's';
                 
                 // Random font size variation
                 const baseFontSize = 20;
@@ -497,81 +797,77 @@
                 document.body.appendChild(element);
             }
             
-            console.log(`Created ${numberOfElements} friendly elements`);
+            console.log(`Created ${numberOfElements} mystery elements`);
         }
 
-        // Create Friends-style colored dots
-        function createFriendsDots() {
-            const friendsColors = ['#FF6B6B', '#FFE66D', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'];
-            const numberOfDots = Math.floor(Math.random() * 20) + 30; // 30-49 dots
+        // Create blood drips
+        function createBloodDrips() {
+            const numberOfDrips = Math.floor(Math.random() * 10) + 8; // 8-17 drips
             
-            for (let i = 0; i < numberOfDots; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'friends-dot';
+            for (let i = 0; i < numberOfDrips; i++) {
+                const drip = document.createElement('div');
+                drip.className = 'blood-drip';
                 
-                // Random color from Friends palette
-                const randomColor = friendsColors[Math.floor(Math.random() * friendsColors.length)];
-                dot.style.backgroundColor = randomColor;
-                dot.style.boxShadow = `0 0 10px ${randomColor}`;
+                // Random horizontal position
+                drip.style.left = Math.random() * 100 + '%';
+                drip.style.top = '0px';
                 
-                // Random position
-                dot.style.top = Math.random() * 100 + '%';
-                dot.style.left = Math.random() * 100 + '%';
+                // Random animation delay for continuous effect (0-2 seconds)
+                drip.style.animationDelay = Math.random() * 2 + 's';
                 
-                // Random animation delay
-                dot.style.animationDelay = Math.random() * 4 + 's';
+                // Random animation duration (8-12 seconds)
+                drip.style.animationDuration = (Math.random() * 4 + 8) + 's';
                 
-                // Random animation duration (3-6 seconds)
-                dot.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                // Random width with much more variation (3-28px range)
+                const minWidth = Math.random() * 4 + 3; // 3-7px (current minimum)
+                const maxWidth = minWidth * 4; // 4x the minimum width
+                const finalWidth = Math.random() * (maxWidth - minWidth) + minWidth;
+                drip.style.width = finalWidth + 'px';
                 
-                // Random size variation
-                const baseSize = 15;
-                const randomSize = baseSize + (Math.random() * 10 - 5); // ±5px variation
-                dot.style.width = randomSize + 'px';
-                dot.style.height = randomSize + 'px';
+                // Adjust border-radius based on width
+                const radius = finalWidth / 2;
+                drip.style.borderRadius = `0 0 ${radius}px ${radius}px`;
                 
                 // Add to body
-                document.body.appendChild(dot);
+                document.body.appendChild(drip);
             }
             
-            console.log(`Created ${numberOfDots} Friends-style dots`);
+            console.log(`Created ${numberOfDrips} blood drips`);
         }
 
-        // Create continuous Friends dots that refresh periodically
-        function startContinuousFriendsDots() {
-            const friendsColors = ['#FF6B6B', '#FFE66D', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'];
-            
+        // Create continuous blood drips that refresh periodically
+        function startContinuousBloodDrips() {
             setInterval(() => {
-                // Add a few more random dots every 5 seconds
-                for (let i = 0; i < 3; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'friends-dot';
+                // Add a few more random drips every 3 seconds
+                for (let i = 0; i < 2; i++) {
+                    const drip = document.createElement('div');
+                    drip.className = 'blood-drip';
                     
-                    const randomColor = friendsColors[Math.floor(Math.random() * friendsColors.length)];
-                    dot.style.backgroundColor = randomColor;
-                    dot.style.boxShadow = `0 0 10px ${randomColor}`;
+                    drip.style.left = Math.random() * 100 + '%';
+                    drip.style.top = '0px';
+                    drip.style.animationDelay = '0s';
+                    drip.style.animationDuration = (Math.random() * 4 + 8) + 's';
                     
-                    dot.style.top = Math.random() * 100 + '%';
-                    dot.style.left = Math.random() * 100 + '%';
-                    dot.style.animationDelay = '0s';
-                    dot.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                    // Random width with variation for new drips too
+                    const minWidth = Math.random() * 4 + 3;
+                    const maxWidth = minWidth * 4;
+                    const finalWidth = Math.random() * (maxWidth - minWidth) + minWidth;
+                    drip.style.width = finalWidth + 'px';
                     
-                    // Random size for new dots too
-                    const baseSize = 15;
-                    const randomSize = baseSize + (Math.random() * 10 - 5);
-                    dot.style.width = randomSize + 'px';
-                    dot.style.height = randomSize + 'px';
+                    // Adjust border-radius based on width
+                    const radius = finalWidth / 2;
+                    drip.style.borderRadius = `0 0 ${radius}px ${radius}px`;
                     
-                    document.body.appendChild(dot);
+                    document.body.appendChild(drip);
                     
-                    // Remove the dot after animation completes
+                    // Remove the drip after animation completes
                     setTimeout(() => {
-                        if (dot.parentNode) {
-                            dot.parentNode.removeChild(dot);
+                        if (drip.parentNode) {
+                            drip.parentNode.removeChild(drip);
                         }
-                    }, 8000);
+                    }, 12000);
                 }
-            }, 5000);
+            }, 3000);
         }
         
         // Safari iOS font size fix
@@ -583,82 +879,34 @@
             if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '32px';
+                    quoteElement.style.fontSize = '44px';
                     quoteElement.style.lineHeight = '0.75';
-                    quoteElement.style.letterSpacing = '0px';
+                    quoteElement.style.letterSpacing = '-1px';
                 } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '38px';
+                    quoteElement.style.fontSize = '52px';
                     quoteElement.style.lineHeight = '0.8';
-                    quoteElement.style.letterSpacing = '1px';
+                    quoteElement.style.letterSpacing = '-1px';
                 }
-                quoteElement.style.fontFamily = "'Permanent Marker', cursive";
+                quoteElement.style.fontFamily = "'Rozha One', 'Federo', 'Rubik Glitch', 'Bodoni Moda SC', 'Bebas Neue', 'Anton', 'Oswald', 'Impact', sans-serif";
                 quoteElement.style.fontWeight = '400';
+                quoteElement.style.textTransform = 'uppercase';
                 
                 console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
             }
         }
         
-        // Google Fonts connection test
-        function testGoogleFontsConnection() {
-            const link = document.querySelector('link[href*="fonts.googleapis.com"]');
-            if (link) {
-                console.log('🔗 Google Fonts link found:', link.href);
-                
-                // Test if the CSS loads
-                const xhr = new XMLHttpRequest();
-                xhr.open('GET', link.href, true);
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            console.log('✅ Google Fonts CSS loaded successfully');
-                        } else {
-                            console.log('❌ Google Fonts CSS failed to load. Status:', xhr.status);
-                        }
-                    }
-                };
-                xhr.send();
-            } else {
-                console.log('❌ No Google Fonts link found');
+        // iPhone specific glow reduction
+        function reduceGlowForiPhone() {
+            const isIphone = /iPhone/i.test(navigator.userAgent);
+            if (isIphone) {
+                const container = document.querySelector('.container');
+                container.style.boxShadow = `
+                    0 15px 30px rgba(0,0,0,0.08), 
+                    0 0 25px rgba(255, 255, 255, 0.6)
+                `;
+                console.log('🍎 iPhone detected - optimized glow applied');
             }
         }
-        
-        // Font loading verification
-        document.addEventListener('DOMContentLoaded', function() {
-            // Test Google Fonts connection
-            testGoogleFontsConnection();
-            
-            // Check if Google Fonts is available
-            if (document.fonts) {
-                document.fonts.ready.then(function() {
-                    // Test if Permanent Marker is loaded
-                    const testElement = document.createElement('span');
-                    testElement.style.fontFamily = "'Permanent Marker', cursive";
-                    testElement.style.fontSize = '12px';
-                    testElement.textContent = 'test';
-                    testElement.style.position = 'absolute';
-                    testElement.style.visibility = 'hidden';
-                    document.body.appendChild(testElement);
-                    
-                    const computedStyle = window.getComputedStyle(testElement);
-                    const actualFont = computedStyle.fontFamily;
-                    
-                    if (actualFont.includes('Permanent Marker')) {
-                        console.log('✅ Google Font "Permanent Marker" loaded successfully!');
-                        console.log('Font family:', actualFont);
-                    } else {
-                        console.log('❌ Google Font "Permanent Marker" failed to load');
-                        console.log('Fallback font:', actualFont);
-                    }
-                    
-                    document.body.removeChild(testElement);
-                });
-                
-                console.log('📊 Google Fonts API is accessible');
-                console.log('🔗 Font connection status: Connected');
-            } else {
-                console.log('❌ Document.fonts API not supported');
-            }
-        });
         
         // Update the content
         document.getElementById('mainQuote').textContent = pageData.quote;
@@ -671,125 +919,41 @@
         // Store for analytics
         window.currentCtaMessage = randomCtaMessage;
         
-        // iPhone specific glow reduction
-        function reduceGlowForiPhone() {
-            const isIphone = /iPhone/i.test(navigator.userAgent);
-            if (isIphone) {
-                const container = document.querySelector('.container');
-                container.style.boxShadow = `
-                    0 15px 30px rgba(255,255,255,0.1), 
-                    0 0 25px rgba(255, 255, 255, 0.2),
-                    0 0 20px rgba(255, 215, 0, 0.3),
-                    0 0 30px rgba(255, 215, 0, 0.2)
-                `;
-                console.log('🍎 iPhone detected - optimized glow applied');
-            }
-        }
-        
         // Apply fixes after content is loaded
         setTimeout(applySafariFix, 100);
         reduceGlowForiPhone();
         
-        // Create friendly elements
-        createFriendlyElements();
+        // Create mystery elements
+        createMysteryElements();
         
-        // Create Friends-style dots
-        createFriendsDots();
+        // Create blood drips
+        createBloodDrips();
         
-        // Start continuous Friends dots
-        startContinuousFriendsDots();
+        // Start continuous blood drips
+        startContinuousBloodDrips();
         
-        // Update character image with loading state
-        const imageElement = document.getElementById('characterImage');
-        if (pageData.image && pageData.image.length > 0) {
-            // Show loading state
-            imageElement.textContent = 'טוען תמונה...';
-            imageElement.classList.add('loading');
-            
-            const img = document.createElement('img');
-            img.src = pageData.image;
-            img.alt = "Character";
-            img.style.width = "100%";
-            img.style.height = "100%";
-            img.style.objectFit = "cover";
-            img.style.borderRadius = "10px";
-            
-            img.onload = function() {
-                console.log('✅ Image loaded successfully:', pageData.image);
-                imageElement.innerHTML = '';
-                imageElement.appendChild(img);
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-            };
-            
-            img.onerror = function() {
-                console.log('❌ Image failed to load:', pageData.image);
-                console.log('Trying alternative paths...');
-                
-                // Try different paths
-                const alternativePaths = [
-                    "assets/images/how-you-doin.png",
-                    "/assets/images/how-you-doin.png",
-                    "./assets/images/how-you-doin.png",
-                    "assets/images/how you doin joe.png",
-                    "/assets/images/how you doin joe.png",
-                    "assets/images/how%20you%20doin%20joe.png"
-                ];
-                
-                let currentIndex = 0;
-                function tryNextPath() {
-                    if (currentIndex < alternativePaths.length) {
-                        const testImg = document.createElement('img');
-                        testImg.src = alternativePaths[currentIndex];
-                        testImg.onload = function() {
-                            console.log('✅ Alternative path worked:', alternativePaths[currentIndex]);
-                            imageElement.innerHTML = '';
-                            imageElement.appendChild(testImg);
-                            imageElement.classList.remove('loading');
-                            imageElement.classList.add('has-image');
-                        };
-                        testImg.onerror = function() {
-                            console.log('❌ Alternative path failed:', alternativePaths[currentIndex]);
-                            currentIndex++;
-                            tryNextPath();
-                        };
-                        testImg.style.width = "100%";
-                        testImg.style.height = "100%";
-                        testImg.style.objectFit = "cover";
-                        testImg.style.borderRadius = "10px";
-                        testImg.alt = "Character";
-                    } else {
-                        console.log('❌ All paths failed. Keeping placeholder text.');
-                        imageElement.textContent = 'Add your image here';
-                        imageElement.classList.remove('loading', 'has-image');
-                    }
-                }
-                tryNextPath();
-            };
-        } else {
-            imageElement.textContent = 'Add your image here';
-            imageElement.classList.remove('loading', 'has-image');
-        }
+        // Load the specific Joe Goldberg GIF
+        loadSpecificMeme();
         
-        // Random Friends colors for friendly animation
-        const friendlyColors = [
-            '#FF6B6B', '#FFE66D', '#4ECDC4', '#45B7D1', '#96CEB4', 
-            '#FFEAA7', '#FD79A8', '#6C5CE7', '#A29BFE', '#74B9FF'
+        // Random colors for creepy animation - Joe Goldberg themed
+        const creepyColors = [
+            '#ff0000', '#8B0000', '#DC143C', '#B22222', '#A0522D', 
+            '#800000', '#CD5C5C', '#F08080', '#FA8072', '#E9967A'
         ];
         
         function getRandomColor() {
-            return friendlyColors[Math.floor(Math.random() * friendlyColors.length)];
+            return creepyColors[Math.floor(Math.random() * creepyColors.length)];
         }
         
-        function friendlyAnimation() {
+        function creepyAnimation() {
             const quoteElement = document.getElementById('mainQuote');
             const color1 = getRandomColor();
             const color2 = getRandomColor();
             
-            // Check if mobile for lighter effects
+            // Check if mobile for lighter shadow
             const isMobile = window.innerWidth <= 480;
             const shadowStrength = isMobile ? '0.5px 0.5px 1px' : '3px 3px 6px';
-            const glowStrength = isMobile ? '0 0 8px' : '0 0 15px';
+            const glowStrength = isMobile ? '0 0 8px' : '0 0 20px';
             const scaleStrength = isMobile ? 1.005 : 1.01;
             
             // Start animation
@@ -801,19 +965,19 @@
                 quoteElement.style.color = color2;
                 quoteElement.style.textShadow = `${glowStrength} ${color2}, ${shadowStrength} rgba(0,0,0,0.2)`;
                 quoteElement.style.transform = `scale(${1/scaleStrength})`;
-            }, 200);
+            }, 150);
             
             setTimeout(() => {
                 quoteElement.style.color = '#222';
                 quoteElement.style.textShadow = isMobile ? '0.5px 0.5px 1px rgba(0,0,0,0.1)' : '3px 3px 6px rgba(0,0,0,0.3)';
                 quoteElement.style.transform = 'scale(1)';
-            }, 400);
+            }, 300);
         }
         
         function scheduleRandomAnimation() {
-            const randomDelay = Math.random() * 3000 + 3000; // 3-6 seconds
+            const randomDelay = Math.random() * 2000 + 2000; // 2-4 seconds
             setTimeout(() => {
-                friendlyAnimation();
+                creepyAnimation();
                 scheduleRandomAnimation(); // Schedule next animation
             }, randomDelay);
         }
@@ -821,11 +985,28 @@
         // Start the random animation cycle
         scheduleRandomAnimation();
         
-        // Analytics tracking
+        // Analytics tracking with Tenor share registration
         document.querySelector('.shop-button').addEventListener('click', function() {
-            console.log('Shop button clicked for quote:', pageData.quote);
+            console.log('Shop button clicked for Joe Goldberg wave GIF');
             console.log('CTA message shown:', window.currentCtaMessage);
+            
+            // Register share with Tenor
+            if (window.tenorGifId) {
+                registerTenorShare(window.tenorGifId);
+            }
         });
+        
+        // Register share with Tenor (optional but recommended)
+        async function registerTenorShare(gifId) {
+            try {
+                await fetch(
+                    `https://tenor.googleapis.com/v2/registershare?id=${gifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`
+                );
+                console.log('✅ Tenor share registered');
+            } catch (error) {
+                console.log('❌ Failed to register Tenor share:', error);
+            }
+        }
         
         // Re-apply fix on orientation change
         window.addEventListener('orientationchange', function() {
