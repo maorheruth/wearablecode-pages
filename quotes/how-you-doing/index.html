@@ -154,28 +154,6 @@
             justify-content: center;
         }
 
-        .tenor-link {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 500;
-            text-decoration: none;
-            z-index: 10;
-            transition: all 0.3s ease;
-            opacity: 0.8;
-        }
-
-        .tenor-link:hover {
-            opacity: 1;
-            background: rgba(0, 0, 0, 0.9);
-            transform: scale(1.05);
-        }
-
         .loading-text {
             font-size: 18px;
             color: #b0b0b0;
@@ -329,13 +307,6 @@
                 font-size: 14px;
             }
             
-            .tenor-link {
-                font-size: 10px;
-                padding: 3px 6px;
-                top: 6px;
-                left: 6px;
-            }
-            
             .loading-text {
                 font-size: 16px;
             }
@@ -444,44 +415,141 @@
             '🎊', '🎉', '😄', '👋', '👍', '🤝', '💛', '🧡'
         ];
         
-        // Simple GIF loading that worked before
+        // Load the EXACT Tenor GIF you want - ID 16802333
         function loadGIF() {
             const imageElement = document.getElementById('characterImage');
-            const gifUrl = 'https://media.giphy.com/media/3o7TKnO6Wve6502iJ2/giphy.gif';
             
-            const img = document.createElement('img');
-            img.src = gifUrl;
-            img.alt = "How you doin'?";
-            img.style.width = '100%';
-            img.style.height = 'auto';
-            img.style.borderRadius = '12px';
-            img.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
-            img.style.display = 'block';
-            img.style.margin = '0';
-            img.style.padding = '0';
-            img.style.objectFit = 'cover';
+            // Try direct URL patterns for your specific GIF ID: 16802333
+            const directUrls = [
+                'https://media.tenor.com/VCLq3KRGwYgAAAAM/friends-joey-tribbiani.gif',
+                'https://c.tenor.com/VCLq3KRGwYgAAAAC/friends-joey-tribbiani.gif',
+                'https://media1.tenor.com/images/VCLq3KRGwYgAAAAM/tenor.gif',
+                'https://media.tenor.com/VCLq3KRGwYgAAAAi/friends-joey-tribbiani.gif'
+            ];
             
-            img.onload = function() {
-                imageElement.innerHTML = '';
-                imageElement.appendChild(img);
-                
-                // Add Tenor link
-                const tenorLink = document.createElement('a');
-                tenorLink.href = 'https://tenor.com';
-                tenorLink.target = '_blank';
-                tenorLink.className = 'tenor-link';
-                tenorLink.textContent = 'via Tenor';
-                
-                imageElement.appendChild(tenorLink);
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-            };
+            let currentIndex = 0;
             
-            img.onerror = function() {
-                imageElement.innerHTML = '<div style="width: 100%; height: 200px; background: #FFFACD; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #8B4513; font-family: \'Permanent Marker\', cursive;">😎<br>How you doin\'?</div>';
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-            };
+            function tryNextUrl() {
+                if (currentIndex < directUrls.length) {
+                    const img = document.createElement('img');
+                    img.src = directUrls[currentIndex];
+                    img.alt = "How you doin'?";
+                    
+                    img.style.width = '100%';
+                    img.style.height = 'auto';
+                    img.style.borderRadius = '12px';
+                    img.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
+                    img.style.display = 'block';
+                    img.style.margin = '0';
+                    img.style.padding = '0';
+                    img.style.objectFit = 'cover';
+                    
+                    img.onload = function() {
+                        imageElement.innerHTML = '';
+                        imageElement.appendChild(img);
+                        imageElement.classList.remove('loading');
+                        imageElement.classList.add('has-image');
+                        
+                        // Add Tenor attribution link
+                        const attribution = document.createElement('div');
+                        attribution.style.cssText = `
+                            position: absolute;
+                            top: 8px;
+                            left: 8px;
+                            font-size: 9px;
+                            color: rgba(255,255,255,0.9);
+                            background: rgba(0,0,0,0.6);
+                            padding: 3px 7px;
+                            border-radius: 6px;
+                            text-decoration: none;
+                            font-weight: 500;
+                            backdrop-filter: blur(4px);
+                            z-index: 10;
+                            cursor: pointer;
+                        `;
+                        attribution.innerHTML = '<a href="https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-how-are-you-nod-gif-16802333" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+                        imageElement.style.position = 'relative';
+                        imageElement.appendChild(attribution);
+                        
+                        console.log('✅ Your specific Tenor GIF loaded:', directUrls[currentIndex]);
+                    };
+                    
+                    img.onerror = function() {
+                        console.log('❌ URL failed:', directUrls[currentIndex]);
+                        currentIndex++;
+                        tryNextUrl();
+                    };
+                } else {
+                    // If direct URLs fail, try the embed as final fallback
+                    console.log('Trying embed fallback...');
+                    const embedContainer = document.createElement('div');
+                    embedContainer.innerHTML = `<div class="tenor-gif-embed" data-postid="16802333" data-share-method="host" data-aspect-ratio="1.37931" data-width="100%"><a href="https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-how-are-you-nod-gif-16802333">Friends Joey Tribbiani GIF</a> from <a href="https://tenor.com/search/friends-gifs">Friends GIFs</a></div>`;
+                    
+                    embedContainer.style.width = '100%';
+                    embedContainer.style.height = 'auto';
+                    embedContainer.style.borderRadius = '12px';
+                    embedContainer.style.overflow = 'hidden';
+                    embedContainer.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
+                    
+                    imageElement.innerHTML = '';
+                    imageElement.appendChild(embedContainer);
+                    imageElement.classList.remove('loading');
+                    imageElement.classList.add('has-image');
+                    
+                    // Add Tenor attribution for embed version
+                    const attribution = document.createElement('div');
+                    attribution.style.cssText = `
+                        position: absolute;
+                        top: 8px;
+                        left: 8px;
+                        font-size: 9px;
+                        color: rgba(255,255,255,0.9);
+                        background: rgba(0,0,0,0.6);
+                        padding: 3px 7px;
+                        border-radius: 6px;
+                        text-decoration: none;
+                        font-weight: 500;
+                        backdrop-filter: blur(4px);
+                        z-index: 10;
+                        cursor: pointer;
+                    `;
+                    attribution.innerHTML = '<a href="https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-how-are-you-nod-gif-16802333" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+                    imageElement.style.position = 'relative';
+                    imageElement.appendChild(attribution);
+                    
+                    // Load Tenor script
+                    if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                        const script = document.createElement('script');
+                        script.type = 'text/javascript';
+                        script.async = true;
+                        script.src = 'https://tenor.com/embed.js';
+                        document.body.appendChild(script);
+                        
+                        script.onload = () => {
+                            setTimeout(() => {
+                                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                                const iframe = embedContainer.querySelector('iframe');
+                                
+                                if (tenorEmbed) {
+                                    tenorEmbed.style.width = '100%';
+                                    tenorEmbed.style.height = 'auto';
+                                }
+                                
+                                if (iframe) {
+                                    iframe.style.width = '100%';
+                                    iframe.style.height = 'auto';
+                                    iframe.style.borderRadius = '12px';
+                                    iframe.style.border = 'none';
+                                }
+                            }, 1000);
+                        };
+                    }
+                    
+                    console.log('✅ Using embed for GIF 16802333');
+                }
+            }
+            
+            tryNextUrl();
         }
         
         function createFriendlyElements() {
