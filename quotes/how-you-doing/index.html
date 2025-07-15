@@ -555,6 +555,7 @@
         
         // Load the specific Friends GIF - BACK TO RELIABLE METHOD
         function loadSpecificMeme() {
+            console.log('🚀 Starting to load Friends GIF...');
             const imageElement = document.getElementById('characterImage');
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
@@ -563,13 +564,16 @@
             fetchSpecificGifFromTenor()
                 .then(gifUrl => {
                     if (gifUrl) {
+                        console.log('🎯 Got GIF URL from API, loading...');
                         loadGifFromUrl(gifUrl);
                     } else {
+                        console.log('⚠️ No GIF URL from API, trying embed...');
                         loadTenorEmbed();
                     }
                 })
                 .catch(error => {
-                    console.log('❌ Tenor API failed, using embed fallback:', error);
+                    console.log('❌ Tenor API failed completely:', error);
+                    console.log('🔄 Using embed fallback...');
                     loadTenorEmbed();
                 });
         }
@@ -577,30 +581,37 @@
         // Try to fetch the specific GIF from Tenor API
         async function fetchSpecificGifFromTenor() {
             try {
+                console.log('🔍 Trying to fetch GIF from Tenor API...');
                 const response = await fetch(
                     `https://tenor.googleapis.com/v2/posts?ids=${specificGifData.id}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}&media_filter=gif`
                 );
+                
+                console.log('📡 Response status:', response.status);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
                 const data = await response.json();
+                console.log('📊 API Response:', data);
                 
                 if (data.results && data.results.length > 0) {
                     const gif = data.results[0];
                     window.tenorGifId = gif.id;
+                    console.log('✅ GIF found:', gif.media_formats.gif.url);
                     return gif.media_formats.gif.url;
                 }
+                console.log('❌ No results in API response');
                 return null;
             } catch (error) {
-                console.log('Tenor API error:', error);
+                console.log('❌ Tenor API error:', error);
                 return null;
             }
         }
         
         // Load GIF from direct URL - SIMPLIFIED VERSION
         function loadGifFromUrl(gifUrl) {
+            console.log('🖼️ Attempting to load GIF from URL:', gifUrl);
             const imageElement = document.getElementById('characterImage');
             const img = document.createElement('img');
             img.src = gifUrl;
@@ -617,6 +628,7 @@
             img.style.objectFit = 'cover';
             
             img.onload = function() {
+                console.log('✅ GIF loaded successfully!');
                 imageElement.innerHTML = '';
                 imageElement.appendChild(img);
                 imageElement.classList.remove('loading');
@@ -627,7 +639,8 @@
             };
             
             img.onerror = function() {
-                console.log('❌ Direct GIF URL failed, trying embed');
+                console.log('❌ GIF failed to load from URL:', gifUrl);
+                console.log('Trying embed fallback...');
                 loadTenorEmbed();
             };
         }
@@ -699,6 +712,7 @@
         
         // Fallback to Tenor embed - SIMPLIFIED
         function loadTenorEmbed() {
+            console.log('🔄 Loading Tenor embed as fallback...');
             const imageElement = document.getElementById('characterImage');
             
             // Create a simple container
@@ -718,10 +732,13 @@
             
             // Load Tenor's embed script
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                console.log('📜 Loading Tenor embed script...');
                 const script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.async = true;
                 script.src = 'https://tenor.com/embed.js';
+                script.onload = () => console.log('✅ Tenor script loaded');
+                script.onerror = () => console.log('❌ Tenor script failed to load');
                 document.body.appendChild(script);
             }
             
