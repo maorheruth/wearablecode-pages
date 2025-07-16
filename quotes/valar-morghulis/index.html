@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valar morghulis | WearableCode</title>
     <link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@100;200;300;400;500;600;700;800;900&family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&family=Bodoni+Moda+SC:wght@400;700;900&family=Rubik+Glitch&family=Federo&family=Rozha+One&family=Cinzel:wght@400;500;600;700;800;900&family=Uncial+Antiqua&display=swap" rel="stylesheet">
-    <!-- Preload main image for faster loading -->
-    <link rel="preload" href="./assets/images/valar-morghulis.png" as="image">
     <style>
         * {
             margin: 0;
@@ -84,37 +82,6 @@
             }
         }
 
-        @keyframes dripEndless {
-            0% {
-                transform: translateY(-100vh);
-                opacity: 0.9;
-            }
-            20% {
-                transform: translateY(-80vh);
-                opacity: 0.8;
-            }
-            40% {
-                transform: translateY(-60vh);
-                opacity: 0.7;
-            }
-            60% {
-                transform: translateY(-40vh);
-                opacity: 0.6;
-            }
-            80% {
-                transform: translateY(-20vh);
-                opacity: 0.4;
-            }
-            95% {
-                transform: translateY(0);
-                opacity: 0.2;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 0;
-            }
-        }
-
         .container {
             background: white;
             border-radius: 20px;
@@ -168,46 +135,102 @@
         }
 
         .character-image {
-            width: 450px;
-            height: 450px;
+            width: 100%;
+            height: auto;
             border-radius: 12px;
             margin: 0 auto 18px;
-            background: #f8f9fa;
+            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ccc;
-            border: 2px dashed #ddd;
+            color: #999;
+            border: none;
             position: relative;
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
+            padding: 0;
         }
 
         .character-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 10px;
+            width: 378px !important;
+            height: 378px !important;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: block;
+            margin: 0 auto;
+            padding: 0;
+            object-fit: cover;
+        }
+
+        /* Simple iframe styling - FORCE 323px height */
+        .character-image iframe {
+            width: 378px !important;
+            height: 323px !important;
+            border: none !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            display: block !important;
+        }
+
+        /* Force styling with specific class */
+        .gif-iframe {
+            width: 378px !important;
+            height: 323px !important;
+            border: none !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            display: block !important;
+            max-width: 378px !important;
+            max-height: 323px !important;
+            min-width: 378px !important;
+            min-height: 323px !important;
         }
 
         .character-image.has-image {
             border: none;
-            background: white;
+            background: transparent;
+            box-shadow: none;
+            height: auto;
+            padding: 0;
+            display: block;
+        }
+
+        .character-image.has-image img,
+        .character-image.has-image iframe,
+        .character-image.has-image .tenor-gif-embed {
+            width: 100% !important;
+            height: auto !important;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: block;
         }
 
         .character-image.loading {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes loading {
+        .loading-text {
+            font-size: 18px;
+            color: #b0b0b0;
+            font-weight: 500;
+            animation: fadeInOut 2s ease-in-out infinite;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInOut {
             0% {
-                background-position: 200% 0;
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
             }
             100% {
-                background-position: -200% 0;
+                opacity: 0.3;
             }
         }
 
@@ -339,10 +362,14 @@
             }
             
             .character-image {
-                width: 320px;
-                height: 320px;
+                width: 100%;
+                height: auto;
                 margin-bottom: 15px;
                 font-size: 14px;
+            }
+            
+            .loading-text {
+                font-size: 16px;
             }
             
             .quote {
@@ -413,9 +440,19 @@
             }
             
             .character-image {
-                width: 280px;
-                height: 280px;
+                width: 100%;
+                height: auto;
                 font-size: 12px;
+            }
+            
+            .character-image img {
+                width: 280px !important;
+                height: 280px !important;
+                margin: 0 auto !important;
+            }
+            
+            .loading-text {
+                font-size: 14px;
             }
             
             .quote {
@@ -462,7 +499,7 @@
     
     <div class="container">
         <div class="character-image" id="characterImage">
-            טוען תמונה...
+            <div class="loading-text">Loading</div>
         </div>
         
         <div class="quote" id="mainQuote">
@@ -491,11 +528,21 @@
     </div>
 
     <script>
+        // Tenor API Configuration
+        const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
+        const CLIENT_KEY = 'wearablecode_memes';
+        
+        // Specific GIF data for Jaqen H'ghar
+        const specificGifData = {
+            id: '19718003',
+            url: 'https://tenor.com/view/game-of-thrones-jaqen-what-can-i-say-gif-19718003',
+            embedCode: `<div class="tenor-gif-embed" data-postid="19718003" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/game-of-thrones-jaqen-what-can-i-say-gif-19718003">Game Of Thrones Jaqen GIF</a>from <a href="https://tenor.com/search/game+of+thrones-gifs">Game Of Thrones GIFs</a></div>`
+        };
+        
         // Page-specific data
         const pageData = {
             quote: "Valar morghulis",
-            source: "- Man has no name",
-            image: "./assets/images/valar-morghulis.png"
+            source: "- Man has no name"
         };
         
         // Random CTA messages in Hebrew
@@ -518,6 +565,218 @@
             '🐺', '🦁', '🌹', '⚡', '💀', '🩸', '🌙', '❄️',
             '🔮', '📜', '🗝️', '🚪'
         ];
+        
+        // Load the specific Jaqen H'ghar GIF
+        function loadSpecificMeme() {
+            const imageElement = document.getElementById('characterImage');
+            imageElement.innerHTML = '<div class="loading-text">Loading</div>';
+            imageElement.classList.add('loading');
+            
+            // Try to load via Tenor API first, then fallback to embed
+            fetchSpecificGifFromTenor()
+                .then(gifUrl => {
+                    if (gifUrl) {
+                        loadGifFromUrl(gifUrl);
+                    } else {
+                        loadTenorEmbed();
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Tenor API failed, using embed fallback:', error);
+                    loadTenorEmbed();
+                });
+        }
+        
+        // Try to fetch the specific GIF from Tenor API
+        async function fetchSpecificGifFromTenor() {
+            try {
+                const response = await fetch(
+                    `https://tenor.googleapis.com/v2/posts?ids=${specificGifData.id}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}&media_filter=gif`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    const gif = data.results[0];
+                    window.tenorGifId = gif.id;
+                    return gif.media_formats.gif.url;
+                }
+                return null;
+            } catch (error) {
+                console.log('Tenor API error:', error);
+                return null;
+            }
+        }
+        
+        // Load GIF from direct URL
+        function loadGifFromUrl(gifUrl) {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = gifUrl;
+            img.alt = "Jaqen H'ghar";
+            
+            // Force exact width styling on the image element
+            img.style.cssText = `
+                width: 378px !important;
+                height: auto !important;
+                border-radius: 12px !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                display: block !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                object-fit: cover !important;
+                max-width: 378px !important;
+            `;
+            
+            img.onload = function() {
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                
+                // Force styling again after load with exact dimensions
+                img.style.cssText = `
+                    width: 378px !important;
+                    height: auto !important;
+                    border-radius: 12px !important;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                    display: block !important;
+                    margin: 0 auto !important;
+                    padding: 0 !important;
+                    object-fit: cover !important;
+                    max-width: 378px !important;
+                `;
+                
+                // Also force styling on any wrapper elements
+                setTimeout(() => {
+                    const allInnerElements = imageElement.querySelectorAll('*');
+                    allInnerElements.forEach(el => {
+                        if (el.tagName === 'IMG' || el.id === 'content') {
+                            el.style.setProperty('width', '378px', 'important');
+                            el.style.setProperty('height', 'auto', 'important');
+                            el.style.setProperty('max-width', '378px', 'important');
+                            el.style.setProperty('margin', '0 auto', 'important');
+                            el.style.setProperty('display', 'block', 'important');
+                        }
+                    });
+                }, 100);
+                
+                addTenorAttribution(imageElement);
+                console.log('✅ Tenor API GIF loaded successfully with 378px width');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Direct GIF URL failed, trying embed');
+                loadTenorEmbed();
+            };
+        }
+        
+        // Fallback to Tenor embed
+        function loadTenorEmbed() {
+            const imageElement = document.getElementById('characterImage');
+            
+            // Create container for the Tenor embed with fixed width
+            const embedContainer = document.createElement('div');
+            embedContainer.innerHTML = specificGifData.embedCode;
+            embedContainer.style.cssText = `
+                width: 378px !important;
+                height: auto !important;
+                display: block !important;
+                border-radius: 12px;
+                overflow: hidden;
+                margin: 0 auto !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            `;
+            
+            // Add to container
+            imageElement.innerHTML = '';
+            imageElement.appendChild(embedContainer);
+            imageElement.classList.remove('loading');
+            imageElement.classList.add('has-image');
+            
+            // Force styling on Tenor elements after they load
+            function forceTenorStyling() {
+                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                const iframe = embedContainer.querySelector('iframe');
+                const innerDiv = embedContainer.querySelector('div[style*="padding-top"]');
+                
+                if (tenorEmbed) {
+                    tenorEmbed.style.setProperty('width', '378px', 'important');
+                    tenorEmbed.style.setProperty('position', 'relative', 'important');
+                }
+                
+                if (innerDiv) {
+                    innerDiv.style.setProperty('width', '378px', 'important');
+                    innerDiv.style.setProperty('height', 'auto', 'important');
+                    innerDiv.style.setProperty('padding-top', '0', 'important');
+                    innerDiv.style.setProperty('position', 'relative', 'important');
+                }
+                
+                if (iframe) {
+                    iframe.style.setProperty('width', '378px', 'important');
+                    iframe.style.setProperty('height', '323px', 'important'); // 378 / 1.7647 aspect ratio
+                    iframe.style.setProperty('position', 'relative', 'important');
+                    iframe.style.setProperty('top', '0', 'important');
+                    iframe.style.setProperty('left', '0', 'important');
+                }
+            }
+            
+            // Run styling multiple times to catch when elements are created
+            setTimeout(forceTenorStyling, 100);
+            setTimeout(forceTenorStyling, 500);
+            setTimeout(forceTenorStyling, 1000);
+            setTimeout(forceTenorStyling, 2000);
+            
+            // Load Tenor's embed script
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.async = true;
+                script.src = 'https://tenor.com/embed.js';
+                document.body.appendChild(script);
+                
+                // Apply styling again after script loads
+                script.onload = () => {
+                    setTimeout(forceTenorStyling, 100);
+                    setTimeout(forceTenorStyling, 500);
+                    setTimeout(forceTenorStyling, 1000);
+                };
+            }
+            
+            // Add Tenor attribution
+            addTenorAttribution(imageElement);
+            
+            // Store GIF ID for analytics
+            window.tenorGifId = specificGifData.id;
+            
+            console.log('✅ Jaqen H\'ghar embed loaded with forced 378px width');
+        }
+        
+        // Add Tenor attribution (required by API terms)
+        function addTenorAttribution(container) {
+            const attribution = document.createElement('div');
+            attribution.style.cssText = `
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                font-size: 9px;
+                color: rgba(255,255,255,0.9);
+                background: rgba(0,0,0,0.6);
+                padding: 3px 7px;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 500;
+                backdrop-filter: blur(4px);
+                z-index: 10;
+            `;
+            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+            container.style.position = 'relative';
+            container.appendChild(attribution);
+        }
         
         // Create random mystery elements
         function createMysteryElements() {
@@ -677,82 +936,13 @@
         // Start continuous snow effects
         startContinuousSnow();
         
-        // Update character image with loading state
-        const imageElement = document.getElementById('characterImage');
-        if (pageData.image && pageData.image.length > 0) {
-            // Show loading state
-            imageElement.textContent = 'טוען תמונה...';
-            imageElement.classList.add('loading');
-            
-            const img = document.createElement('img');
-            img.src = pageData.image;
-            img.alt = "Character";
-            img.style.width = "100%";
-            img.style.height = "100%";
-            img.style.objectFit = "contain";
-            img.style.borderRadius = "10px";
-            
-            img.onload = function() {
-                console.log('✅ Image loaded successfully:', pageData.image);
-                imageElement.innerHTML = '';
-                imageElement.appendChild(img);
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-            };
-            
-            img.onerror = function() {
-                console.log('❌ Image failed to load:', pageData.image);
-                console.log('Trying alternative paths...');
-                
-                // Try different paths
-                const alternativePaths = [
-                    "assets/images/valar-morghulis.png",
-                    "/assets/images/valar-morghulis.png",
-                    "./assets/images/valar-morghulis.png",
-                    "assets/images/Valar_morghulis.png",
-                    "/assets/images/Valar_morghulis.png",
-                    "../../assets/images/valar-morghulis.png"
-                ];
-                
-                let currentIndex = 0;
-                function tryNextPath() {
-                    if (currentIndex < alternativePaths.length) {
-                        const testImg = document.createElement('img');
-                        testImg.src = alternativePaths[currentIndex];
-                        testImg.onload = function() {
-                            console.log('✅ Alternative path worked:', alternativePaths[currentIndex]);
-                            imageElement.innerHTML = '';
-                            imageElement.appendChild(testImg);
-                            imageElement.classList.remove('loading');
-                            imageElement.classList.add('has-image');
-                        };
-                        testImg.onerror = function() {
-                            console.log('❌ Alternative path failed:', alternativePaths[currentIndex]);
-                            currentIndex++;
-                            tryNextPath();
-                        };
-                        testImg.style.width = "100%";
-                        testImg.style.height = "100%";
-                        testImg.style.objectFit = "contain";
-                        testImg.style.borderRadius = "10px";
-                        testImg.alt = "Character";
-                    } else {
-                        console.log('❌ All paths failed. Keeping placeholder text.');
-                        imageElement.textContent = 'Add your image here';
-                        imageElement.classList.remove('loading', 'has-image');
-                    }
-                }
-                tryNextPath();
-            };
-        } else {
-            imageElement.textContent = 'Add your image here';
-            imageElement.classList.remove('loading', 'has-image');
-        }
+        // Load the specific Jaqen H'ghar GIF
+        loadSpecificMeme();
         
-        // Random colors for creepy animation - Game of Thrones themed
-        const creepyColors = [
-            '#ff0000', '#8B0000', '#DC143C', '#B22222', '#A0522D', 
-            '#800000', '#CD5C5C', '#F08080', '#FA8072', '#E9967A'
+        // Random colors for magical animation - Game of Thrones themed
+        const magicalColors = [
+            '#1e3a8a', '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', 
+            '#3730a3', '#4338ca', '#4f46e5', '#6366f1', '#8b5cf6'
         ];
         
         function getRandomColor() {
@@ -789,7 +979,7 @@
         }
         
         function scheduleRandomAnimation() {
-            const randomDelay = Math.random() * 2000 + 2000; // 2-4 seconds (faster than 3-6)
+            const randomDelay = Math.random() * 2000 + 2000; // 2-4 seconds
             setTimeout(() => {
                 magicalAnimation();
                 scheduleRandomAnimation(); // Schedule next animation
@@ -799,11 +989,28 @@
         // Start the random animation cycle
         scheduleRandomAnimation();
         
-        // Analytics tracking
+        // Analytics tracking with Tenor share registration
         document.querySelector('.shop-button').addEventListener('click', function() {
-            console.log('Shop button clicked for quote:', pageData.quote);
+            console.log('Shop button clicked for Jaqen H\'ghar GIF');
             console.log('CTA message shown:', window.currentCtaMessage);
+            
+            // Register share with Tenor
+            if (window.tenorGifId) {
+                registerTenorShare(window.tenorGifId);
+            }
         });
+        
+        // Register share with Tenor (optional but recommended)
+        async function registerTenorShare(gifId) {
+            try {
+                await fetch(
+                    `https://tenor.googleapis.com/v2/registershare?id=${gifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`
+                );
+                console.log('✅ Tenor share registered');
+            } catch (error) {
+                console.log('❌ Failed to register Tenor share:', error);
+            }
+        }
         
         // Re-apply fix on orientation change
         window.addEventListener('orientationchange', function() {
