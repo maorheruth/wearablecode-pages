@@ -677,19 +677,7 @@
                     console.log('❌ Tenor API failed for Shaq, using embed fallback:', error);
                     loadTenorEmbed();
                 });
-        } URL obtained from Tenor API');
-                        loadGifFromUrl(gifUrl);
-                    } else {
-                        console.log('❌ No GIF URL from API, trying embed');
-                        loadTenorEmbed();
-                    }
-                })
-                .catch(error => {
-                    console.log('❌ Tenor API failed, using embed fallback:', error);
-                    loadTenorEmbed();
-                });
-        }
-        
+              
         // Add Tenor attribution
         function addTenorAttribution(container) {
             const attribution = document.createElement('div');
