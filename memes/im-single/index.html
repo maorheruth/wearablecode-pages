@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yes, I am single😊 | WearableCode</title>
+    <link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@100;200;300;400;500;600;700;800;900&family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&family=Bodoni+Moda+SC:wght@400;700;900&family=Rubik+Glitch&family=Federo&family=Rozha+One&family=Cinzel:wght@400;500;600;700;800;900&family=Uncial+Antiqua&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Simple 2-color sunset background */
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, 
+                #ff69b4 0%,  /* Hot Pink */
+                #ffd700 100% /* Gold */
+            );
+            position: relative;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            margin: 0;
+            overflow: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Remove complex overlays */
+        body::before,
+        body::after {
+            display: none;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(25px);
+            border-radius: 28px;
+            padding: 45px 40px;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.15), 
+                0 0 50px rgba(255, 255, 255, 0.8),
+                0 12px 40px rgba(255, 105, 180, 0.25);
+            text-align: center;
+            position: relative;
+            animation: slideUp 1s ease-out;
+            height: auto;
+            min-height: auto;
+            max-height: 95vh;
+            z-index: 10;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            margin-top: 12px;
+            margin-bottom: 0px;
+            text-align: center;
+        }
+
+        .logo a {
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logo img {
+            height: 18px;
+            opacity: 0.8;
+            filter: grayscale(20%);
+            transition: all 0.3s ease;
+        }
+
+        .logo img:hover {
+            opacity: 1;
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .character-image {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            margin: 0 auto 20px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 0;
+        }
+
+        .character-image img {
+            width: 100% !important;
+            height: 374px !important;
+            max-width: 100% !important;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            display: block;
+            margin: 0 auto;
+            padding: 0;
+            object-fit: cover;
+        }
+
+        /* Enhanced iframe styling for full width with fixed height */
+        .character-image iframe {
+            width: 100% !important;
+            height: 374px !important;
+            max-width: 100% !important;
+            border: none !important;
+            border-radius: 16px !important;
+            margin: 0 auto !important;
+            display: block !important;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+        }
+
+        /* Enhanced Tenor embed styling for full width with fixed height */
+        .tenor-gif-embed {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 374px !important;
+            border-radius: 16px !important;
+            overflow: hidden !important;
+            margin: 0 auto !important;
+            display: block !important;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+        }
+
+        .tenor-gif-embed > div {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 374px !important;
+            position: relative !important;
+            padding-top: 0 !important;
+        }
+
+        .tenor-gif-embed iframe {
+            width: 100% !important;
+            height: 374px !important;
+            max-width: 100% !important;
+            position: relative !important;
+            top: 0 !important;
+            left: 0 !important;
+            border: none !important;
+            border-radius: 16px !important;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+        }
+
+        .character-image.has-image {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            height: auto;
+            padding: 0;
+            display: block;
+        }
+
+        .character-image.has-image img,
+        .character-image.has-image iframe,
+        .character-image.has-image .tenor-gif-embed {
+            width: 100% !important;
+            height: 374px !important;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            display: block;
+        }
+
+        .character-image.loading {
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-text {
+            font-size: 18px;
+            color: #ff69b4;
+            font-weight: 600;
+            animation: fadeInOut 2s ease-in-out infinite;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.3;
+            }
+        }
+
+        .quote {
+            font-size: 68px;
+            font-weight: 700;
+            font-family: 'Poppins', 'Bebas Neue', 'Anton', 'Oswald', sans-serif;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            position: relative;
+            padding: 0 20px;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .quote::before {
+            content: '"';
+            font-size: 50px;
+            color: #ff69b4;
+            position: absolute;
+            left: -5px;
+            top: -15px;
+            opacity: 0.8;
+            font-family: Georgia, serif;
+        }
+
+        .quote::after {
+            content: '"';
+            font-size: 50px;
+            color: #ff69b4;
+            position: absolute;
+            right: -5px;
+            bottom: -20px;
+            opacity: 0.8;
+            font-family: Georgia, serif;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, 
+                rgba(255, 182, 193, 0.15), 
+                rgba(255, 105, 180, 0.15),
+                rgba(255, 20, 147, 0.1)
+            );
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 30px;
+            direction: rtl;
+            text-align: center;
+            border: 1px solid rgba(255, 105, 180, 0.25);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.1);
+        }
+
+        .cta-text {
+            font-size: 16px;
+            color: #444;
+            margin-bottom: 14px;
+            font-weight: 600;
+            direction: rtl;
+            text-align: center;
+        }
+
+        .shop-button {
+            background: linear-gradient(135deg, 
+                #ffb347 0%,  /* Peach */
+                #ff69b4 100% /* Hot Pink */
+            );
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 16px 32px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .shop-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(255, 105, 180, 0.6);
+            background: linear-gradient(135deg, 
+                #ff69b4 0%,  /* Hot Pink */
+                #ffb347 100% /* Peach */
+            );
+        }
+
+        /* Palm tree emojis with gentle breathing animation */
+        .palm-tree {
+            position: absolute;
+            font-size: 40px;
+            z-index: 2;
+            animation: palmBreathing 4s ease-in-out infinite;
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.8;
+        }
+
+        @keyframes palmBreathing {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-3px) scale(1.02);
+                opacity: 0.9;
+            }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                overflow-x: hidden;
+            }
+            
+            .container {
+                padding: 25px 20px;
+                border-radius: 20px;
+                max-width: 95vw;
+                max-height: 90vh;
+            }
+            
+            .character-image {
+                width: 100%;
+                height: auto;
+                margin-bottom: 18px;
+                font-size: 14px;
+            }
+            
+            .loading-text {
+                font-size: 16px;
+            }
+            
+            .quote {
+                font-size: 48px;
+                margin-bottom: 20px;
+                line-height: 1.1;
+                padding: 0 10px;
+                font-family: 'Poppins', 'Bebas Neue', 'Anton', 'Oswald', sans-serif;
+                letter-spacing: -0.5px;
+                font-weight: 700;
+            }
+            
+            .quote::before {
+                font-size: 28px;
+                color: #ff69b4;
+                top: -8px;
+                left: -3px;
+                opacity: 0.8;
+            }
+
+            .quote::after {
+                font-size: 28px;
+                color: #ff69b4;
+                bottom: -12px;
+                right: -3px;
+                opacity: 0.8;
+            }
+            
+            .logo img {
+                height: 15px;
+                margin-top: 8px;
+            }
+            
+            .cta-text {
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+            
+            .cta-section {
+                padding: 15px;
+                margin-top: 20px;
+            }
+            
+            .shop-button {
+                padding: 12px 24px;
+                font-size: 13px;
+            }
+
+            .palm-tree {
+                font-size: 32px;
+            }
+        }
+
+        /* iPhone SE and smaller */
+        @media (max-width: 375px) {
+            .container {
+                padding: 20px 15px;
+                max-width: 98vw;
+                max-height: 88vh;
+            }
+            
+            .character-image {
+                width: 100%;
+                height: auto;
+                font-size: 12px;
+            }
+            
+            .loading-text {
+                font-size: 14px;
+            }
+            
+            .quote {
+                font-size: 42px;
+                padding: 0 8px;
+                line-height: 1.1;
+                font-family: 'Poppins', 'Bebas Neue', 'Anton', 'Oswald', sans-serif;
+                letter-spacing: -0.3px;
+                font-weight: 700;
+            }
+
+            .quote::before {
+                font-size: 24px;
+                color: #ff69b4;
+                top: -6px;
+                left: -2px;
+                opacity: 0.8;
+            }
+
+            .quote::after {
+                font-size: 24px;
+                color: #ff69b4;
+                bottom: -10px;
+                right: -2px;
+                opacity: 0.8;
+            }
+
+            .palm-tree {
+                font-size: 28px;
+            }
+            
+            .logo img {
+                height: 14px;
+                margin-top: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mystery elements will be generated by JavaScript -->
+    
+    <div class="container">
+        <div class="character-image" id="characterImage">
+            <div class="loading-text">Loading</div>
+        </div>
+        
+        <div class="quote" id="mainQuote">
+            Yes, I am single😊
+        </div>
+        
+        <div class="cta-section">
+            <div class="cta-text">
+                טוען הודעה...
+            </div>
+            
+            <a href="https://wearablecode.com" class="shop-button">
+                כנסו ל-WearableCode.com 🚀
+            </a>
+        </div>
+        
+        <div class="logo">
+            <a href="https://wearablecode.com" target="_blank">
+                <img src="../../assets/logos/wearablecode_logo_black.png" alt="WearableCode">
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Tenor API Configuration
+        const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
+        const CLIENT_KEY = 'wearablecode_memes';
+        
+        // Specific GIF data for Jersey Shore head turn
+        const specificGifData = {
+            id: '27468648',
+            url: 'https://tenor.com/view/head-turn-vinny-guadagnino-jersey-shore-family-vacation-what-huh-gif-27468648',
+            embedCode: `<div class="tenor-gif-embed" data-postid="27468648" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/head-turn-vinny-guadagnino-jersey-shore-family-vacation-what-huh-gif-27468648">Head Turn Vinny Guadagnino GIF</a>from <a href="https://tenor.com/search/jersey+shore-gifs">Jersey Shore GIFs</a></div>`
+        };
+        
+        // Page-specific data
+        const pageData = {
+            quote: "Yes, I am single😊"
+        };
+        
+        // Random CTA messages in Hebrew
+        const ctaMessages = [
+            "רוצה גם חולצה מגניבה כזאת? 👇",
+            "אהבתם? הזמינו את החולצה שלכם עוד היום 👇",
+            "מגניב נכון? רוצים גם? 👇",
+            "קלטנו שאהבתם את הקונספט! רוצים גם חולצה כזאת? 👇",
+            "איזה חולצה מגניבה הא? קנו את שלכם גם 👇",
+            "רוצים גם להיות cool כמו בקליפורניה? 👇",
+            "החולצה הזאת יכולה להיות שלכם! 👇",
+            "מתאים לכם? בואו נזמין! 👇",
+            "זה הזמן להזמין את החולצה המושלמת 👇",
+            "חולצה כזאת חייבת להיות לכם בארון! 👇"
+        ];
+        
+        // California vibes emojis for background (removed, replaced with palm trees)
+        // const californiaEmojis = [];
+        
+        // Load the specific Jersey Shore GIF
+        function loadSpecificMeme() {
+            const imageElement = document.getElementById('characterImage');
+            imageElement.innerHTML = '<div class="loading-text">Loading</div>';
+            imageElement.classList.add('loading');
+            
+            // Try to load via Tenor API first, then fallback to embed
+            fetchSpecificGifFromTenor()
+                .then(gifUrl => {
+                    if (gifUrl) {
+                        loadGifFromUrl(gifUrl);
+                    } else {
+                        loadTenorEmbed();
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Tenor API failed, using embed fallback:', error);
+                    loadTenorEmbed();
+                });
+        }
+        
+        // Try to fetch the specific GIF from Tenor API
+        async function fetchSpecificGifFromTenor() {
+            try {
+                const response = await fetch(
+                    `https://tenor.googleapis.com/v2/posts?ids=${specificGifData.id}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}&media_filter=gif`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    const gif = data.results[0];
+                    window.tenorGifId = gif.id;
+                    return gif.media_formats.gif.url;
+                }
+                return null;
+            } catch (error) {
+                console.log('Tenor API error:', error);
+                return null;
+            }
+        }
+        
+        // Load GIF from direct URL
+        function loadGifFromUrl(gifUrl) {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = gifUrl;
+            img.alt = "Jersey Shore";
+            
+            // Force full width with fixed height styling
+            img.style.cssText = `
+                width: 100% !important;
+                height: 374px !important;
+                max-width: 100% !important;
+                border-radius: 16px !important;
+                box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+                display: block !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                object-fit: cover !important;
+            `;
+            
+            img.onload = function() {
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                
+                // Force styling again after load
+                img.style.cssText = `
+                    width: 100% !important;
+                    height: 374px !important;
+                    max-width: 100% !important;
+                    border-radius: 16px !important;
+                    box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+                    display: block !important;
+                    margin: 0 auto !important;
+                    padding: 0 !important;
+                    object-fit: cover !important;
+                `;
+                
+                addTenorAttribution(imageElement);
+                console.log('✅ Tenor API GIF loaded successfully with full width and 374px height');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Direct GIF URL failed, trying embed');
+                loadTenorEmbed();
+            };
+        }
+        
+        // Fallback to Tenor embed
+        function loadTenorEmbed() {
+            const imageElement = document.getElementById('characterImage');
+            
+            // Create container for the Tenor embed with full width and fixed height
+            const embedContainer = document.createElement('div');
+            embedContainer.innerHTML = specificGifData.embedCode;
+            embedContainer.style.cssText = `
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 374px !important;
+                display: block !important;
+                border-radius: 16px;
+                overflow: hidden;
+                margin: 0 auto !important;
+                box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            `;
+            
+            // Add to container
+            imageElement.innerHTML = '';
+            imageElement.appendChild(embedContainer);
+            imageElement.classList.remove('loading');
+            imageElement.classList.add('has-image');
+            
+            // Enhanced force styling on Tenor elements for full width with fixed height
+            function forceTenorStyling() {
+                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                const iframe = embedContainer.querySelector('iframe');
+                const innerDiv = embedContainer.querySelector('div[style*="padding-top"]');
+                const allDivs = embedContainer.querySelectorAll('div');
+                
+                if (tenorEmbed) {
+                    tenorEmbed.style.setProperty('width', '100%', 'important');
+                    tenorEmbed.style.setProperty('max-width', '100%', 'important');
+                    tenorEmbed.style.setProperty('height', '374px', 'important');
+                    tenorEmbed.style.setProperty('position', 'relative', 'important');
+                    tenorEmbed.style.setProperty('border-radius', '16px', 'important');
+                    tenorEmbed.style.setProperty('overflow', 'hidden', 'important');
+                    tenorEmbed.style.setProperty('box-shadow', '0 12px 40px rgba(0,0,0,0.12)', 'important');
+                }
+                
+                // Force all inner divs to be full width with fixed height
+                allDivs.forEach(div => {
+                    div.style.setProperty('width', '100%', 'important');
+                    div.style.setProperty('max-width', '100%', 'important');
+                    div.style.setProperty('height', '374px', 'important');
+                    div.style.setProperty('padding-top', '0', 'important');
+                    div.style.setProperty('position', 'relative', 'important');
+                });
+                
+                if (iframe) {
+                    iframe.style.setProperty('width', '100%', 'important');
+                    iframe.style.setProperty('max-width', '100%', 'important');
+                    iframe.style.setProperty('height', '374px', 'important');
+                    iframe.style.setProperty('position', 'relative', 'important');
+                    iframe.style.setProperty('top', '0', 'important');
+                    iframe.style.setProperty('left', '0', 'important');
+                    iframe.style.setProperty('border', 'none', 'important');
+                    iframe.style.setProperty('border-radius', '16px', 'important');
+                    iframe.style.setProperty('box-shadow', '0 12px 40px rgba(0,0,0,0.12)', 'important');
+                }
+            }
+            
+            // Run styling multiple times to catch when elements are created
+            setTimeout(forceTenorStyling, 100);
+            setTimeout(forceTenorStyling, 500);
+            setTimeout(forceTenorStyling, 1000);
+            setTimeout(forceTenorStyling, 2000);
+            setTimeout(forceTenorStyling, 3000);
+            
+            // Load Tenor's embed script
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.async = true;
+                script.src = 'https://tenor.com/embed.js';
+                document.body.appendChild(script);
+                
+                // Apply styling again after script loads
+                script.onload = () => {
+                    setTimeout(forceTenorStyling, 100);
+                    setTimeout(forceTenorStyling, 500);
+                    setTimeout(forceTenorStyling, 1000);
+                    setTimeout(forceTenorStyling, 2000);
+                };
+            }
+            
+            // Also force styling on window resize
+            window.addEventListener('resize', forceTenorStyling);
+            
+            // Add Tenor attribution
+            addTenorAttribution(imageElement);
+            
+            // Store GIF ID for analytics
+            window.tenorGifId = specificGifData.id;
+            
+            console.log('✅ Jersey Shore "head turn" embed loaded with full width and 374px height');
+        }
+        
+        // Add Tenor attribution (required by API terms)
+        function addTenorAttribution(container) {
+            const attribution = document.createElement('div');
+            attribution.style.cssText = `
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                font-size: 10px;
+                color: rgba(255,255,255,0.95);
+                background: rgba(0,0,0,0.7);
+                padding: 4px 8px;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                backdrop-filter: blur(6px);
+                z-index: 10;
+            `;
+            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+            container.style.position = 'relative';
+            container.appendChild(attribution);
+        }
+        
+        // Create random California vibes elements
+        function createCaliforniaElements() {
+            const numberOfElements = Math.floor(Math.random() * 12) + 18; // 18-29 elements
+            
+            for (let i = 0; i < numberOfElements; i++) {
+                const element = document.createElement('div');
+                element.className = 'mystery-element';
+                
+                // Random emoji
+                const randomEmoji = californiaEmojis[Math.floor(Math.random() * californiaEmojis.length)];
+                element.textContent = randomEmoji;
+                
+                // Random position
+                element.style.fontSize = randomSize + 'px';
+                
+                // Add to body
+                document.body.appendChild(element);
+            }
+            
+            console.log(`Created ${numberOfElements} California vibes elements`);
+        }
+        
+        // Safari iOS font size fix
+        function applySafariFix() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
+            const screenWidth = window.innerWidth || screen.width;
+            
+            if (isMobile && isSafari) {
+                const quoteElement = document.getElementById('mainQuote');
+                if (screenWidth <= 375) {
+                    quoteElement.style.fontSize = '40px';
+                    quoteElement.style.lineHeight = '1.1';
+                    quoteElement.style.letterSpacing = '-0.2px';
+                } else if (screenWidth <= 480) {
+                    quoteElement.style.fontSize = '46px';
+                    quoteElement.style.lineHeight = '1.1';
+                    quoteElement.style.letterSpacing = '-0.3px';
+                }
+                quoteElement.style.fontFamily = "'Poppins', 'Bebas Neue', 'Anton', 'Oswald', sans-serif";
+                quoteElement.style.fontWeight = '700';
+                
+                console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
+            }
+        }
+        
+        // iPhone specific glow reduction
+        function reduceGlowForiPhone() {
+            const isIphone = /iPhone/i.test(navigator.userAgent);
+            if (isIphone) {
+                const container = document.querySelector('.container');
+                container.style.boxShadow = `
+                    0 20px 35px rgba(0,0,0,0.08), 
+                    0 0 35px rgba(255, 255, 255, 0.5),
+                    0 8px 28px rgba(255, 127, 80, 0.15)
+                `;
+                console.log('🍎 iPhone detected - optimized glow applied');
+            }
+        }
+        
+        // Update the content
+        document.getElementById('mainQuote').textContent = pageData.quote;
+        
+        // Set random CTA message
+        const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
+        document.querySelector('.cta-text').textContent = randomCtaMessage;
+        
+        // Store for analytics
+        window.currentCtaMessage = randomCtaMessage;
+        
+        // Apply fixes after content is loaded
+        setTimeout(applySafariFix, 100);
+        reduceGlowForiPhone();
+        
+        // Create palm trees
+        createPalmTrees();
+        
+        // Load the specific Jersey Shore GIF
+        loadSpecificMeme();
+        
+        // Random colors for sunset animation - simplified
+        const sunsetColors = [
+            '#ff69b4', '#ffd700', '#ff7f50', '#ffb347', '#ff1493', '#ffa500'
+        ];
+        
+        function getRandomColor() {
+            return sunsetColors[Math.floor(Math.random() * sunsetColors.length)];
+        }
+        
+        function sunsetAnimation() {
+            const quoteElement = document.getElementById('mainQuote');
+            const color1 = getRandomColor();
+            const color2 = getRandomColor();
+            
+            // Check if mobile for lighter shadow
+            const isMobile = window.innerWidth <= 480;
+            const shadowStrength = isMobile ? '1px 1px 6px' : '3px 3px 12px';
+            const glowStrength = isMobile ? '0 0 20px' : '0 0 30px';
+            const scaleStrength = isMobile ? 1.025 : 1.05;
+            
+            // Start animation
+            quoteElement.style.color = color1;
+            quoteElement.style.textShadow = `${glowStrength} ${color1}, ${shadowStrength} rgba(0,0,0,0.15)`;
+            quoteElement.style.transform = `scale(${scaleStrength})`;
+            
+            setTimeout(() => {
+                quoteElement.style.color = color2;
+                quoteElement.style.textShadow = `${glowStrength} ${color2}, ${shadowStrength} rgba(0,0,0,0.15)`;
+                quoteElement.style.transform = `scale(${1/scaleStrength})`;
+            }, 250);
+            
+            setTimeout(() => {
+                quoteElement.style.color = '#333';
+                quoteElement.style.textShadow = isMobile ? '1px 1px 4px rgba(0,0,0,0.1)' : '2px 2px 8px rgba(0,0,0,0.1)';
+                quoteElement.style.transform = 'scale(1)';
+            }, 500);
+        }
+        
+        function scheduleRandomAnimation() {
+            const randomDelay = Math.random() * 3000 + 2000; // 2-5 seconds
+            setTimeout(() => {
+                sunsetAnimation();
+                scheduleRandomAnimation(); // Schedule next animation
+            }, randomDelay);
+        }
+        
+        // Start the random animation cycle
+        scheduleRandomAnimation();
+        
+        // Analytics tracking with Tenor share registration
+        document.querySelector('.shop-button').addEventListener('click', function() {
+            console.log('Shop button clicked for Jersey Shore "head turn" GIF');
+            console.log('CTA message shown:', window.currentCtaMessage);
+            
+            // Register share with Tenor
+            if (window.tenorGifId) {
+                registerTenorShare(window.tenorGifId);
+            }
+        });
+        
+        // Register share with Tenor (optional but recommended)
+        async function registerTenorShare(gifId) {
+            try {
+                await fetch(
+                    `https://tenor.googleapis.com/v2/registershare?id=${gifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`
+                );
+                console.log('✅ Tenor share registered');
+            } catch (error) {
+                console.log('❌ Failed to register Tenor share:', error);
+            }
+        }
+        
+        // Re-apply fix on orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(applySafariFix, 200);
+            setTimeout(reduceGlowForiPhone, 200);
+        });
+        
+        window.addEventListener('resize', function() {
+            setTimeout(applySafariFix, 100);
+            setTimeout(reduceGlowForiPhone, 100);
+        });
+    </script>
+</body>
+</html>
