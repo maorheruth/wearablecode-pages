@@ -503,11 +503,11 @@
         const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
         const CLIENT_KEY = 'wearablecode_memes';
         
-        // Specific GIF data for Shaq flirty smile
+        // Specific GIF data for Shaq flirty smile - using working ID
         const specificGifData = {
-            id: '15632508310642849617',
-            url: 'https://tenor.com/view/shaq-flirty-cool-smile-funny-gif-15632508310642849617',
-            embedCode: `<div class="tenor-gif-embed" data-postid="15632508310642849617" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/shaq-flirty-cool-smile-funny-gif-15632508310642849617">Shaq Flirty GIF</a>from <a href="https://tenor.com/search/shaq-gifs">Shaq GIFs</a></div>`
+            id: '26140807',
+            url: 'https://tenor.com/view/shaq-flirty-cool-smile-funny-gif-26140807',
+            embedCode: `<div class="tenor-gif-embed" data-postid="26140807" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/shaq-flirty-cool-smile-funny-gif-26140807">Shaq Flirty GIF</a>from <a href="https://tenor.com/search/shaq-gifs">Shaq GIFs</a></div>`
         };
         
         // Page-specific data
@@ -663,8 +663,10 @@
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Try direct URL first
-            console.log('🔄 Attempting to load Shaq GIF from direct URL...');
+            // Try multiple approaches in sequence
+            console.log('🔄 Attempting multiple methods to load Shaq GIF...');
+            
+            // Method 1: Direct URL first
             loadGifFromDirectUrl();
         }
         
@@ -697,7 +699,41 @@
             };
             
             img.onerror = function() {
-                console.log('❌ Direct Shaq GIF URL failed, trying Tenor API...');
+                console.log('❌ Direct Shaq GIF URL failed, trying alternative direct URL...');
+                loadGifFromAlternativeUrl();
+            };
+        }
+        
+        // Try alternative direct URL
+        function loadGifFromAlternativeUrl() {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = 'https://media.tenor.com/2PHTe-Q1d1EAAAAd/shaq-flirty.gif';
+            img.alt = "Shaq Flirty";
+            
+            img.style.cssText = `
+                width: 100% !important;
+                height: 374px !important;
+                max-width: 100% !important;
+                border-radius: 16px !important;
+                box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+                display: block !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                object-fit: cover !important;
+            `;
+            
+            img.onload = function() {
+                console.log('✅ Shaq GIF loaded successfully from alternative URL');
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                addTenorAttribution(imageElement);
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Alternative URL failed, trying Tenor API...');
                 // Fallback to Tenor API
                 fetchSpecificGifFromTenor()
                     .then(gifUrl => {
