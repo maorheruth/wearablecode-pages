@@ -303,25 +303,41 @@
             );
         }
 
-        /* Palm tree emojis with gentle breathing animation */
+        /* Palm tree emojis with gentle breathing and slow rotation animation */
         .palm-tree {
             position: absolute;
             font-size: 40px;
             z-index: 2;
-            animation: palmBreathing 4s ease-in-out infinite;
+            animation: palmBreathingAndRotation 10s ease-in-out infinite;
             pointer-events: none;
             user-select: none;
             opacity: 0.8;
         }
 
-        @keyframes palmBreathing {
+        @keyframes palmBreathingAndRotation {
             0%, 100% {
-                transform: translateY(0px) scale(1);
+                transform: translateY(0px) translateX(0px) scale(1) rotate(-3deg);
                 opacity: 0.8;
             }
-            50% {
-                transform: translateY(-3px) scale(1.02);
+            16% {
+                transform: translateY(-8px) translateX(5px) scale(1.01) rotate(8deg);
                 opacity: 0.9;
+            }
+            33% {
+                transform: translateY(-15px) translateX(-3px) scale(1.02) rotate(-15deg);
+                opacity: 0.95;
+            }
+            50% {
+                transform: translateY(-12px) translateX(7px) scale(1.015) rotate(20deg);
+                opacity: 0.85;
+            }
+            66% {
+                transform: translateY(-6px) translateX(-2px) scale(1.01) rotate(-8deg);
+                opacity: 0.9;
+            }
+            83% {
+                transform: translateY(-10px) translateX(4px) scale(1.018) rotate(12deg);
+                opacity: 0.88;
             }
         }
 
@@ -685,17 +701,24 @@
             container.appendChild(attribution);
         }
         
-        // Create palm tree emojis with breathing animation
+        // Create palm tree emojis with breathing and rotation animation
         function createPalmTrees() {
             console.log('🌴 createPalmTrees function called');
             
+            // More palm trees spread across the entire screen
             const palmPositions = [
-                { left: '5%', bottom: '5%' },
-                { left: '18%', bottom: '8%' },
-                { left: '32%', bottom: '3%' },
-                { left: '68%', bottom: '7%' },
-                { left: '82%', bottom: '4%' },
-                { left: '95%', bottom: '6%' }
+                { left: '8%', top: '15%' },
+                { left: '92%', top: '20%' },
+                { left: '15%', top: '70%' },
+                { left: '85%', top: '75%' },
+                { left: '5%', top: '45%' },
+                { left: '95%', top: '50%' },
+                { left: '25%', top: '25%' },
+                { left: '75%', top: '30%' },
+                { left: '35%', top: '80%' },
+                { left: '65%', top: '85%' },
+                { left: '12%', top: '90%' },
+                { left: '88%', top: '8%' }
             ];
             
             palmPositions.forEach((pos, index) => {
@@ -703,9 +726,22 @@
                     const palmTree = document.createElement('div');
                     palmTree.className = 'palm-tree';
                     palmTree.textContent = '🌴';
-                    palmTree.style.left = pos.left;
-                    palmTree.style.bottom = pos.bottom;
-                    palmTree.style.animationDelay = (index * 0.5) + 's';
+                    
+                    // Random position variation within ±10px
+                    const randomX = (Math.random() - 0.5) * 20; // -10 to +10
+                    const randomY = (Math.random() - 0.5) * 20; // -10 to +10
+                    
+                    palmTree.style.left = `calc(${pos.left} + ${randomX}px)`;
+                    palmTree.style.top = `calc(${pos.top} + ${randomY}px)`;
+                    
+                    // Random animation delay for natural effect
+                    palmTree.style.animationDelay = (Math.random() * 3) + 's';
+                    
+                    // Random animation duration between 8-12 seconds (slower)
+                    const randomDuration = (Math.random() * 4 + 8);
+                    palmTree.style.animationDuration = randomDuration + 's';
+                    
+                    // Additional inline styles
                     palmTree.style.position = 'absolute';
                     palmTree.style.fontSize = '40px';
                     palmTree.style.zIndex = '2';
@@ -713,14 +749,18 @@
                     palmTree.style.userSelect = 'none';
                     palmTree.style.opacity = '0.8';
                     
+                    // Random rotation range for each palm tree (within -30 to +30 degrees)
+                    const maxRotation = Math.random() * 30 - 15; // -15 to +15 as base
+                    palmTree.style.setProperty('--max-rotation', maxRotation + 'deg');
+                    
                     document.body.appendChild(palmTree);
-                    console.log(`✅ Palm tree ${index + 1} created at ${pos.left}, ${pos.bottom}`);
+                    console.log(`✅ Palm tree ${index + 1} created at ${pos.left}, ${pos.top} with ${randomX}px, ${randomY}px offset`);
                 } catch (error) {
                     console.error(`❌ Error creating palm tree ${index + 1}:`, error);
                 }
             });
             
-            console.log('✅ All 6 palm trees created with breathing animation');
+            console.log(`✅ All ${palmPositions.length} palm trees created across entire screen`);
         }
         
         // Safari iOS font size fix
