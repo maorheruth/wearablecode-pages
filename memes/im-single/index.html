@@ -503,11 +503,11 @@
         const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
         const CLIENT_KEY = 'wearablecode_memes';
         
-        // Specific GIF data for Shaq shimmy - using your exact embed
+        // Specific GIF data for Shaq flirty smile
         const specificGifData = {
-            id: '12032436',
-            url: 'https://tenor.com/view/shaq-shimmy-excited-smile-gif-12032436',
-            embedCode: `<div class="tenor-gif-embed" data-postid="12032436" data-share-method="host" data-aspect-ratio="1.3369" data-width="100%"><a href="https://tenor.com/view/shaq-shimmy-excited-smile-gif-12032436">Shaq Shimmy GIF</a>from <a href="https://tenor.com/search/shaq-gifs">Shaq GIFs</a></div>`
+            id: '15632508310642849617',
+            url: 'https://tenor.com/view/shaq-flirty-cool-smile-funny-gif-15632508310642849617',
+            embedCode: `<div class="tenor-gif-embed" data-postid="15632508310642849617" data-share-method="host" data-aspect-ratio="1.09202" data-width="100%"><a href="https://tenor.com/view/shaq-flirty-cool-smile-funny-gif-15632508310642849617">Shaq Flirty GIF</a>from <a href="https://tenor.com/search/shaq-gifs">Shaq GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>`
         };
         
         // Page-specific data
@@ -522,7 +522,6 @@
             "מגניב נכון? רוצים גם? 👇",
             "קלטנו שאהבתם את הקונספט! רוצים גם חולצה כזאת? 👇",
             "איזה חולצה מגניבה הא? קנו את שלכם גם 👇",
-            "רוצים גם להיות cool כמו בקליפורניה? 👇",
             "החולצה הזאת יכולה להיות שלכם! 👇",
             "מתאים לכם? בואו נזמין! 👇",
             "זה הזמן להזמין את החולצה המושלמת 👇",
@@ -591,7 +590,6 @@
         
         // Fallback to Tenor embed
         function loadTenorEmbed() {
-            console.log('🎬 Loading Shaq via Tenor embed');
             const imageElement = document.getElementById('characterImage');
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = specificGifData.embedCode;
@@ -620,63 +618,40 @@
                     tenorEmbed.style.setProperty('width', '100%', 'important');
                     tenorEmbed.style.setProperty('height', '374px', 'important');
                     tenorEmbed.style.setProperty('border-radius', '16px', 'important');
-                    tenorEmbed.style.setProperty('overflow', 'hidden', 'important');
                 }
                 
                 allDivs.forEach(div => {
                     div.style.setProperty('width', '100%', 'important');
                     div.style.setProperty('height', '374px', 'important');
                     div.style.setProperty('padding-top', '0', 'important');
-                    div.style.setProperty('position', 'relative', 'important');
                 });
                 
                 if (iframe) {
                     iframe.style.setProperty('width', '100%', 'important');
                     iframe.style.setProperty('height', '374px', 'important');
                     iframe.style.setProperty('border-radius', '16px', 'important');
-                    iframe.style.setProperty('border', 'none', 'important');
-                    iframe.style.setProperty('position', 'relative', 'important');
-                    iframe.style.setProperty('top', '0', 'important');
-                    iframe.style.setProperty('left', '0', 'important');
                 }
             }
             
-            // Apply styling multiple times
             setTimeout(forceTenorStyling, 100);
             setTimeout(forceTenorStyling, 500);
             setTimeout(forceTenorStyling, 1000);
-            setTimeout(forceTenorStyling, 2000);
             
-            // Load Tenor's embed script if not already loaded
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
                 const script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.async = true;
                 script.src = 'https://tenor.com/embed.js';
                 document.body.appendChild(script);
-                
-                script.onload = () => {
-                    console.log('✅ Tenor embed script loaded');
-                    setTimeout(forceTenorStyling, 100);
-                    setTimeout(forceTenorStyling, 500);
-                    setTimeout(forceTenorStyling, 1000);
-                };
-                
-                script.onerror = () => {
-                    console.error('❌ Failed to load Tenor embed script');
-                };
-            } else {
-                console.log('✅ Tenor embed script already exists');
+                script.onload = () => setTimeout(forceTenorStyling, 500);
             }
             
             addTenorAttribution(imageElement);
             window.tenorGifId = specificGifData.id;
-            console.log('✅ Shaq shimmy embed loaded with exact embed code');
+            console.log('✅ Shaq flirty embed loaded');
         }
         
-        // Load the specific Shaq shimmy GIF - force embed approach
+        // Load the specific Shaq flirty GIF
         function loadSpecificMeme() {
-            console.log('🎬 loadSpecificMeme function called for Shaq shimmy - forcing embed');
+            console.log('🎬 loadSpecificMeme function called for Shaq');
             const imageElement = document.getElementById('characterImage');
             
             if (!imageElement) {
@@ -687,91 +662,21 @@
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Go straight to embed with the new Shaq shimmy
-            console.log('🔄 Loading Shaq shimmy GIF via Tenor embed...');
-            loadTenorEmbed();
-        }
-        
-        // Load GIF from the direct URL you provided
-        function loadGifFromDirectUrl() {
-            const imageElement = document.getElementById('characterImage');
-            const img = document.createElement('img');
-            img.src = 'https://media1.tenor.com/m/2PHTe-Q1d1EAAAAd/shaq-flirty.gif';
-            img.alt = "Shaq Flirty";
-            
-            img.style.cssText = `
-                width: 100% !important;
-                height: 374px !important;
-                max-width: 100% !important;
-                border-radius: 16px !important;
-                box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
-                display: block !important;
-                margin: 0 auto !important;
-                padding: 0 !important;
-                object-fit: cover !important;
-            `;
-            
-            img.onload = function() {
-                console.log('✅ Shaq GIF loaded successfully from direct URL');
-                imageElement.innerHTML = '';
-                imageElement.appendChild(img);
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-                addTenorAttribution(imageElement);
-            };
-            
-            img.onerror = function() {
-                console.log('❌ Direct Shaq GIF URL failed, trying alternative direct URL...');
-                loadGifFromAlternativeUrl();
-            };
-        }
-        
-        // Try alternative direct URL
-        function loadGifFromAlternativeUrl() {
-            const imageElement = document.getElementById('characterImage');
-            const img = document.createElement('img');
-            img.src = 'https://media.tenor.com/2PHTe-Q1d1EAAAAd/shaq-flirty.gif';
-            img.alt = "Shaq Flirty";
-            
-            img.style.cssText = `
-                width: 100% !important;
-                height: 374px !important;
-                max-width: 100% !important;
-                border-radius: 16px !important;
-                box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
-                display: block !important;
-                margin: 0 auto !important;
-                padding: 0 !important;
-                object-fit: cover !important;
-            `;
-            
-            img.onload = function() {
-                console.log('✅ Shaq GIF loaded successfully from alternative URL');
-                imageElement.innerHTML = '';
-                imageElement.appendChild(img);
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-                addTenorAttribution(imageElement);
-            };
-            
-            img.onerror = function() {
-                console.log('❌ Alternative URL failed, trying Tenor API...');
-                // Fallback to Tenor API
-                fetchSpecificGifFromTenor()
-                    .then(gifUrl => {
-                        if (gifUrl) {
-                            console.log('✅ Shaq GIF URL obtained from Tenor API');
-                            loadGifFromUrl(gifUrl);
-                        } else {
-                            console.log('❌ No Shaq GIF URL from API, trying embed');
-                            loadTenorEmbed();
-                        }
-                    })
-                    .catch(error => {
-                        console.log('❌ Tenor API failed for Shaq, using embed fallback:', error);
+            console.log('🔄 Attempting to fetch Shaq GIF from Tenor API...');
+            fetchSpecificGifFromTenor()
+                .then(gifUrl => {
+                    if (gifUrl) {
+                        console.log('✅ Shaq GIF URL obtained from Tenor API');
+                        loadGifFromUrl(gifUrl);
+                    } else {
+                        console.log('❌ No Shaq GIF URL from API, trying embed');
                         loadTenorEmbed();
-                    });
-            };
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Tenor API failed for Shaq, using embed fallback:', error);
+                    loadTenorEmbed();
+                });
         } URL obtained from Tenor API');
                         loadGifFromUrl(gifUrl);
                     } else {
