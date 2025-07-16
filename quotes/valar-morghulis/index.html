@@ -153,8 +153,9 @@
         }
 
         .character-image img {
-            width: 378px !important;
-            height: 378px !important;
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100% !important;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             display: block;
@@ -163,28 +164,50 @@
             object-fit: cover;
         }
 
-        /* Simple iframe styling - FORCE 323px height */
+        /* Enhanced iframe styling for full width */
         .character-image iframe {
-            width: 378px !important;
-            height: 323px !important;
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100% !important;
+            min-height: 250px !important;
             border: none !important;
             border-radius: 12px !important;
             margin: 0 auto !important;
             display: block !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
         }
 
-        /* Force styling with specific class */
-        .gif-iframe {
-            width: 378px !important;
-            height: 323px !important;
-            border: none !important;
+        /* Enhanced Tenor embed styling for full width */
+        .tenor-gif-embed {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
             border-radius: 12px !important;
+            overflow: hidden !important;
             margin: 0 auto !important;
             display: block !important;
-            max-width: 378px !important;
-            max-height: 323px !important;
-            min-width: 378px !important;
-            min-height: 323px !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+        }
+
+        .tenor-gif-embed > div {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+            position: relative !important;
+            padding-top: 0 !important;
+        }
+
+        .tenor-gif-embed iframe {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100% !important;
+            min-height: 250px !important;
+            position: relative !important;
+            top: 0 !important;
+            left: 0 !important;
+            border: none !important;
+            border-radius: 12px !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
         }
 
         .character-image.has-image {
@@ -532,11 +555,11 @@
         const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
         const CLIENT_KEY = 'wearablecode_memes';
         
-        // Specific GIF data for Jaqen H'ghar
+        // Specific GIF data for Game of Thrones "hehehe that's right"
         const specificGifData = {
-            id: '19718003',
-            url: 'https://tenor.com/view/game-of-thrones-jaqen-what-can-i-say-gif-19718003',
-            embedCode: `<div class="tenor-gif-embed" data-postid="19718003" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/game-of-thrones-jaqen-what-can-i-say-gif-19718003">Game Of Thrones Jaqen GIF</a>from <a href="https://tenor.com/search/game+of+thrones-gifs">Game Of Thrones GIFs</a></div>`
+            id: '17975278',
+            url: 'https://tenor.com/view/game-of-thrones-hehehe-thats-right-true-dat-smiling-gif-17975278',
+            embedCode: `<div class="tenor-gif-embed" data-postid="17975278" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/game-of-thrones-hehehe-thats-right-true-dat-smiling-gif-17975278">Game Of Thrones Hehehe GIF</a>from <a href="https://tenor.com/search/game+of+thrones-gifs">Game Of Thrones GIFs</a></div>`
         };
         
         // Page-specific data
@@ -617,19 +640,19 @@
             const imageElement = document.getElementById('characterImage');
             const img = document.createElement('img');
             img.src = gifUrl;
-            img.alt = "Jaqen H'ghar";
+            img.alt = "Game of Thrones";
             
-            // Force exact width styling on the image element
+            // Force full width styling on the image element
             img.style.cssText = `
-                width: 378px !important;
+                width: 100% !important;
                 height: auto !important;
+                max-width: 100% !important;
                 border-radius: 12px !important;
                 box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                 display: block !important;
                 margin: 0 auto !important;
                 padding: 0 !important;
                 object-fit: cover !important;
-                max-width: 378px !important;
             `;
             
             img.onload = function() {
@@ -638,35 +661,21 @@
                 imageElement.classList.remove('loading');
                 imageElement.classList.add('has-image');
                 
-                // Force styling again after load with exact dimensions
+                // Force styling again after load
                 img.style.cssText = `
-                    width: 378px !important;
+                    width: 100% !important;
                     height: auto !important;
+                    max-width: 100% !important;
                     border-radius: 12px !important;
                     box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
                     display: block !important;
                     margin: 0 auto !important;
                     padding: 0 !important;
                     object-fit: cover !important;
-                    max-width: 378px !important;
                 `;
                 
-                // Also force styling on any wrapper elements
-                setTimeout(() => {
-                    const allInnerElements = imageElement.querySelectorAll('*');
-                    allInnerElements.forEach(el => {
-                        if (el.tagName === 'IMG' || el.id === 'content') {
-                            el.style.setProperty('width', '378px', 'important');
-                            el.style.setProperty('height', 'auto', 'important');
-                            el.style.setProperty('max-width', '378px', 'important');
-                            el.style.setProperty('margin', '0 auto', 'important');
-                            el.style.setProperty('display', 'block', 'important');
-                        }
-                    });
-                }, 100);
-                
                 addTenorAttribution(imageElement);
-                console.log('✅ Tenor API GIF loaded successfully with 378px width');
+                console.log('✅ Tenor API GIF loaded successfully with full width');
             };
             
             img.onerror = function() {
@@ -679,11 +688,12 @@
         function loadTenorEmbed() {
             const imageElement = document.getElementById('characterImage');
             
-            // Create container for the Tenor embed with fixed width
+            // Create container for the Tenor embed with full width
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
-                width: 378px !important;
+                width: 100% !important;
+                max-width: 100% !important;
                 height: auto !important;
                 display: block !important;
                 border-radius: 12px;
@@ -698,30 +708,47 @@
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
-            // Force styling on Tenor elements after they load
+            // Enhanced force styling on Tenor elements for full width
             function forceTenorStyling() {
                 const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
                 const iframe = embedContainer.querySelector('iframe');
                 const innerDiv = embedContainer.querySelector('div[style*="padding-top"]');
+                const allDivs = embedContainer.querySelectorAll('div');
                 
                 if (tenorEmbed) {
-                    tenorEmbed.style.setProperty('width', '378px', 'important');
+                    tenorEmbed.style.setProperty('width', '100%', 'important');
+                    tenorEmbed.style.setProperty('max-width', '100%', 'important');
+                    tenorEmbed.style.setProperty('height', 'auto', 'important');
                     tenorEmbed.style.setProperty('position', 'relative', 'important');
+                    tenorEmbed.style.setProperty('border-radius', '12px', 'important');
+                    tenorEmbed.style.setProperty('overflow', 'hidden', 'important');
+                    tenorEmbed.style.setProperty('box-shadow', '0 8px 32px rgba(0,0,0,0.15)', 'important');
                 }
                 
-                if (innerDiv) {
-                    innerDiv.style.setProperty('width', '378px', 'important');
-                    innerDiv.style.setProperty('height', 'auto', 'important');
-                    innerDiv.style.setProperty('padding-top', '0', 'important');
-                    innerDiv.style.setProperty('position', 'relative', 'important');
-                }
+                // Force all inner divs to be full width
+                allDivs.forEach(div => {
+                    div.style.setProperty('width', '100%', 'important');
+                    div.style.setProperty('max-width', '100%', 'important');
+                    div.style.setProperty('height', 'auto', 'important');
+                    div.style.setProperty('padding-top', '0', 'important');
+                    div.style.setProperty('position', 'relative', 'important');
+                });
                 
                 if (iframe) {
-                    iframe.style.setProperty('width', '378px', 'important');
-                    iframe.style.setProperty('height', '323px', 'important'); // 378 / 1.7647 aspect ratio
+                    // Calculate responsive height based on 16:9 aspect ratio
+                    const containerWidth = imageElement.offsetWidth || 590; // fallback width
+                    const responsiveHeight = Math.max(250, containerWidth * 0.5625); // 9/16 = 0.5625
+                    
+                    iframe.style.setProperty('width', '100%', 'important');
+                    iframe.style.setProperty('max-width', '100%', 'important');
+                    iframe.style.setProperty('height', `${responsiveHeight}px`, 'important');
+                    iframe.style.setProperty('min-height', '250px', 'important');
                     iframe.style.setProperty('position', 'relative', 'important');
                     iframe.style.setProperty('top', '0', 'important');
                     iframe.style.setProperty('left', '0', 'important');
+                    iframe.style.setProperty('border', 'none', 'important');
+                    iframe.style.setProperty('border-radius', '12px', 'important');
+                    iframe.style.setProperty('box-shadow', '0 8px 32px rgba(0,0,0,0.15)', 'important');
                 }
             }
             
@@ -730,6 +757,7 @@
             setTimeout(forceTenorStyling, 500);
             setTimeout(forceTenorStyling, 1000);
             setTimeout(forceTenorStyling, 2000);
+            setTimeout(forceTenorStyling, 3000);
             
             // Load Tenor's embed script
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
@@ -744,8 +772,12 @@
                     setTimeout(forceTenorStyling, 100);
                     setTimeout(forceTenorStyling, 500);
                     setTimeout(forceTenorStyling, 1000);
+                    setTimeout(forceTenorStyling, 2000);
                 };
             }
+            
+            // Also force styling on window resize
+            window.addEventListener('resize', forceTenorStyling);
             
             // Add Tenor attribution
             addTenorAttribution(imageElement);
@@ -753,7 +785,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ Jaqen H\'ghar embed loaded with forced 378px width');
+            console.log('✅ Game of Thrones "hehehe" embed loaded with full width');
         }
         
         // Add Tenor attribution (required by API terms)
@@ -936,7 +968,7 @@
         // Start continuous snow effects
         startContinuousSnow();
         
-        // Load the specific Jaqen H'ghar GIF
+        // Load the specific Game of Thrones "hehehe" GIF
         loadSpecificMeme();
         
         // Random colors for magical animation - Game of Thrones themed
@@ -991,7 +1023,7 @@
         
         // Analytics tracking with Tenor share registration
         document.querySelector('.shop-button').addEventListener('click', function() {
-            console.log('Shop button clicked for Jaqen H\'ghar GIF');
+            console.log('Shop button clicked for Game of Thrones "hehehe" GIF');
             console.log('CTA message shown:', window.currentCtaMessage);
             
             // Register share with Tenor
