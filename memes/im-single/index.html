@@ -17,12 +17,12 @@
             width: 100%;
         }
 
-        /* Simple 2-color sunset background */
+        /* Romantic pink-red background */
         body {
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, 
-                #ff69b4 0%,  /* Hot Pink */
-                #ffd700 100% /* Gold */
+                #ff1744 0%,  /* Deep Pink Red */
+                #ff69b4 100% /* Hot Pink */
             );
             position: relative;
             height: 100vh;
@@ -194,7 +194,7 @@
 
         .loading-text {
             font-size: 18px;
-            color: #ff69b4;
+            color: #ff1744;
             font-weight: 600;
             animation: fadeInOut 2s ease-in-out infinite;
             letter-spacing: 1px;
@@ -229,7 +229,7 @@
         .quote::before {
             content: '"';
             font-size: 38px;
-            color: #ff69b4;
+            color: #ff1744;
             position: absolute;
             left: -5px;
             top: -12px;
@@ -240,7 +240,7 @@
         .quote::after {
             content: '"';
             font-size: 38px;
-            color: #ff69b4;
+            color: #ff1744;
             position: absolute;
             right: -5px;
             bottom: -16px;
@@ -303,40 +303,40 @@
             );
         }
 
-        /* Palm tree emojis with gentle breathing and slow rotation animation */
-        .palm-tree {
+        /* Heart emojis with gentle romantic animation */
+        .heart {
             position: absolute;
             font-size: 40px;
             z-index: 2;
-            animation: palmBreathingAndRotation 10s ease-in-out infinite;
+            animation: heartFloat 10s ease-in-out infinite;
             pointer-events: none;
             user-select: none;
             opacity: 0.8;
         }
 
-        @keyframes palmBreathingAndRotation {
+        @keyframes heartFloat {
             0%, 100% {
                 transform: translateY(0px) translateX(0px) scale(1) rotate(-3deg);
                 opacity: 0.8;
             }
             16% {
-                transform: translateY(-8px) translateX(5px) scale(1.01) rotate(8deg);
+                transform: translateY(-8px) translateX(5px) scale(1.05) rotate(8deg);
                 opacity: 0.9;
             }
             33% {
-                transform: translateY(-15px) translateX(-3px) scale(1.02) rotate(-15deg);
+                transform: translateY(-15px) translateX(-3px) scale(1.1) rotate(-15deg);
                 opacity: 0.95;
             }
             50% {
-                transform: translateY(-12px) translateX(7px) scale(1.015) rotate(20deg);
+                transform: translateY(-12px) translateX(7px) scale(1.08) rotate(20deg);
                 opacity: 0.85;
             }
             66% {
-                transform: translateY(-6px) translateX(-2px) scale(1.01) rotate(-8deg);
+                transform: translateY(-6px) translateX(-2px) scale(1.03) rotate(-8deg);
                 opacity: 0.9;
             }
             83% {
-                transform: translateY(-10px) translateX(4px) scale(1.018) rotate(12deg);
+                transform: translateY(-10px) translateX(4px) scale(1.06) rotate(12deg);
                 opacity: 0.88;
             }
         }
@@ -378,7 +378,7 @@
             
             .quote::before {
                 font-size: 22px;
-                color: #ff69b4;
+                color: #ff1744;
                 top: -6px;
                 left: -3px;
                 opacity: 0.8;
@@ -386,7 +386,7 @@
 
             .quote::after {
                 font-size: 22px;
-                color: #ff69b4;
+                color: #ff1744;
                 bottom: -10px;
                 right: -3px;
                 opacity: 0.8;
@@ -412,7 +412,7 @@
                 font-size: 13px;
             }
 
-            .palm-tree {
+            .heart {
                 font-size: 32px;
             }
         }
@@ -446,7 +446,7 @@
 
             .quote::before {
                 font-size: 18px;
-                color: #ff69b4;
+                color: #ff1744;
                 top: -4px;
                 left: -2px;
                 opacity: 0.8;
@@ -454,7 +454,7 @@
 
             .quote::after {
                 font-size: 18px;
-                color: #ff69b4;
+                color: #ff1744;
                 bottom: -8px;
                 right: -2px;
                 opacity: 0.8;
@@ -465,7 +465,7 @@
                 margin-top: 6px;
             }
 
-            .palm-tree {
+            .heart {
                 font-size: 28px;
             }
         }
@@ -503,11 +503,11 @@
         const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
         const CLIENT_KEY = 'wearablecode_memes';
         
-        // Specific GIF data for Jersey Shore head turn
+        // Specific GIF data for Shaq flirty smile
         const specificGifData = {
-            id: '27468648',
-            url: 'https://tenor.com/view/head-turn-vinny-guadagnino-jersey-shore-family-vacation-what-huh-gif-27468648',
-            embedCode: `<div class="tenor-gif-embed" data-postid="27468648" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/head-turn-vinny-guadagnino-jersey-shore-family-vacation-what-huh-gif-27468648">Head Turn Vinny Guadagnino GIF</a>from <a href="https://tenor.com/search/jersey+shore-gifs">Jersey Shore GIFs</a></div>`
+            id: '15632508310642849617',
+            url: 'https://tenor.com/view/shaq-flirty-cool-smile-funny-gif-15632508310642849617',
+            embedCode: `<div class="tenor-gif-embed" data-postid="15632508310642849617" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/shaq-flirty-cool-smile-funny-gif-15632508310642849617">Shaq Flirty GIF</a>from <a href="https://tenor.com/search/shaq-gifs">Shaq GIFs</a></div>`
         };
         
         // Page-specific data
@@ -556,11 +556,11 @@
         
         // Load GIF from direct URL
         function loadGifFromUrl(gifUrl) {
-            console.log('🎬 Loading GIF from URL:', gifUrl);
+            console.log('🎬 Loading Shaq GIF from URL:', gifUrl);
             const imageElement = document.getElementById('characterImage');
             const img = document.createElement('img');
             img.src = gifUrl;
-            img.alt = "Jersey Shore";
+            img.alt = "Shaq Flirty";
             
             img.style.cssText = `
                 width: 100% !important;
@@ -575,7 +575,7 @@
             `;
             
             img.onload = function() {
-                console.log('✅ GIF loaded successfully from direct URL');
+                console.log('✅ Shaq GIF loaded successfully from direct URL');
                 imageElement.innerHTML = '';
                 imageElement.appendChild(img);
                 imageElement.classList.remove('loading');
@@ -584,7 +584,7 @@
             };
             
             img.onerror = function() {
-                console.log('❌ Direct GIF URL failed, trying embed');
+                console.log('❌ Direct Shaq GIF URL failed, trying embed');
                 loadTenorEmbed();
             };
         }
@@ -647,12 +647,12 @@
             
             addTenorAttribution(imageElement);
             window.tenorGifId = specificGifData.id;
-            console.log('✅ Jersey Shore embed loaded');
+            console.log('✅ Shaq flirty embed loaded');
         }
         
-        // Load the specific Jersey Shore GIF
+        // Load the specific Shaq flirty GIF
         function loadSpecificMeme() {
-            console.log('🎬 loadSpecificMeme function called');
+            console.log('🎬 loadSpecificMeme function called for Shaq');
             const imageElement = document.getElementById('characterImage');
             
             if (!imageElement) {
@@ -663,11 +663,22 @@
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            console.log('🔄 Attempting to fetch GIF from Tenor API...');
+            console.log('🔄 Attempting to fetch Shaq GIF from Tenor API...');
             fetchSpecificGifFromTenor()
                 .then(gifUrl => {
                     if (gifUrl) {
-                        console.log('✅ GIF URL obtained from Tenor API');
+                        console.log('✅ Shaq GIF URL obtained from Tenor API');
+                        loadGifFromUrl(gifUrl);
+                    } else {
+                        console.log('❌ No Shaq GIF URL from API, trying embed');
+                        loadTenorEmbed();
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Tenor API failed for Shaq, using embed fallback:', error);
+                    loadTenorEmbed();
+                });
+        } URL obtained from Tenor API');
                         loadGifFromUrl(gifUrl);
                     } else {
                         console.log('❌ No GIF URL from API, trying embed');
@@ -701,12 +712,12 @@
             container.appendChild(attribution);
         }
         
-        // Create palm tree emojis with breathing and rotation animation
+        // Create heart emojis with romantic floating animation
         function createPalmTrees() {
-            console.log('🌴 createPalmTrees function called');
+            console.log('💕 createHearts function called');
             
-            // More palm trees spread across the entire screen with extra focus on top area
-            const palmPositions = [
+            // Hearts spread across the entire screen with extra focus on top area
+            const heartPositions = [
                 // Top area (more concentrated)
                 { left: '8%', top: '8%' },
                 { left: '25%', top: '12%' },
@@ -725,51 +736,53 @@
                 { left: '58%', top: '85%' },
                 { left: '78%', top: '78%' },
                 { left: '88%', top: '88%' },
-                // Extra palms for balance
+                // Extra hearts for romance
                 { left: '32%', top: '25%' },
                 { left: '68%', top: '30%' }
             ];
             
-            palmPositions.forEach((pos, index) => {
+            // Different heart emojis for variety
+            const heartEmojis = ['💕', '💖', '💗', '💘', '💝', '❤️', '💞', '💓'];
+            
+            heartPositions.forEach((pos, index) => {
                 try {
-                    const palmTree = document.createElement('div');
-                    palmTree.className = 'palm-tree';
-                    palmTree.textContent = '🌴';
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    
+                    // Random heart emoji
+                    const randomHeart = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                    heart.textContent = randomHeart;
                     
                     // Random position variation within ±10px
                     const randomX = (Math.random() - 0.5) * 20; // -10 to +10
                     const randomY = (Math.random() - 0.5) * 20; // -10 to +10
                     
-                    palmTree.style.left = `calc(${pos.left} + ${randomX}px)`;
-                    palmTree.style.top = `calc(${pos.top} + ${randomY}px)`;
+                    heart.style.left = `calc(${pos.left} + ${randomX}px)`;
+                    heart.style.top = `calc(${pos.top} + ${randomY}px)`;
                     
                     // Random animation delay for natural effect
-                    palmTree.style.animationDelay = (Math.random() * 3) + 's';
+                    heart.style.animationDelay = (Math.random() * 3) + 's';
                     
                     // Random animation duration between 8-12 seconds (slower)
                     const randomDuration = (Math.random() * 4 + 8);
-                    palmTree.style.animationDuration = randomDuration + 's';
+                    heart.style.animationDuration = randomDuration + 's';
                     
                     // Additional inline styles
-                    palmTree.style.position = 'absolute';
-                    palmTree.style.fontSize = '40px';
-                    palmTree.style.zIndex = '2';
-                    palmTree.style.pointerEvents = 'none';
-                    palmTree.style.userSelect = 'none';
-                    palmTree.style.opacity = '0.8';
+                    heart.style.position = 'absolute';
+                    heart.style.fontSize = '40px';
+                    heart.style.zIndex = '2';
+                    heart.style.pointerEvents = 'none';
+                    heart.style.userSelect = 'none';
+                    heart.style.opacity = '0.8';
                     
-                    // Random rotation range for each palm tree (within -30 to +30 degrees)
-                    const maxRotation = Math.random() * 30 - 15; // -15 to +15 as base
-                    palmTree.style.setProperty('--max-rotation', maxRotation + 'deg');
-                    
-                    document.body.appendChild(palmTree);
-                    console.log(`✅ Palm tree ${index + 1} created at ${pos.left}, ${pos.top} with ${randomX}px, ${randomY}px offset`);
+                    document.body.appendChild(heart);
+                    console.log(`💕 Heart ${index + 1} (${randomHeart}) created at ${pos.left}, ${pos.top} with ${randomX}px, ${randomY}px offset`);
                 } catch (error) {
-                    console.error(`❌ Error creating palm tree ${index + 1}:`, error);
+                    console.error(`❌ Error creating heart ${index + 1}:`, error);
                 }
             });
             
-            console.log(`✅ All ${palmPositions.length} palm trees created across entire screen with focus on top area`);
+            console.log(`💕 All ${heartPositions.length} hearts created for romantic atmosphere`);
         }
         
         // Safari iOS font size fix
@@ -854,12 +867,12 @@
         setTimeout(applySafariFix, 100);
         reduceGlowForiPhone();
         
-        console.log('🌴 Creating palm trees...');
+        console.log('💕 Creating hearts...');
         try {
             createPalmTrees();
-            console.log('✅ Palm trees created successfully');
+            console.log('✅ Hearts created successfully');
         } catch (error) {
-            console.error('❌ Error creating palm trees:', error);
+            console.error('❌ Error creating hearts:', error);
         }
         
         console.log('🎬 Loading GIF...');
