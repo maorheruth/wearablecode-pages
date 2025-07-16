@@ -164,12 +164,11 @@
             object-fit: cover;
         }
 
-        /* Enhanced iframe styling for full width */
+        /* Enhanced iframe styling for full width with fixed height */
         .character-image iframe {
             width: 100% !important;
             height: 374px !important;
             max-width: 100% !important;
-            min-height: 250px !important;
             border: none !important;
             border-radius: 12px !important;
             margin: 0 auto !important;
@@ -177,9 +176,10 @@
             box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
         }
 
-        /* Enhanced Tenor embed styling for full width */
+        /* Enhanced Tenor embed styling for full width with fixed height */
         .tenor-gif-embed {
             width: 100% !important;
+            max-width: 100% !important;
             height: 374px !important;
             border-radius: 12px !important;
             overflow: hidden !important;
@@ -190,7 +190,8 @@
 
         .tenor-gif-embed > div {
             width: 100% !important;
-            height: auto !important;
+            max-width: 100% !important;
+            height: 374px !important;
             position: relative !important;
             padding-top: 0 !important;
         }
@@ -198,6 +199,7 @@
         .tenor-gif-embed iframe {
             width: 100% !important;
             height: 374px !important;
+            max-width: 100% !important;
             position: relative !important;
             top: 0 !important;
             left: 0 !important;
@@ -219,7 +221,7 @@
         .character-image.has-image iframe,
         .character-image.has-image .tenor-gif-embed {
             width: 100% !important;
-            height: 374px !important;
+            height: auto !important;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             display: block;
@@ -638,10 +640,10 @@
             img.src = gifUrl;
             img.alt = "Game of Thrones";
             
-            // Force full width styling on the image element
+            // Force full width with fixed height styling
             img.style.cssText = `
                 width: 100% !important;
-                height: auto !important;
+                height: 374px !important;
                 max-width: 100% !important;
                 border-radius: 12px !important;
                 box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
@@ -671,7 +673,7 @@
                 `;
                 
                 addTenorAttribution(imageElement);
-                console.log('✅ Tenor API GIF loaded successfully with full width');
+                console.log('✅ Tenor API GIF loaded successfully with full width and 374px height');
             };
             
             img.onerror = function() {
@@ -684,13 +686,13 @@
         function loadTenorEmbed() {
             const imageElement = document.getElementById('characterImage');
             
-            // Create container for the Tenor embed with full width
+            // Create container for the Tenor embed with full width and fixed height
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
                 width: 100% !important;
                 max-width: 100% !important;
-                height: auto !important;
+                height: 374px !important;
                 display: block !important;
                 border-radius: 12px;
                 overflow: hidden;
@@ -704,7 +706,7 @@
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
-            // Enhanced force styling on Tenor elements for full width
+            // Enhanced force styling on Tenor elements for full width with fixed height
             function forceTenorStyling() {
                 const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
                 const iframe = embedContainer.querySelector('iframe');
@@ -721,24 +723,19 @@
                     tenorEmbed.style.setProperty('box-shadow', '0 8px 32px rgba(0,0,0,0.15)', 'important');
                 }
                 
-                // Force all inner divs to be full width
+                // Force all inner divs to be full width with fixed height
                 allDivs.forEach(div => {
                     div.style.setProperty('width', '100%', 'important');
                     div.style.setProperty('max-width', '100%', 'important');
-                    div.style.setProperty('height', 'auto', 'important');
+                    div.style.setProperty('height', '374px', 'important');
                     div.style.setProperty('padding-top', '0', 'important');
                     div.style.setProperty('position', 'relative', 'important');
                 });
                 
                 if (iframe) {
-                    // Calculate responsive height based on 16:9 aspect ratio
-                    const containerWidth = imageElement.offsetWidth || 590; // fallback width
-                    const responsiveHeight = Math.max(250, containerWidth * 0.5625); // 9/16 = 0.5625
-                    
                     iframe.style.setProperty('width', '100%', 'important');
-                    iframe.style.setProperty('max-width', '374px', 'important');
-                    iframe.style.setProperty('height', `${responsiveHeight}px`, 'important');
-                    iframe.style.setProperty('min-height', '250px', 'important');
+                    iframe.style.setProperty('max-width', '100%', 'important');
+                    iframe.style.setProperty('height', '374px', 'important');
                     iframe.style.setProperty('position', 'relative', 'important');
                     iframe.style.setProperty('top', '0', 'important');
                     iframe.style.setProperty('left', '0', 'important');
@@ -781,7 +778,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ Game of Thrones "hehehe" embed loaded with full width');
+            console.log('✅ Game of Thrones "hehehe" embed loaded with full width and 374px height');
         }
         
         // Add Tenor attribution (required by API terms)
