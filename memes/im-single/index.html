@@ -663,21 +663,57 @@
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            console.log('🔄 Attempting to fetch Shaq GIF from Tenor API...');
-            fetchSpecificGifFromTenor()
-                .then(gifUrl => {
-                    if (gifUrl) {
-                        console.log('✅ Shaq GIF URL obtained from Tenor API');
-                        loadGifFromUrl(gifUrl);
-                    } else {
-                        console.log('❌ No Shaq GIF URL from API, trying embed');
+            // Try direct URL first
+            console.log('🔄 Attempting to load Shaq GIF from direct URL...');
+            loadGifFromDirectUrl();
+        }
+        
+        // Load GIF from the direct URL you provided
+        function loadGifFromDirectUrl() {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = 'https://media1.tenor.com/m/2PHTe-Q1d1EAAAAd/shaq-flirty.gif';
+            img.alt = "Shaq Flirty";
+            
+            img.style.cssText = `
+                width: 100% !important;
+                height: 374px !important;
+                max-width: 100% !important;
+                border-radius: 16px !important;
+                box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+                display: block !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                object-fit: cover !important;
+            `;
+            
+            img.onload = function() {
+                console.log('✅ Shaq GIF loaded successfully from direct URL');
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                addTenorAttribution(imageElement);
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Direct Shaq GIF URL failed, trying Tenor API...');
+                // Fallback to Tenor API
+                fetchSpecificGifFromTenor()
+                    .then(gifUrl => {
+                        if (gifUrl) {
+                            console.log('✅ Shaq GIF URL obtained from Tenor API');
+                            loadGifFromUrl(gifUrl);
+                        } else {
+                            console.log('❌ No Shaq GIF URL from API, trying embed');
+                            loadTenorEmbed();
+                        }
+                    })
+                    .catch(error => {
+                        console.log('❌ Tenor API failed for Shaq, using embed fallback:', error);
                         loadTenorEmbed();
-                    }
-                })
-                .catch(error => {
-                    console.log('❌ Tenor API failed for Shaq, using embed fallback:', error);
-                    loadTenorEmbed();
-                });
+                    });
+            };
         } URL obtained from Tenor API');
                         loadGifFromUrl(gifUrl);
                     } else {
