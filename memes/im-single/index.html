@@ -503,11 +503,11 @@
         const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
         const CLIENT_KEY = 'wearablecode_memes';
         
-        // Specific GIF data for Shaq flirty smile - using your exact embed
+        // Specific GIF data for Shaq shimmy - using your exact embed
         const specificGifData = {
-            id: '15632508310642849617',
-            url: 'https://tenor.com/view/shaq-flirty-cool-smile-funny-gif-15632508310642849617',
-            embedCode: `<div class="tenor-gif-embed" data-postid="15632508310642849617" data-share-method="host" data-aspect-ratio="1.09202" data-width="100%"><a href="https://tenor.com/view/shaq-flirty-cool-smile-funny-gif-15632508310642849617">Shaq Flirty GIF</a>from <a href="https://tenor.com/search/shaq-gifs">Shaq GIFs</a></div>`
+            id: '12032436',
+            url: 'https://tenor.com/view/shaq-shimmy-excited-smile-gif-12032436',
+            embedCode: `<div class="tenor-gif-embed" data-postid="12032436" data-share-method="host" data-aspect-ratio="1.3369" data-width="100%"><a href="https://tenor.com/view/shaq-shimmy-excited-smile-gif-12032436">Shaq Shimmy GIF</a>from <a href="https://tenor.com/search/shaq-gifs">Shaq GIFs</a></div>`
         };
         
         // Page-specific data
@@ -671,12 +671,12 @@
             
             addTenorAttribution(imageElement);
             window.tenorGifId = specificGifData.id;
-            console.log('✅ Shaq flirty embed loaded with exact embed code');
+            console.log('✅ Shaq shimmy embed loaded with exact embed code');
         }
         
-        // Load the specific Shaq flirty GIF - force embed approach
+        // Load the specific Shaq shimmy GIF - force embed approach
         function loadSpecificMeme() {
-            console.log('🎬 loadSpecificMeme function called for Shaq - forcing embed');
+            console.log('🎬 loadSpecificMeme function called for Shaq shimmy - forcing embed');
             const imageElement = document.getElementById('characterImage');
             
             if (!imageElement) {
@@ -687,8 +687,8 @@
             imageElement.innerHTML = '<div class="loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Go straight to embed - more reliable
-            console.log('🔄 Loading Shaq GIF via Tenor embed...');
+            // Go straight to embed with the new Shaq shimmy
+            console.log('🔄 Loading Shaq shimmy GIF via Tenor embed...');
             loadTenorEmbed();
         }
         
