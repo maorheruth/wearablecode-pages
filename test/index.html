@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOTCHA! | WearableCode</title>
+    <title>Are you following me? | WearableCode</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Anton:wght@400&family=Oswald:wght@700&family=Bodoni+Moda+SC:wght@400;700;900&family=Rubik+Glitch&family=Federo&family=Rozha+One&display=swap" rel="stylesheet">
     <style>
         * {
@@ -26,7 +26,7 @@
             height: 100%;
             height: 100vh;
             height: 100dvh;
-            background: linear-gradient(135deg, #1a4c1a 0%, #0d3b0d 50%, #062206 100%);
+            background: linear-gradient(135deg, #8B0000 0%, #4A0000 50%, #220000 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -44,7 +44,7 @@
             width: 60px;
             height: 60px;
             border: 4px solid rgba(255, 255, 255, 0.2);
-            border-top: 4px solid #32CD32;
+            border-top: 4px solid #DC143C;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 20px;
@@ -58,13 +58,15 @@
         .loading-text {
             color: white;
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 24px;
-            letter-spacing: 2px;
+            font-size: 32px;
+            letter-spacing: 3px;
             text-transform: uppercase;
             margin-bottom: 10px;
             animation: pulse 2s ease-in-out infinite;
             direction: rtl;
             text-align: center;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .loading-subtitle {
@@ -84,7 +86,7 @@
         /* Safari iOS specific fixes */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a4c1a 0%, #0d3b0d 50%, #062206 100%);
+            background: linear-gradient(135deg, #8B0000 0%, #4A0000 50%, #220000 100%);
             height: 100vh;
             height: 100dvh; /* Dynamic viewport height for iOS */
             display: flex;
@@ -95,6 +97,49 @@
             position: relative;
             overflow: hidden;
             -webkit-overflow-scrolling: touch;
+        }
+
+        /* Blood drip animation */
+        .blood-drip {
+            position: absolute;
+            height: 100vh;
+            background: linear-gradient(to bottom, #ff1a1a 0%, #ff0000 30%, #cc0000 70%, #990000 100%);
+            z-index: 0;
+            animation: dripEndless 10s ease-in infinite;
+            pointer-events: none;
+            transform: translateY(-100vh);
+            box-shadow: 0 0 3px rgba(255, 0, 0, 0.6);
+        }
+
+        @keyframes dripEndless {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0.9;
+            }
+            20% {
+                transform: translateY(-80vh);
+                opacity: 0.8;
+            }
+            40% {
+                transform: translateY(-60vh);
+                opacity: 0.7;
+            }
+            60% {
+                transform: translateY(-40vh);
+                opacity: 0.6;
+            }
+            80% {
+                transform: translateY(-20vh);
+                opacity: 0.4;
+            }
+            95% {
+                transform: translateY(0);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 0;
+            }
         }
 
         .container {
@@ -109,6 +154,7 @@
             animation: slideUp 0.6s ease-out;
             height: auto;
             min-height: auto;
+            max-height: 95vh;
             z-index: 5;
             overflow: hidden;
             opacity: 0;
@@ -155,7 +201,7 @@
         }
 
         .character-image {
-            width: 380px;
+            width: 100%;
             height: auto;
             border-radius: 12px;
             margin: 0 auto 18px;
@@ -173,8 +219,9 @@
         }
 
         .character-image img {
-            width: 380px !important;
-            height: auto;
+            width: 378px !important;
+            height: auto !important;
+            max-height: 215px !important;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             display: block;
@@ -186,7 +233,7 @@
         /* Simple iframe styling - FORCE specific dimensions */
         .character-image iframe {
             width: 378px !important;
-            height: 450px !important;
+            height: 215px !important;
             border: none !important;
             border-radius: 12px !important;
             margin: 0 auto !important;
@@ -196,12 +243,15 @@
         /* Force styling with specific class */
         .gif-iframe {
             width: 378px !important;
-            height: 450px !important;
+            height: 215px !important;
             border: none !important;
             border-radius: 12px !important;
             margin: 0 auto !important;
             display: block !important;
-
+            max-width: 378px !important;
+            max-height: 215px !important;
+            min-width: 378px !important;
+            min-height: 215px !important;
         }
 
         .character-image.has-image {
@@ -225,7 +275,7 @@
         .character-image.has-image iframe,
         .character-image.has-image .tenor-gif-embed {
             width: 100% !important;
-            height: 450px;
+            height: auto !important;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             display: block;
@@ -240,45 +290,61 @@
             min-height: 200px;
         }
 
+        .char-loading-text {
+            font-size: 18px;
+            color: #b0b0b0;
+            font-weight: 500;
+            animation: fadeInOut 2s ease-in-out infinite;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.3;
+            }
+        }
+
         .quote {
-            font-size: 35px;
+            font-size: 36px;
             font-weight: 400;
             font-family: 'Bebas Neue';
             color: #222;
             margin-bottom: 15px;
-            line-height: 1.1;
+            line-height: 0.9;
             position: relative;
             padding: 0 15px;
             letter-spacing: 1px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
             text-transform: uppercase;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: 100%;
-            box-sizing: border-box;
         }
 
         .quote::before {
             content: '"';
-            font-size: 35px;
+            font-size: 36px;
             color: #bbb;
             position: absolute;
             left: -8px;
             top: -10px;
             opacity: 0.7;
-            font-family: Bebas Neue;
+            font-family: 'Bebas Neue';
         }
 
         .quote::after {
             content: '"';
-            font-size: 35px;
+            font-size: 36px;
             color: #bbb;
             position: absolute;
             right: -8px;
             bottom: -14px;
             opacity: 0.7;
-            font-family: Bebas Neue;
+            font-family: 'Bebas Neue';
         }
 
         .source {
@@ -286,11 +352,10 @@
             color: #666;
             font-style: italic;
             margin-bottom: 25px;
-            display: none; /* Hidden as requested */
         }
 
         .cta-section {
-            background: #e8f5e8;
+            background: #f8f9fa;
             border-radius: 12px;
             padding: 15px;
             margin-top: 20px;
@@ -308,7 +373,7 @@
         }
 
         .shop-button {
-            background: linear-gradient(135deg, #228B22, #006400);
+            background: linear-gradient(135deg, #8B0000, #B22222);
             color: white;
             border: none;
             border-radius: 10px;
@@ -319,24 +384,24 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            box-shadow: 0 4px 15px rgba(34, 139, 34, 0.3);
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
         }
 
         .shop-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(34, 139, 34, 0.5);
-            background: linear-gradient(135deg, #32CD32, #228B22);
+            box-shadow: 0 8px 20px rgba(139, 0, 0, 0.5);
+            background: linear-gradient(135deg, #A0522D, #DC143C);
         }
 
-        /* Animated jungle elements */
-        .jungle-element {
+        /* Animated mysterious background elements */
+        .mystery-element {
             position: absolute;
             font-size: 20px;
-            color: rgba(34, 139, 34, 0.25);
+            color: rgba(255, 255, 255, 0.25);
             z-index: 1;
             animation: wiggleFloat 6s ease-in-out infinite;
             pointer-events: none;
-            text-shadow: 0 0 4px rgba(34, 139, 34, 0.3);
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
         }
 
         @keyframes wiggleFloat {
@@ -380,11 +445,11 @@
             }
             
             .loading-text {
-                font-size: 20px;
+                font-size: 26px;
             }
             
             .loading-subtitle {
-                font-size: 12px;
+                font-size: 12px !important;
             }
             
             .loading-spinner {
@@ -393,27 +458,28 @@
                 margin-bottom: 15px;
             }
             
+            .char-loading-text {
+                font-size: 16px;
+            }
+            
             .quote {
-                font-size: 35px;
+                font-size: 36px;
                 margin-bottom: 10px;
-                line-height: 1.2;
+                line-height: 0.9;
                 padding: 0 5px;
-                font-family: 'Bebas Neue';
+                font-family: font-family: 'Bebas Neue';
                 letter-spacing: 0.5px;
                 text-transform: uppercase;
-                word-wrap: break-word;
-                overflow-wrap: break-word;
-                max-width: 100%;
             }
             
             .quote::before {
-                font-size: 35px;
+                font-size: 36px;
                 top: -8px;
                 left: -4px;
             }
 
             .quote::after {
-                font-size: 35px;
+                font-size: 36px;
                 bottom: -12px;
                 right: -4px;
             }
@@ -443,10 +509,10 @@
                 font-size: 13px;
             }
 
-            .jungle-element {
+            .mystery-element {
                 font-size: 16px;
-                color: rgba(34, 139, 34, 0.2);
-                text-shadow: 0 0 3px rgba(34, 139, 34, 0.25);
+                color: rgba(255, 255, 255, 0.2);
+                text-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
             }
         }
 
@@ -471,11 +537,11 @@
             }
             
             .loading-text {
-                font-size: 18px;
+                font-size: 22px;
             }
             
             .loading-subtitle {
-                font-size: 11px;
+                font-size: 11px !important;
             }
             
             .loading-spinner {
@@ -484,30 +550,31 @@
                 margin-bottom: 12px;
             }
             
+            .char-loading-text {
+                font-size: 14px;
+            }
+            
             .quote {
-                font-size: 35px;
+                font-size: 36px;
                 padding: 0 3px;
-                line-height: 1.1;
-                font-family: 'Bebas Neue';
+                line-height: 0.9;
+                font-family: font-family: 'Bebas Neue';
                 letter-spacing: 0px;
                 text-transform: uppercase;
-                word-wrap: break-word;
-                overflow-wrap: break-word;
-                max-width: 100%;
             }
 
             .quote::before {
-                font-size: 35px;
+                font-size: 36px;
             }
 
             .quote::after {
-                font-size: 35px;
+                font-size: 36px;
             }
 
-            .jungle-element {
+            .mystery-element {
                 font-size: 14px;
-                color: rgba(34, 139, 34, 0.18);
-                text-shadow: 0 0 2px rgba(34, 139, 34, 0.2);
+                color: rgba(255, 255, 255, 0.18);
+                text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
             }
             
             .logo img {
@@ -521,25 +588,23 @@
     <!-- Loading overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
-        <div class="loading-text">...טוען</div>
+        <div class="loading-text">טוען...</div>
         <div class="loading-subtitle">🎉 מכין הפתעה מיוחדת בשבילך</div>
     </div>
 
-    <!-- Jungle elements will be generated by JavaScript -->
+    <!-- Mystery elements will be generated by JavaScript -->
     
     <div class="container" id="mainContainer">
         <div class="character-image" id="characterImage">
-            <div style="min-height: 200px; display: flex; align-items: center; justify-content: center; color: #ccc;">
-                ממתין לתוכן...
-            </div>
+            <div class="char-loading-text">Loading</div>
         </div>
         
         <div class="quote" id="mainQuote">
-            GOTCHA!🤣
+            Are you following me?
         </div>
         
         <div class="source" id="quoteSource">
-            <!-- Source removed as requested -->
+            - Beck Guinevere
         </div>
         
         <div class="cta-section">
@@ -564,18 +629,17 @@
         const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
         const CLIENT_KEY = 'wearablecode_memes';
         
-        // Updated GIF data for the new "Good Morning" GIF
+        // Updated GIF data for the new "Wait what" GIF
         const specificGifData = {
-            id: '13523523365572867630',
-            url: 'https://tenor.com/view/good-morning-gif-13523523365572867630',
-            embedCode: `<div class="tenor-gif-embed" data-postid="13523523365572867630" data-share-method="host" data-aspect-ratio="1.0" data-width="100%"><a href="https://tenor.com/view/good-morning-gif-13523523365572867630">Good Morning GIF</a>from <a href="https://tenor.com/search/good+morning-gifs">Good Morning GIFs</a></div>`,
-            title: 'Good Morning GIF'
+            id: '15989664',
+            url: 'https://tenor.com/view/wait-what-huh-excuse-me-what-is-that-what-do-you-say-gif-15989664',
+            embedCode: `<div class="tenor-gif-embed" data-postid="15989664" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/wait-what-huh-excuse-me-what-is-that-what-do-you-say-gif-15989664">Wait What Huh GIF</a>from <a href="https://tenor.com/search/wait+what-gifs">Wait What GIFs</a></div>`
         };
         
         // Page-specific data
         const pageData = {
-            quote: "GOTCHA!🤣",
-            source: "" // Removed as requested
+            quote: "Are you following me?🔍",
+            source: "- Beck Guinevere"
         };
         
         // Random CTA messages in Hebrew
@@ -592,11 +656,11 @@
             "חולצה כזאת חייבת להיות לכם בארון! 👇"
         ];
         
-        // Jungle emojis for background
-        const jungleEmojis = [
-            '🌿', '🍃', '🌱', '🌳', '🌴', '🦋', '🐸', '🦜',
-            '🐍', '🦎', '🐒', '🌺', '🌸', '🌼', '☘️', '🍀',
-            '🌾', '🌲', '🌵', '🦗', '🐛', '🕷️', '🌞', '⭐'
+        // Mystery emojis for background - Only the scariest ones
+        const mysteryEmojis = [
+            '👁️', '🩸', '🔪', '🔍', '💀', '🖤', '🕯️', '🔐',
+            '🗝️', '📖', '🚪', '📱', '💻', '🌃', '🌙', '⚡',
+            '🔥', '👤', '🎭', '👻'
         ];
 
         // Track loading state
@@ -624,10 +688,10 @@
             }
         }
         
-        // Load the specific GIF with loading tracking
+        // Load the specific GIF
         function loadSpecificMeme() {
             const imageElement = document.getElementById('characterImage');
-            imageElement.innerHTML = '<div style="min-height: 200px; display: flex; align-items: center; justify-content: center; color: #ccc;">טוען GIF...</div>';
+            imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
             // Try to load via Tenor API first, then fallback to embed
@@ -643,41 +707,6 @@
                     console.log('❌ Tenor API failed, using embed fallback:', error);
                     loadTenorEmbed();
                 });
-        }
-        
-        // Load GIF from direct URL
-        function loadGifFromUrl(url) {
-            const imageElement = document.getElementById('characterImage');
-            const img = new Image();
-            
-            img.onload = function() {
-                imageElement.innerHTML = '';
-                imageElement.appendChild(img);
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-                
-                // Mark GIF as loaded
-                gifLoaded = true;
-                showMainContent();
-                
-                console.log('✅ GIF loaded from URL');
-            };
-            
-            img.onerror = function() {
-                console.log('❌ Failed to load GIF from URL, trying embed fallback');
-                loadTenorEmbed();
-            };
-            
-            img.src = url;
-            img.style.cssText = `
-                width: 378px !important;
-                height: 450px;
-                border-radius: 12px;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-                display: block;
-                margin: 0 auto;
-                object-fit: cover;
-            `;
         }
         
         // Try to fetch the specific GIF from Tenor API
@@ -705,7 +734,77 @@
             }
         }
         
-        // Fallback to Tenor embed with loading tracking
+        // Load GIF from direct URL
+        function loadGifFromUrl(gifUrl) {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = gifUrl;
+            img.alt = "Wait what";
+            
+            // Force exact width styling on the image element
+            img.style.cssText = `
+                width: 378px !important;
+                height: auto !important;
+                max-height: 215px !important;
+                border-radius: 12px !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                display: block !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                object-fit: cover !important;
+                max-width: 378px !important;
+            `;
+            
+            img.onload = function() {
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                
+                // Force styling again after load with exact dimensions
+                img.style.cssText = `
+                    width: 378px !important;
+                    height: auto !important;
+                    max-height: 215px !important;
+                    border-radius: 12px !important;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                    display: block !important;
+                    margin: 0 auto !important;
+                    padding: 0 !important;
+                    object-fit: cover !important;
+                    max-width: 378px !important;
+                `;
+                
+                // Also force styling on any wrapper elements
+                setTimeout(() => {
+                    const allInnerElements = imageElement.querySelectorAll('*');
+                    allInnerElements.forEach(el => {
+                        if (el.tagName === 'IMG' || el.id === 'content') {
+                            el.style.setProperty('width', '378px', 'important');
+                            el.style.setProperty('height', 'auto', 'important');
+                            el.style.setProperty('max-width', '378px', 'important');
+                            el.style.setProperty('margin', '0 auto', 'important');
+                            el.style.setProperty('display', 'block', 'important');
+                        }
+                    });
+                }, 100);
+                
+                addTenorAttribution(imageElement);
+                
+                // Mark GIF as loaded
+                gifLoaded = true;
+                showMainContent();
+                
+                console.log('✅ Tenor API GIF loaded successfully with 378px width');
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Direct GIF URL failed, trying embed');
+                loadTenorEmbed();
+            };
+        }
+        
+        // Fallback to Tenor embed
         function loadTenorEmbed() {
             const imageElement = document.getElementById('characterImage');
             
@@ -714,7 +813,7 @@
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
                 width: 378px !important;
-                height: 450px;
+                height: 215px !important;
                 display: block !important;
                 border-radius: 12px;
                 overflow: hidden;
@@ -741,14 +840,14 @@
                 
                 if (innerDiv) {
                     innerDiv.style.setProperty('width', '378px', 'important');
-                    innerDiv.style.setProperty('height', '450px');
+                    innerDiv.style.setProperty('height', '215px', 'important');
                     innerDiv.style.setProperty('padding-top', '0', 'important');
                     innerDiv.style.setProperty('position', 'relative', 'important');
                 }
                 
                 if (iframe) {
                     iframe.style.setProperty('width', '378px', 'important');
-                    iframe.style.setProperty('height', '450px');
+                    iframe.style.setProperty('height', '215px', 'important'); // Fixed aspect ratio
                     iframe.style.setProperty('position', 'relative', 'important');
                     iframe.style.setProperty('top', '0', 'important');
                     iframe.style.setProperty('left', '0', 'important');
@@ -801,7 +900,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ "Good Morning" embed loaded with forced 378px width');
+            console.log('✅ "Wait what" embed loaded with forced 378px width');
         }
         
         // Add Tenor attribution (required by API terms)
@@ -826,16 +925,16 @@
             container.appendChild(attribution);
         }
         
-        // Create random jungle elements
-        function createJungleElements() {
+        // Create random mystery elements
+        function createMysteryElements() {
             const numberOfElements = Math.floor(Math.random() * 11) + 15; // 15-25 elements
             
             for (let i = 0; i < numberOfElements; i++) {
                 const element = document.createElement('div');
-                element.className = 'jungle-element';
+                element.className = 'mystery-element';
                 
                 // Random emoji
-                const randomEmoji = jungleEmojis[Math.floor(Math.random() * jungleEmojis.length)];
+                const randomEmoji = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
                 element.textContent = randomEmoji;
                 
                 // Random position
@@ -857,7 +956,77 @@
                 document.body.appendChild(element);
             }
             
-            console.log(`Created ${numberOfElements} jungle elements`);
+            console.log(`Created ${numberOfElements} mystery elements`);
+        }
+
+        // Create blood drips
+        function createBloodDrips() {
+            const numberOfDrips = Math.floor(Math.random() * 10) + 8; // 8-17 drips
+            
+            for (let i = 0; i < numberOfDrips; i++) {
+                const drip = document.createElement('div');
+                drip.className = 'blood-drip';
+                
+                // Random horizontal position
+                drip.style.left = Math.random() * 100 + '%';
+                drip.style.top = '0px';
+                
+                // Random animation delay for continuous effect (0-2 seconds)
+                drip.style.animationDelay = Math.random() * 2 + 's';
+                
+                // Random animation duration (8-12 seconds)
+                drip.style.animationDuration = (Math.random() * 4 + 8) + 's';
+                
+                // Random width with much more variation (3-28px range)
+                const minWidth = Math.random() * 4 + 3; // 3-7px (current minimum)
+                const maxWidth = minWidth * 4; // 4x the minimum width
+                const finalWidth = Math.random() * (maxWidth - minWidth) + minWidth;
+                drip.style.width = finalWidth + 'px';
+                
+                // Adjust border-radius based on width
+                const radius = finalWidth / 2;
+                drip.style.borderRadius = `0 0 ${radius}px ${radius}px`;
+                
+                // Add to body
+                document.body.appendChild(drip);
+            }
+            
+            console.log(`Created ${numberOfDrips} blood drips`);
+        }
+
+        // Create continuous blood drips that refresh periodically
+        function startContinuousBloodDrips() {
+            setInterval(() => {
+                // Add a few more random drips every 3 seconds
+                for (let i = 0; i < 2; i++) {
+                    const drip = document.createElement('div');
+                    drip.className = 'blood-drip';
+                    
+                    drip.style.left = Math.random() * 100 + '%';
+                    drip.style.top = '0px';
+                    drip.style.animationDelay = '0s';
+                    drip.style.animationDuration = (Math.random() * 4 + 8) + 's';
+                    
+                    // Random width with variation for new drips too
+                    const minWidth = Math.random() * 4 + 3;
+                    const maxWidth = minWidth * 4;
+                    const finalWidth = Math.random() * (maxWidth - minWidth) + minWidth;
+                    drip.style.width = finalWidth + 'px';
+                    
+                    // Adjust border-radius based on width
+                    const radius = finalWidth / 2;
+                    drip.style.borderRadius = `0 0 ${radius}px ${radius}px`;
+                    
+                    document.body.appendChild(drip);
+                    
+                    // Remove the drip after animation completes
+                    setTimeout(() => {
+                        if (drip.parentNode) {
+                            drip.parentNode.removeChild(drip);
+                        }
+                    }, 12000);
+                }
+            }, 3000);
         }
         
         // Safari iOS font size fix
@@ -869,12 +1038,12 @@
             if (isMobile && isSafari) {
                 const quoteElement = document.getElementById('mainQuote');
                 if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '35px';
-                    quoteElement.style.lineHeight = '1.1';
+                    quoteElement.style.fontSize = '36px';
+                    quoteElement.style.lineHeight = '0.85';
                     quoteElement.style.letterSpacing = '0px';
                 } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '60px';
-                    quoteElement.style.lineHeight = '1.2';
+                    quoteElement.style.fontSize = '36px';
+                    quoteElement.style.lineHeight = '0.9';
                     quoteElement.style.letterSpacing = '0.5px';
                 }
                 quoteElement.style.fontFamily = "'Bebas Neue'";
@@ -902,6 +1071,7 @@
         function initializePageContent() {
             // Update the content
             document.getElementById('mainQuote').textContent = pageData.quote;
+            document.getElementById('quoteSource').textContent = pageData.source;
             
             // Set random CTA message
             const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
@@ -914,8 +1084,14 @@
             setTimeout(applySafariFix, 100);
             reduceGlowForiPhone();
             
-            // Create jungle elements
-            createJungleElements();
+            // Create mystery elements
+            createMysteryElements();
+            
+            // Create blood drips
+            createBloodDrips();
+            
+            // Start continuous blood drips
+            startContinuousBloodDrips();
             
             // Mark page content as ready
             pageContentReady = true;
@@ -923,17 +1099,17 @@
             console.log('✅ Page content initialized');
         }
         
-        // Random colors for animation - jungle themed
-        const jungleColors = [
-            '#228B22', '#32CD32', '#00FF00', '#7CFC00', '#9ACD32', 
-            '#90EE90', '#98FB98', '#00FA9A', '#00FF7F', '#20B2AA'
+        // Random colors for creepy animation - Joe Goldberg themed
+        const creepyColors = [
+            '#ff0000', '#8B0000', '#DC143C', '#B22222', '#A0522D', 
+            '#800000', '#CD5C5C', '#F08080', '#FA8072', '#E9967A'
         ];
         
         function getRandomColor() {
-            return jungleColors[Math.floor(Math.random() * jungleColors.length)];
+            return creepyColors[Math.floor(Math.random() * creepyColors.length)];
         }
         
-        function jungleAnimation() {
+        function creepyAnimation() {
             const quoteElement = document.getElementById('mainQuote');
             const color1 = getRandomColor();
             const color2 = getRandomColor();
@@ -966,7 +1142,7 @@
             const randomDelay = Math.random() * 2000 + 2000; // 2-4 seconds
             setTimeout(() => {
                 if (gifLoaded && pageContentReady) {
-                    jungleAnimation();
+                    creepyAnimation();
                 }
                 scheduleRandomAnimation(); // Schedule next animation
             }, randomDelay);
@@ -977,7 +1153,7 @@
             const shopButton = document.querySelector('.shop-button');
             if (shopButton) {
                 shopButton.addEventListener('click', function() {
-                    console.log('Shop button clicked for "Good Morning" GIF');
+                    console.log('Shop button clicked for "Wait what" GIF');
                     console.log('CTA message shown:', window.currentCtaMessage);
                     
                     // Register share with Tenor
