@@ -672,7 +672,14 @@
                 object-fit: cover !important;
             `;
             
+            // Add timeout for loading
+            let loadTimeout = setTimeout(() => {
+                console.log('⏰ Direct GIF loading timeout, trying embed fallback');
+                loadTenorEmbed();
+            }, 5000); // 5 second timeout
+            
             img.onload = function() {
+                clearTimeout(loadTimeout);
                 console.log('✅ Shaq GIF loaded successfully from direct URL');
                 imageElement.innerHTML = '';
                 imageElement.appendChild(img);
@@ -686,6 +693,7 @@
             };
             
             img.onerror = function() {
+                clearTimeout(loadTimeout);
                 console.log('❌ Direct Shaq GIF URL failed, trying embed');
                 loadTenorEmbed();
             };
@@ -712,6 +720,13 @@
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
+            // Enhanced timeout system for embed
+            let embedTimeout = setTimeout(() => {
+                console.log('⏰ Embed loading timeout, showing content anyway');
+                gifLoaded = true;
+                showMainContent();
+            }, 8000); // 8 second timeout for embed
+            
             function forceTenorStyling() {
                 const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
                 const iframe = embedContainer.querySelector('iframe');
@@ -736,6 +751,7 @@
                     
                     // Mark as loaded when iframe is ready
                     iframe.onload = function() {
+                        clearTimeout(embedTimeout);
                         gifLoaded = true;
                         showMainContent();
                         console.log('✅ Tenor embed iframe loaded');
@@ -747,15 +763,6 @@
             setTimeout(forceTenorStyling, 500);
             setTimeout(forceTenorStyling, 1000);
             
-            // Fallback: mark as loaded after 3 seconds if iframe doesn't trigger onload
-            setTimeout(() => {
-                if (!gifLoaded) {
-                    gifLoaded = true;
-                    showMainContent();
-                    console.log('✅ Tenor embed loaded (timeout fallback)');
-                }
-            }, 3000);
-            
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
                 const script = document.createElement('script');
                 script.src = 'https://tenor.com/embed.js';
@@ -765,7 +772,7 @@
             
             addTenorAttribution(imageElement);
             window.tenorGifId = specificGifData.id;
-            console.log('✅ Shaq flirty embed loaded');
+            console.log('✅ Shaq flirty embed loaded with timeout protection');
         }
         
         // Load the specific Shaq flirty GIF
@@ -781,21 +788,12 @@
             imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            console.log('🔄 Attempting to fetch Shaq GIF from Tenor API...');
-            fetchSpecificGifFromTenor()
-                .then(gifUrl => {
-                    if (gifUrl) {
-                        console.log('✅ Shaq GIF URL obtained from Tenor API');
-                        loadGifFromUrl(gifUrl);
-                    } else {
-                        console.log('❌ No Shaq GIF URL from API, trying embed');
-                        loadTenorEmbed();
-                    }
-                })
-                .catch(error => {
-                    console.log('❌ Tenor API failed for Shaq, using embed fallback:', error);
-                    loadTenorEmbed();
-                });
+            // Try direct URL first (faster), then API if available
+            console.log('🔄 Trying direct GIF URL first...');
+            
+            // Direct GIF URL approach
+            const directGifUrl = 'https://media.tenor.com/2m_WLyO-oyoAAAAC/shaq-flirty.gif';
+            loadGifFromUrl(directGifUrl);
         }
         // Add Tenor attribution
         function addTenorAttribution(container) {
