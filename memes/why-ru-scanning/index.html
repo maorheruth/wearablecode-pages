@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>למה סרקת לי את הגב?🤨 | WearableCode</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Loading overlay styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100vh;
+            height: 100dvh;
+            background: #cbcbcb; /* Light gray background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Logo animation styles */
+        .loading-logo {
+            width: 240px;
+            height: auto;
+            animation: logoFade 1.5s ease-in-out infinite;
+        }
+
+        @keyframes logoFade {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        /* Remove old loading elements */
+        .loading-spinner,
+        .loading-text,
+        .loading-subtitle {
+            display: none;
+        }
+
+        /* Why You Lying inspired colorful background */
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: 
+                radial-gradient(circle at 15% 85%, #FF6B35 0%, transparent 50%),
+                radial-gradient(circle at 85% 15%, #F7931E 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #FFD23F 0%, transparent 60%),
+                linear-gradient(135deg, 
+                    #FF6B35 0%,
+                    #F7931E 25%,
+                    #FFD23F 50%,
+                    #F7931E 75%,
+                    #FF6B35 100%
+                );
+            position: relative;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            margin: 0;
+            overflow: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Add animated emoji particles */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(3px 3px at 20% 80%, #FFD700, transparent),
+                radial-gradient(2px 2px at 60% 70%, #FFA500, transparent),
+                radial-gradient(2px 2px at 90% 40%, #FF8C00, transparent),
+                radial-gradient(3px 3px at 40% 60%, #FFD700, transparent),
+                radial-gradient(2px 2px at 10% 30%, #FFA500, transparent),
+                radial-gradient(2px 2px at 75% 85%, #FF8C00, transparent);
+            background-size: 100px 100px, 80px 80px, 120px 120px, 110px 110px, 90px 90px, 130px 130px;
+            animation: emojiParticles 20s linear infinite;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        @keyframes emojiParticles {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        .container {
+            background: rgba(40, 25, 15, 0.95);
+            backdrop-filter: blur(25px);
+            border-radius: 28px;
+            padding: 45px 40px;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.6), 
+                0 0 50px rgba(255, 107, 53, 0.4),
+                0 12px 40px rgba(247, 147, 30, 0.3),
+                inset 0 1px 0 rgba(255, 210, 63, 0.2);
+            text-align: center;
+            position: relative;
+            animation: slideUp 1s ease-out;
+            height: auto;
+            min-height: auto;
+            max-height: 95vh;
+            z-index: 10;
+            overflow: hidden;
+            border: 2px solid rgba(255, 107, 53, 0.4);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .container.loaded {
+            opacity: 1;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            margin-top: 12px;
+            margin-bottom: 0px;
+            text-align: center;
+        }
+
+        .logo a {
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logo img {
+            height: 18px;
+            opacity: 0.8;
+            filter: grayscale(20%) brightness(1.2);
+            transition: all 0.3s ease;
+        }
+
+        .logo img:hover {
+            opacity: 1;
+            filter: grayscale(0%) brightness(1.3);
+            transform: scale(1.05);
+        }
+
+        .character-image {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            margin: 0 auto 20px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD23F;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 0;
+        }
+
+        .character-image img {
+            width: 100% !important;
+            height: 358px !important;
+            max-width: 100% !important;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.4);
+            display: block;
+            margin: 0 auto;
+            padding: 0;
+            object-fit: cover;
+        }
+
+        .character-image iframe {
+            width: 100% !important;
+            height: 358px !important;
+            max-width: 100% !important;
+            border: none !important;
+            border-radius: 16px !important;
+            margin: 0 auto !important;
+            display: block !important;
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.4) !important;
+        }
+
+        .tenor-gif-embed {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 358px !important;
+            border-radius: 16px !important;
+            overflow: hidden !important;
+            margin: 0 auto !important;
+            display: block !important;
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.4) !important;
+        }
+
+        .tenor-gif-embed > div {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 358px !important;
+            position: relative !important;
+            padding-top: 0 !important;
+        }
+
+        .tenor-gif-embed iframe {
+            width: 100% !important;
+            height: 358px !important;
+            max-width: 100% !important;
+            position: relative !important;
+            top: 0 !important;
+            left: 0 !important;
+            border: none !important;
+            border-radius: 16px !important;
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.4) !important;
+        }
+
+        .character-image.has-image {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            height: auto;
+            padding: 0;
+            display: block;
+        }
+
+        .character-image.has-image img,
+        .character-image.has-image iframe,
+        .character-image.has-image .tenor-gif-embed {
+            width: 100% !important;
+            height: 358px !important;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.4);
+            display: block;
+        }
+
+        .character-image.loading {
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 358px;
+        }
+
+        .char-loading-text {
+            font-size: 18px;
+            color: #FFD23F;
+            font-weight: 600;
+            animation: fadeInOut 2s ease-in-out infinite;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.3;
+            }
+        }
+
+        .quote {
+            font-size: 52px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            position: relative;
+            padding: 0 20px;
+            letter-spacing: -1px;
+            text-shadow: 
+                2px 2px 8px rgba(0,0,0,0.8),
+                0 0 20px rgba(255, 210, 63, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .quote::before {
+            content: '"';
+            font-size: 38px;
+            color: #FFD23F;
+            position: absolute;
+            left: -5px;
+            top: -12px;
+            opacity: 0.8;
+            font-family: Georgia, serif;
+        }
+
+        .quote::after {
+            content: '"';
+            font-size: 38px;
+            color: #FFD23F;
+            position: absolute;
+            right: -5px;
+            bottom: -16px;
+            opacity: 0.8;
+            font-family: Georgia, serif;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, 
+                rgba(255, 107, 53, 0.15), 
+                rgba(247, 147, 30, 0.15),
+                rgba(255, 210, 63, 0.1)
+            );
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 30px;
+            direction: rtl;
+            text-align: center;
+            border: 1px solid rgba(255, 210, 63, 0.25);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
+        }
+
+        .cta-text {
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 14px;
+            font-weight: 600;
+            direction: rtl;
+            text-align: center;
+        }
+
+        .shop-button {
+            background: linear-gradient(135deg, 
+                #FF6B35 0%,  /* Orange Red */
+                #FFD23F 100% /* Golden Yellow */
+            );
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 16px 32px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(255, 210, 63, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .shop-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(255, 210, 63, 0.6);
+            background: linear-gradient(135deg, 
+                #FFD23F 0%,  /* Golden Yellow */
+                #FF6B35 100% /* Orange Red */
+            );
+        }
+
+        /* Playful emoji animations */
+        .emoji {
+            position: absolute;
+            font-size: 16px;
+            z-index: 2;
+            animation: emojiBounce 10s ease-in-out infinite;
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.8;
+        }
+
+        @keyframes emojiBounce {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) scale(1) rotate(0deg);
+                opacity: 0.7;
+            }
+            15% {
+                transform: translateY(-12px) translateX(8px) scale(1.1) rotate(15deg);
+                opacity: 0.9;
+            }
+            30% {
+                transform: translateY(-20px) translateX(-6px) scale(1.2) rotate(-20deg);
+                opacity: 1;
+            }
+            45% {
+                transform: translateY(-15px) translateX(10px) scale(1.15) rotate(25deg);
+                opacity: 0.85;
+            }
+            60% {
+                transform: translateY(-25px) translateX(-8px) scale(1.25) rotate(-15deg);
+                opacity: 0.9;
+            }
+            75% {
+                transform: translateY(-10px) translateX(6px) scale(1.05) rotate(18deg);
+                opacity: 0.8;
+            }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                overflow-x: hidden;
+            }
+            
+            .container {
+                padding: 25px 20px;
+                border-radius: 20px;
+                max-width: 95vw;
+                max-height: 90vh;
+            }
+            
+            .character-image {
+                width: 100%;
+                height: auto;
+                margin-bottom: 18px;
+                font-size: 14px;
+            }
+            
+            .loading-logo {
+                width: 200px;
+            }
+            
+            .char-loading-text {
+                font-size: 16px;
+            }
+            
+            .quote {
+                font-size: 38px;
+                margin-bottom: 20px;
+                line-height: 1.1;
+                padding: 0 10px;
+                font-family: 'Poppins', sans-serif;
+                letter-spacing: -0.5px;
+                font-weight: 700;
+            }
+            
+            .quote::before {
+                font-size: 22px;
+                color: #FFD23F;
+                top: -6px;
+                left: -3px;
+                opacity: 0.8;
+            }
+
+            .quote::after {
+                font-size: 22px;
+                color: #FFD23F;
+                bottom: -10px;
+                right: -3px;
+                opacity: 0.8;
+            }
+            
+            .logo img {
+                height: 15px;
+                margin-top: 8px;
+            }
+            
+            .cta-text {
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+            
+            .cta-section {
+                padding: 15px;
+                margin-top: 20px;
+            }
+            
+            .shop-button {
+                padding: 12px 24px;
+                font-size: 13px;
+            }
+
+            .emoji {
+                font-size: 14px;
+            }
+        }
+
+        /* iPhone SE and smaller */
+        @media (max-width: 375px) {
+            .container {
+                padding: 20px 15px;
+                max-width: 98vw;
+                max-height: 88vh;
+            }
+            
+            .character-image {
+                width: 100%;
+                height: auto;
+                font-size: 12px;
+            }
+            
+            .loading-logo {
+                width: 160px;
+            }
+            
+            .char-loading-text {
+                font-size: 14px;
+            }
+            
+            .quote {
+                font-size: 32px;
+                padding: 0 8px;
+                line-height: 1.1;
+                font-family: 'Poppins', sans-serif;
+                letter-spacing: -0.3px;
+                font-weight: 700;
+            }
+
+            .quote::before {
+                font-size: 18px;
+                color: #FFD23F;
+                top: -4px;
+                left: -2px;
+                opacity: 0.8;
+            }
+
+            .quote::after {
+                font-size: 18px;
+                color: #FFD23F;
+                bottom: -8px;
+                right: -2px;
+                opacity: 0.8;
+            }
+            
+            .logo img {
+                height: 14px;
+                margin-top: 6px;
+            }
+
+            .emoji {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading overlay with logo animation -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <img src="https://wearablecode-pages.vercel.app/assets/logos/wearablecode_logo_black.png" 
+             alt="WearableCode" 
+             class="loading-logo"
+             id="loadingLogo">
+    </div>
+
+    <div class="container" id="mainContainer">
+        <div class="character-image" id="characterImage">
+            <div class="char-loading-text">Loading</div>
+        </div>
+        
+        <div class="quote" id="mainQuote">
+            למה סרקת לי את הגב?🤨
+        </div>
+        
+        <div class="cta-section">
+            <div class="cta-text">
+                טוען הודעה...
+            </div>
+            
+            <a href="https://wearablecode.com" class="shop-button">
+                כנסו ל-WearableCode.com 🚀
+            </a>
+        </div>
+        
+        <div class="logo">
+            <a href="https://wearablecode.com" target="_blank">
+                <img src="../../assets/logos/wearablecode_logo_white.png" alt="WearableCode">
+            </a>
+        </div>
+    </div>
+<script>
+    const TENOR_API_KEY = '';
+    const CLIENT_KEY = 'wearablecode_memes';
+
+    const specificGifData = {
+        id: '2050912710562437363',
+        url: 'https://tenor.com/view/why-you-lying-gif-2050912710562437363',
+        embedCode: `
+            <div class="tenor-gif-embed" data-postid="2050912710562437363" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
+                <a href="https://tenor.com/view/why-you-lying-gif-2050912710562437363">Why You Lying GIF</a>
+            </div>
+        `
+    };  
+        // Page-specific data
+        const pageData = {
+            quote: "למה סרקת לי את הגב?🤨"
+        };
+        
+        // Random CTA messages in Hebrew
+        const ctaMessages = [
+            "רוצה גם חולצה מגניבה כזאת? 👇",
+            "אהבתם? הזמינו את החולצה שלכם עוד היום 👇",
+            "מגניב נכון? רוצים גם? 👇",
+            "קלטנו שאהבתם את הקונספט! רוצים גם חולצה כזאת? 👇",
+            "איזה חולצה מגניבה הא? קנו את שלכם גם 👇",
+            "החולצה הזאת יכולה להיות שלכם! 👇",
+            "מתאים לכם? בואו נזמין! 👇",
+            "זה הזמן להזמין את החולצה המושלמת 👇",
+            "חולצה כזאת חייבת להיות לכם בארון! 👇"
+        ];
+
+        // Track loading state
+        let gifLoaded = false;
+        let pageContentReady = false;
+
+        // Function to hide loading overlay and show content
+        function showMainContent() {
+            // ONLY hide loading overlay when GIF is actually loaded
+            if (gifLoaded) {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                const mainContainer = document.getElementById('mainContainer');
+                
+                // Hide loading overlay
+                loadingOverlay.classList.add('hidden');
+                
+                // Show main container
+                mainContainer.classList.add('loaded');
+                
+                // Start animations after content is visible
+                setTimeout(() => {
+                    scheduleRandomAnimation();
+                }, 500);
+                
+                console.log('✅ Content fully loaded and displayed');
+            } else {
+                console.log('⏳ Waiting for GIF to load before showing content...');
+            }
+        }
+        
+        // Try to fetch the specific GIF from Tenor API
+        async function fetchSpecificGifFromTenor() {
+            try {
+                const response = await fetch(
+                    `https://tenor.googleapis.com/v2/posts?ids=${specificGifData.id}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}&media_filter=gif`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    const gif = data.results[0];
+                    window.tenorGifId = gif.id;
+                    return gif.media_formats.gif.url;
+                }
+                return null;
+            } catch (error) {
+                console.log('Tenor API error:', error);
+                return null;
+            }
+        }
+        
+        // Load GIF from direct URL
+        function loadGifFromUrl(gifUrl) {
+            console.log('🎬 Loading Why You Lying GIF from URL:', gifUrl);
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = gifUrl;
+            img.alt = "Why You Lying";
+            
+            img.style.cssText = `
+                width: 100% !important;
+                height: 358px !important;
+                max-width: 100% !important;
+                border-radius: 16px !important;
+                box-shadow: 0 12px 40px rgba(255, 107, 53, 0.4) !important;
+                display: block !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                object-fit: cover !important;
+            `;
+            
+            // Add timeout for loading
+            let loadTimeout = setTimeout(() => {
+                console.log('⏰ Direct GIF loading timeout, trying embed fallback');
+                loadTenorEmbed();
+            }, 5000); // 5 second timeout
+            
+            img.onload = function() {
+                clearTimeout(loadTimeout);
+                console.log('✅ Why You Lying GIF loaded successfully from direct URL');
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                imageElement.classList.add('has-image');
+                addTenorAttribution(imageElement);
+                
+                // Mark GIF as loaded
+                gifLoaded = true;
+                showMainContent();
+            };
+            
+            img.onerror = function() {
+                clearTimeout(loadTimeout);
+                console.log('❌ Direct Why You Lying GIF URL failed, trying embed');
+                loadTenorEmbed();
+            };
+        }
+        
+        // CRITICAL FIX: Enhanced Tenor embed with immediate loading
+        function loadTenorEmbed() {
+            console.log('🚨 CRITICAL: Starting enhanced Tenor embed for Why You Lying');
+            const imageElement = document.getElementById('characterImage');
+            
+            // Clear loading text immediately
+            imageElement.innerHTML = '';
+            
+            // Create embed container
+            const embedContainer = document.createElement('div');
+            embedContainer.innerHTML = specificGifData.embedCode;
+            embedContainer.style.cssText = `
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 358px !important;
+                display: block !important;
+                border-radius: 16px;
+                overflow: hidden;
+                margin: 0 auto !important;
+                box-shadow: 0 12px 40px rgba(255, 107, 53, 0.4);
+            `;
+            
+            imageElement.appendChild(embedContainer);
+            imageElement.classList.remove('loading');
+            imageElement.classList.add('has-image');
+            
+            // AGGRESSIVE timeout - show content quickly regardless
+            let embedTimeout = setTimeout(() => {
+                console.log('🚨 CRITICAL: Forcing content display - GIF marked as loaded');
+                gifLoaded = true;
+                showMainContent();
+            }, 2000); // Only 2 seconds timeout!
+            
+            // Load Tenor script IMMEDIATELY
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.src = 'https://tenor.com/embed.js';
+                script.async = true;
+                document.head.appendChild(script);
+                
+                script.onload = () => {
+                    console.log('🚨 CRITICAL: Tenor script loaded for Why You Lying');
+                    setTimeout(() => {
+                        forceTenorStyling();
+                        // Mark as loaded when script loads
+                        if (!gifLoaded) {
+                            clearTimeout(embedTimeout);
+                            gifLoaded = true;
+                            showMainContent();
+                        }
+                    }, 500);
+                };
+            } else {
+                // Script already exists, force load immediately
+                setTimeout(() => {
+                    if (!gifLoaded) {
+                        clearTimeout(embedTimeout);
+                        gifLoaded = true;
+                        showMainContent();
+                    }
+                }, 1000);
+            }
+            
+            function forceTenorStyling() {
+                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                const iframe = embedContainer.querySelector('iframe');
+                const allDivs = embedContainer.querySelectorAll('div');
+                
+                if (tenorEmbed) {
+                    tenorEmbed.style.setProperty('width', '100%', 'important');
+                    tenorEmbed.style.setProperty('height', '358px', 'important');
+                    tenorEmbed.style.setProperty('border-radius', '16px', 'important');
+                }
+                
+                allDivs.forEach(div => {
+                    div.style.setProperty('width', '100%', 'important');
+                    div.style.setProperty('height', '358px', 'important');
+                    div.style.setProperty('padding-top', '0', 'important');
+                });
+                
+                if (iframe) {
+                    iframe.style.setProperty('width', '100%', 'important');
+                    iframe.style.setProperty('height', '358px', 'important');
+                    iframe.style.setProperty('border-radius', '16px', 'important');
+                    
+                    iframe.onload = function() {
+                        console.log('🚨 CRITICAL: Why You Lying iframe actually loaded!');
+                        clearTimeout(embedTimeout);
+                        if (!gifLoaded) {
+                            gifLoaded = true;
+                            showMainContent();
+                        }
+                    };
+                }
+            }
+            
+            // Force styling multiple times
+            setTimeout(forceTenorStyling, 100);
+            setTimeout(forceTenorStyling, 300);
+            setTimeout(forceTenorStyling, 800);
+            setTimeout(forceTenorStyling, 1500);
+            
+            addTenorAttribution(imageElement);
+            window.tenorGifId = specificGifData.id;
+            console.log('🚨 CRITICAL: Why You Lying embed initiated with aggressive timeout');
+        }
+        
+        // Load the specific Why You Lying GIF - CRITICAL FIX
+        function loadSpecificMeme() {
+            console.log('🎬 CRITICAL: loadSpecificMeme function called for Why You Lying');
+            const imageElement = document.getElementById('characterImage');
+            
+            if (!imageElement) {
+                console.error('❌ Character image element not found');
+                return;
+            }
+            
+            imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
+            imageElement.classList.add('loading');
+            
+            // IMMEDIATE EMBED APPROACH - skip direct URL entirely
+            console.log('🔄 CRITICAL: Loading embed immediately for reliability');
+            loadTenorEmbed();
+        }
+        
+        // Add Tenor attribution
+        function addTenorAttribution(container) {
+            const attribution = document.createElement('div');
+            attribution.style.cssText = `
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                font-size: 10px;
+                color: rgba(255,255,255,0.95);
+                background: rgba(0,0,0,0.7);
+                padding: 4px 8px;
+                border-radius: 8px;
+                font-weight: 600;
+                backdrop-filter: blur(6px);
+                z-index: 10;
+            `;
+            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+            container.style.position = 'relative';
+            container.appendChild(attribution);
+        }
+        
+        // Create playful emojis with Why You Lying inspired floating animation
+        function createPalmTrees() {
+            console.log('😤 createEmojis function called');
+            
+            // Emojis spread across the entire screen with playful positioning
+            const emojiPositions = [
+                // Top area (more concentrated)
+                { left: '6%', top: '6%' },
+                { left: '18%', top: '12%' },
+                { left: '35%', top: '9%' },
+                { left: '75%', top: '16%' },
+                { left: '92%', top: '11%' },
+                { left: '98%', top: '8%' },
+                // Middle area
+                { left: '14%', top: '42%' },
+                { left: '84%', top: '47%' },
+                { left: '25%', top: '62%' },
+                { left: '96%', top: '54%' },
+                // Bottom area
+                { left: '10%', top: '88%' },
+                { left: '22%', top: '92%' },
+                { left: '68%', top: '90%' },
+                { left: '87%', top: '84%' },
+                { left: '99%', top: '92%' },
+                // Extra emojis for fun
+                { left: '52%', top: '32%' },
+                { left: '90%', top: '42%' },
+                { left: '28%', top: '77%' }
+            ];
+            
+            // Different emojis for variety - playful and questioning theme
+            const playfulEmojis = ['🤨', '😤'];
+            
+            emojiPositions.forEach((pos, index) => {
+                try {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji';
+                    
+                    // Random emoji
+                    const randomEmoji = playfulEmojis[Math.floor(Math.random() * playfulEmojis.length)];
+                    emoji.textContent = randomEmoji;
+                    
+                    // Random position variation within ±25px
+                    const randomX = (Math.random() - 0.5) * 50; // -25 to +25
+                    const randomY = (Math.random() - 0.5) * 50; // -25 to +25
+                    
+                    emoji.style.left = `calc(${pos.left} + ${randomX}px)`;
+                    emoji.style.top = `calc(${pos.top} + ${randomY}px)`;
+                    
+                    // Random animation delay for natural effect
+                    emoji.style.animationDelay = (Math.random() * 4) + 's';
+                    
+                    // Random animation duration between 8-12 seconds
+                    const randomDuration = (Math.random() * 4 + 8);
+                    emoji.style.animationDuration = randomDuration + 's';
+                    
+                    // Additional inline styles
+                    emoji.style.position = 'absolute';
+                    emoji.style.fontSize = '16px';
+                    emoji.style.zIndex = '2';
+                    emoji.style.pointerEvents = 'none';
+                    emoji.style.userSelect = 'none';
+                    emoji.style.opacity = '0.8';
+                    
+                    document.body.appendChild(emoji);
+                    console.log(`😤 Emoji ${index + 1} (${randomEmoji}) created at ${pos.left}, ${pos.top} with ${randomX}px, ${randomY}px offset`);
+                } catch (error) {
+                    console.error(`❌ Error creating emoji ${index + 1}:`, error);
+                }
+            });
+            
+            console.log(`😤 All ${emojiPositions.length} emojis created for Why You Lying atmosphere`);
+        }
+        
+        // Safari iOS font size fix
+        function applySafariFix() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
+            const screenWidth = window.innerWidth || screen.width;
+            
+            if (isMobile && isSafari) {
+                const quoteElement = document.getElementById('mainQuote');
+                if (screenWidth <= 375) {
+                    quoteElement.style.fontSize = '30px';
+                } else if (screenWidth <= 480) {
+                    quoteElement.style.fontSize = '36px';
+                }
+                quoteElement.style.fontFamily = "'Poppins', sans-serif";
+                quoteElement.style.fontWeight = '700';
+                console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
+            }
+        }
+        
+        // iPhone specific glow reduction
+        function reduceGlowForiPhone() {
+            const isIphone = /iPhone/i.test(navigator.userAgent);
+            if (isIphone) {
+                const container = document.querySelector('.container');
+                container.style.boxShadow = `
+                    0 25px 45px rgba(0,0,0,0.5), 
+                    0 0 45px rgba(255, 107, 53, 0.3),
+                    0 12px 35px rgba(247, 147, 30, 0.25)
+                `;
+            }
+        }
+        
+        // Initialize page content
+        function initializePageContent() {
+            document.getElementById('mainQuote').textContent = pageData.quote;
+            
+            const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
+            document.querySelector('.cta-text').textContent = randomCtaMessage;
+            window.currentCtaMessage = randomCtaMessage;
+            
+            setTimeout(applySafariFix, 100);
+            reduceGlowForiPhone();
+            
+            console.log('😤 Creating emojis...');
+            try {
+                createPalmTrees();
+                console.log('✅ Emojis created successfully');
+            } catch (error) {
+                console.error('❌ Error creating emojis:', error);
+            }
+            
+            // Mark page content as ready, but DON'T show main content yet
+            pageContentReady = true;
+            
+            console.log('✅ Page content initialized - waiting for GIF to load');
+        }
+        
+        // Colorful animation for text
+        const colorfulColors = ['#FF6B35', '#F7931E', '#FFD23F', '#FFA500', '#FF8C00', '#FFD700'];
+        
+        function colorfulAnimation() {
+            const quoteElement = document.getElementById('mainQuote');
+            const color1 = colorfulColors[Math.floor(Math.random() * colorfulColors.length)];
+            const color2 = colorfulColors[Math.floor(Math.random() * colorfulColors.length)];
+            
+            const isMobile = window.innerWidth <= 480;
+            const shadowStrength = isMobile ? '1px 1px 6px' : '3px 3px 12px';
+            const glowStrength = isMobile ? '0 0 20px' : '0 0 30px';
+            const scaleStrength = isMobile ? 1.025 : 1.05;
+            
+            quoteElement.style.color = color1;
+            quoteElement.style.textShadow = `${glowStrength} ${color1}, ${shadowStrength} rgba(0,0,0,0.8)`;
+            quoteElement.style.transform = `scale(${scaleStrength})`;
+            
+            setTimeout(() => {
+                quoteElement.style.color = color2;
+                quoteElement.style.textShadow = `${glowStrength} ${color2}, ${shadowStrength} rgba(0,0,0,0.8)`;
+                quoteElement.style.transform = `scale(${1/scaleStrength})`;
+            }, 250);
+            
+            setTimeout(() => {
+                quoteElement.style.color = '#ffffff';
+                quoteElement.style.textShadow = isMobile ? '1px 1px 4px rgba(0,0,0,0.8), 0 0 15px rgba(255, 210, 63, 0.6)' : '2px 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(255, 210, 63, 0.7)';
+                quoteElement.style.transform = 'scale(1)';
+            }, 500);
+        }
+        
+        function scheduleRandomAnimation() {
+            const randomDelay = Math.random() * 4500 + 3500;
+            setTimeout(() => {
+                if (gifLoaded && pageContentReady) {
+                    colorfulAnimation();
+                }
+                scheduleRandomAnimation();
+            }, randomDelay);
+        }
+        
+        // Analytics tracking with Tenor share registration
+        document.addEventListener('DOMContentLoaded', function() {
+            const shopButton = document.querySelector('.shop-button');
+            if (shopButton) {
+                shopButton.addEventListener('click', function() {
+                    console.log('Shop button clicked for Why You Lying GIF');
+                    if (window.tenorGifId) {
+                        fetch(`https://tenor.googleapis.com/v2/registershare?id=${window.tenorGifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`)
+                            .then(() => console.log('✅ Tenor share registered'))
+                            .catch(error => console.log('❌ Failed to register Tenor share:', error));
+                    }
+                });
+            }
+        });
+        
+        // Responsive fixes
+        window.addEventListener('orientationchange', () => {
+            setTimeout(applySafariFix, 200);
+            setTimeout(reduceGlowForiPhone, 200);
+        });
+        
+        window.addEventListener('resize', () => {
+            setTimeout(applySafariFix, 100);
+            setTimeout(reduceGlowForiPhone, 100);
+        });
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('😤 Starting Why You Lying page initialization...');
+            
+            // Initialize page content first
+            initializePageContent();
+            
+            // Start loading the GIF
+            console.log('🎬 Loading Why You Lying GIF...');
+            try {
+                loadSpecificMeme();
+                console.log('✅ Why You Lying GIF loading initiated');
+            } catch (error) {
+                console.error('❌ Error loading Why You Lying GIF:', error);
+            }
+            
+            // Fallback: ensure content shows even if something goes wrong
+            setTimeout(() => {
+                if (!gifLoaded) {
+                    console.log('⚠️ Fallback: Showing content after timeout');
+                    gifLoaded = true;
+                    showMainContent();
+                }
+            }, 8000); // 8 second maximum wait
+        });
+
+        if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+            const script = document.createElement('script');
+            script.src = 'https://tenor.com/embed.js';
+            document.body.appendChild(script);
+        }
+    </script>
+</body>
+</html>
