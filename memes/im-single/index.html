@@ -699,9 +699,15 @@
             };
         }
         
-        // Fallback to Tenor embed
+        // CRITICAL FIX: Enhanced Tenor embed with immediate loading
         function loadTenorEmbed() {
+            console.log('🚨 CRITICAL: Starting enhanced Tenor embed');
             const imageElement = document.getElementById('characterImage');
+            
+            // Clear loading text immediately
+            imageElement.innerHTML = '';
+            
+            // Create embed container
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = specificGifData.embedCode;
             embedContainer.style.cssText = `
@@ -715,17 +721,46 @@
                 box-shadow: 0 12px 40px rgba(0,0,0,0.12);
             `;
             
-            imageElement.innerHTML = '';
             imageElement.appendChild(embedContainer);
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
-            // Enhanced timeout system for embed
+            // AGGRESSIVE timeout - show content quickly regardless
             let embedTimeout = setTimeout(() => {
-                console.log('⏰ Embed loading timeout, showing content anyway');
+                console.log('🚨 CRITICAL: Forcing content display - GIF marked as loaded');
                 gifLoaded = true;
                 showMainContent();
-            }, 8000); // 8 second timeout for embed
+            }, 2000); // Only 2 seconds timeout!
+            
+            // Load Tenor script IMMEDIATELY
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.src = 'https://tenor.com/embed.js';
+                script.async = true;
+                document.head.appendChild(script);
+                
+                script.onload = () => {
+                    console.log('🚨 CRITICAL: Tenor script loaded');
+                    setTimeout(() => {
+                        forceTenorStyling();
+                        // Mark as loaded when script loads
+                        if (!gifLoaded) {
+                            clearTimeout(embedTimeout);
+                            gifLoaded = true;
+                            showMainContent();
+                        }
+                    }, 500);
+                };
+            } else {
+                // Script already exists, force load immediately
+                setTimeout(() => {
+                    if (!gifLoaded) {
+                        clearTimeout(embedTimeout);
+                        gifLoaded = true;
+                        showMainContent();
+                    }
+                }, 1000);
+            }
             
             function forceTenorStyling() {
                 const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
@@ -749,35 +784,31 @@
                     iframe.style.setProperty('height', '334px', 'important');
                     iframe.style.setProperty('border-radius', '16px', 'important');
                     
-                    // Mark as loaded when iframe is ready
                     iframe.onload = function() {
+                        console.log('🚨 CRITICAL: Iframe actually loaded!');
                         clearTimeout(embedTimeout);
-                        gifLoaded = true;
-                        showMainContent();
-                        console.log('✅ Tenor embed iframe loaded');
+                        if (!gifLoaded) {
+                            gifLoaded = true;
+                            showMainContent();
+                        }
                     };
                 }
             }
             
+            // Force styling multiple times
             setTimeout(forceTenorStyling, 100);
-            setTimeout(forceTenorStyling, 500);
-            setTimeout(forceTenorStyling, 1000);
-            
-            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
-                const script = document.createElement('script');
-                script.src = 'https://tenor.com/embed.js';
-                document.body.appendChild(script);
-                script.onload = () => setTimeout(forceTenorStyling, 500);
-            }
+            setTimeout(forceTenorStyling, 300);
+            setTimeout(forceTenorStyling, 800);
+            setTimeout(forceTenorStyling, 1500);
             
             addTenorAttribution(imageElement);
             window.tenorGifId = specificGifData.id;
-            console.log('✅ Shaq shimmy embed loaded with timeout protection');
+            console.log('🚨 CRITICAL: Shaq shimmy embed initiated with aggressive timeout');
         }
         
-        // Load the specific Shaq flirty GIF
+        // Load the specific Shaq shimmy GIF - CRITICAL FIX
         function loadSpecificMeme() {
-            console.log('🎬 loadSpecificMeme function called for Shaq');
+            console.log('🎬 CRITICAL: loadSpecificMeme function called for Shaq');
             const imageElement = document.getElementById('characterImage');
             
             if (!imageElement) {
@@ -788,12 +819,9 @@
             imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // Try direct URL first (faster), then API if available
-            console.log('🔄 Trying direct GIF URL first...');
-            
-            // Direct GIF URL approach - Updated for Shaq shimmy
-            const directGifUrl = 'https://media.tenor.com/VcxlJglYJkkAAAAC/shaq-shimmy.gif';
-            loadGifFromUrl(directGifUrl);
+            // IMMEDIATE EMBED APPROACH - skip direct URL entirely
+            console.log('🔄 CRITICAL: Loading embed immediately for reliability');
+            loadTenorEmbed();
         }
         // Add Tenor attribution
         function addTenorAttribution(container) {
