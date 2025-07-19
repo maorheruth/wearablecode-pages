@@ -26,7 +26,7 @@
             height: 100%;
             height: 100vh;
             height: 100dvh;
-            background: #1a1a1a; /* Dark background to match theme */
+            background: #cbcbcb; /* Light gray background */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -200,7 +200,7 @@
 
         .character-image img {
             width: 100% !important;
-            height: 334px !important;
+            height: 183px !important;
             max-width: 100% !important;
             border-radius: 16px;
             box-shadow: 0 12px 40px rgba(255, 69, 0, 0.3);
@@ -212,7 +212,7 @@
 
         .character-image iframe {
             width: 100% !important;
-            height: 400px !important;
+            height: 183px !important;
             max-width: 100% !important;
             border: none !important;
             border-radius: 16px !important;
@@ -224,7 +224,7 @@
         .tenor-gif-embed {
             width: 100% !important;
             max-width: 100% !important;
-            height: 400px !important;
+            height: 183px !important;
             border-radius: 16px !important;
             overflow: hidden !important;
             margin: 0 auto !important;
@@ -235,14 +235,14 @@
         .tenor-gif-embed > div {
             width: 100% !important;
             max-width: 100% !important;
-            height: 334px !important;
+            height: 183px !important;
             position: relative !important;
             padding-top: 0 !important;
         }
 
         .tenor-gif-embed iframe {
             width: 100% !important;
-            height: 400px !important;
+            height: 183px !important;
             max-width: 100% !important;
             position: relative !important;
             top: 0 !important;
@@ -265,7 +265,7 @@
         .character-image.has-image iframe,
         .character-image.has-image .tenor-gif-embed {
             width: 100% !important;
-            height: 400px !important;
+            height: 183px !important;
             border-radius: 16px;
             box-shadow: 0 12px 40px rgba(255, 69, 0, 0.3);
             display: block;
@@ -626,7 +626,7 @@
     };  
         // Page-specific data
         const pageData = {
-            quote: "יצאת פיתה"
+            quote: "יצאת פיתה חחחחח"
         };
         
         // Random CTA messages in Hebrew
@@ -705,7 +705,7 @@
             
             img.style.cssText = `
                 width: 100% !important;
-                height: 334px !important;
+                height: 183px !important;
                 max-width: 100% !important;
                 border-radius: 16px !important;
                 box-shadow: 0 12px 40px rgba(255, 69, 0, 0.3) !important;
@@ -756,7 +756,7 @@
             embedContainer.style.cssText = `
                 width: 100% !important;
                 max-width: 100% !important;
-                height: 334px !important;
+                height: 183px !important;
                 display: block !important;
                 border-radius: 16px;
                 overflow: hidden;
@@ -812,19 +812,19 @@
                 
                 if (tenorEmbed) {
                     tenorEmbed.style.setProperty('width', '100%', 'important');
-                    tenorEmbed.style.setProperty('height', '400px', 'important');
+                    tenorEmbed.style.setProperty('height', '183px', 'important');
                     tenorEmbed.style.setProperty('border-radius', '16px', 'important');
                 }
                 
                 allDivs.forEach(div => {
                     div.style.setProperty('width', '100%', 'important');
-                    div.style.setProperty('height', '334px', 'important');
+                    div.style.setProperty('height', '183px', 'important');
                     div.style.setProperty('padding-top', '0', 'important');
                 });
                 
                 if (iframe) {
                     iframe.style.setProperty('width', '100%', 'important');
-                    iframe.style.setProperty('height', '400px', 'important');
+                    iframe.style.setProperty('height', '183px', 'important');
                     iframe.style.setProperty('border-radius', '16px', 'important');
                     
                     iframe.onload = function() {
