@@ -17,7 +17,7 @@
             width: 100%;
         }
 
-        /* Loading overlay styles */
+        /* Updated loading overlay styles */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -26,7 +26,7 @@
             height: 100%;
             height: 100vh;
             height: 100dvh;
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 50%, #2a2a2a 100%);
+            background: #cbcbcb; /* Light gray background */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -40,46 +40,29 @@
             visibility: hidden;
         }
 
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-top: 4px solid #FFD700;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+        /* New logo animation styles */
+        .loading-logo {
+            width: 240px; /* Doubled from 120px */
+            height: auto;
+            animation: logoFade 1.5s ease-in-out infinite; /* Faster animation */
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes logoFade {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.05);
+            }
         }
 
-        .loading-text {
-            color: white;
-            font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 32px;
-            letter-spacing: 0px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            animation: pulse 2s ease-in-out infinite;
-            direction: rtl;
-            text-align: center;
-            font-weight: bold;
-        }
-
+        /* Remove old loading elements */
+        .loading-spinner,
+        .loading-text,
         .loading-subtitle {
-            color: rgba(255, 255, 255, 0.9) !important;
-            font-size: 14px !important;
-            font-family: sans-serif !important;
-            text-align: center !important;
-            max-width: 300px !important;
-            direction: ltr !important;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
+            display: none;
         }
 
         body {
@@ -379,18 +362,8 @@
                 font-size: 14px;
             }
             
-            .loading-text {
-                font-size: 26px;
-            }
-            
-            .loading-subtitle {
-                font-size: 12px !important;
-            }
-            
-            .loading-spinner {
-                width: 50px;
-                height: 50px;
-                margin-bottom: 15px;
+            .loading-logo {
+                width: 200px; /* Doubled from 100px */
             }
             
             .char-loading-text {
@@ -446,28 +419,19 @@
 
         /* iPhone SE and smaller */
         @media (max-width: 375px) {
-            .loading-text {
-                font-size: 22px;
-            }
-            
-            .loading-subtitle {
-                font-size: 11px !important;
-            }
-            
-            .loading-spinner {
-                width: 40px;
-                height: 40px;
-                margin-bottom: 12px;
+            .loading-logo {
+                width: 160px; /* Doubled from 80px */
             }
         }
     </style>
 </head>
 <body>
-    <!-- Loading overlay -->
+    <!-- Updated loading overlay with logo animation -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">טוען...</div>
-        <div class="loading-subtitle">🎉 מכין הפתעה מיוחדת בשבילך</div>
+        <img src="https://wearablecode-pages.vercel.app/assets/logos/wearablecode_logo_black.png" 
+             alt="WearableCode" 
+             class="loading-logo"
+             id="loadingLogo">
     </div>
 
     <div class="container" id="mainContainer">
@@ -529,9 +493,10 @@
         let gifLoaded = false;
         let pageContentReady = false;
 
-        // Function to hide loading overlay and show content
+        // Function to hide loading overlay and show content - FIXED
         function showMainContent() {
-            if (gifLoaded && pageContentReady) {
+            // ONLY hide loading overlay when GIF is actually loaded
+            if (gifLoaded) {
                 const loadingOverlay = document.getElementById('loadingOverlay');
                 const mainContainer = document.getElementById('mainContainer');
                 
@@ -542,14 +507,27 @@
                 mainContainer.classList.add('loaded');
                 
                 console.log('✅ Content fully loaded and displayed');
+            } else {
+                console.log('⏳ Waiting for GIF to load before showing content...');
             }
         }
         
-        // Load the EXACT Tenor GIF you want - ID 16802333
+        // CRITICAL FIX: Enhanced GIF loading with immediate fallback
         function loadGIF() {
+            console.log('🚨 CRITICAL: loadGIF function called for Joey');
             const imageElement = document.getElementById('characterImage');
             
-            // Try direct URL patterns for your specific GIF ID: 16802333
+            imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
+            imageElement.classList.add('loading');
+            
+            // AGGRESSIVE timeout - show content quickly regardless
+            let loadTimeout = setTimeout(() => {
+                console.log('🚨 CRITICAL: Forcing content display - GIF marked as loaded');
+                gifLoaded = true;
+                showMainContent();
+            }, 2000); // Only 2 seconds timeout!
+            
+            // Try direct URL patterns for Joey GIF ID: 16802333
             const directUrls = [
                 'https://media1.tenor.com/m/Tj1YTr3EjoAAAAAC/friends-joey-tribbiani.gif',
             ];
@@ -562,16 +540,19 @@
                     img.src = directUrls[currentIndex];
                     img.alt = "How you doin'?";
                     
-                    img.style.width = '100%';
-                    img.style.height = 'auto';
-                    img.style.borderRadius = '12px';
-                    img.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
-                    img.style.display = 'block';
-                    img.style.margin = '0';
-                    img.style.padding = '0';
-                    img.style.objectFit = 'cover';
+                    img.style.cssText = `
+                        width: 100% !important;
+                        height: auto !important;
+                        border-radius: 12px !important;
+                        box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+                        display: block !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        object-fit: cover !important;
+                    `;
                     
                     img.onload = function() {
+                        clearTimeout(loadTimeout);
                         imageElement.innerHTML = '';
                         imageElement.appendChild(img);
                         imageElement.classList.remove('loading');
@@ -602,7 +583,7 @@
                         gifLoaded = true;
                         showMainContent();
                         
-                        console.log('✅ Your specific Tenor GIF loaded:', directUrls[currentIndex]);
+                        console.log('🚨 CRITICAL: Joey GIF loaded:', directUrls[currentIndex]);
                     };
                     
                     img.onerror = function() {
@@ -612,91 +593,126 @@
                     };
                 } else {
                     // If direct URLs fail, try the embed as final fallback
-                    console.log('Trying embed fallback...');
-                    const embedContainer = document.createElement('div');
-                    embedContainer.innerHTML = `<div class="tenor-gif-embed" data-postid="16802333" data-share-method="host" data-aspect-ratio="1.37931" data-width="100%"><a href="https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-how-are-you-nod-gif-16802333">Friends Joey Tribbiani GIF</a> from <a href="https://tenor.com/search/friends-gifs">Friends GIFs</a></div>`;
-                    
-                    embedContainer.style.width = '100%';
-                    embedContainer.style.height = 'auto';
-                    embedContainer.style.borderRadius = '12px';
-                    embedContainer.style.overflow = 'hidden';
-                    embedContainer.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
-                    
-                    imageElement.innerHTML = '';
-                    imageElement.appendChild(embedContainer);
-                    imageElement.classList.remove('loading');
-                    imageElement.classList.add('has-image');
-                    
-                    // Add Tenor attribution for embed version
-                    const attribution = document.createElement('div');
-                    attribution.style.cssText = `
-                        position: absolute;
-                        top: 8px;
-                        left: 8px;
-                        font-size: 9px;
-                        color: rgba(255,255,255,0.9);
-                        background: rgba(0,0,0,0.6);
-                        padding: 3px 7px;
-                        border-radius: 6px;
-                        text-decoration: none;
-                        font-weight: 500;
-                        backdrop-filter: blur(4px);
-                        z-index: 10;
-                        cursor: pointer;
-                    `;
-                    attribution.innerHTML = '<a href="https://media1.tenor.com/m/Tj1YTr3EjoAAAAAC/friends-joey-tribbiani.gif" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
-                    imageElement.style.position = 'relative';
-                    imageElement.appendChild(attribution);
-                    
-                    // Load Tenor script
-                    if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
-                        const script = document.createElement('script');
-                        script.type = 'text/javascript';
-                        script.async = true;
-                        script.src = 'https://tenor.com/embed.js';
-                        document.body.appendChild(script);
-                        
-                        script.onload = () => {
-                            setTimeout(() => {
-                                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
-                                const iframe = embedContainer.querySelector('iframe');
-                                
-                                if (tenorEmbed) {
-                                    tenorEmbed.style.width = '100%';
-                                    tenorEmbed.style.height = 'auto';
-                                }
-                                
-                                if (iframe) {
-                                    iframe.style.width = '100%';
-                                    iframe.style.height = 'auto';
-                                    iframe.style.borderRadius = '12px';
-                                    iframe.style.border = 'none';
-                                    
-                                    // Mark as loaded when iframe is ready
-                                    iframe.onload = function() {
-                                        gifLoaded = true;
-                                        showMainContent();
-                                        console.log('✅ Tenor embed iframe loaded');
-                                    };
-                                }
-                            }, 1000);
-                        };
-                    }
-                    
-                    // Fallback: mark as loaded after 3 seconds if iframe doesn't trigger onload
-                    setTimeout(() => {
-                        if (!gifLoaded) {
-                            gifLoaded = true;
-                            showMainContent();
-                            console.log('✅ Tenor embed loaded (timeout fallback)');
-                        }
-                    }, 3000);
-                    
-                    console.log('✅ Using embed for GIF 16802333');
+                    console.log('🔄 Trying embed fallback...');
+                    loadTenorEmbed();
                 }
             }
             
             tryNextUrl();
+        }
+        
+        // Enhanced Tenor embed with aggressive timeout
+        function loadTenorEmbed() {
+            const imageElement = document.getElementById('characterImage');
+            
+            const embedContainer = document.createElement('div');
+            embedContainer.innerHTML = `<div class="tenor-gif-embed" data-postid="16802333" data-share-method="host" data-aspect-ratio="1.37931" data-width="100%"><a href="https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-how-are-you-nod-gif-16802333">Friends Joey Tribbiani GIF</a> from <a href="https://tenor.com/search/friends-gifs">Friends GIFs</a></div>`;
+            
+            embedContainer.style.cssText = `
+                width: 100% !important;
+                height: auto !important;
+                border-radius: 12px !important;
+                overflow: hidden !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+            `;
+            
+            imageElement.innerHTML = '';
+            imageElement.appendChild(embedContainer);
+            imageElement.classList.remove('loading');
+            imageElement.classList.add('has-image');
+            
+            // AGGRESSIVE timeout for embed
+            let embedTimeout = setTimeout(() => {
+                console.log('🚨 CRITICAL: Embed timeout - forcing content display');
+                if (!gifLoaded) {
+                    gifLoaded = true;
+                    showMainContent();
+                }
+            }, 2000); // Only 2 seconds timeout!
+            
+            // Load Tenor script IMMEDIATELY
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.src = 'https://tenor.com/embed.js';
+                script.async = true;
+                document.head.appendChild(script);
+                
+                script.onload = () => {
+                    console.log('🚨 CRITICAL: Tenor script loaded');
+                    setTimeout(() => {
+                        forceTenorStyling();
+                        if (!gifLoaded) {
+                            clearTimeout(embedTimeout);
+                            gifLoaded = true;
+                            showMainContent();
+                        }
+                    }, 500);
+                };
+            } else {
+                // Script already exists, force load immediately
+                setTimeout(() => {
+                    if (!gifLoaded) {
+                        clearTimeout(embedTimeout);
+                        gifLoaded = true;
+                        showMainContent();
+                    }
+                }, 1000);
+            }
+            
+            function forceTenorStyling() {
+                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                const iframe = embedContainer.querySelector('iframe');
+                
+                if (tenorEmbed) {
+                    tenorEmbed.style.setProperty('width', '100%', 'important');
+                    tenorEmbed.style.setProperty('height', 'auto', 'important');
+                }
+                
+                if (iframe) {
+                    iframe.style.setProperty('width', '100%', 'important');
+                    iframe.style.setProperty('height', 'auto', 'important');
+                    iframe.style.setProperty('border-radius', '12px', 'important');
+                    iframe.style.setProperty('border', 'none', 'important');
+                    
+                    iframe.onload = function() {
+                        console.log('🚨 CRITICAL: Iframe actually loaded!');
+                        clearTimeout(embedTimeout);
+                        if (!gifLoaded) {
+                            gifLoaded = true;
+                            showMainContent();
+                        }
+                    };
+                }
+            }
+            
+            // Force styling multiple times
+            setTimeout(forceTenorStyling, 100);
+            setTimeout(forceTenorStyling, 300);
+            setTimeout(forceTenorStyling, 800);
+            setTimeout(forceTenorStyling, 1500);
+            
+            // Add Tenor attribution for embed version
+            const attribution = document.createElement('div');
+            attribution.style.cssText = `
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                font-size: 9px;
+                color: rgba(255,255,255,0.9);
+                background: rgba(0,0,0,0.6);
+                padding: 3px 7px;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 500;
+                backdrop-filter: blur(4px);
+                z-index: 10;
+                cursor: pointer;
+            `;
+            attribution.innerHTML = '<a href="https://media1.tenor.com/m/Tj1YTr3EjoAAAAAC/friends-joey-tribbiani.gif" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+            imageElement.style.position = 'relative';
+            imageElement.appendChild(attribution);
+            
+            console.log('🚨 CRITICAL: Joey embed initiated with aggressive timeout');
         }
         
         function createFriendlyElements() {
@@ -761,10 +777,10 @@
             createFriendlyElements();
             createFriendsDots();
             
-            // Mark page content as ready
+            // Mark page content as ready, but DON'T show main content yet
             pageContentReady = true;
             
-            console.log('✅ Page content initialized');
+            console.log('✅ Page content initialized - waiting for GIF to load');
         }
 
         // Initialize everything when page loads
@@ -775,7 +791,13 @@
             initializePageContent();
             
             // Start loading the GIF
-            loadGIF();
+            console.log('🎬 Loading GIF...');
+            try {
+                loadGIF();
+                console.log('✅ GIF loading initiated');
+            } catch (error) {
+                console.error('❌ Error loading GIF:', error);
+            }
             
             // Fallback: ensure content shows even if something goes wrong
             setTimeout(() => {
