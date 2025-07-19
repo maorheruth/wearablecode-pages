@@ -65,19 +65,19 @@
             display: none;
         }
 
-        /* Euphoria inspired mystical purple background with stars */
+        /* Euphoria inspired vibrant purple background with stars */
         body {
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: 
-                radial-gradient(circle at 15% 85%, #4B0082 0%, transparent 50%),
-                radial-gradient(circle at 85% 15%, #6A0DAD 0%, transparent 50%),
+                radial-gradient(circle at 15% 85%, #8A2BE2 0%, transparent 50%),
+                radial-gradient(circle at 85% 15%, #DA70D6 0%, transparent 50%),
                 radial-gradient(circle at 50% 50%, #8A2BE2 0%, transparent 60%),
                 linear-gradient(135deg, 
-                    #1C0135 0%,
-                    #2D1B4E 25%,
-                    #4B0082 50%,
-                    #2D1B4E 75%,
-                    #1C0135 100%
+                    #8A2BE2 0%,
+                    #DA70D6 25%,
+                    #8A2BE2 50%,
+                    #DA70D6 75%,
+                    #8A2BE2 100%
                 );
             position: relative;
             height: 100vh;
@@ -91,7 +91,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Add mystical star particle effect */
+        /* Add simplified star particle effect */
         body::before {
             content: '';
             position: absolute;
@@ -101,16 +101,14 @@
             bottom: 0;
             background: 
                 radial-gradient(2px 2px at 20% 80%, #E6E6FA, transparent),
-                radial-gradient(1px 1px at 60% 70%, #DDA0DD, transparent),
-                radial-gradient(1px 1px at 90% 40%, #DA70D6, transparent),
+                radial-gradient(1px 1px at 60% 70%, #E6E6FA, transparent),
+                radial-gradient(1px 1px at 90% 40%, #E6E6FA, transparent),
                 radial-gradient(2px 2px at 40% 60%, #E6E6FA, transparent),
-                radial-gradient(1px 1px at 10% 30%, #DDA0DD, transparent),
-                radial-gradient(1px 1px at 75% 85%, #DA70D6, transparent),
-                radial-gradient(2px 2px at 30% 20%, #E6E6FA, transparent),
-                radial-gradient(1px 1px at 80% 60%, #DDA0DD, transparent);
-            background-size: 120px 120px, 100px 100px, 140px 140px, 110px 110px, 130px 130px, 90px 90px, 160px 160px, 80px 80px;
+                radial-gradient(1px 1px at 10% 30%, #E6E6FA, transparent),
+                radial-gradient(1px 1px at 75% 85%, #E6E6FA, transparent);
+            background-size: 120px 120px, 100px 100px, 140px 140px, 110px 110px, 130px 130px, 90px 90px;
             animation: starParticles 25s linear infinite;
-            opacity: 0.4;
+            opacity: 0.5;
             pointer-events: none;
         }
 
@@ -203,7 +201,7 @@
 
         .character-image img {
             width: 100% !important;
-            height: 183px !important;
+            height: 358px !important;
             max-width: 100% !important;
             border-radius: 16px;
             box-shadow: 0 12px 40px rgba(138, 43, 226, 0.4);
@@ -215,7 +213,7 @@
 
         .character-image iframe {
             width: 100% !important;
-            height: 183px !important;
+            height: 358px !important;
             max-width: 100% !important;
             border: none !important;
             border-radius: 16px !important;
@@ -227,7 +225,7 @@
         .tenor-gif-embed {
             width: 100% !important;
             max-width: 100% !important;
-            height: 183px !important;
+            height: 358px !important;
             border-radius: 16px !important;
             overflow: hidden !important;
             margin: 0 auto !important;
@@ -238,14 +236,14 @@
         .tenor-gif-embed > div {
             width: 100% !important;
             max-width: 100% !important;
-            height: 183px !important;
+            height: 358px !important;
             position: relative !important;
             padding-top: 0 !important;
         }
 
         .tenor-gif-embed iframe {
             width: 100% !important;
-            height: 183px !important;
+            height: 358px !important;
             max-width: 100% !important;
             position: relative !important;
             top: 0 !important;
@@ -268,7 +266,7 @@
         .character-image.has-image iframe,
         .character-image.has-image .tenor-gif-embed {
             width: 100% !important;
-            height: 183px !important;
+            height: 358px !important;
             border-radius: 16px;
             box-shadow: 0 12px 40px rgba(138, 43, 226, 0.4);
             display: block;
@@ -280,7 +278,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 183px;
+            min-height: 358px;
         }
 
         .char-loading-text {
@@ -304,12 +302,12 @@
         }
 
         .quote {
-            font-size: 52px;
+            font-size: 42px;
             font-weight: 700;
             font-family: 'Poppins', sans-serif;
             color: #ffffff;
             margin-bottom: 30px;
-            line-height: 1.1;
+            line-height: 1.0;
             position: relative;
             padding: 0 20px;
             letter-spacing: -1px;
@@ -317,6 +315,9 @@
                 2px 2px 8px rgba(0,0,0,0.8),
                 0 0 20px rgba(218, 112, 214, 0.7);
             transition: all 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .quote::before {
@@ -477,9 +478,9 @@
             }
             
             .quote {
-                font-size: 38px;
+                font-size: 32px;
                 margin-bottom: 20px;
-                line-height: 1.1;
+                line-height: 1.0;
                 padding: 0 10px;
                 font-family: 'Poppins', sans-serif;
                 letter-spacing: -0.5px;
@@ -555,9 +556,9 @@
             }
             
             .quote {
-                font-size: 32px;
+                font-size: 28px;
                 padding: 0 8px;
-                line-height: 1.1;
+                line-height: 1.0;
                 font-family: 'Poppins', sans-serif;
                 letter-spacing: -0.3px;
                 font-weight: 700;
@@ -629,7 +630,7 @@
         
         <div class="logo">
             <a href="https://wearablecode.com" target="_blank">
-                <img src="../../assets/logos/wearablecode_logo_black.png" alt="WearableCode">
+                <img src="../../assets/logos/wearablecode_logo_white.png" alt="WearableCode">
             </a>
         </div>
     </div>
@@ -727,7 +728,7 @@
             
             img.style.cssText = `
                 width: 100% !important;
-                height: 183px !important;
+                height: 358px !important;
                 max-width: 100% !important;
                 border-radius: 16px !important;
                 box-shadow: 0 12px 40px rgba(138, 43, 226, 0.4) !important;
@@ -778,7 +779,7 @@
             embedContainer.style.cssText = `
                 width: 100% !important;
                 max-width: 100% !important;
-                height: 183px !important;
+                height: 358px !important;
                 display: block !important;
                 border-radius: 16px;
                 overflow: hidden;
@@ -834,19 +835,19 @@
                 
                 if (tenorEmbed) {
                     tenorEmbed.style.setProperty('width', '100%', 'important');
-                    tenorEmbed.style.setProperty('height', '183px', 'important');
+                    tenorEmbed.style.setProperty('height', '358px', 'important');
                     tenorEmbed.style.setProperty('border-radius', '16px', 'important');
                 }
                 
                 allDivs.forEach(div => {
                     div.style.setProperty('width', '100%', 'important');
-                    div.style.setProperty('height', '183px', 'important');
+                    div.style.setProperty('height', '358px', 'important');
                     div.style.setProperty('padding-top', '0', 'important');
                 });
                 
                 if (iframe) {
                     iframe.style.setProperty('width', '100%', 'important');
-                    iframe.style.setProperty('height', '183px', 'important');
+                    iframe.style.setProperty('height', '358px', 'important');
                     iframe.style.setProperty('border-radius', '16px', 'important');
                     
                     iframe.onload = function() {
@@ -940,8 +941,8 @@
                 { left: '25%', top: '75%' }
             ];
             
-            // Different star emojis for variety
-            const starEmojis = ['⭐', '✨', '🌟', '💫', '⭐', '✨', '🌟', '💫'];
+            // Different star emojis for variety - only 2 types
+            const starEmojis = ['⭐', '✨'];
             
             starPositions.forEach((pos, index) => {
                 try {
@@ -968,7 +969,7 @@
                     
                     // Additional inline styles
                     star.style.position = 'absolute';
-                    star.style.fontSize = '32px';
+                    star.style.fontSize = '16px';
                     star.style.zIndex = '2';
                     star.style.pointerEvents = 'none';
                     star.style.userSelect = 'none';
