@@ -605,7 +605,8 @@
 
         // Function to hide loading overlay and show content
         function showMainContent() {
-            if (gifLoaded && pageContentReady) {
+            // ONLY hide loading overlay when GIF is actually loaded
+            if (gifLoaded) {
                 const loadingOverlay = document.getElementById('loadingOverlay');
                 const mainContainer = document.getElementById('mainContainer');
                 
@@ -621,6 +622,8 @@
                 }, 500);
                 
                 console.log('✅ Content fully loaded and displayed');
+            } else {
+                console.log('⏳ Waiting for GIF to load before showing content...');
             }
         }
         
@@ -939,10 +942,10 @@
                 console.error('❌ Error creating hearts:', error);
             }
             
-            // Mark page content as ready
+            // Mark page content as ready, but DON'T show main content yet
             pageContentReady = true;
             
-            console.log('✅ Page content initialized');
+            console.log('✅ Page content initialized - waiting for GIF to load');
         }
         
         // Sunset animation
