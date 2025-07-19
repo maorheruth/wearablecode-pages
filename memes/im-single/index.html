@@ -17,7 +17,7 @@
             width: 100%;
         }
 
-        /* Loading overlay styles */
+        /* Updated loading overlay styles */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -26,10 +26,7 @@
             height: 100%;
             height: 100vh;
             height: 100dvh;
-            background: linear-gradient(135deg, 
-                #b91c3c 0%,
-                #c73675 100%
-            );
+            background: #cbcbcb; /* Light gray background */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -43,47 +40,29 @@
             visibility: hidden;
         }
 
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-top: 4px solid #ff69b4;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+        /* New logo animation styles */
+        .loading-logo {
+            width: 240px; /* Doubled from 120px */
+            height: auto;
+            animation: logoFade 1.5s ease-in-out infinite; /* Faster animation */
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes logoFade {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.05);
+            }
         }
 
-        .loading-text {
-            color: white;
-            font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 32px;
-            letter-spacing: 0px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            animation: pulse 2s ease-in-out infinite;
-            direction: rtl;
-            text-align: center;
-            font-weight: bold;
-        }
-
+        /* Remove old loading elements */
+        .loading-spinner,
+        .loading-text,
         .loading-subtitle {
-            color: rgba(255, 255, 255, 0.9) !important;
-            font-size: 14px !important;
-            font-family: 'Poppins', sans-serif !important;
-            text-align: center !important;
-            max-width: 300px !important;
-            direction: ltr !important;
-            font-weight: 500 !important;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
+            display: none;
         }
 
         /* Romantic pink-red background */
@@ -438,18 +417,8 @@
                 font-size: 14px;
             }
             
-            .loading-text {
-                font-size: 26px;
-            }
-            
-            .loading-subtitle {
-                font-size: 12px !important;
-            }
-            
-            .loading-spinner {
-                width: 50px;
-                height: 50px;
-                margin-bottom: 15px;
+            .loading-logo {
+                width: 200px; /* Doubled from 100px */
             }
             
             .char-loading-text {
@@ -521,18 +490,8 @@
                 font-size: 12px;
             }
             
-            .loading-text {
-                font-size: 22px;
-            }
-            
-            .loading-subtitle {
-                font-size: 11px !important;
-            }
-            
-            .loading-spinner {
-                width: 40px;
-                height: 40px;
-                margin-bottom: 12px;
+            .loading-logo {
+                width: 160px; /* Doubled from 80px */
             }
             
             .char-loading-text {
@@ -576,11 +535,12 @@
     </style>
 </head>
 <body>
-    <!-- Loading overlay -->
+    <!-- Updated loading overlay with logo animation -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">טוען...</div>
-        <div class="loading-subtitle">🎉 מכין הפתעה מיוחדת בשבילך</div>
+        <img src="https://wearablecode-pages.vercel.app/assets/logos/wearablecode_logo_black.png" 
+             alt="WearableCode" 
+             class="loading-logo"
+             id="loadingLogo">
     </div>
 
     <div class="container" id="mainContainer">
@@ -1030,7 +990,7 @@
             const shopButton = document.querySelector('.shop-button');
             if (shopButton) {
                 shopButton.addEventListener('click', function() {
-                    console.log('Shop button clicked for Jersey Shore GIF');
+                    console.log('Shop button clicked for Shaq flirty GIF');
                     if (window.tenorGifId) {
                         fetch(`https://tenor.googleapis.com/v2/registershare?id=${window.tenorGifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`)
                             .then(() => console.log('✅ Tenor share registered'))
@@ -1053,7 +1013,7 @@
 
         // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🌴 Starting page initialization...');
+            console.log('💕 Starting page initialization...');
             
             // Initialize page content first
             initializePageContent();
