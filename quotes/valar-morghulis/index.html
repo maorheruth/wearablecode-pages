@@ -193,16 +193,36 @@
             height: 374px;
             border-radius: 12px;
             margin: 0 auto 18px;
-            background: #f5f5f5;
+            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #999;
-            border: 2px dashed #ddd;
+            border: none;
             position: relative;
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
+        }
+
+        .character-image img {
+            width: 100% !important;
+            height: 374px !important;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: block;
+            margin: 0 auto;
+            padding: 0;
+            object-fit: cover;
+        }
+
+        .character-image.has-image {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            height: auto;
+            padding: 0;
+            display: block;
         }
 
         .character-image.loading {
@@ -560,25 +580,183 @@
         ];
 
         // Track loading state
+        let gifLoaded = false;
         let pageContentReady = false;
 
-        // Function to hide loading overlay and show content - SIMPLIFIED
+        // Function to hide loading overlay and show content - FIXED
         function showMainContent() {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const mainContainer = document.getElementById('mainContainer');
+            // ONLY hide loading overlay when GIF is actually loaded
+            if (gifLoaded) {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                const mainContainer = document.getElementById('mainContainer');
+                
+                // Hide loading overlay
+                loadingOverlay.classList.add('hidden');
+                
+                // Show main container
+                mainContainer.classList.add('loaded');
+                
+                // Start animations after content is visible
+                setTimeout(() => {
+                    scheduleRandomAnimation();
+                }, 500);
+                
+                console.log('✅ Content fully loaded and displayed');
+            } else {
+                console.log('⏳ Waiting for GIF to load before showing content...');
+            }
+        }
+        
+        // CRITICAL FIX: Enhanced GIF loading with immediate embed
+        function loadSpecificMeme() {
+            console.log('🚨 CRITICAL: loadSpecificMeme function called for Jaqen H\'ghar');
+            const imageElement = document.getElementById('characterImage');
             
-            // Hide loading overlay
-            loadingOverlay.classList.add('hidden');
+            if (!imageElement) {
+                console.error('❌ Character image element not found');
+                return;
+            }
             
-            // Show main container
-            mainContainer.classList.add('loaded');
+            imageElement.innerHTML = '<div class="char-loading-text">Loading Jaqen H\'ghar...</div>';
+            imageElement.classList.add('loading');
             
-            // Start animations after content is visible
-            setTimeout(() => {
-                scheduleRandomAnimation();
-            }, 500);
+            // IMMEDIATE EMBED APPROACH - skip API entirely for reliability
+            console.log('🔄 CRITICAL: Loading embed immediately for reliability');
+            loadTenorEmbed();
+        }
+        
+        // CRITICAL FIX: Enhanced Tenor embed with immediate loading
+        function loadTenorEmbed() {
+            console.log('🚨 CRITICAL: Starting enhanced Tenor embed for GoT');
+            const imageElement = document.getElementById('characterImage');
             
-            console.log('✅ Content fully loaded and displayed');
+            // Clear loading text immediately
+            imageElement.innerHTML = '';
+            
+            // Create embed container
+            const embedContainer = document.createElement('div');
+            embedContainer.innerHTML = `<div class="tenor-gif-embed" data-postid="19718003" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/game-of-thrones-jaqen-what-can-i-say-gif-19718003">Game Of Thrones Jaqen GIF</a>from <a href="https://tenor.com/search/game+of+thrones-gifs">Game Of Thrones GIFs</a></div>`;
+            embedContainer.style.cssText = `
+                width: 100% !important;
+                height: 374px !important;
+                display: block !important;
+                border-radius: 12px;
+                overflow: hidden;
+                margin: 0 auto !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            `;
+            
+            imageElement.appendChild(embedContainer);
+            imageElement.classList.remove('loading');
+            imageElement.classList.add('has-image');
+            
+            // Remove dashed border and background when GIF loads
+            imageElement.style.border = 'none';
+            imageElement.style.background = 'transparent';
+            
+            // AGGRESSIVE timeout - show content quickly regardless
+            let embedTimeout = setTimeout(() => {
+                console.log('🚨 CRITICAL: Forcing content display - GIF marked as loaded');
+                gifLoaded = true;
+                showMainContent();
+            }, 2000); // Only 2 seconds timeout!
+            
+            // Load Tenor script IMMEDIATELY
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.src = 'https://tenor.com/embed.js';
+                script.async = true;
+                document.head.appendChild(script);
+                
+                script.onload = () => {
+                    console.log('🚨 CRITICAL: Tenor script loaded');
+                    setTimeout(() => {
+                        forceTenorStyling();
+                        // Mark as loaded when script loads
+                        if (!gifLoaded) {
+                            clearTimeout(embedTimeout);
+                            gifLoaded = true;
+                            showMainContent();
+                        }
+                    }, 500);
+                };
+            } else {
+                // Script already exists, force load immediately
+                setTimeout(() => {
+                    if (!gifLoaded) {
+                        clearTimeout(embedTimeout);
+                        gifLoaded = true;
+                        showMainContent();
+                    }
+                }, 1000);
+            }
+            
+            function forceTenorStyling() {
+                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                const iframe = embedContainer.querySelector('iframe');
+                const allDivs = embedContainer.querySelectorAll('div');
+                
+                if (tenorEmbed) {
+                    tenorEmbed.style.setProperty('width', '100%', 'important');
+                    tenorEmbed.style.setProperty('height', '374px', 'important');
+                    tenorEmbed.style.setProperty('position', 'relative', 'important');
+                }
+                
+                allDivs.forEach(div => {
+                    div.style.setProperty('width', '100%', 'important');
+                    div.style.setProperty('height', '374px', 'important');
+                    div.style.setProperty('padding-top', '0', 'important');
+                    div.style.setProperty('position', 'relative', 'important');
+                });
+                
+                if (iframe) {
+                    iframe.style.setProperty('width', '100%', 'important');
+                    iframe.style.setProperty('height', '374px', 'important');
+                    iframe.style.setProperty('position', 'relative', 'important');
+                    iframe.style.setProperty('top', '0', 'important');
+                    iframe.style.setProperty('left', '0', 'important');
+                    iframe.style.setProperty('border-radius', '12px', 'important');
+                    iframe.style.setProperty('border', 'none', 'important');
+                    
+                    iframe.onload = function() {
+                        console.log('🚨 CRITICAL: Iframe actually loaded!');
+                        clearTimeout(embedTimeout);
+                        if (!gifLoaded) {
+                            gifLoaded = true;
+                            showMainContent();
+                        }
+                    };
+                }
+            }
+            
+            // Force styling multiple times
+            setTimeout(forceTenorStyling, 100);
+            setTimeout(forceTenorStyling, 300);
+            setTimeout(forceTenorStyling, 800);
+            setTimeout(forceTenorStyling, 1500);
+            
+            // Add Tenor attribution
+            const attribution = document.createElement('div');
+            attribution.style.cssText = `
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                font-size: 9px;
+                color: rgba(255,255,255,0.9);
+                background: rgba(0,0,0,0.6);
+                padding: 3px 7px;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 500;
+                backdrop-filter: blur(4px);
+                z-index: 10;
+            `;
+            attribution.innerHTML = '<a href="https://tenor.com/view/game-of-thrones-jaqen-what-can-i-say-gif-19718003" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+            imageElement.style.position = 'relative';
+            imageElement.appendChild(attribution);
+            
+            window.tenorGifId = '19718003';
+            console.log('🚨 CRITICAL: Jaqen H\'ghar embed initiated with aggressive timeout');
         }
         
         // Generate random mystery elements
@@ -661,10 +839,10 @@
             // Set random CTA message
             setRandomCTA();
             
-            // Mark page content as ready
+            // Mark page content as ready, but DON'T show main content yet
             pageContentReady = true;
             
-            console.log('✅ GoT page content initialized - waiting for timeout');
+            console.log('✅ GoT page content initialized - waiting for GIF to load');
         }
 
         // Initialize page
@@ -674,10 +852,23 @@
             // Initialize page content first
             initializePageContent();
             
-            // Show content after 2 seconds (no GIF in this case, just static image placeholder)
+            // Start loading the GIF
+            console.log('🎬 Loading GIF...');
+            try {
+                loadSpecificMeme();
+                console.log('✅ GIF loading initiated');
+            } catch (error) {
+                console.error('❌ Error loading GIF:', error);
+            }
+            
+            // Fallback: ensure content shows even if something goes wrong
             setTimeout(() => {
-                showMainContent();
-            }, 2000);
+                if (!gifLoaded) {
+                    console.log('⚠️ Fallback: Showing content after timeout');
+                    gifLoaded = true;
+                    showMainContent();
+                }
+            }, 8000); // 8 second maximum wait
         });
     </script>
 </body>
