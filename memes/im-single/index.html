@@ -42,9 +42,9 @@
 
         /* New logo animation styles */
         .loading-logo {
-            width: 240px; /* Doubled from 120px */
+            width: 240px;
             height: auto;
-            animation: logoFade 1.5s ease-in-out infinite; /* Faster animation */
+            animation: logoFade 1.5s ease-in-out infinite;
         }
 
         @keyframes logoFade {
@@ -147,95 +147,66 @@
             transform: scale(1.05);
         }
 
+        /* FIXED: Character image container */
         .character-image {
             width: 100%;
-            height: auto;
+            height: 280px; /* Fixed height */
             border-radius: 16px;
             margin: 0 auto 20px;
             background: transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            border: none;
+            display: block;
             position: relative;
             overflow: hidden;
-            font-size: 16px;
-            font-weight: 500;
-            padding: 0;
-        }
-
-        .character-image img {
-            width: 100% !important;
-            height: 334px !important;
-            max-width: 100% !important;
-            border-radius: 16px;
             box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-            display: block;
-            margin: 0 auto;
-            padding: 0;
-            object-fit: cover;
         }
 
+        /* FIXED: All image and iframe elements */
+        .character-image img,
         .character-image iframe {
             width: 100% !important;
-            height: 334px !important;
+            height: 100% !important;
             max-width: 100% !important;
-            border: none !important;
             border-radius: 16px !important;
-            margin: 0 auto !important;
             display: block !important;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            object-fit: cover !important;
+            object-position: center !important;
+            border: none !important;
         }
 
+        /* FIXED: Tenor embed styling */
         .tenor-gif-embed {
             width: 100% !important;
+            height: 100% !important;
             max-width: 100% !important;
-            height: 400px !important;
             border-radius: 16px !important;
             overflow: hidden !important;
-            margin: 0 auto !important;
+            margin: 0 !important;
             display: block !important;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+            position: relative !important;
         }
 
         .tenor-gif-embed > div {
             width: 100% !important;
+            height: 100% !important;
             max-width: 100% !important;
-            height: 334px !important;
-            position: relative !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
             padding-top: 0 !important;
         }
 
         .tenor-gif-embed iframe {
             width: 100% !important;
-            height: 334px !important;
+            height: 100% !important;
             max-width: 100% !important;
-            position: relative !important;
+            position: absolute !important;
             top: 0 !important;
             left: 0 !important;
             border: none !important;
             border-radius: 16px !important;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
-        }
-
-        .character-image.has-image {
-            border: none;
-            background: transparent;
-            box-shadow: none;
-            height: auto;
-            padding: 0;
-            display: block;
-        }
-
-        .character-image.has-image img,
-        .character-image.has-image iframe,
-        .character-image.has-image .tenor-gif-embed {
-            width: 100% !important;
-            height: 334px !important;
-            border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-            display: block;
+            object-fit: cover !important;
         }
 
         .character-image.loading {
@@ -244,7 +215,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 200px;
+            color: #ff1744;
         }
 
         .char-loading-text {
@@ -411,14 +382,12 @@
             }
             
             .character-image {
-                width: 100%;
-                height: auto;
+                height: 240px; /* Smaller on mobile */
                 margin-bottom: 18px;
-                font-size: 14px;
             }
             
             .loading-logo {
-                width: 200px; /* Doubled from 100px */
+                width: 200px;
             }
             
             .char-loading-text {
@@ -485,13 +454,11 @@
             }
             
             .character-image {
-                width: 100%;
-                height: auto;
-                font-size: 12px;
+                height: 200px; /* Even smaller */
             }
             
             .loading-logo {
-                width: 160px; /* Doubled from 80px */
+                width: 160px;
             }
             
             .char-loading-text {
@@ -545,7 +512,7 @@
 
     <div class="container" id="mainContainer">
         <div class="character-image" id="characterImage">
-            <div class="char-loading-text">Loading</div>
+            <div class="char-loading-text">Loading Shaq Shimmy...</div>
         </div>
         
         <div class="quote" id="mainQuote">
@@ -554,7 +521,7 @@
         
         <div class="cta-section">
             <div class="cta-text">
-                טוען הודעה...
+                רוצה גם חולצה מגניבה כזאת? 👇
             </div>
             
             <a href="https://wearablecode.com" class="shop-button">
@@ -564,23 +531,12 @@
         
         <div class="logo">
             <a href="https://wearablecode.com" target="_blank">
-                <img src="../../assets/logos/wearablecode_logo_black.png" alt="WearableCode">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjMwIiB2aWV3Qm94PSIwIDAgMTAwIDMwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8dGV4dCB4PSI1MCIgeT0iMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldlYXJhYmxlQ29kZTwvdGV4dD4KPC9zdmc+" alt="WearableCode">
             </a>
         </div>
     </div>
-<script>
-    const TENOR_API_KEY = '';
-    const CLIENT_KEY = 'wearablecode_memes';
 
-    const specificGifData = {
-        id: '12032436',
-        url: 'https://tenor.com/view/shaq-shimmy-excited-smile-gif-12032436',
-        embedCode: `
-            <div class="tenor-gif-embed" data-postid="12032436" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
-                <a href="https://tenor.com/view/shaq-shimmy-excited-smile-gif-12032436">Shaq Shimmy GIF</a>
-            </div>
-        `
-    };  
+    <script>
         // Page-specific data
         const pageData = {
             quote: "Yes, I am single😊"
@@ -605,7 +561,6 @@
 
         // Function to hide loading overlay and show content
         function showMainContent() {
-            // ONLY hide loading overlay when GIF is actually loaded
             if (gifLoaded) {
                 const loadingOverlay = document.getElementById('loadingOverlay');
                 const mainContainer = document.getElementById('mainContainer');
@@ -627,112 +582,81 @@
             }
         }
         
-        // Try to fetch the specific GIF from Tenor API
-        async function fetchSpecificGifFromTenor() {
-            try {
-                const response = await fetch(
-                    `https://tenor.googleapis.com/v2/posts?ids=${specificGifData.id}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}&media_filter=gif`
-                );
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+        // FIXED: Load GIF with multiple fallback URLs
+        function loadSpecificMeme() {
+            console.log('🎬 Loading Shaq shimmy GIF...');
+            const imageElement = document.getElementById('characterImage');
+            
+            // Multiple GIF URLs to try
+            const gifUrls = [
+                'https://media.tenor.com/H22kYpRhCFYAAAAM/shaq-shimmy.gif',
+                'https://tenor.googleapis.com/v2/posts?ids=12032436&key=AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq&client_key=wearablecode_memes&media_filter=gif',
+                'https://c.tenor.com/H22kYpRhCFYAAAAC/shaq-shimmy.gif',
+                'https://media1.tenor.com/m/H22kYpRhCFYAAAAC/shaq-shimmy.gif'
+            ];
+            
+            let currentUrlIndex = 0;
+            
+            function tryLoadGif() {
+                if (currentUrlIndex >= gifUrls.length) {
+                    // All URLs failed, load Tenor embed instead
+                    loadTenorEmbed();
+                    return;
                 }
                 
-                const data = await response.json();
+                const img = document.createElement('img');
+                img.src = gifUrls[currentUrlIndex];
+                img.alt = "Shaq Shimmy";
                 
-                if (data.results && data.results.length > 0) {
-                    const gif = data.results[0];
-                    window.tenorGifId = gif.id;
-                    return gif.media_formats.gif.url;
-                }
-                return null;
-            } catch (error) {
-                console.log('Tenor API error:', error);
-                return null;
+                img.onload = function() {
+                    console.log(`✅ Shaq shimmy GIF loaded successfully from URL ${currentUrlIndex + 1}`);
+                    imageElement.innerHTML = '';
+                    imageElement.appendChild(img);
+                    imageElement.classList.remove('loading');
+                    
+                    // Mark GIF as loaded
+                    gifLoaded = true;
+                    showMainContent();
+                };
+                
+                img.onerror = function() {
+                    console.log(`❌ URL ${currentUrlIndex + 1} failed, trying next...`);
+                    currentUrlIndex++;
+                    tryLoadGif();
+                };
+                
+                // Add timeout for each attempt
+                setTimeout(() => {
+                    if (!gifLoaded) {
+                        console.log(`⏰ URL ${currentUrlIndex + 1} timeout, trying next...`);
+                        currentUrlIndex++;
+                        tryLoadGif();
+                    }
+                }, 3000);
             }
+            
+            tryLoadGif();
         }
         
-        // Load GIF from direct URL
-        function loadGifFromUrl(gifUrl) {
-            console.log('🎬 Loading Shaq GIF from URL:', gifUrl);
-            const imageElement = document.getElementById('characterImage');
-            const img = document.createElement('img');
-            img.src = gifUrl;
-            img.alt = "Shaq Shimmy";
-            
-            img.style.cssText = `
-                width: 100% !important;
-                height: 334px !important;
-                max-width: 100% !important;
-                border-radius: 16px !important;
-                box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
-                display: block !important;
-                margin: 0 auto !important;
-                padding: 0 !important;
-                object-fit: cover !important;
-            `;
-            
-            // Add timeout for loading
-            let loadTimeout = setTimeout(() => {
-                console.log('⏰ Direct GIF loading timeout, trying embed fallback');
-                loadTenorEmbed();
-            }, 5000); // 5 second timeout
-            
-            img.onload = function() {
-                clearTimeout(loadTimeout);
-                console.log('✅ Shaq shimmy GIF loaded successfully from direct URL');
-                imageElement.innerHTML = '';
-                imageElement.appendChild(img);
-                imageElement.classList.remove('loading');
-                imageElement.classList.add('has-image');
-                addTenorAttribution(imageElement);
-                
-                // Mark GIF as loaded
-                gifLoaded = true;
-                showMainContent();
-            };
-            
-            img.onerror = function() {
-                clearTimeout(loadTimeout);
-                console.log('❌ Direct Shaq shimmy GIF URL failed, trying embed');
-                loadTenorEmbed();
-            };
-        }
-        
-        // CRITICAL FIX: Enhanced Tenor embed with immediate loading
+        // Tenor embed fallback
         function loadTenorEmbed() {
-            console.log('🚨 CRITICAL: Starting enhanced Tenor embed');
+            console.log('🎬 Loading Tenor embed as fallback...');
             const imageElement = document.getElementById('characterImage');
             
-            // Clear loading text immediately
-            imageElement.innerHTML = '';
-            
-            // Create embed container
+            // Create Tenor embed
             const embedContainer = document.createElement('div');
-            embedContainer.innerHTML = specificGifData.embedCode;
-            embedContainer.style.cssText = `
-                width: 100% !important;
-                max-width: 100% !important;
-                height: 334px !important;
-                display: block !important;
-                border-radius: 16px;
-                overflow: hidden;
-                margin: 0 auto !important;
-                box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            embedContainer.innerHTML = `
+                <div class="tenor-gif-embed" data-postid="12032436" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
+                    <a href="https://tenor.com/view/shaq-shimmy-excited-smile-gif-12032436">Shaq Shimmy GIF</a>
+                    from <a href="https://tenor.com/search/shaq-gifs">Shaq GIFs</a>
+                </div>
             `;
             
+            imageElement.innerHTML = '';
             imageElement.appendChild(embedContainer);
             imageElement.classList.remove('loading');
-            imageElement.classList.add('has-image');
             
-            // AGGRESSIVE timeout - show content quickly regardless
-            let embedTimeout = setTimeout(() => {
-                console.log('🚨 CRITICAL: Forcing content display - GIF marked as loaded');
-                gifLoaded = true;
-                showMainContent();
-            }, 2000); // Only 2 seconds timeout!
-            
-            // Load Tenor script IMMEDIATELY
+            // Load Tenor script
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
                 const script = document.createElement('script');
                 script.src = 'https://tenor.com/embed.js';
@@ -740,245 +664,76 @@
                 document.head.appendChild(script);
                 
                 script.onload = () => {
-                    console.log('🚨 CRITICAL: Tenor script loaded');
+                    console.log('✅ Tenor script loaded');
                     setTimeout(() => {
-                        forceTenorStyling();
-                        // Mark as loaded when script loads
                         if (!gifLoaded) {
-                            clearTimeout(embedTimeout);
                             gifLoaded = true;
                             showMainContent();
                         }
-                    }, 500);
+                    }, 1000);
                 };
-            } else {
-                // Script already exists, force load immediately
-                setTimeout(() => {
-                    if (!gifLoaded) {
-                        clearTimeout(embedTimeout);
-                        gifLoaded = true;
-                        showMainContent();
-                    }
-                }, 1000);
             }
             
-            function forceTenorStyling() {
-                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
-                const iframe = embedContainer.querySelector('iframe');
-                const allDivs = embedContainer.querySelectorAll('div');
-                
-                if (tenorEmbed) {
-                    tenorEmbed.style.setProperty('width', '100%', 'important');
-                    tenorEmbed.style.setProperty('height', '400px', 'important');
-                    tenorEmbed.style.setProperty('border-radius', '16px', 'important');
+            // Fallback timeout
+            setTimeout(() => {
+                if (!gifLoaded) {
+                    console.log('✅ Tenor embed timeout - showing content anyway');
+                    gifLoaded = true;
+                    showMainContent();
                 }
-                
-                allDivs.forEach(div => {
-                    div.style.setProperty('width', '100%', 'important');
-                    div.style.setProperty('height', '334px', 'important');
-                    div.style.setProperty('padding-top', '0', 'important');
-                });
-                
-                if (iframe) {
-                    iframe.style.setProperty('width', '100%', 'important');
-                    iframe.style.setProperty('height', '400px', 'important');
-                    iframe.style.setProperty('border-radius', '16px', 'important');
-                    
-                    iframe.onload = function() {
-                        console.log('🚨 CRITICAL: Iframe actually loaded!');
-                        clearTimeout(embedTimeout);
-                        if (!gifLoaded) {
-                            gifLoaded = true;
-                            showMainContent();
-                        }
-                    };
-                }
-            }
-            
-            // Force styling multiple times
-            setTimeout(forceTenorStyling, 100);
-            setTimeout(forceTenorStyling, 300);
-            setTimeout(forceTenorStyling, 800);
-            setTimeout(forceTenorStyling, 1500);
-            
-            addTenorAttribution(imageElement);
-            window.tenorGifId = specificGifData.id;
-            console.log('🚨 CRITICAL: Shaq shimmy embed initiated with aggressive timeout');
-        }
-        
-        // Load the specific Shaq shimmy GIF - CRITICAL FIX
-        function loadSpecificMeme() {
-            console.log('🎬 CRITICAL: loadSpecificMeme function called for Shaq');
-            const imageElement = document.getElementById('characterImage');
-            
-            if (!imageElement) {
-                console.error('❌ Character image element not found');
-                return;
-            }
-            
-            imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
-            imageElement.classList.add('loading');
-            
-            // IMMEDIATE EMBED APPROACH - skip direct URL entirely
-            console.log('🔄 CRITICAL: Loading embed immediately for reliability');
-            loadTenorEmbed();
-        }
-        // Add Tenor attribution
-        function addTenorAttribution(container) {
-            const attribution = document.createElement('div');
-            attribution.style.cssText = `
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                font-size: 10px;
-                color: rgba(255,255,255,0.95);
-                background: rgba(0,0,0,0.7);
-                padding: 4px 8px;
-                border-radius: 8px;
-                font-weight: 600;
-                backdrop-filter: blur(6px);
-                z-index: 10;
-            `;
-            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
-            container.style.position = 'relative';
-            container.appendChild(attribution);
+            }, 4000);
         }
         
         // Create heart emojis with romantic floating animation
-        function createPalmTrees() {
-            console.log('💕 createHearts function called');
+        function createHearts() {
+            console.log('💕 Creating hearts...');
             
-            // Hearts spread across the entire screen with extra focus on top area
             const heartPositions = [
-                // Top area (more concentrated)
                 { left: '2%', top: '2%' },
                 { left: '8%', top: '8%' },
                 { left: '25%', top: '5%' },
                 { left: '65%', top: '15%' },
                 { left: '85%', top: '8%' },
                 { left: '92%', top: '6%' },
-                // Middle area
                 { left: '5%', top: '35%' },
                 { left: '75%', top: '40%' },
                 { left: '15%', top: '55%' },
                 { left: '95%', top: '45%' },
-                // Bottom area
                 { left: '5%', top: '95%' },
                 { left: '10%', top: '98%' },
                 { left: '58%', top: '95%' },
                 { left: '78%', top: '90%' },
                 { left: '98%', top: '98%' },
-                // Extra hearts for romance
                 { left: '42%', top: '25%' },
                 { left: '88%', top: '36%' }
             ];
             
-            // Different heart emojis for variety
             const heartEmojis = ['💕', '💖', '💗', '💘', '💝', '❤️', '💞', '💓'];
             
             heartPositions.forEach((pos, index) => {
-                try {
-                    const heart = document.createElement('div');
-                    heart.className = 'heart';
-                    
-                    // Random heart emoji
-                    const randomHeart = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-                    heart.textContent = randomHeart;
-                    
-                    // Random position variation within ±10px
-                    const randomX = (Math.random() - 0.5) * 20; // -10 to +10
-                    const randomY = (Math.random() - 0.5) * 20; // -10 to +10
-                    
-                    heart.style.left = `calc(${pos.left} + ${randomX}px)`;
-                    heart.style.top = `calc(${pos.top} + ${randomY}px)`;
-                    
-                    // Random animation delay for natural effect
-                    heart.style.animationDelay = (Math.random() * 3) + 's';
-                    
-                    // Random animation duration between 8-12 seconds (slower)
-                    const randomDuration = (Math.random() * 4 + 8);
-                    heart.style.animationDuration = randomDuration + 's';
-                    
-                    // Additional inline styles
-                    heart.style.position = 'absolute';
-                    heart.style.fontSize = '30px';
-                    heart.style.zIndex = '2';
-                    heart.style.pointerEvents = 'none';
-                    heart.style.userSelect = 'none';
-                    heart.style.opacity = '0.8';
-                    
-                    document.body.appendChild(heart);
-                    console.log(`💕 Heart ${index + 1} (${randomHeart}) created at ${pos.left}, ${pos.top} with ${randomX}px, ${randomY}px offset`);
-                } catch (error) {
-                    console.error(`❌ Error creating heart ${index + 1}:`, error);
-                }
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                
+                const randomHeart = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                heart.textContent = randomHeart;
+                
+                const randomX = (Math.random() - 0.5) * 20;
+                const randomY = (Math.random() - 0.5) * 20;
+                
+                heart.style.left = `calc(${pos.left} + ${randomX}px)`;
+                heart.style.top = `calc(${pos.top} + ${randomY}px)`;
+                heart.style.animationDelay = (Math.random() * 3) + 's';
+                heart.style.animationDuration = (Math.random() * 4 + 8) + 's';
+                
+                document.body.appendChild(heart);
             });
-            
-            console.log(`💕 All ${heartPositions.length} hearts created for romantic atmosphere`);
         }
         
-        // Safari iOS font size fix
-        function applySafariFix() {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
-            const screenWidth = window.innerWidth || screen.width;
-            
-            if (isMobile && isSafari) {
-                const quoteElement = document.getElementById('mainQuote');
-                if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '30px';
-                } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '36px';
-                }
-                quoteElement.style.fontFamily = "'Poppins', sans-serif";
-                quoteElement.style.fontWeight = '700';
-                console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
-            }
-        }
-        
-        // iPhone specific glow reduction
-        function reduceGlowForiPhone() {
-            const isIphone = /iPhone/i.test(navigator.userAgent);
-            if (isIphone) {
-                const container = document.querySelector('.container');
-                container.style.boxShadow = `
-                    0 25px 45px rgba(0,0,0,0.12), 
-                    0 0 45px rgba(255, 255, 255, 0.7),
-                    0 12px 35px rgba(255, 105, 180, 0.2)
-                `;
-            }
-        }
-        
-        // Initialize page content
-        function initializePageContent() {
-            document.getElementById('mainQuote').textContent = pageData.quote;
-            
-            const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
-            document.querySelector('.cta-text').textContent = randomCtaMessage;
-            window.currentCtaMessage = randomCtaMessage;
-            
-            setTimeout(applySafariFix, 100);
-            reduceGlowForiPhone();
-            
-            console.log('💕 Creating hearts...');
-            try {
-                createPalmTrees();
-                console.log('✅ Hearts created successfully');
-            } catch (error) {
-                console.error('❌ Error creating hearts:', error);
-            }
-            
-            // Mark page content as ready, but DON'T show main content yet
-            pageContentReady = true;
-            
-            console.log('✅ Page content initialized - waiting for GIF to load');
-        }
-        
-        // Sunset animation
-        const sunsetColors = ['#ff69b4', '#ffd700', '#ff7f50', '#ffb347', '#ff1493', '#ffa500'];
-        
+        // Sunset animation for quote
         function sunsetAnimation() {
             const quoteElement = document.getElementById('mainQuote');
+            const sunsetColors = ['#ff69b4', '#ffd700', '#ff7f50', '#ffb347', '#ff1493', '#ffa500'];
+            
             const color1 = sunsetColors[Math.floor(Math.random() * sunsetColors.length)];
             const color2 = sunsetColors[Math.floor(Math.random() * sunsetColors.length)];
             
@@ -1014,32 +769,19 @@
             }, randomDelay);
         }
         
-        // Analytics tracking with Tenor share registration
-        document.addEventListener('DOMContentLoaded', function() {
-            const shopButton = document.querySelector('.shop-button');
-            if (shopButton) {
-                shopButton.addEventListener('click', function() {
-                    console.log('Shop button clicked for Shaq shimmy GIF');
-                    if (window.tenorGifId) {
-                        fetch(`https://tenor.googleapis.com/v2/registershare?id=${window.tenorGifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`)
-                            .then(() => console.log('✅ Tenor share registered'))
-                            .catch(error => console.log('❌ Failed to register Tenor share:', error));
-                    }
-                });
-            }
-        });
+        // Initialize page content
+        function initializePageContent() {
+            document.getElementById('mainQuote').textContent = pageData.quote;
+            
+            const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
+            document.querySelector('.cta-text').textContent = randomCtaMessage;
+            
+            createHearts();
+            pageContentReady = true;
+            
+            console.log('✅ Page content initialized');
+        }
         
-        // Responsive fixes
-        window.addEventListener('orientationchange', () => {
-            setTimeout(applySafariFix, 200);
-            setTimeout(reduceGlowForiPhone, 200);
-        });
-        
-        window.addEventListener('resize', () => {
-            setTimeout(applySafariFix, 100);
-            setTimeout(reduceGlowForiPhone, 100);
-        });
-
         // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', function() {
             console.log('💕 Starting page initialization...');
@@ -1048,13 +790,7 @@
             initializePageContent();
             
             // Start loading the GIF
-            console.log('🎬 Loading GIF...');
-            try {
-                loadSpecificMeme();
-                console.log('✅ GIF loading initiated');
-            } catch (error) {
-                console.error('❌ Error loading GIF:', error);
-            }
+            loadSpecificMeme();
             
             // Fallback: ensure content shows even if something goes wrong
             setTimeout(() => {
@@ -1063,14 +799,8 @@
                     gifLoaded = true;
                     showMainContent();
                 }
-            }, 8000); // 8 second maximum wait
+            }, 5000);
         });
-
-        if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
-            const script = document.createElement('script');
-            script.src = 'https://tenor.com/embed.js';
-            document.body.appendChild(script);
-        }
     </script>
 </body>
 </html>
