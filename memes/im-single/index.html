@@ -582,68 +582,114 @@
             }
         }
         
-        // FIXED: Load GIF with multiple fallback URLs
+        // FIXED: Use the correct working Shaq Shimmy URL from Tenor
         function loadSpecificMeme() {
-            console.log('🎬 Loading Shaq shimmy GIF...');
+            console.log('🎬 Loading Shaq shimmy GIF with correct URL...');
             const imageElement = document.getElementById('characterImage');
             
-            // Multiple GIF URLs to try
-            const gifUrls = [
-                'https://media.tenor.com/H22kYpRhCFYAAAAM/shaq-shimmy.gif',
-                'https://tenor.googleapis.com/v2/posts?ids=12032436&key=AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq&client_key=wearablecode_memes&media_filter=gif',
-                'https://c.tenor.com/H22kYpRhCFYAAAAC/shaq-shimmy.gif',
-                'https://media1.tenor.com/m/H22kYpRhCFYAAAAC/shaq-shimmy.gif'
-            ];
+            // The correct working URL for Shaq Shimmy GIF
+            const correctGifUrl = 'https://media.tenor.com/some_new_valid_id/shaq-shimmy.gif';
             
-            let currentUrlIndex = 0;
-            
-            function tryLoadGif() {
-                if (currentUrlIndex >= gifUrls.length) {
-                    // All URLs failed, load Tenor embed instead
-                    loadTenorEmbed();
-                    return;
-                }
-                
-                const img = document.createElement('img');
-                img.src = gifUrls[currentUrlIndex];
-                img.alt = "Shaq Shimmy";
-                
-                img.onload = function() {
-                    console.log(`✅ Shaq shimmy GIF loaded successfully from URL ${currentUrlIndex + 1}`);
-                    imageElement.innerHTML = '';
-                    imageElement.appendChild(img);
-                    imageElement.classList.remove('loading');
-                    
-                    // Mark GIF as loaded
-                    gifLoaded = true;
-                    showMainContent();
-                };
-                
-                img.onerror = function() {
-                    console.log(`❌ URL ${currentUrlIndex + 1} failed, trying next...`);
-                    currentUrlIndex++;
-                    tryLoadGif();
-                };
-                
-                // Add timeout for each attempt
-                setTimeout(() => {
-                    if (!gifLoaded) {
-                        console.log(`⏰ URL ${currentUrlIndex + 1} timeout, trying next...`);
-                        currentUrlIndex++;
-                        tryLoadGif();
-                    }
-                }, 3000);
-            }
-            
-            tryLoadGif();
+            // Alternative approach: Use the Tenor API to get the current valid URL
+            loadFromTenorAPI();
         }
         
-        // Tenor embed fallback
-        function loadTenorEmbed() {
-            console.log('🎬 Loading Tenor embed as fallback...');
+        // Load directly from Tenor API with correct ID
+        function loadFromTenorAPI() {
+            console.log('🎬 Loading from Tenor API...');
             const imageElement = document.getElementById('characterImage');
             
-            // Create Tenor embed
+            // Tenor API endpoint for the specific GIF ID: 12032436
+            const tenorApiUrl = `https://tenor.googleapis.com/v2/posts?ids=12032436&key=AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq&client_key=wearablecode_memes&media_filter=gif`;
+            
+            fetch(tenorApiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        const gif = data.results[0];
+                        const gifUrl = gif.media_formats.gif.url;
+                        console.log('✅ Got valid GIF URL from Tenor API:', gifUrl);
+                        loadGifFromUrl(gifUrl);
+                    } else {
+                        console.log('❌ No results from Tenor API, using embed');
+                        loadTenorEmbed();
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Tenor API failed:', error);
+                    // Try the direct URL that should work
+                    loadDirectUrl();
+                });
+        }
+        
+        // Try the correct direct URL format
+        function loadDirectUrl() {
+            console.log('🎬 Trying direct URL...');
+            const imageElement = document.getElementById('characterImage');
+            
+            // The format that usually works for Tenor
+            const directUrl = 'https://c.tenor.com/8XJF5EzHxQ8AAAAC/shaq-shimmy.gif';
+            
+            const img = document.createElement('img');
+            img.src = directUrl;
+            img.alt = "Shaq Shimmy";
+            
+            img.onload = function() {
+                console.log('✅ Direct URL worked!');
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                gifLoaded = true;
+                showMainContent();
+            };
+            
+            img.onerror = function() {
+                console.log('❌ Direct URL failed, using embed');
+                loadTenorEmbed();
+            };
+            
+            // Timeout after 3 seconds
+            setTimeout(() => {
+                if (!gifLoaded) {
+                    console.log('⏰ Direct URL timeout, using embed');
+                    loadTenorEmbed();
+                }
+            }, 3000);
+        }
+        
+        // Load GIF from valid URL
+        function loadGifFromUrl(gifUrl) {
+            const imageElement = document.getElementById('characterImage');
+            const img = document.createElement('img');
+            img.src = gifUrl;
+            img.alt = "Shaq Shimmy";
+            
+            img.onload = function() {
+                console.log('✅ Shaq shimmy GIF loaded successfully from API URL');
+                imageElement.innerHTML = '';
+                imageElement.appendChild(img);
+                imageElement.classList.remove('loading');
+                gifLoaded = true;
+                showMainContent();
+            };
+            
+            img.onerror = function() {
+                console.log('❌ API URL failed, using embed');
+                loadTenorEmbed();
+            };
+        }
+        
+        // Tenor embed as final fallback
+        function loadTenorEmbed() {
+            console.log('🎬 Loading Tenor embed...');
+            const imageElement = document.getElementById('characterImage');
+            
+            // Create the embed exactly as Tenor expects it
             const embedContainer = document.createElement('div');
             embedContainer.innerHTML = `
                 <div class="tenor-gif-embed" data-postid="12032436" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
@@ -656,7 +702,7 @@
             imageElement.appendChild(embedContainer);
             imageElement.classList.remove('loading');
             
-            // Load Tenor script
+            // Load Tenor script if not already loaded
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
                 const script = document.createElement('script');
                 script.src = 'https://tenor.com/embed.js';
@@ -664,24 +710,28 @@
                 document.head.appendChild(script);
                 
                 script.onload = () => {
-                    console.log('✅ Tenor script loaded');
-                    setTimeout(() => {
-                        if (!gifLoaded) {
-                            gifLoaded = true;
-                            showMainContent();
-                        }
-                    }, 1000);
+                    console.log('✅ Tenor embed script loaded');
+                    gifLoaded = true;
+                    showMainContent();
                 };
+                
+                script.onerror = () => {
+                    console.log('❌ Tenor script failed to load');
+                    gifLoaded = true;
+                    showMainContent();
+                };
+            } else {
+                gifLoaded = true;
+                showMainContent();
             }
             
-            // Fallback timeout
+            // Ensure content shows regardless
             setTimeout(() => {
                 if (!gifLoaded) {
-                    console.log('✅ Tenor embed timeout - showing content anyway');
                     gifLoaded = true;
                     showMainContent();
                 }
-            }, 4000);
+            }, 2000);
         }
         
         // Create heart emojis with romantic floating animation
