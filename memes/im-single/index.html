@@ -147,10 +147,10 @@
             transform: scale(1.05);
         }
 
-        /* FIXED: Character image container */
+        /* FIXED: Character image container - taller to accommodate GIF better */
         .character-image {
             width: 100%;
-            height: 280px; /* Fixed height */
+            height: 320px; /* Increased from 280px */
             border-radius: 16px;
             margin: 0 auto 20px;
             background: transparent;
@@ -592,9 +592,9 @@
             loadTenorEmbed();
         }
         
-        // Load the exact Tenor embed you provided
+        // Load the exact Tenor embed you provided with aggressive styling
         function loadTenorEmbed() {
-            console.log('🎬 Loading Tenor embed with correct aspect ratio...');
+            console.log('🎬 Loading Tenor embed with full width fix...');
             const imageElement = document.getElementById('characterImage');
             
             // Your exact embed code with correct aspect ratio 1.3369
@@ -617,6 +617,11 @@
                 
                 script.onload = () => {
                     console.log('✅ Tenor embed script loaded successfully');
+                    // Force aggressive styling after load
+                    setTimeout(forceFullWidthStyling, 500);
+                    setTimeout(forceFullWidthStyling, 1000);
+                    setTimeout(forceFullWidthStyling, 2000);
+                    
                     // Force re-initialization of embeds
                     if (window.TenorEmbed) {
                         window.TenorEmbed.init();
@@ -633,6 +638,8 @@
             } else {
                 // Script already exists, just mark as loaded
                 console.log('✅ Tenor script already loaded');
+                setTimeout(forceFullWidthStyling, 100);
+                setTimeout(forceFullWidthStyling, 500);
                 // Try to reinitialize embeds
                 if (window.TenorEmbed) {
                     window.TenorEmbed.init();
@@ -649,6 +656,72 @@
                     showMainContent();
                 }
             }, 2000);
+        }
+        
+        // AGGRESSIVE function to force full width styling
+        function forceFullWidthStyling() {
+            const container = document.getElementById('characterImage');
+            if (!container) return;
+            
+            const tenorEmbed = container.querySelector('.tenor-gif-embed');
+            const allDivs = container.querySelectorAll('div');
+            const allIframes = container.querySelectorAll('iframe');
+            
+            console.log('🔥 FORCING FULL WIDTH STYLING');
+            
+            // Force container styling
+            container.style.setProperty('width', '100%', 'important');
+            container.style.setProperty('height', '320px', 'important');
+            container.style.setProperty('overflow', 'hidden', 'important');
+            
+            // Force Tenor embed styling
+            if (tenorEmbed) {
+                tenorEmbed.style.setProperty('width', '100%', 'important');
+                tenorEmbed.style.setProperty('height', '100%', 'important');
+                tenorEmbed.style.setProperty('max-width', 'none', 'important');
+                tenorEmbed.style.setProperty('min-width', '100%', 'important');
+                tenorEmbed.style.setProperty('border-radius', '16px', 'important');
+                tenorEmbed.style.setProperty('overflow', 'hidden', 'important');
+                tenorEmbed.style.setProperty('display', 'block', 'important');
+                tenorEmbed.style.setProperty('position', 'relative', 'important');
+                tenorEmbed.style.setProperty('margin', '0', 'important');
+                tenorEmbed.style.setProperty('padding', '0', 'important');
+            }
+            
+            // Force all divs to full width
+            allDivs.forEach((div, index) => {
+                div.style.setProperty('width', '100%', 'important');
+                div.style.setProperty('height', '100%', 'important');
+                div.style.setProperty('max-width', 'none', 'important');
+                div.style.setProperty('min-width', '100%', 'important');
+                div.style.setProperty('position', 'absolute', 'important');
+                div.style.setProperty('top', '0', 'important');
+                div.style.setProperty('left', '0', 'important');
+                div.style.setProperty('padding-top', '0', 'important');
+                div.style.setProperty('margin', '0', 'important');
+                div.style.setProperty('padding', '0', 'important');
+                console.log(`Styled div ${index + 1}`);
+            });
+            
+            // Force all iframes to full width
+            allIframes.forEach((iframe, index) => {
+                iframe.style.setProperty('width', '100%', 'important');
+                iframe.style.setProperty('height', '100%', 'important');
+                iframe.style.setProperty('max-width', 'none', 'important');
+                iframe.style.setProperty('min-width', '100%', 'important');
+                iframe.style.setProperty('position', 'absolute', 'important');
+                iframe.style.setProperty('top', '0', 'important');
+                iframe.style.setProperty('left', '0', 'important');
+                iframe.style.setProperty('border', 'none', 'important');
+                iframe.style.setProperty('border-radius', '16px', 'important');
+                iframe.style.setProperty('object-fit', 'cover', 'important');
+                iframe.style.setProperty('object-position', 'center', 'important');
+                iframe.style.setProperty('margin', '0', 'important');
+                iframe.style.setProperty('padding', '0', 'important');
+                console.log(`Styled iframe ${index + 1}`);
+            });
+            
+            console.log('🔥 FULL WIDTH STYLING APPLIED');
         }
         
         // Create heart emojis with romantic floating animation
