@@ -175,22 +175,21 @@
             border: none !important;
         }
 
-        /* FIXED: Tenor embed styling with 115% height */
+        /* FIXED: Tenor embed styling - fill container without cropping */
         .tenor-gif-embed {
             width: 100% !important;
-            height: 115% !important;
+            height: 100% !important;
             max-width: 100% !important;
             border-radius: 16px !important;
             overflow: hidden !important;
             margin: 0 !important;
             display: block !important;
             position: relative !important;
-            transform: translateY(-7.5%); /* Center the oversized content */
         }
 
         .tenor-gif-embed > div {
             width: 100% !important;
-            height: 115% !important;
+            height: 100% !important;
             max-width: 100% !important;
             position: absolute !important;
             top: 0 !important;
@@ -200,7 +199,7 @@
 
         .tenor-gif-embed iframe {
             width: 100% !important;
-            height: 115% !important;
+            height: 100% !important;
             max-width: 100% !important;
             position: absolute !important;
             top: 0 !important;
@@ -208,6 +207,7 @@
             border: none !important;
             border-radius: 16px !important;
             object-fit: cover !important;
+            object-position: center center !important;
         }
 
         .character-image.loading {
