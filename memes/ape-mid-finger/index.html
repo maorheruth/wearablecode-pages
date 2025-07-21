@@ -568,28 +568,46 @@
         let gifLoaded = false;
         let pageContentReady = false;
 
-        // Function to hide loading overlay and show content
+        // Function to hide loading overlay and show content - UPDATED WITH ENHANCED TIMING
         function showMainContent() {
             if (gifLoaded && pageContentReady) {
-                const loadingOverlay = document.getElementById('loadingOverlay');
-                const mainContainer = document.getElementById('mainContainer');
+                console.log('🎬 GIF is loaded, verifying visibility before showing content...');
                 
-                // Hide loading overlay
-                loadingOverlay.classList.add('hidden');
+                // Additional verification - make sure the GIF element is actually visible
+                const characterImage = document.getElementById('characterImage');
+                const hasVisibleGif = characterImage && (
+                    characterImage.querySelector('img') || 
+                    characterImage.querySelector('iframe') || 
+                    characterImage.querySelector('.tenor-gif-embed')
+                );
                 
-                // Show main container
-                mainContainer.classList.add('loaded');
-                
-                // Start animations after content is visible
-                setTimeout(() => {
-                    scheduleRandomAnimation();
-                }, 500);
-                
-                console.log('✅ Content fully loaded and displayed');
+                if (hasVisibleGif) {
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    const mainContainer = document.getElementById('mainContainer');
+                    
+                    console.log('✅ GIF is visually confirmed, hiding loading overlay now');
+                    
+                    // Hide loading overlay
+                    loadingOverlay.classList.add('hidden');
+                    
+                    // Show main container
+                    mainContainer.classList.add('loaded');
+                    
+                    // Start animations after content is visible
+                    setTimeout(() => {
+                        scheduleRandomAnimation();
+                    }, 500);
+                    
+                    console.log('✅ Content fully loaded and displayed');
+                } else {
+                    console.log('⏳ GIF element not yet visible, waiting...');
+                    // Retry after a short delay
+                    setTimeout(showMainContent, 200);
+                }
             }
         }
         
-        // Load the specific GIF with loading tracking
+        // Load the specific GIF with loading tracking - UPDATED TIMING
         function loadSpecificMeme() {
             const imageElement = document.getElementById('characterImage');
             imageElement.innerHTML = '<div style="min-height: 200px; display: flex; align-items: center; justify-content: center; color: #ccc;">טוען GIF...</div>';
@@ -610,7 +628,7 @@
                 });
         }
         
-        // Load GIF from direct URL
+        // Load GIF from direct URL - UPDATED TIMING
         function loadGifFromUrl(url) {
             const imageElement = document.getElementById('characterImage');
             const img = new Image();
@@ -621,9 +639,12 @@
                 imageElement.classList.remove('loading');
                 imageElement.classList.add('has-image');
                 
-                // Mark GIF as loaded
-                gifLoaded = true;
-                showMainContent();
+                // Wait a bit more to ensure the image is fully rendered
+                setTimeout(() => {
+                    console.log('🎬 Image fully rendered, marking as loaded');
+                    gifLoaded = true;
+                    showMainContent();
+                }, 300); // Extra delay to ensure visual rendering
                 
                 console.log('✅ GIF loaded from URL');
             };
@@ -670,7 +691,7 @@
             }
         }
         
-        // Fallback to Tenor embed with loading tracking
+        // Fallback to Tenor embed with extended timing
         function loadTenorEmbed() {
             const imageElement = document.getElementById('characterImage');
             
@@ -720,29 +741,33 @@
                     iframe.style.setProperty('border-radius', '12px', 'important');
                     iframe.style.setProperty('border', 'none', 'important');
                     
-                    // Mark as loaded when iframe is ready
+                    // Mark as loaded when iframe is ready - with extra delay
                     iframe.onload = function() {
-                        gifLoaded = true;
-                        showMainContent();
-                        console.log('✅ Tenor embed iframe loaded');
+                        // Wait a bit more after iframe loads to ensure content is visible
+                        setTimeout(() => {
+                            gifLoaded = true;
+                            showMainContent();
+                            console.log('✅ Tenor embed iframe loaded with delay');
+                        }, 800); // 800ms delay after iframe loads
                     };
                 }
             }
             
-            // Run styling multiple times to catch when elements are created
-            setTimeout(forceTenorStyling, 100);
-            setTimeout(forceTenorStyling, 500);
-            setTimeout(forceTenorStyling, 1000);
+            // Run styling multiple times to catch when elements are created - with longer intervals
+            setTimeout(forceTenorStyling, 200);
+            setTimeout(forceTenorStyling, 600);
+            setTimeout(forceTenorStyling, 1200);
             setTimeout(forceTenorStyling, 2000);
+            setTimeout(forceTenorStyling, 3000);
             
-            // Fallback: mark as loaded after 3 seconds if iframe doesn't trigger onload
+            // Fallback: mark as loaded after 6 seconds if iframe doesn't trigger onload
             setTimeout(() => {
                 if (!gifLoaded) {
                     gifLoaded = true;
                     showMainContent();
-                    console.log('✅ Tenor embed loaded (timeout fallback)');
+                    console.log('✅ Tenor embed loaded (extended timeout fallback)');
                 }
-            }, 3000);
+            }, 6000); // Increased to 6 seconds
             
             // Load Tenor's embed script
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
@@ -752,11 +777,12 @@
                 script.src = 'https://tenor.com/embed.js';
                 document.body.appendChild(script);
                 
-                // Apply styling again after script loads
+                // Apply styling again after script loads - with longer delays
                 script.onload = () => {
-                    setTimeout(forceTenorStyling, 100);
-                    setTimeout(forceTenorStyling, 500);
-                    setTimeout(forceTenorStyling, 1000);
+                    setTimeout(forceTenorStyling, 200);
+                    setTimeout(forceTenorStyling, 600);
+                    setTimeout(forceTenorStyling, 1200);
+                    setTimeout(forceTenorStyling, 2000);
                 };
             }
             
@@ -766,7 +792,7 @@
             // Store GIF ID for analytics
             window.tenorGifId = specificGifData.id;
             
-            console.log('✅ "Good Morning" embed loaded with forced 378px width');
+            console.log('✅ "Good Morning" embed loaded with extended timing for perfect reveal');
         }
         
         // Add Tenor attribution (required by API terms)
@@ -989,11 +1015,11 @@
             // Fallback: ensure content shows even if something goes wrong
             setTimeout(() => {
                 if (!gifLoaded) {
-                    console.log('⚠️ Fallback: Showing content after timeout');
+                    console.log('⚠️ Fallback: Showing content after extended timeout');
                     gifLoaded = true;
                     showMainContent();
                 }
-            }, 8000); // 8 second maximum wait
+            }, 12000); // Increased to 12 seconds maximum wait
         });
     </script>
 </body>
