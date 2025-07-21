@@ -618,19 +618,21 @@
             </a>
         </div>
     </div>
-<script>
-    const TENOR_API_KEY = '';
-    const CLIENT_KEY = 'wearablecode_memes';
 
-    const specificGifData = {
-        id: '2050912710562437363',
-        url: 'https://tenor.com/view/why-you-lying-gif-2050912710562437363',
-        embedCode: `
-            <div class="tenor-gif-embed" data-postid="2050912710562437363" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
-                <a href="https://tenor.com/view/why-you-lying-gif-2050912710562437363">Why You Lying GIF</a>
-            </div>
-        `
-    };  
+    <script>
+        const TENOR_API_KEY = '';
+        const CLIENT_KEY = 'wearablecode_memes';
+
+        const specificGifData = {
+            id: '2050912710562437363',
+            url: 'https://tenor.com/view/why-you-lying-gif-2050912710562437363',
+            embedCode: `
+                <div class="tenor-gif-embed" data-postid="2050912710562437363" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
+                    <a href="https://tenor.com/view/why-you-lying-gif-2050912710562437363">Why You Lying GIF</a>
+                </div>
+            `
+        };  
+
         // Page-specific data
         const pageData = {
             quote: "למה סרקת לי את הגב?🤨"
@@ -653,25 +655,27 @@
         let gifLoaded = false;
         let pageContentReady = false;
 
-        // Function to hide loading overlay and show content
+        // Function to hide loading overlay and show content - UPDATED WITH DELAY
         function showMainContent() {
-            // ONLY hide loading overlay when GIF is actually loaded
             if (gifLoaded) {
-                const loadingOverlay = document.getElementById('loadingOverlay');
-                const mainContainer = document.getElementById('mainContainer');
-                
-                // Hide loading overlay
-                loadingOverlay.classList.add('hidden');
-                
-                // Show main container
-                mainContainer.classList.add('loaded');
-                
-                // Start animations after content is visible
+                // Wait additional 2-3 seconds to ensure GIF is fully loaded and ready
                 setTimeout(() => {
-                    scheduleRandomAnimation();
-                }, 500);
-                
-                console.log('✅ Content fully loaded and displayed');
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    const mainContainer = document.getElementById('mainContainer');
+                    
+                    // Hide loading overlay
+                    loadingOverlay.classList.add('hidden');
+                    
+                    // Show main container
+                    mainContainer.classList.add('loaded');
+                    
+                    // Start animations after content is visible
+                    setTimeout(() => {
+                        scheduleRandomAnimation();
+                    }, 500);
+                    
+                    console.log('✅ Content fully loaded and displayed after additional delay');
+                }, 2500); // Additional 2.5 second delay for the surprise effect
             } else {
                 console.log('⏳ Waiting for GIF to load before showing content...');
             }
