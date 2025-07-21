@@ -590,7 +590,6 @@
     <script>
         // Tenor API Configuration
         const TENOR_API_KEY = 'AIzaSyCnsX-fRoZAZoT6zobpVijxT7ksnLLeq';
-        const CLIENT_KEY = 'wearablecode_memes';
         
         // Updated GIF data for the new "Wait what" GIF
         const specificGifData = {
@@ -694,7 +693,7 @@
         async function fetchSpecificGifFromTenor() {
             try {
                 const response = await fetch(
-                    `https://tenor.googleapis.com/v2/posts?ids=${specificGifData.id}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}&media_filter=gif`
+                    `https://tenor.googleapis.com/v1/gifs?ids=${specificGifData.id}&key=${TENOR_API_KEY}&limit=1`
                 );
                 
                 if (!response.ok) {
@@ -706,7 +705,7 @@
                 if (data.results && data.results.length > 0) {
                     const gif = data.results[0];
                     window.tenorGifId = gif.id;
-                    return gif.media_formats.gif.url;
+                    return gif.media[0].gif.url;
                 }
                 return null;
             } catch (error) {
@@ -1154,7 +1153,7 @@
         async function registerTenorShare(gifId) {
             try {
                 await fetch(
-                    `https://tenor.googleapis.com/v2/registershare?id=${gifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`
+                    `https://tenor.googleapis.com/v1/registershare?id=${gifId}&key=${TENOR_API_KEY}&q=wait%20what`
                 );
                 console.log('✅ Tenor share registered');
             } catch (error) {
