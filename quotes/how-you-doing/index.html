@@ -493,26 +493,44 @@
         let gifLoaded = false;
         let pageContentReady = false;
 
-        // Function to hide loading overlay and show content - FIXED
+        // Function to hide loading overlay and show content - UPDATED WITH ENHANCED TIMING
         function showMainContent() {
             // ONLY hide loading overlay when GIF is actually loaded
             if (gifLoaded) {
-                const loadingOverlay = document.getElementById('loadingOverlay');
-                const mainContainer = document.getElementById('mainContainer');
+                console.log('🎬 GIF is loaded, verifying visibility before showing content...');
                 
-                // Hide loading overlay
-                loadingOverlay.classList.add('hidden');
+                // Additional verification - make sure the GIF element is actually visible
+                const characterImage = document.getElementById('characterImage');
+                const hasVisibleGif = characterImage && (
+                    characterImage.querySelector('img') || 
+                    characterImage.querySelector('iframe') || 
+                    characterImage.querySelector('.tenor-gif-embed')
+                );
                 
-                // Show main container
-                mainContainer.classList.add('loaded');
-                
-                console.log('✅ Content fully loaded and displayed');
+                if (hasVisibleGif) {
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    const mainContainer = document.getElementById('mainContainer');
+                    
+                    console.log('✅ GIF is visually confirmed, hiding loading overlay now');
+                    
+                    // Hide loading overlay
+                    loadingOverlay.classList.add('hidden');
+                    
+                    // Show main container
+                    mainContainer.classList.add('loaded');
+                    
+                    console.log('✅ Content fully loaded and displayed');
+                } else {
+                    console.log('⏳ GIF element not yet visible, waiting...');
+                    // Retry after a short delay
+                    setTimeout(showMainContent, 200);
+                }
             } else {
                 console.log('⏳ Waiting for GIF to load before showing content...');
             }
         }
         
-        // CRITICAL FIX: Enhanced GIF loading with immediate fallback
+        // CRITICAL FIX: Enhanced GIF loading with immediate fallback - UPDATED TIMING
         function loadGIF() {
             console.log('🚨 CRITICAL: loadGIF function called for Joey');
             const imageElement = document.getElementById('characterImage');
@@ -520,12 +538,14 @@
             imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
             imageElement.classList.add('loading');
             
-            // AGGRESSIVE timeout - show content quickly regardless
+            // MUCH longer timeout - wait for actual content to load
             let loadTimeout = setTimeout(() => {
-                console.log('🚨 CRITICAL: Forcing content display - GIF marked as loaded');
-                gifLoaded = true;
-                showMainContent();
-            }, 2000); // Only 2 seconds timeout!
+                console.log('🚨 CRITICAL: Forcing content display after extended timeout');
+                if (!gifLoaded) {
+                    gifLoaded = true;
+                    showMainContent();
+                }
+            }, 8000); // Increased to 8 seconds!
             
             // Try direct URL patterns for Joey GIF ID: 16802333
             const directUrls = [
@@ -579,9 +599,12 @@
                         imageElement.style.position = 'relative';
                         imageElement.appendChild(attribution);
                         
-                        // Mark GIF as loaded
-                        gifLoaded = true;
-                        showMainContent();
+                        // Wait a bit more to ensure the image is fully rendered
+                        setTimeout(() => {
+                            console.log('🎬 Image fully rendered, marking as loaded');
+                            gifLoaded = true;
+                            showMainContent();
+                        }, 300); // Extra delay to ensure visual rendering
                         
                         console.log('🚨 CRITICAL: Joey GIF loaded:', directUrls[currentIndex]);
                     };
@@ -601,7 +624,7 @@
             tryNextUrl();
         }
         
-        // Enhanced Tenor embed with aggressive timeout
+        // Enhanced Tenor embed with extended timing
         function loadTenorEmbed() {
             const imageElement = document.getElementById('characterImage');
             
@@ -621,14 +644,14 @@
             imageElement.classList.remove('loading');
             imageElement.classList.add('has-image');
             
-            // AGGRESSIVE timeout for embed
+            // MUCH longer timeout for embed
             let embedTimeout = setTimeout(() => {
-                console.log('🚨 CRITICAL: Embed timeout - forcing content display');
+                console.log('🚨 CRITICAL: Embed timeout after extended wait - forcing content display');
                 if (!gifLoaded) {
                     gifLoaded = true;
                     showMainContent();
                 }
-            }, 2000); // Only 2 seconds timeout!
+            }, 6000); // Increased to 6 seconds!
             
             // Load Tenor script IMMEDIATELY
             if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
@@ -641,21 +664,29 @@
                     console.log('🚨 CRITICAL: Tenor script loaded');
                     setTimeout(() => {
                         forceTenorStyling();
+                        // Wait longer before marking as loaded
+                        setTimeout(() => {
+                            if (!gifLoaded) {
+                                console.log('🎬 Tenor embed ready after script load delay');
+                                clearTimeout(embedTimeout);
+                                gifLoaded = true;
+                                showMainContent();
+                            }
+                        }, 1500); // Extra 1.5 second delay after script loads
+                    }, 500);
+                };
+            } else {
+                // Script already exists, but wait longer for embed to be ready
+                setTimeout(() => {
+                    forceTenorStyling();
+                    setTimeout(() => {
                         if (!gifLoaded) {
+                            console.log('🎬 Tenor embed ready with existing script');
                             clearTimeout(embedTimeout);
                             gifLoaded = true;
                             showMainContent();
                         }
-                    }, 500);
-                };
-            } else {
-                // Script already exists, force load immediately
-                setTimeout(() => {
-                    if (!gifLoaded) {
-                        clearTimeout(embedTimeout);
-                        gifLoaded = true;
-                        showMainContent();
-                    }
+                    }, 2000); // 2 second delay when script exists
                 }, 1000);
             }
             
@@ -676,20 +707,25 @@
                     
                     iframe.onload = function() {
                         console.log('🚨 CRITICAL: Iframe actually loaded!');
-                        clearTimeout(embedTimeout);
-                        if (!gifLoaded) {
-                            gifLoaded = true;
-                            showMainContent();
-                        }
+                        // Wait a bit more after iframe loads to ensure content is visible
+                        setTimeout(() => {
+                            clearTimeout(embedTimeout);
+                            if (!gifLoaded) {
+                                console.log('🎬 Content verified after iframe load');
+                                gifLoaded = true;
+                                showMainContent();
+                            }
+                        }, 800); // 800ms delay after iframe loads
                     };
                 }
             }
             
-            // Force styling multiple times
-            setTimeout(forceTenorStyling, 100);
-            setTimeout(forceTenorStyling, 300);
-            setTimeout(forceTenorStyling, 800);
-            setTimeout(forceTenorStyling, 1500);
+            // Force styling multiple times with longer intervals
+            setTimeout(forceTenorStyling, 200);
+            setTimeout(forceTenorStyling, 600);
+            setTimeout(forceTenorStyling, 1200);
+            setTimeout(forceTenorStyling, 2000);
+            setTimeout(forceTenorStyling, 3000);
             
             // Add Tenor attribution for embed version
             const attribution = document.createElement('div');
@@ -712,7 +748,7 @@
             imageElement.style.position = 'relative';
             imageElement.appendChild(attribution);
             
-            console.log('🚨 CRITICAL: Joey embed initiated with aggressive timeout');
+            console.log('🚨 CRITICAL: Joey embed initiated with extended timeout for perfect timing');
         }
         
         function createFriendlyElements() {
@@ -802,11 +838,11 @@
             // Fallback: ensure content shows even if something goes wrong
             setTimeout(() => {
                 if (!gifLoaded) {
-                    console.log('⚠️ Fallback: Showing content after timeout');
+                    console.log('⚠️ Fallback: Showing content after extended timeout');
                     gifLoaded = true;
                     showMainContent();
                 }
-            }, 8000); // 8 second maximum wait
+            }, 12000); // Increased to 12 seconds maximum wait
         });
     </script>
 </body>
