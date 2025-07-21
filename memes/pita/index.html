@@ -7,7 +7,285 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
-            margin: 0;
+            // Force styling multiple times
+            setTimeout(forceTenorStyling, 100);
+            setTimeout(forceTenorStyling, 300);
+            setTimeout(forceTenorStyling, 800);
+            setTimeout(forceTenorStyling, 1500);
+            
+            addTenorAttribution(imageElement);
+            window.tenorGifId = specificGifData.id;
+            console.log('🚨 CRITICAL: Peeta embed initiated with aggressive timeout');
+        }
+        
+        // Load the specific Peeta GIF - CRITICAL FIX
+        function loadSpecificMeme() {
+            console.log('🎬 CRITICAL: loadSpecificMeme function called for Peeta');
+            const imageElement = document.getElementById('characterImage');
+            
+            if (!imageElement) {
+                console.error('❌ Character image element not found');
+                return;
+            }
+            
+            imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
+            imageElement.classList.add('loading');
+            
+            // IMMEDIATE EMBED APPROACH - skip direct URL entirely
+            console.log('🔄 CRITICAL: Loading embed immediately for reliability');
+            loadTenorEmbed();
+        }
+        // Add Tenor attribution
+        function addTenorAttribution(container) {
+            const attribution = document.createElement('div');
+            attribution.style.cssText = `
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                font-size: 10px;
+                color: rgba(255,255,255,0.95);
+                background: rgba(0,0,0,0.7);
+                padding: 4px 8px;
+                border-radius: 8px;
+                font-weight: 600;
+                backdrop-filter: blur(6px);
+                z-index: 10;
+            `;
+            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+            container.style.position = 'relative';
+            container.appendChild(attribution);
+        }
+        
+        // Create fire flame emojis with Hunger Games inspired floating animation
+        function createPalmTrees() {
+            console.log('🔥 createFlames function called');
+            
+            // Flames spread across the entire screen with focus on dramatic positions
+            const flamePositions = [
+                // Top area (more concentrated)
+                { left: '3%', top: '3%' },
+                { left: '12%', top: '8%' },
+                { left: '28%', top: '6%' },
+                { left: '68%', top: '12%' },
+                { left: '88%', top: '7%' },
+                { left: '95%', top: '5%' },
+                // Middle area
+                { left: '8%', top: '38%' },
+                { left: '78%', top: '42%' },
+                { left: '18%', top: '58%' },
+                { left: '92%', top: '48%' },
+                // Bottom area
+                { left: '6%', top: '92%' },
+                { left: '15%', top: '96%' },
+                { left: '62%', top: '94%' },
+                { left: '82%', top: '88%' },
+                { left: '96%', top: '96%' },
+                // Extra flames for intensity
+                { left: '45%', top: '28%' },
+                { left: '85%', top: '38%' }
+            ];
+            
+            // Different fire emojis for variety
+            const flameEmojis = ['🔥' , '😂' , '🤣', '⚡', '🔥', '🔥'];
+            
+            flamePositions.forEach((pos, index) => {
+                try {
+                    const flame = document.createElement('div');
+                    flame.className = 'flame';
+                    
+                    // Random flame emoji (mostly fire)
+                    const randomFlame = flameEmojis[Math.floor(Math.random() * flameEmojis.length)];
+                    flame.textContent = randomFlame;
+                    
+                    // Random position variation within ±15px
+                    const randomX = (Math.random() - 0.5) * 30; // -15 to +15
+                    const randomY = (Math.random() - 0.5) * 30; // -15 to +15
+                    
+                    flame.style.left = `calc(${pos.left} + ${randomX}px)`;
+                    flame.style.top = `calc(${pos.top} + ${randomY}px)`;
+                    
+                    // Random animation delay for natural effect
+                    flame.style.animationDelay = (Math.random() * 4) + 's';
+                    
+                    // Random animation duration between 6-10 seconds (faster flicker)
+                    const randomDuration = (Math.random() * 4 + 6);
+                    flame.style.animationDuration = randomDuration + 's';
+                    
+                    // Additional inline styles
+                    flame.style.position = 'absolute';
+                    flame.style.fontSize = '35px';
+                    flame.style.zIndex = '2';
+                    flame.style.pointerEvents = 'none';
+                    flame.style.userSelect = 'none';
+                    flame.style.opacity = '0.9';
+                    
+                    document.body.appendChild(flame);
+                    console.log(`🔥 Flame ${index + 1} (${randomFlame}) created at ${pos.left}, ${pos.top} with ${randomX}px, ${randomY}px offset`);
+                } catch (error) {
+                    console.error(`❌ Error creating flame ${index + 1}:`, error);
+                }
+            });
+            
+            console.log(`🔥 All ${flamePositions.length} flames created for Hunger Games atmosphere`);
+        }
+        
+        // Safari iOS font size fix
+        function applySafariFix() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
+            const screenWidth = window.innerWidth || screen.width;
+            
+            if (isMobile && isSafari) {
+                const quoteElement = document.getElementById('mainQuote');
+                if (screenWidth <= 375) {
+                    quoteElement.style.fontSize = '30px';
+                } else if (screenWidth <= 480) {
+                    quoteElement.style.fontSize = '36px';
+                }
+                quoteElement.style.fontFamily = "'Poppins', sans-serif";
+                quoteElement.style.fontWeight = '700';
+                console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
+            }
+        }
+        
+        // iPhone specific glow reduction
+        function reduceGlowForiPhone() {
+            const isIphone = /iPhone/i.test(navigator.userAgent);
+            if (isIphone) {
+                const container = document.querySelector('.container');
+                container.style.boxShadow = `
+                    0 25px 45px rgba(0,0,0,0.5), 
+                    0 0 45px rgba(255, 102, 0, 0.25),
+                    0 12px 35px rgba(255, 69, 0, 0.2)
+                `;
+            }
+        }
+        
+        // Initialize page content
+        function initializePageContent() {
+            document.getElementById('mainQuote').textContent = pageData.quote;
+            
+            const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
+            document.querySelector('.cta-text').textContent = randomCtaMessage;
+            window.currentCtaMessage = randomCtaMessage;
+            
+            setTimeout(applySafariFix, 100);
+            reduceGlowForiPhone();
+            
+            console.log('🔥 Creating flames...');
+            try {
+                createPalmTrees();
+                console.log('✅ Flames created successfully');
+            } catch (error) {
+                console.error('❌ Error creating flames:', error);
+            }
+            
+            // Mark page content as ready, but DON'T show main content yet
+            pageContentReady = true;
+            
+            console.log('✅ Page content initialized - waiting for GIF to load');
+        }
+        
+        // Fire animation for text
+        const fireColors = ['#ff6600', '#ff4500', '#ff8c00', '#ffa500', '#ff7f50', '#ffb347'];
+        
+        function fireAnimation() {
+            const quoteElement = document.getElementById('mainQuote');
+            const color1 = fireColors[Math.floor(Math.random() * fireColors.length)];
+            const color2 = fireColors[Math.floor(Math.random() * fireColors.length)];
+            
+            const isMobile = window.innerWidth <= 480;
+            const shadowStrength = isMobile ? '1px 1px 6px' : '3px 3px 12px';
+            const glowStrength = isMobile ? '0 0 20px' : '0 0 30px';
+            const scaleStrength = isMobile ? 1.025 : 1.05;
+            
+            quoteElement.style.color = color1;
+            quoteElement.style.textShadow = `${glowStrength} ${color1}, ${shadowStrength} rgba(0,0,0,0.8)`;
+            quoteElement.style.transform = `scale(${scaleStrength})`;
+            
+            setTimeout(() => {
+                quoteElement.style.color = color2;
+                quoteElement.style.textShadow = `${glowStrength} ${color2}, ${shadowStrength} rgba(0,0,0,0.8)`;
+                quoteElement.style.transform = `scale(${1/scaleStrength})`;
+            }, 250);
+            
+            setTimeout(() => {
+                quoteElement.style.color = '#ffffff';
+                quoteElement.style.textShadow = isMobile ? '1px 1px 4px rgba(0,0,0,0.8), 0 0 15px rgba(255, 140, 0, 0.5)' : '2px 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(255, 140, 0, 0.6)';
+                quoteElement.style.transform = 'scale(1)';
+            }, 500);
+        }
+        
+        function scheduleRandomAnimation() {
+            const randomDelay = Math.random() * 4000 + 3000;
+            setTimeout(() => {
+                if (gifLoaded && pageContentReady) {
+                    fireAnimation();
+                }
+                scheduleRandomAnimation();
+            }, randomDelay);
+        }
+        
+        // Analytics tracking with Tenor share registration
+        document.addEventListener('DOMContentLoaded', function() {
+            const shopButton = document.querySelector('.shop-button');
+            if (shopButton) {
+                shopButton.addEventListener('click', function() {
+                    console.log('Shop button clicked for Peeta GIF');
+                    if (window.tenorGifId) {
+                        fetch(`https://tenor.googleapis.com/v2/registershare?id=${window.tenorGifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`)
+                            .then(() => console.log('✅ Tenor share registered'))
+                            .catch(error => console.log('❌ Failed to register Tenor share:', error));
+                    }
+                });
+            }
+        });
+        
+        // Responsive fixes
+        window.addEventListener('orientationchange', () => {
+            setTimeout(applySafariFix, 200);
+            setTimeout(reduceGlowForiPhone, 200);
+        });
+        
+        window.addEventListener('resize', () => {
+            setTimeout(applySafariFix, 100);
+            setTimeout(reduceGlowForiPhone, 100);
+        });
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔥 Starting Hunger Games page initialization...');
+            
+            // Initialize page content first
+            initializePageContent();
+            
+            // Start loading the GIF
+            console.log('🎬 Loading Peeta GIF...');
+            try {
+                loadSpecificMeme();
+                console.log('✅ Peeta GIF loading initiated');
+            } catch (error) {
+                console.error('❌ Error loading Peeta GIF:', error);
+            }
+            
+            // Fallback: ensure content shows even if something goes wrong
+            setTimeout(() => {
+                if (!gifLoaded) {
+                    console.log('⚠️ Fallback: Showing content after timeout');
+                    gifLoaded = true;
+                    showMainContent();
+                }
+            }, 8000); // 8 second maximum wait
+        });
+
+        if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+            const script = document.createElement('script');
+            script.src = 'https://tenor.com/embed.js';
+            document.body.appendChild(script);
+        }
+    </script>
+</body>
+</html>margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
@@ -607,7 +885,7 @@
         
         <div class="logo">
             <a href="https://wearablecode.com" target="_blank">
-                <img src="../../assets/logos/wearablecode_logo_white.png" alt="WearableCode">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjMwIiB2aWV3Qm94PSIwIDAgMTAwIDMwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8dGV4dCB4PSI1MCIgeT0iMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldlYXJhYmxlQ29kZTwvdGV4dD4KPC9zdmc+" alt="WearableCode">
             </a>
         </div>
     </div>
@@ -646,25 +924,27 @@
         let gifLoaded = false;
         let pageContentReady = false;
 
-        // Function to hide loading overlay and show content
+        // Function to hide loading overlay and show content - UPDATED WITH DELAY
         function showMainContent() {
-            // ONLY hide loading overlay when GIF is actually loaded
             if (gifLoaded) {
-                const loadingOverlay = document.getElementById('loadingOverlay');
-                const mainContainer = document.getElementById('mainContainer');
-                
-                // Hide loading overlay
-                loadingOverlay.classList.add('hidden');
-                
-                // Show main container
-                mainContainer.classList.add('loaded');
-                
-                // Start animations after content is visible
+                // Wait additional 2-3 seconds to ensure GIF is fully loaded and ready
                 setTimeout(() => {
-                    scheduleRandomAnimation();
-                }, 500);
-                
-                console.log('✅ Content fully loaded and displayed');
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    const mainContainer = document.getElementById('mainContainer');
+                    
+                    // Hide loading overlay
+                    loadingOverlay.classList.add('hidden');
+                    
+                    // Show main container
+                    mainContainer.classList.add('loaded');
+                    
+                    // Start animations after content is visible
+                    setTimeout(() => {
+                        scheduleRandomAnimation();
+                    }, 500);
+                    
+                    console.log('✅ Content fully loaded and displayed after additional delay');
+                }, 2500); // Additional 2.5 second delay for the surprise effect
             } else {
                 console.log('⏳ Waiting for GIF to load before showing content...');
             }
@@ -837,283 +1117,3 @@
                     };
                 }
             }
-            
-            // Force styling multiple times
-            setTimeout(forceTenorStyling, 100);
-            setTimeout(forceTenorStyling, 300);
-            setTimeout(forceTenorStyling, 800);
-            setTimeout(forceTenorStyling, 1500);
-            
-            addTenorAttribution(imageElement);
-            window.tenorGifId = specificGifData.id;
-            console.log('🚨 CRITICAL: Peeta embed initiated with aggressive timeout');
-        }
-        
-        // Load the specific Peeta GIF - CRITICAL FIX
-        function loadSpecificMeme() {
-            console.log('🎬 CRITICAL: loadSpecificMeme function called for Peeta');
-            const imageElement = document.getElementById('characterImage');
-            
-            if (!imageElement) {
-                console.error('❌ Character image element not found');
-                return;
-            }
-            
-            imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
-            imageElement.classList.add('loading');
-            
-            // IMMEDIATE EMBED APPROACH - skip direct URL entirely
-            console.log('🔄 CRITICAL: Loading embed immediately for reliability');
-            loadTenorEmbed();
-        }
-        // Add Tenor attribution
-        function addTenorAttribution(container) {
-            const attribution = document.createElement('div');
-            attribution.style.cssText = `
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                font-size: 10px;
-                color: rgba(255,255,255,0.95);
-                background: rgba(0,0,0,0.7);
-                padding: 4px 8px;
-                border-radius: 8px;
-                font-weight: 600;
-                backdrop-filter: blur(6px);
-                z-index: 10;
-            `;
-            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
-            container.style.position = 'relative';
-            container.appendChild(attribution);
-        }
-        
-        // Create fire flame emojis with Hunger Games inspired floating animation
-        function createPalmTrees() {
-            console.log('🔥 createFlames function called');
-            
-            // Flames spread across the entire screen with focus on dramatic positions
-            const flamePositions = [
-                // Top area (more concentrated)
-                { left: '3%', top: '3%' },
-                { left: '12%', top: '8%' },
-                { left: '28%', top: '6%' },
-                { left: '68%', top: '12%' },
-                { left: '88%', top: '7%' },
-                { left: '95%', top: '5%' },
-                // Middle area
-                { left: '8%', top: '38%' },
-                { left: '78%', top: '42%' },
-                { left: '18%', top: '58%' },
-                { left: '92%', top: '48%' },
-                // Bottom area
-                { left: '6%', top: '92%' },
-                { left: '15%', top: '96%' },
-                { left: '62%', top: '94%' },
-                { left: '82%', top: '88%' },
-                { left: '96%', top: '96%' },
-                // Extra flames for intensity
-                { left: '45%', top: '28%' },
-                { left: '85%', top: '38%' }
-            ];
-            
-            // Different fire emojis for variety
-            const flameEmojis = ['🔥' , '😂' , '🤣', '⚡', '🔥', '🔥'];
-            
-            flamePositions.forEach((pos, index) => {
-                try {
-                    const flame = document.createElement('div');
-                    flame.className = 'flame';
-                    
-                    // Random flame emoji (mostly fire)
-                    const randomFlame = flameEmojis[Math.floor(Math.random() * flameEmojis.length)];
-                    flame.textContent = randomFlame;
-                    
-                    // Random position variation within ±15px
-                    const randomX = (Math.random() - 0.5) * 30; // -15 to +15
-                    const randomY = (Math.random() - 0.5) * 30; // -15 to +15
-                    
-                    flame.style.left = `calc(${pos.left} + ${randomX}px)`;
-                    flame.style.top = `calc(${pos.top} + ${randomY}px)`;
-                    
-                    // Random animation delay for natural effect
-                    flame.style.animationDelay = (Math.random() * 4) + 's';
-                    
-                    // Random animation duration between 6-10 seconds (faster flicker)
-                    const randomDuration = (Math.random() * 4 + 6);
-                    flame.style.animationDuration = randomDuration + 's';
-                    
-                    // Additional inline styles
-                    flame.style.position = 'absolute';
-                    flame.style.fontSize = '35px';
-                    flame.style.zIndex = '2';
-                    flame.style.pointerEvents = 'none';
-                    flame.style.userSelect = 'none';
-                    flame.style.opacity = '0.9';
-                    
-                    document.body.appendChild(flame);
-                    console.log(`🔥 Flame ${index + 1} (${randomFlame}) created at ${pos.left}, ${pos.top} with ${randomX}px, ${randomY}px offset`);
-                } catch (error) {
-                    console.error(`❌ Error creating flame ${index + 1}:`, error);
-                }
-            });
-            
-            console.log(`🔥 All ${flamePositions.length} flames created for Hunger Games atmosphere`);
-        }
-        
-        // Safari iOS font size fix
-        function applySafariFix() {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
-            const screenWidth = window.innerWidth || screen.width;
-            
-            if (isMobile && isSafari) {
-                const quoteElement = document.getElementById('mainQuote');
-                if (screenWidth <= 375) {
-                    quoteElement.style.fontSize = '30px';
-                } else if (screenWidth <= 480) {
-                    quoteElement.style.fontSize = '36px';
-                }
-                quoteElement.style.fontFamily = "'Poppins', sans-serif";
-                quoteElement.style.fontWeight = '700';
-                console.log('Safari iOS fix applied. Font size:', quoteElement.style.fontSize);
-            }
-        }
-        
-        // iPhone specific glow reduction
-        function reduceGlowForiPhone() {
-            const isIphone = /iPhone/i.test(navigator.userAgent);
-            if (isIphone) {
-                const container = document.querySelector('.container');
-                container.style.boxShadow = `
-                    0 25px 45px rgba(0,0,0,0.5), 
-                    0 0 45px rgba(255, 102, 0, 0.25),
-                    0 12px 35px rgba(255, 69, 0, 0.2)
-                `;
-            }
-        }
-        
-        // Initialize page content
-        function initializePageContent() {
-            document.getElementById('mainQuote').textContent = pageData.quote;
-            
-            const randomCtaMessage = ctaMessages[Math.floor(Math.random() * ctaMessages.length)];
-            document.querySelector('.cta-text').textContent = randomCtaMessage;
-            window.currentCtaMessage = randomCtaMessage;
-            
-            setTimeout(applySafariFix, 100);
-            reduceGlowForiPhone();
-            
-            console.log('🔥 Creating flames...');
-            try {
-                createPalmTrees();
-                console.log('✅ Flames created successfully');
-            } catch (error) {
-                console.error('❌ Error creating flames:', error);
-            }
-            
-            // Mark page content as ready, but DON'T show main content yet
-            pageContentReady = true;
-            
-            console.log('✅ Page content initialized - waiting for GIF to load');
-        }
-        
-        // Fire animation for text
-        const fireColors = ['#ff6600', '#ff4500', '#ff8c00', '#ffa500', '#ff7f50', '#ffb347'];
-        
-        function fireAnimation() {
-            const quoteElement = document.getElementById('mainQuote');
-            const color1 = fireColors[Math.floor(Math.random() * fireColors.length)];
-            const color2 = fireColors[Math.floor(Math.random() * fireColors.length)];
-            
-            const isMobile = window.innerWidth <= 480;
-            const shadowStrength = isMobile ? '1px 1px 6px' : '3px 3px 12px';
-            const glowStrength = isMobile ? '0 0 20px' : '0 0 30px';
-            const scaleStrength = isMobile ? 1.025 : 1.05;
-            
-            quoteElement.style.color = color1;
-            quoteElement.style.textShadow = `${glowStrength} ${color1}, ${shadowStrength} rgba(0,0,0,0.8)`;
-            quoteElement.style.transform = `scale(${scaleStrength})`;
-            
-            setTimeout(() => {
-                quoteElement.style.color = color2;
-                quoteElement.style.textShadow = `${glowStrength} ${color2}, ${shadowStrength} rgba(0,0,0,0.8)`;
-                quoteElement.style.transform = `scale(${1/scaleStrength})`;
-            }, 250);
-            
-            setTimeout(() => {
-                quoteElement.style.color = '#ffffff';
-                quoteElement.style.textShadow = isMobile ? '1px 1px 4px rgba(0,0,0,0.8), 0 0 15px rgba(255, 140, 0, 0.5)' : '2px 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(255, 140, 0, 0.6)';
-                quoteElement.style.transform = 'scale(1)';
-            }, 500);
-        }
-        
-        function scheduleRandomAnimation() {
-            const randomDelay = Math.random() * 4000 + 3000;
-            setTimeout(() => {
-                if (gifLoaded && pageContentReady) {
-                    fireAnimation();
-                }
-                scheduleRandomAnimation();
-            }, randomDelay);
-        }
-        
-        // Analytics tracking with Tenor share registration
-        document.addEventListener('DOMContentLoaded', function() {
-            const shopButton = document.querySelector('.shop-button');
-            if (shopButton) {
-                shopButton.addEventListener('click', function() {
-                    console.log('Shop button clicked for Peeta GIF');
-                    if (window.tenorGifId) {
-                        fetch(`https://tenor.googleapis.com/v2/registershare?id=${window.tenorGifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`)
-                            .then(() => console.log('✅ Tenor share registered'))
-                            .catch(error => console.log('❌ Failed to register Tenor share:', error));
-                    }
-                });
-            }
-        });
-        
-        // Responsive fixes
-        window.addEventListener('orientationchange', () => {
-            setTimeout(applySafariFix, 200);
-            setTimeout(reduceGlowForiPhone, 200);
-        });
-        
-        window.addEventListener('resize', () => {
-            setTimeout(applySafariFix, 100);
-            setTimeout(reduceGlowForiPhone, 100);
-        });
-
-        // Initialize everything when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🔥 Starting Hunger Games page initialization...');
-            
-            // Initialize page content first
-            initializePageContent();
-            
-            // Start loading the GIF
-            console.log('🎬 Loading Peeta GIF...');
-            try {
-                loadSpecificMeme();
-                console.log('✅ Peeta GIF loading initiated');
-            } catch (error) {
-                console.error('❌ Error loading Peeta GIF:', error);
-            }
-            
-            // Fallback: ensure content shows even if something goes wrong
-            setTimeout(() => {
-                if (!gifLoaded) {
-                    console.log('⚠️ Fallback: Showing content after timeout');
-                    gifLoaded = true;
-                    showMainContent();
-                }
-            }, 8000); // 8 second maximum wait
-        });
-
-        if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
-            const script = document.createElement('script');
-            script.src = 'https://tenor.com/embed.js';
-            document.body.appendChild(script);
-        }
-    </script>
-</body>
-</html>
