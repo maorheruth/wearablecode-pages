@@ -635,12 +635,13 @@
     const TENOR_API_KEY = '';
     const CLIENT_KEY = 'wearablecode_memes';
 
+    // Updated GIF data with the new Tenor GIF ID
     const specificGifData = {
-        id: '24980543',
-        url: 'https://tenor.com/view/reveluiv-gif-24980543',
+        id: '24513228',
+        url: 'https://tenor.com/view/lmlyrukia-gif-24513228',
         embedCode: `
-            <div class="tenor-gif-embed" data-postid="24980543" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
-                <a href="https://tenor.com/view/reveluiv-gif-24980543">Reveluiv GIF</a>
+            <div class="tenor-gif-embed" data-postid="24513228" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
+                <a href="https://tenor.com/view/lmlyrukia-gif-24513228">Lmlyrukia GIF</a>
             </div>
         `
     };  
@@ -717,11 +718,11 @@
         
         // Load GIF from direct URL
         function loadGifFromUrl(gifUrl) {
-            console.log('🎬 Loading Maddy GIF from URL:', gifUrl);
+            console.log('🎬 Loading GIF from URL:', gifUrl);
             const imageElement = document.getElementById('characterImage');
             const img = document.createElement('img');
             img.src = gifUrl;
-            img.alt = "Maddy Perez Euphoria";
+            img.alt = "Character GIF";
             
             img.style.cssText = `
                 width: 100% !important;
@@ -743,7 +744,7 @@
             
             img.onload = function() {
                 clearTimeout(loadTimeout);
-                console.log('✅ Maddy GIF loaded successfully from direct URL');
+                console.log('✅ GIF loaded successfully from direct URL');
                 imageElement.innerHTML = '';
                 imageElement.appendChild(img);
                 imageElement.classList.remove('loading');
@@ -757,14 +758,14 @@
             
             img.onerror = function() {
                 clearTimeout(loadTimeout);
-                console.log('❌ Direct Maddy GIF URL failed, trying embed');
+                console.log('❌ Direct GIF URL failed, trying embed');
                 loadTenorEmbed();
             };
         }
         
         // CRITICAL FIX: Enhanced Tenor embed with immediate loading
         function loadTenorEmbed() {
-            console.log('🚨 CRITICAL: Starting enhanced Tenor embed for Maddy');
+            console.log('🚨 CRITICAL: Starting enhanced Tenor embed');
             const imageElement = document.getElementById('characterImage');
             
             // Clear loading text immediately
@@ -803,7 +804,7 @@
                 document.head.appendChild(script);
                 
                 script.onload = () => {
-                    console.log('🚨 CRITICAL: Tenor script loaded for Maddy');
+                    console.log('🚨 CRITICAL: Tenor script loaded');
                     setTimeout(() => {
                         forceTenorStyling();
                         // Mark as loaded when script loads
@@ -848,7 +849,7 @@
                     iframe.style.setProperty('border-radius', '16px', 'important');
                     
                     iframe.onload = function() {
-                        console.log('🚨 CRITICAL: Maddy iframe actually loaded!');
+                        console.log('🚨 CRITICAL: iframe actually loaded!');
                         clearTimeout(embedTimeout);
                         if (!gifLoaded) {
                             gifLoaded = true;
@@ -866,12 +867,12 @@
             
             addTenorAttribution(imageElement);
             window.tenorGifId = specificGifData.id;
-            console.log('🚨 CRITICAL: Maddy embed initiated with aggressive timeout');
+            console.log('🚨 CRITICAL: embed initiated with aggressive timeout');
         }
         
-        // Load the specific Maddy GIF - CRITICAL FIX
+        // Load the specific GIF - CRITICAL FIX
         function loadSpecificMeme() {
-            console.log('🎬 CRITICAL: loadSpecificMeme function called for Maddy');
+            console.log('🎬 CRITICAL: loadSpecificMeme function called');
             const imageElement = document.getElementById('characterImage');
             
             if (!imageElement) {
@@ -1084,7 +1085,7 @@
             const shopButton = document.querySelector('.shop-button');
             if (shopButton) {
                 shopButton.addEventListener('click', function() {
-                    console.log('Shop button clicked for Maddy GIF');
+                    console.log('Shop button clicked for GIF');
                     if (window.tenorGifId) {
                         fetch(`https://tenor.googleapis.com/v2/registershare?id=${window.tenorGifId}&key=${TENOR_API_KEY}&client_key=${CLIENT_KEY}`)
                             .then(() => console.log('✅ Tenor share registered'))
@@ -1113,12 +1114,12 @@
             initializePageContent();
             
             // Start loading the GIF
-            console.log('🎬 Loading Maddy GIF...');
+            console.log('🎬 Loading new GIF...');
             try {
                 loadSpecificMeme();
-                console.log('✅ Maddy GIF loading initiated');
+                console.log('✅ New GIF loading initiated');
             } catch (error) {
-                console.error('❌ Error loading Maddy GIF:', error);
+                console.error('❌ Error loading new GIF:', error);
             }
             
             // Fallback: ensure content shows even if something goes wrong
