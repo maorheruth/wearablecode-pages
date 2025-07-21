@@ -563,21 +563,24 @@
         // Function to hide loading overlay and show content
         function showMainContent() {
             if (gifLoaded) {
-                const loadingOverlay = document.getElementById('loadingOverlay');
-                const mainContainer = document.getElementById('mainContainer');
-                
-                // Hide loading overlay
-                loadingOverlay.classList.add('hidden');
-                
-                // Show main container
-                mainContainer.classList.add('loaded');
-                
-                // Start animations after content is visible
+                // Wait additional 2-3 seconds to ensure GIF is fully loaded and ready
                 setTimeout(() => {
-                    scheduleRandomAnimation();
-                }, 500);
-                
-                console.log('✅ Content fully loaded and displayed');
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    const mainContainer = document.getElementById('mainContainer');
+                    
+                    // Hide loading overlay
+                    loadingOverlay.classList.add('hidden');
+                    
+                    // Show main container
+                    mainContainer.classList.add('loaded');
+                    
+                    // Start animations after content is visible
+                    setTimeout(() => {
+                        scheduleRandomAnimation();
+                    }, 500);
+                    
+                    console.log('✅ Content fully loaded and displayed after additional delay');
+                }, 2500); // Additional 2.5 second delay for the surprise effect
             } else {
                 console.log('⏳ Waiting for GIF to load before showing content...');
             }
@@ -626,8 +629,12 @@
                     if (window.TenorEmbed) {
                         window.TenorEmbed.init();
                     }
-                    gifLoaded = true;
-                    showMainContent();
+                    
+                    // Wait additional time to ensure GIF is actually playable
+                    setTimeout(() => {
+                        gifLoaded = true;
+                        showMainContent();
+                    }, 1500); // Additional delay to ensure GIF is ready
                 };
                 
                 script.onerror = () => {
@@ -644,8 +651,11 @@
                 if (window.TenorEmbed) {
                     window.TenorEmbed.init();
                 }
-                gifLoaded = true;
-                showMainContent();
+                // Wait additional time before marking as loaded
+                setTimeout(() => {
+                    gifLoaded = true;
+                    showMainContent();
+                }, 1500);
             }
             
             // Fallback timeout to ensure content shows
@@ -655,7 +665,7 @@
                     gifLoaded = true;
                     showMainContent();
                 }
-            }, 2000);
+            }, 8000); // Increased fallback timeout to account for additional delays
         }
         
         // AGGRESSIVE function to force full width styling
@@ -839,7 +849,7 @@
                     gifLoaded = true;
                     showMainContent();
                 }
-            }, 5000);
+            }, 10000); // Increased final fallback timeout
         });
     </script>
 </body>
