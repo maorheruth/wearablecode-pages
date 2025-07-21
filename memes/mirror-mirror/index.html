@@ -524,7 +524,7 @@
         </div>
         
         <div class="quote" id="mainQuote">
-            MIRROR MIRROR ON THE WALL WHO IS THE PRETTIEST OF THEM ALL?
+            SMILE! I got you🤣
         </div>
         
         <div class="source" id="quoteSource">
@@ -543,7 +543,7 @@
         
         <div class="logo">
             <a href="https://wearablecode.com" target="_blank">
-                <img src="../../assets/logos/wearablecode_logo_black.png" alt="WearableCode">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjMwIiB2aWV3Qm94PSIwIDAgMTAwIDMwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8dGV4dCB4PSI1MCIgeT0iMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldlYXJhYmxlQ29kZTwvdGV4dD4KPC9zdmc+" alt="WearableCode">
             </a>
         </div>
     </div>
@@ -592,25 +592,27 @@
         let gifLoaded = false;
         let pageContentReady = false;
 
-        // Function to hide loading overlay and show content - FIXED
+        // Function to hide loading overlay and show content - ONLY CHANGED THIS FUNCTION
         function showMainContent() {
-            // ONLY hide loading overlay when GIF is actually loaded
             if (gifLoaded) {
-                const loadingOverlay = document.getElementById('loadingOverlay');
-                const mainContainer = document.getElementById('mainContainer');
-                
-                // Hide loading overlay
-                loadingOverlay.classList.add('hidden');
-                
-                // Show main container
-                mainContainer.classList.add('loaded');
-                
-                // Start animations after content is visible
+                // Wait additional 2-3 seconds to ensure GIF is fully loaded and ready
                 setTimeout(() => {
-                    scheduleRandomAnimation();
-                }, 500);
-                
-                console.log('✅ Content fully loaded and displayed');
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    const mainContainer = document.getElementById('mainContainer');
+                    
+                    // Hide loading overlay
+                    loadingOverlay.classList.add('hidden');
+                    
+                    // Show main container
+                    mainContainer.classList.add('loaded');
+                    
+                    // Start animations after content is visible
+                    setTimeout(() => {
+                        scheduleRandomAnimation();
+                    }, 500);
+                    
+                    console.log('✅ Content fully loaded and displayed after additional delay');
+                }, 2500); // Additional 2.5 second delay for the surprise effect
             } else {
                 console.log('⏳ Waiting for GIF to load before showing content...');
             }
