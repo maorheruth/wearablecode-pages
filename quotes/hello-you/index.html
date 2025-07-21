@@ -629,206 +629,11 @@
         let gifLoaded = false;
         let pageContentReady = false;
 
-        // Function to hide loading overlay and show content - FIXED
+        // Function to hide loading overlay and show content
         function showMainContent() {
             // ONLY hide loading overlay when GIF is actually loaded
             if (gifLoaded) {
-                const loadingOverlay = document.getElementById('loadingOverlay');
-                const mainContainer = document.getElementById('mainContainer');
-                
-                // Hide loading overlay
-                loadingOverlay.classList.add('hidden');
-                
-                // Show main container
-                mainContainer.classList.add('loaded');
-                
-                // Start animations after content is visible
-                setTimeout(() => {
-                    scheduleRandomAnimation();
-                }, 500);
-                
-                console.log('✅ Content fully loaded and displayed');
-            } else {
-                console.log('⏳ Waiting for GIF to load before showing content...');
-            }
-        }
-        
-        // CRITICAL FIX: Enhanced GIF loading with immediate embed
-        function loadSpecificMeme() {
-            console.log('🚨 CRITICAL: loadSpecificMeme function called for Joe Goldberg');
-            const imageElement = document.getElementById('characterImage');
-            
-            if (!imageElement) {
-                console.error('❌ Character image element not found');
-                return;
-            }
-            
-            imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
-            imageElement.classList.add('loading');
-            
-            // IMMEDIATE EMBED APPROACH - skip API entirely for reliability
-            console.log('🔄 CRITICAL: Loading embed immediately for reliability');
-            loadTenorEmbed();
-        }
-        
-        // CRITICAL FIX: Enhanced Tenor embed with immediate loading
-        function loadTenorEmbed() {
-            console.log('🚨 CRITICAL: Starting enhanced Tenor embed');
-            const imageElement = document.getElementById('characterImage');
-            
-            // Clear loading text immediately
-            imageElement.innerHTML = '';
-            
-            // Create embed container
-            const embedContainer = document.createElement('div');
-            embedContainer.innerHTML = specificGifData.embedCode;
-            embedContainer.style.cssText = `
-                width: 378px !important;
-                height: auto !important;
-                display: block !important;
-                border-radius: 12px;
-                overflow: hidden;
-                margin: 0 auto !important;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-            `;
-            
-            imageElement.appendChild(embedContainer);
-            imageElement.classList.remove('loading');
-            imageElement.classList.add('has-image');
-            
-            // AGGRESSIVE timeout - show content quickly regardless
-            let embedTimeout = setTimeout(() => {
-                console.log('🚨 CRITICAL: Forcing content display - GIF marked as loaded');
-                gifLoaded = true;
-                showMainContent();
-            }, 2000); // Only 2 seconds timeout!
-            
-            // Load Tenor script IMMEDIATELY
-            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
-                const script = document.createElement('script');
-                script.src = 'https://tenor.com/embed.js';
-                script.async = true;
-                document.head.appendChild(script);
-                
-                script.onload = () => {
-                    console.log('🚨 CRITICAL: Tenor script loaded');
-                    setTimeout(() => {
-                        forceTenorStyling();
-                        // Mark as loaded when script loads
-                        if (!gifLoaded) {
-                            clearTimeout(embedTimeout);
-                            gifLoaded = true;
-                            showMainContent();
-                        }
-                    }, 500);
-                };
-            } else {
-                // Script already exists, force load immediately
-                setTimeout(() => {
-                    if (!gifLoaded) {
-                        clearTimeout(embedTimeout);
-                        gifLoaded = true;
-                        showMainContent();
-                    }
-                }, 1000);
-            }
-            
-            function forceTenorStyling() {
-                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
-                const iframe = embedContainer.querySelector('iframe');
-                const allDivs = embedContainer.querySelectorAll('div');
-                
-                if (tenorEmbed) {
-                    tenorEmbed.style.setProperty('width', '378px', 'important');
-                    tenorEmbed.style.setProperty('position', 'relative', 'important');
-                }
-                
-                allDivs.forEach(div => {
-                    div.style.setProperty('width', '378px', 'important');
-                    div.style.setProperty('height', 'auto', 'important');
-                    div.style.setProperty('padding-top', '0', 'important');
-                    div.style.setProperty('position', 'relative', 'important');
-                });
-                
-                if (iframe) {
-                    iframe.style.setProperty('width', '378px', 'important');
-                    iframe.style.setProperty('height', '323px', 'important'); // 378 / 1.7647 aspect ratio
-                    iframe.style.setProperty('position', 'relative', 'important');
-                    iframe.style.setProperty('top', '0', 'important');
-                    iframe.style.setProperty('left', '0', 'important');
-                    iframe.style.setProperty('border-radius', '12px', 'important');
-                    iframe.style.setProperty('border', 'none', 'important');
-                    
-                    iframe.onload = function() {
-                        console.log('🚨 CRITICAL: Iframe actually loaded!');
-                        clearTimeout(embedTimeout);
-                        if (!gifLoaded) {
-                            gifLoaded = true;
-                            showMainContent();
-                        }
-                    };
-                }
-            }
-            
-            // Force styling multiple times
-            setTimeout(forceTenorStyling, 100);
-            setTimeout(forceTenorStyling, 300);
-            setTimeout(forceTenorStyling, 800);
-            setTimeout(forceTenorStyling, 1500);
-            
-            addTenorAttribution(imageElement);
-            window.tenorGifId = specificGifData.id;
-            console.log('🚨 CRITICAL: Joe Goldberg embed initiated with aggressive timeout');
-        }
-        
-        // Add Tenor attribution (required by API terms)
-        function addTenorAttribution(container) {
-            const attribution = document.createElement('div');
-            attribution.style.cssText = `
-                position: absolute;
-                top: 8px;
-                left: 8px;
-                font-size: 9px;
-                color: rgba(255,255,255,0.9);
-                background: rgba(0,0,0,0.6);
-                padding: 3px 7px;
-                border-radius: 6px;
-                text-decoration: none;
-                font-weight: 500;
-                backdrop-filter: blur(4px);
-                z-index: 10;
-            `;
-            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
-            container.style.position = 'relative';
-            container.appendChild(attribution);
-        }
-        
-        // Create random mystery elements
-        function createMysteryElements() {
-            const numberOfElements = Math.floor(Math.random() * 11) + 15; // 15-25 elements
-            
-            for (let i = 0; i < numberOfElements; i++) {
-                const element = document.createElement('div');
-                element.className = 'mystery-element';
-                
-                // Random emoji
-                const randomEmoji = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
-                element.textContent = randomEmoji;
-                
-                // Random position
-                element.style.top = Math.random() * 100 + '%';
-                element.style.left = Math.random() * 100 + '%';
-                
-                // No delay - start animation immediately
-                element.style.animationDelay = '0s';
-                
-                // Random animation duration (5-8 seconds)
-                element.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                
-                // Random font size variation
-                const baseFontSize = 20;
-                const randomSize = baseFontSize + (Math.random() * 8 - 4); // ±4px variation
-                element.style.fontSize = randomSize + 'px';
+                console.log('🎬 GIF is loaded, verifying visibility before showing content...');
                 
                 // Add to body
                 document.body.appendChild(element);
@@ -1084,12 +889,239 @@
             // Fallback: ensure content shows even if something goes wrong
             setTimeout(() => {
                 if (!gifLoaded) {
-                    console.log('⚠️ Fallback: Showing content after timeout');
+                    console.log('⚠️ Fallback: Showing content after extended timeout');
                     gifLoaded = true;
                     showMainContent();
                 }
-            }, 8000); // 8 second maximum wait
+            }, 12000); // Increased to 12 seconds maximum wait
         });
     </script>
 </body>
-</html>
+</html>ditional verification - make sure the GIF element is actually visible
+                const characterImage = document.getElementById('characterImage');
+                const hasVisibleGif = characterImage && (
+                    characterImage.querySelector('img') || 
+                    characterImage.querySelector('iframe') || 
+                    characterImage.querySelector('.tenor-gif-embed')
+                );
+                
+                if (hasVisibleGif) {
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    const mainContainer = document.getElementById('mainContainer');
+                    
+                    console.log('✅ GIF is visually confirmed, hiding loading overlay now');
+                    
+                    // Hide loading overlay
+                    loadingOverlay.classList.add('hidden');
+                    
+                    // Show main container
+                    mainContainer.classList.add('loaded');
+                    
+                    // Start animations after content is visible
+                    setTimeout(() => {
+                        scheduleRandomAnimation();
+                    }, 500);
+                    
+                    console.log('✅ Content fully loaded and displayed');
+                } else {
+                    console.log('⏳ GIF element not yet visible, waiting...');
+                    // Retry after a short delay
+                    setTimeout(showMainContent, 200);
+                }
+            } else {
+                console.log('⏳ Waiting for GIF to load before showing content...');
+            }
+        }
+        
+        // CRITICAL FIX: Enhanced GIF loading with immediate embed
+        function loadSpecificMeme() {
+            console.log('🚨 CRITICAL: loadSpecificMeme function called for Joe Goldberg');
+            const imageElement = document.getElementById('characterImage');
+            
+            if (!imageElement) {
+                console.error('❌ Character image element not found');
+                return;
+            }
+            
+            imageElement.innerHTML = '<div class="char-loading-text">Loading</div>';
+            imageElement.classList.add('loading');
+            
+            // IMMEDIATE EMBED APPROACH - skip API entirely for reliability
+            console.log('🔄 CRITICAL: Loading embed immediately for reliability');
+            loadTenorEmbed();
+        }
+        
+        // CRITICAL FIX: Enhanced Tenor embed with immediate loading
+        function loadTenorEmbed() {
+            console.log('🚨 CRITICAL: Starting enhanced Tenor embed');
+            const imageElement = document.getElementById('characterImage');
+            
+            // Clear loading text immediately
+            imageElement.innerHTML = '';
+            
+            // Create embed container
+            const embedContainer = document.createElement('div');
+            embedContainer.innerHTML = specificGifData.embedCode;
+            embedContainer.style.cssText = `
+                width: 378px !important;
+                height: auto !important;
+                display: block !important;
+                border-radius: 12px;
+                overflow: hidden;
+                margin: 0 auto !important;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            `;
+            
+            imageElement.appendChild(embedContainer);
+            imageElement.classList.remove('loading');
+            imageElement.classList.add('has-image');
+            
+            // MUCH longer timeout - wait for actual content to load
+            let embedTimeout = setTimeout(() => {
+                console.log('🚨 CRITICAL: Forcing content display after extended timeout');
+                if (!gifLoaded) {
+                    gifLoaded = true;
+                    showMainContent();
+                }
+            }, 6000); // Increased to 6 seconds!
+            
+            // Load Tenor script IMMEDIATELY
+            if (!document.querySelector('script[src*="tenor.com/embed.js"]')) {
+                const script = document.createElement('script');
+                script.src = 'https://tenor.com/embed.js';
+                script.async = true;
+                document.head.appendChild(script);
+                
+                script.onload = () => {
+                    console.log('🚨 CRITICAL: Tenor script loaded');
+                    setTimeout(() => {
+                        forceTenorStyling();
+                        // Wait longer before marking as loaded
+                        setTimeout(() => {
+                            if (!gifLoaded) {
+                                console.log('🎬 Tenor embed ready after script load delay');
+                                clearTimeout(embedTimeout);
+                                gifLoaded = true;
+                                showMainContent();
+                            }
+                        }, 1500); // Extra 1.5 second delay after script loads
+                    }, 500);
+                };
+            } else {
+                // Script already exists, but wait longer for embed to be ready
+                setTimeout(() => {
+                    forceTenorStyling();
+                    setTimeout(() => {
+                        if (!gifLoaded) {
+                            console.log('🎬 Tenor embed ready with existing script');
+                            clearTimeout(embedTimeout);
+                            gifLoaded = true;
+                            showMainContent();
+                        }
+                    }, 2000); // 2 second delay when script exists
+                }, 1000);
+            }
+            
+            function forceTenorStyling() {
+                const tenorEmbed = embedContainer.querySelector('.tenor-gif-embed');
+                const iframe = embedContainer.querySelector('iframe');
+                const allDivs = embedContainer.querySelectorAll('div');
+                
+                if (tenorEmbed) {
+                    tenorEmbed.style.setProperty('width', '378px', 'important');
+                    tenorEmbed.style.setProperty('position', 'relative', 'important');
+                }
+                
+                allDivs.forEach(div => {
+                    div.style.setProperty('width', '378px', 'important');
+                    div.style.setProperty('height', 'auto', 'important');
+                    div.style.setProperty('padding-top', '0', 'important');
+                    div.style.setProperty('position', 'relative', 'important');
+                });
+                
+                if (iframe) {
+                    iframe.style.setProperty('width', '378px', 'important');
+                    iframe.style.setProperty('height', '323px', 'important'); // 378 / 1.7647 aspect ratio
+                    iframe.style.setProperty('position', 'relative', 'important');
+                    iframe.style.setProperty('top', '0', 'important');
+                    iframe.style.setProperty('left', '0', 'important');
+                    iframe.style.setProperty('border-radius', '12px', 'important');
+                    iframe.style.setProperty('border', 'none', 'important');
+                    
+                    iframe.onload = function() {
+                        console.log('🚨 CRITICAL: Iframe actually loaded!');
+                        // Wait a bit more after iframe loads to ensure content is visible
+                        setTimeout(() => {
+                            clearTimeout(embedTimeout);
+                            if (!gifLoaded) {
+                                console.log('🎬 Content verified after iframe load');
+                                gifLoaded = true;
+                                showMainContent();
+                            }
+                        }, 800); // 800ms delay after iframe loads
+                    };
+                }
+            }
+            
+            // Force styling multiple times with longer intervals
+            setTimeout(forceTenorStyling, 200);
+            setTimeout(forceTenorStyling, 600);
+            setTimeout(forceTenorStyling, 1200);
+            setTimeout(forceTenorStyling, 2000);
+            setTimeout(forceTenorStyling, 3000);
+            
+            addTenorAttribution(imageElement);
+            window.tenorGifId = specificGifData.id;
+            console.log('🚨 CRITICAL: Joe Goldberg embed initiated with extended timeout for perfect timing');
+        }
+        
+        // Add Tenor attribution (required by API terms)
+        function addTenorAttribution(container) {
+            const attribution = document.createElement('div');
+            attribution.style.cssText = `
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                font-size: 9px;
+                color: rgba(255,255,255,0.9);
+                background: rgba(0,0,0,0.6);
+                padding: 3px 7px;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 500;
+                backdrop-filter: blur(4px);
+                z-index: 10;
+            `;
+            attribution.innerHTML = '<a href="https://tenor.com" target="_blank" style="color: white; text-decoration: none;">via Tenor</a>';
+            container.style.position = 'relative';
+            container.appendChild(attribution);
+        }
+        
+        // Create random mystery elements
+        function createMysteryElements() {
+            const numberOfElements = Math.floor(Math.random() * 11) + 15; // 15-25 elements
+            
+            for (let i = 0; i < numberOfElements; i++) {
+                const element = document.createElement('div');
+                element.className = 'mystery-element';
+                
+                // Random emoji
+                const randomEmoji = mysteryEmojis[Math.floor(Math.random() * mysteryEmojis.length)];
+                element.textContent = randomEmoji;
+                
+                // Random position
+                element.style.top = Math.random() * 100 + '%';
+                element.style.left = Math.random() * 100 + '%';
+                
+                // No delay - start animation immediately
+                element.style.animationDelay = '0s';
+                
+                // Random animation duration (5-8 seconds)
+                element.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                
+                // Random font size variation
+                const baseFontSize = 20;
+                const randomSize = baseFontSize + (Math.random() * 8 - 4); // ±4px variation
+                element.style.fontSize = randomSize + 'px';
+                
+                // Ad
