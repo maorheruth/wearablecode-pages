@@ -1,4 +1,4 @@
-// WearableCode Shopify Chatbot Widget
+// WearableCode Shopify Chatbot Widget - Enhanced Version
 // הוסף את הקוד הזה לשופיפיי לווידג'ט צ'אט בוט מלא
 
 (function() {
@@ -6,8 +6,9 @@
     
     // הגדרות הצ'אט בוט
     const CHATBOT_CONFIG = {
-        apiUrl: 'https://wearablecode-pages.vercel.app/api/chat',
-        position: 'bottom-right', // bottom-right, bottom-left
+        apiUrl: 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium',
+        huggingfaceToken: 'hf_pYTJTQzgWzSEGRk6ZmgKvdwJkpWBDqBuzP', // הטוקן שלך
+        position: 'bottom-right',
         zIndex: 999999
     };
 
@@ -16,13 +17,13 @@
         return;
     }
 
-    // CSS עבור הצ'אט בוט
+    // CSS עבור הצ'אט בוט - מעודכן עם תיקוני מובייל
     const chatbotCSS = `
         /* WearableCode Chatbot Styles */
         .wc-chatbot-container {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 15px;
+            right: 15px;
             z-index: ${CHATBOT_CONFIG.zIndex};
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             direction: rtl;
@@ -204,6 +205,13 @@
             transform: scale(1.05);
         }
 
+        /* החץ מתוקן - פונה שמאלה */
+        .wc-send-button::before {
+            content: "←";
+            font-size: 16px;
+            font-weight: bold;
+        }
+
         .wc-typing {
             display: flex;
             gap: 4px;
@@ -227,18 +235,62 @@
             30% { transform: translateY(-10px); }
         }
 
-        /* Mobile Responsive */
+        /* Mobile Responsive - מעודכן */
         @media (max-width: 480px) {
             .wc-chatbot-container {
-                right: 15px;
-                bottom: 15px;
+                right: 10px;
+                bottom: 10px;
+            }
+            
+            .wc-chat-button {
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
             }
             
             .wc-chat-window {
-                width: 90vw;
-                height: 80vh;
-                right: -75vw;
-                bottom: 80px;
+                width: calc(100vw - 20px);
+                height: calc(100vh - 120px);
+                right: calc(-100vw + 75px);
+                bottom: 75px;
+                max-width: 350px;
+                max-height: 500px;
+            }
+            
+            .wc-chat-header {
+                padding: 15px;
+            }
+            
+            .wc-assistant-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+            }
+            
+            .wc-assistant-info h3 {
+                font-size: 14px;
+            }
+            
+            .wc-assistant-info p {
+                font-size: 11px;
+            }
+            
+            .wc-chat-messages {
+                padding: 15px;
+            }
+            
+            .wc-chat-input-container {
+                padding: 12px 15px;
+            }
+            
+            .wc-chat-input {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+            
+            .wc-send-button {
+                width: 32px;
+                height: 32px;
             }
         }
     `;
@@ -248,6 +300,7 @@
         constructor() {
             this.isOpen = false;
             this.messages = [];
+            this.conversationHistory = [];
             this.init();
         }
 
@@ -257,7 +310,7 @@
             this.bindEvents();
             
             // הודעת ברוכים הבאים
-            this.addMessage('שלום! איך אני יכול לעזור לך היום? 😊', 'bot');
+            this.addMessage('שלום! אני כאן לעזור לך עם מוצרי WearableCode. איך אני יכול לעזור לך היום? 😊', 'bot');
         }
 
         addStyles() {
@@ -286,9 +339,7 @@
 
                     <div class="wc-chat-input-container">
                         <input type="text" class="wc-chat-input" id="wcChatInput" placeholder="כתוב הודעה..." />
-                        <button class="wc-send-button" id="wcSendButton">
-                            <span>➤</span>
-                        </button>
+                        <button class="wc-send-button" id="wcSendButton"></button>
                     </div>
                 </div>
             `;
@@ -316,6 +367,7 @@
             this.isOpen = !this.isOpen;
             if (this.isOpen) {
                 this.chatWindow.classList.add('open');
+                this.chatInput.focus();
             } else {
                 this.chatWindow.classList.remove('open');
             }
@@ -368,54 +420,132 @@
             this.showTyping();
 
             try {
-                const response = await fetch(CHATBOT_CONFIG.apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ message: message })
-                });
-
-                const data = await response.json();
+                // ניסיון להשתמש ב-Hugging Face AI
+                const aiResponse = await this.getAIResponse(message);
                 
                 this.hideTyping();
-                
-                if (data.success) {
-                    this.addMessage(data.response, 'bot');
-                } else {
-                    throw new Error('API Error');
-                }
+                this.addMessage(aiResponse, 'bot');
 
             } catch (error) {
                 console.log('שגיאה בצ\'אט בוט:', error);
                 this.hideTyping();
                 
-                // תשובת fallback בעברית
-                const fallbackResponse = this.getFallbackResponse(message);
+                // תשובת fallback חכמה יותר
+                const fallbackResponse = this.getSmartFallbackResponse(message);
                 this.addMessage(fallbackResponse, 'bot');
             }
         }
 
-        getFallbackResponse(message) {
+        async getAIResponse(message) {
+            // הוספת הקשר לשיחה
+            this.conversationHistory.push(message);
+            
+            // שמירה על 5 הודעות אחרונות לקונטקסט
+            if (this.conversationHistory.length > 5) {
+                this.conversationHistory = this.conversationHistory.slice(-5);
+            }
+
+            const response = await fetch(CHATBOT_CONFIG.apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${CHATBOT_CONFIG.huggingfaceToken}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    inputs: {
+                        past_user_inputs: this.conversationHistory.slice(0, -1),
+                        generated_responses: [],
+                        text: message
+                    },
+                    parameters: {
+                        max_length: 150,
+                        temperature: 0.7,
+                        repetition_penalty: 1.2
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('AI API Error');
+            }
+
+            const data = await response.json();
+            
+            if (data.generated_text) {
+                return this.translateToHebrew(data.generated_text);
+            } else {
+                throw new Error('No AI response');
+            }
+        }
+
+        translateToHebrew(text) {
+            // תרגום בסיסי למילים נפוצות
+            const translations = {
+                'hello': 'שלום',
+                'hi': 'היי',
+                'thanks': 'תודה',
+                'price': 'מחיר',
+                'shirt': 'חולצה',
+                'size': 'מידה',
+                'shipping': 'משלוח',
+                'yes': 'כן',
+                'no': 'לא'
+            };
+
+            let translated = text;
+            Object.keys(translations).forEach(eng => {
+                translated = translated.replace(new RegExp(eng, 'gi'), translations[eng]);
+            });
+
+            return translated;
+        }
+
+        getSmartFallbackResponse(message) {
             const lowerMessage = message.toLowerCase();
             
-            if (lowerMessage.includes('מחיר') || lowerMessage.includes('כמה עולה')) {
-                return 'המחירים שלנו נעים בין ₪79-99 לחולצה. יש לנו הנחות מיוחדות ללקוחות חדשים! 💰';
+            // זיהוי כוונות מתקדם יותר
+            if (lowerMessage.includes('מחיר') || lowerMessage.includes('כמה עולה') || lowerMessage.includes('₪')) {
+                return 'המחירים שלנו נעים בין ₪79-99 לחולצה, תלוי בעיצוב. יש לנו הנחות מיוחדות ללקוחות חדשים של 15%! רוצה לראות את המבצעים הנוכחיים? 💰';
             }
             
-            if (lowerMessage.includes('משלוח')) {
-                return 'משלוח חינם מעל ₪150! משלוח רגיל עולה ₪25 ומגיע תוך 3-5 ימי עסקים 📦';
+            if (lowerMessage.includes('משלוח') || lowerMessage.includes('דואר') || lowerMessage.includes('שליח')) {
+                return 'משלוח חינם בהזמנה מעל ₪150! משלוח רגיל עולה ₪25 ומגיע תוך 3-5 ימי עסקים. יש לנו גם אפשרות איסוף עצמי ממרכזי חלוקה 📦';
             }
             
-            if (lowerMessage.includes('החזרה') || lowerMessage.includes('החלפה')) {
-                return 'ההחזרות שלנו עד 30 יום, החלפת מידה חינם! המוצר צריך להיות במצב מקורי 🔄';
+            if (lowerMessage.includes('החזרה') || lowerMessage.includes('החלפה') || lowerMessage.includes('החזר')) {
+                return 'מדיניות ההחזרות שלנו נדיבה מאוד! החזרה עד 30 יום, החלפת מידה חינם! המוצר צריך להיות במצב מקורי עם התגיות. רוצה פרטים נוספים? 🔄';
             }
             
-            if (lowerMessage.includes('מידה') || lowerMessage.includes('גודל')) {
-                return 'יש לנו מידות S, M, L, XL. אפשר לראות את מדריך המידות באתר או לפנות אלינו לעזרה! 📏';
+            if (lowerMessage.includes('מידה') || lowerMessage.includes('גודל') || lowerMessage.includes('size')) {
+                return 'יש לנו מידות S, M, L, XL, XXL. הכי חשוב - יש מדריך מידות מפורט באתר עם מדידות מדויקות. מתלבט/ת במידה? אני יכול לעזור לך לבחור! 📏';
             }
             
-            return 'תודה על הפניה! איך אני יכול לעזור לך עם המוצרים שלנו? אני יכול לעזור עם מידע על חולצות, מחירים, משלוח או כל דבר אחר 😊';
+            if (lowerMessage.includes('עיצוב') || lowerMessage.includes('דגם') || lowerMessage.includes('חולצה')) {
+                return 'יש לנו מגוון ענק של עיצובים מגניבים! מציטוטים מסדרות, מימים ישראליים, ועיצובים יחודיים. איזה סגנון מעניין אותך? קומיקס, סדרות, או משהו ישראלי? 🎨';
+            }
+            
+            if (lowerMessage.includes('איכות') || lowerMessage.includes('חומר') || lowerMessage.includes('בד')) {
+                return 'אנחנו משתמשים רק בבדים איכותיים - כותנה 100% או תערובות נוחות שלא מתכווצות בכביסה. ההדפסה עמידה ולא נסדקת. איכות פרימיום במחיר הוגן! 👔';
+            }
+            
+            if (lowerMessage.includes('שלום') || lowerMessage.includes('היי') || lowerMessage.includes('hello')) {
+                return 'שלום וברוכים הבאים ל-WearableCode! 👋 אני כאן לעזור לך למצוא את החולצה המושלמת. מה מעניין אותך - מחירים, עיצובים, מידות, או משהו אחר?';
+            }
+            
+            if (lowerMessage.includes('תודה') || lowerMessage.includes('thanks')) {
+                return 'בכיף! אני כאן בשבילך. אם יש עוד שאלות או אם תרצה המלצות על חולצות ספציפיות, אל תהסס לשאול! 😊';
+            }
+            
+            // תשובה כללית חכמה
+            return `הבנתי את השאלה שלך! אני מתמחה במוצרי WearableCode - חולצות מגניבות עם עיצובים יחודיים. אני יכול לעזור לך עם:
+            
+📋 מידע על מוצרים ומחירים
+📏 עזרה בבחירת מידה
+🚚 פרטי משלוח והחזרות
+🎨 המלצות על עיצובים
+💬 כל שאלה אחרת!
+
+מה הכי מעניין אותך?`;
         }
     }
 
