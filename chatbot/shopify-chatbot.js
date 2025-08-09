@@ -1,17 +1,18 @@
-// WearableCode Shopify Chatbot עם Google Gemini API - בטוח ומתקדם
-// קח את ה-API Key מכאן: https://ai.google.dev/gemini-api/docs/api-key
+// WearableCode Shopify Chatbot עם Google Gemini API - גרסה מתוקנת
+// צריך לקבל API Key מ: https://aistudio.google.com/app/apikey
 
 (function() {
     'use strict';
     
     // *** חשוב: תחליף את ה-API KEY הזה בשלך! ***
-    const GEMINI_API_KEY = 'AIzaSyCJHnfJsB0FfcbSuST2Pf3CVFTu6WJzNNY'; // קח מ-https://ai.google.dev
+    const GEMINI_API_KEY = 'AIzaSyCJHnfJsB0FfcbSuST2Pf3CVFTu6WJzNNY'; // הכנס כאן את המפתח שלך
     
-    // הגדרות הצ'אט בוט
+    // הגדרות הצ'אט בוט - URL מתוקן!
     const CHATBOT_CONFIG = {
         position: 'bottom-right',
         zIndex: 999999,
-        apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+        // URL מתוקן של Gemini API
+        apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent',
         maxRetries: 3
     };
 
@@ -35,7 +36,7 @@
             this.bindEvents();
             
             // הודעת ברוכים הבאים
-            this.addMessage('שלום! אני עוזר WearableCode החכם 🤖 איך אני יכול לעזור לך היום?', 'bot');
+            this.addMessage('🤖 שלום! אני עוזר WearableCode החכם. איך אני יכול לעזור לך היום?', 'bot');
         }
 
         addStyles() {
@@ -285,7 +286,7 @@
                         <div class="wc-assistant-avatar">🤖</div>
                         <div class="wc-assistant-info">
                             <h3>עוזר WearableCode</h3>
-                            <p>מופעל על ידי Google Gemini AI</p>
+                            <p>מופעל על ידי Google Gemini</p>
                         </div>
                     </div>
 
@@ -373,6 +374,11 @@
             this.showTyping();
 
             try {
+                // בדיקה אם ה-API Key מוגדר
+                if (!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
+                    throw new Error('API key not configured');
+                }
+
                 // הוספת הקשר של WearableCode לשיחה
                 const contextualMessage = `אתה עוזר חכם של חברת WearableCode - חנות חולצות מגניבות עם עיצובים יחודיים. 
                 תמיד תענה בעברית ותעזור ללקוחות עם:
@@ -400,40 +406,54 @@
         }
 
         async callGeminiAPI(message) {
-            if (!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
-                throw new Error('API key not configured');
-            }
-
-            const response = await fetch(`${CHATBOT_CONFIG.apiUrl}?key=${GEMINI_API_KEY}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: message
-                        }]
-                    }],
-                    generationConfig: {
-                        temperature: 0.7,
-                        topK: 40,
-                        topP: 0.95,
-                        maxOutputTokens: 150,
-                    }
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
+            console.log('🚀 קורא ל-Gemini API...');
             
-            if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                return data.candidates[0].content.parts[0].text;
-            } else {
-                throw new Error('No response from Gemini');
+            try {
+                const response = await fetch(`${CHATBOT_CONFIG.apiUrl}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: message
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            topK: 40,
+                            topP: 0.95,
+                            maxOutputTokens: 150,
+                        },
+                        safetySettings: [
+                            {
+                                category: "HARM_CATEGORY_HARASSMENT",
+                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                            }
+                        ]
+                    })
+                });
+
+                console.log('📡 תגובת שרת:', response.status);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ שגיאת API:', response.status, errorText);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('✅ נתונים מGemini:', data);
+                
+                if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
+                    return data.candidates[0].content.parts[0].text;
+                } else {
+                    throw new Error('No valid response from Gemini');
+                }
+            } catch (error) {
+                console.error('❌ שגיאה בקריאה ל-Gemini:', error);
+                throw error;
             }
         }
 
@@ -459,6 +479,15 @@
             
             if (lowerMessage.includes('עיצוב') || lowerMessage.includes('חולצה')) {
                 return 'יש לנו מגוון ענק של עיצובים מגניבים! מציטוטים מסדרות, מימים ישראליים, ועיצובים יחודיים 🎨';
+            }
+            
+            if (lowerMessage.includes('שלום') || lowerMessage.includes('היי')) {
+                return 'שלום וברוכים הבאים ל-WearableCode! 👋 איך אני יכול לעזור לך היום?';
+            }
+            
+            // אם ה-API לא עובד
+            if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
+                return '⚠️ הצ\'אט בוט פועל במצב מקומי. לקבלת תשובות מתקדמות יותר, צריך להוסיף API Key. בינתיים אני יכול לעזור עם שאלות בסיסיות על WearableCode!';
             }
             
             return 'תודה על השאלה! אני כאן לעזור לך עם כל מה שקשור ל-WearableCode. איך אני יכול לעזור לך עוד? 😊';
