@@ -7,7 +7,7 @@
     // הגדרות הצ'אט בוט
     const CHATBOT_CONFIG = {
         apiUrl: 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium',
-        huggingfaceToken: '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', // הטוקן שלך
+        huggingfaceToken: 'hf_pYTJTQzgWzSEGRk6ZmgKvdwJkpWBDqBuzP', // הטוקן שלך
         position: 'bottom-right',
         zIndex: 999999
     };
@@ -22,12 +22,24 @@
         /* WearableCode Chatbot Styles */
         .wc-chatbot-container {
             position: fixed;
-            bottom: 15px;
-            left: 15px; /* שינוי לצד שמאל במקום ימין */
+            bottom: 20px;
+            right: 20px; /* חזרה לימין */
             z-index: ${CHATBOT_CONFIG.zIndex};
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             direction: rtl;
-            max-width: calc(100vw - 30px); /* מניעת יציאה מהמסך */
+            max-width: 400px;
+            /* וידוא שהצ'אט נשאר בתוך הגבולות */
+            margin-right: 0;
+            margin-left: auto;
+        }
+        
+        /* התאמה לאתרי שופיפיי - מניעת יציאה מהפריים */
+        @media (max-width: 768px) {
+            .wc-chatbot-container {
+                right: 10px;
+                bottom: 10px;
+                max-width: calc(100vw - 30px);
+            }
         }
 
         .wc-chat-button {
@@ -59,7 +71,7 @@
         .wc-chat-window {
             position: absolute;
             bottom: 80px;
-            left: 0; /* שינוי לשמאל */
+            right: 0; /* חזרה לימין */
             width: 380px;
             height: 600px;
             background: white;
@@ -69,7 +81,9 @@
             flex-direction: column;
             overflow: hidden;
             border: 1px solid #e5e7eb;
-            max-width: calc(100vw - 30px); /* מניעת יציאה מהמסך */
+            /* מניעת יציאה מהמסך */
+            max-width: calc(100vw - 40px);
+            max-height: calc(100vh - 120px);
         }
 
         .wc-chat-window.open {
@@ -240,8 +254,9 @@
         /* Mobile Responsive - מעודכן */
         @media (max-width: 480px) {
             .wc-chatbot-container {
-                left: 10px; /* שמאל במובייל */
-                bottom: 10px;
+                right: 15px; /* ימין במובייל */
+                bottom: 15px;
+                max-width: calc(100vw - 30px);
             }
             
             .wc-chat-button {
@@ -251,9 +266,9 @@
             }
             
             .wc-chat-window {
-                width: calc(100vw - 30px); /* רוחב מותאם */
-                height: calc(100vh - 120px);
-                left: 0; /* ממורכז */
+                width: calc(100vw - 40px); /* רוחב מותאם טוב יותר */
+                height: calc(100vh - 140px);
+                right: -320px; /* מיקום טוב יותר במובייל */
                 bottom: 75px;
                 max-width: 350px;
                 max-height: 500px;
