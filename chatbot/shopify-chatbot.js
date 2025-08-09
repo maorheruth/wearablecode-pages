@@ -23,23 +23,11 @@
         .wc-chatbot-container {
             position: fixed;
             bottom: 20px;
-            right: 20px; /* חזרה לימין */
+            right: 20px; /* כפתור בצד ימין */
             z-index: ${CHATBOT_CONFIG.zIndex};
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            direction: rtl;
+            direction: rtl; /* עברית מימין לשמאל */
             max-width: 400px;
-            /* וידוא שהצ'אט נשאר בתוך הגבולות */
-            margin-right: 0;
-            margin-left: auto;
-        }
-        
-        /* התאמה לאתרי שופיפיי - מניעת יציאה מהפריים */
-        @media (max-width: 768px) {
-            .wc-chatbot-container {
-                right: 10px;
-                bottom: 10px;
-                max-width: calc(100vw - 30px);
-            }
         }
 
         .wc-chat-button {
@@ -71,7 +59,7 @@
         .wc-chat-window {
             position: absolute;
             bottom: 80px;
-            right: 0; /* חזרה לימין */
+            right: 0; /* חלון מוצמד לימין */
             width: 380px;
             height: 600px;
             background: white;
@@ -81,6 +69,7 @@
             flex-direction: column;
             overflow: hidden;
             border: 1px solid #e5e7eb;
+            direction: rtl; /* עברית מימין לשמאל */
             /* מניעת יציאה מהמסך */
             max-width: calc(100vw - 40px);
             max-height: calc(100vh - 120px);
@@ -109,6 +98,8 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            direction: rtl; /* עברית בכותרת */
+            text-align: right; /* יישור לימין */
         }
 
         .wc-assistant-avatar {
@@ -139,6 +130,7 @@
             padding: 20px;
             overflow-y: auto;
             background: white;
+            direction: rtl; /* עברית בהודעות */
         }
 
         .wc-message {
@@ -149,11 +141,11 @@
         }
 
         .wc-message.user {
-            justify-content: flex-end;
+            justify-content: flex-start; /* הודעות משתמש מימין */
         }
 
         .wc-message.bot {
-            justify-content: flex-start;
+            justify-content: flex-end; /* הודעות בוט משמאל */
         }
 
         .wc-message-content {
@@ -167,13 +159,15 @@
         .wc-message.user .wc-message-content {
             background: #7c3aed;
             color: white;
-            border-bottom-right-radius: 4px;
+            border-bottom-left-radius: 4px; /* פינה קטנה משמאל למשתמש */
+            text-align: right; /* טקסט יישור ימין */
         }
 
         .wc-message.bot .wc-message-content {
             background: #f3f4f6;
             color: #374151;
-            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px; /* פינה קטנה מימין לבוט */
+            text-align: right; /* טקסט יישור ימין */
         }
 
         .wc-chat-input-container {
@@ -183,6 +177,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            direction: rtl; /* עברית באיזור הקלט */
         }
 
         .wc-chat-input {
@@ -254,9 +249,9 @@
         /* Mobile Responsive - מעודכן */
         @media (max-width: 480px) {
             .wc-chatbot-container {
-                right: 15px; /* ימין במובייל */
+                right: 15px; /* ימין במובייל, רחוק מאייקון נגישות */
                 bottom: 15px;
-                max-width: calc(100vw - 30px);
+                max-width: calc(100vw - 80px); /* מקום לאייקון נגישות */
             }
             
             .wc-chat-button {
@@ -266,9 +261,9 @@
             }
             
             .wc-chat-window {
-                width: calc(100vw - 40px); /* רוחב מותאם טוב יותר */
+                width: calc(100vw - 30px); /* רוחב מותאם טוב יותר */
                 height: calc(100vh - 140px);
-                right: -320px; /* מיקום טוב יותר במובייל */
+                right: -15px; /* מוצמד לימין במובייל */
                 bottom: 75px;
                 max-width: 350px;
                 max-height: 500px;
