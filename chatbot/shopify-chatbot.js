@@ -7,7 +7,7 @@
     // הגדרות הצ'אט בוט
     const CHATBOT_CONFIG = {
         apiUrl: 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium',
-        huggingfaceToken: 'hf_pYTJTQzgWzSEGRk6ZmgKvdwJkpWBDqBuzP', // הטוקן שלך
+        huggingfaceToken: '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', // הטוקן שלך
         position: 'bottom-right',
         zIndex: 999999
     };
@@ -23,10 +23,11 @@
         .wc-chatbot-container {
             position: fixed;
             bottom: 15px;
-            right: 15px;
+            left: 15px; /* שינוי לצד שמאל במקום ימין */
             z-index: ${CHATBOT_CONFIG.zIndex};
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             direction: rtl;
+            max-width: calc(100vw - 30px); /* מניעת יציאה מהמסך */
         }
 
         .wc-chat-button {
@@ -58,7 +59,7 @@
         .wc-chat-window {
             position: absolute;
             bottom: 80px;
-            right: 0;
+            left: 0; /* שינוי לשמאל */
             width: 380px;
             height: 600px;
             background: white;
@@ -68,6 +69,7 @@
             flex-direction: column;
             overflow: hidden;
             border: 1px solid #e5e7eb;
+            max-width: calc(100vw - 30px); /* מניעת יציאה מהמסך */
         }
 
         .wc-chat-window.open {
@@ -238,7 +240,7 @@
         /* Mobile Responsive - מעודכן */
         @media (max-width: 480px) {
             .wc-chatbot-container {
-                right: 10px;
+                left: 10px; /* שמאל במובייל */
                 bottom: 10px;
             }
             
@@ -249,9 +251,9 @@
             }
             
             .wc-chat-window {
-                width: calc(100vw - 20px);
+                width: calc(100vw - 30px); /* רוחב מותאם */
                 height: calc(100vh - 120px);
-                right: calc(-100vw + 75px);
+                left: 0; /* ממורכז */
                 bottom: 75px;
                 max-width: 350px;
                 max-height: 500px;
@@ -437,44 +439,41 @@
         }
 
         async getAIResponse(message) {
-            // הוספת הקשר לשיחה
-            this.conversationHistory.push(message);
-            
-            // שמירה על 5 הודעות אחרונות לקונטקסט
-            if (this.conversationHistory.length > 5) {
-                this.conversationHistory = this.conversationHistory.slice(-5);
-            }
-
-            const response = await fetch(CHATBOT_CONFIG.apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${CHATBOT_CONFIG.huggingfaceToken}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    inputs: {
-                        past_user_inputs: this.conversationHistory.slice(0, -1),
-                        generated_responses: [],
-                        text: message
+            // בדיקה פשוטה אם Hugging Face עובד
+            try {
+                console.log('מנסה להתחבר ל-Hugging Face...');
+                
+                const response = await fetch('https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${CHATBOT_CONFIG.huggingfaceToken}`,
+                        'Content-Type': 'application/json',
                     },
-                    parameters: {
-                        max_length: 150,
-                        temperature: 0.7,
-                        repetition_penalty: 1.2
+                    body: JSON.stringify({
+                        inputs: message,
+                        parameters: {
+                            max_length: 100,
+                            temperature: 0.7
+                        }
+                    })
+                });
+
+                console.log('תגובת API:', response.status);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('נתונים מ-API:', data);
+                    
+                    if (data && data[0] && data[0].generated_text) {
+                        return data[0].generated_text;
                     }
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('AI API Error');
-            }
-
-            const data = await response.json();
-            
-            if (data.generated_text) {
-                return this.translateToHebrew(data.generated_text);
-            } else {
-                throw new Error('No AI response');
+                }
+                
+                throw new Error('Hugging Face API לא זמין');
+                
+            } catch (error) {
+                console.log('שגיאה ב-Hugging Face:', error);
+                throw error; // נעבור ל-fallback
             }
         }
 
