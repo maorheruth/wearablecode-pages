@@ -6,8 +6,8 @@
     
     // הגדרות הצ'אט בוט
     const CHATBOT_CONFIG = {
-        apiUrl: 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium',
-        huggingfaceToken: 'hf_pYTJTQzgWzSEGRk6ZmgKvdwJkpWBDqBuzP', // הטוקן שלך
+        apiUrl: 'https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill',
+        huggingfaceToken: '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', // טוקן
         position: 'bottom-right',
         zIndex: 999999
     };
@@ -446,11 +446,10 @@
         }
 
         async getAIResponse(message) {
-            // בדיקה פשוטה אם Hugging Face עובד
             try {
-                console.log('מנסה להתחבר ל-Hugging Face...');
+                console.log('🤖 מנסה להתחבר ל-Hugging Face עם BlenderBot...');
                 
-                const response = await fetch('https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium', {
+                const response = await fetch(CHATBOT_CONFIG.apiUrl, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${CHATBOT_CONFIG.huggingfaceToken}`,
@@ -460,27 +459,51 @@
                         inputs: message,
                         parameters: {
                             max_length: 100,
-                            temperature: 0.7
+                            temperature: 0.7,
+                            do_sample: true
+                        },
+                        options: {
+                            wait_for_model: true
                         }
                     })
                 });
 
-                console.log('תגובת API:', response.status);
+                console.log('📡 תגובת API:', response.status, response.statusText);
+
+                if (response.status === 401) {
+                    console.log('🔑 שגיאת הרשאה - הטוקן לא תקף');
+                    throw new Error('Token not valid');
+                }
+
+                if (response.status === 503) {
+                    console.log('⏳ המודל נטען... ננסה שוב');
+                    // המתנה קצרה ונסיון נוסף
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    return await this.getAIResponse(message);
+                }
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('נתונים מ-API:', data);
+                    console.log('✅ נתונים מ-API:', data);
                     
                     if (data && data[0] && data[0].generated_text) {
-                        return data[0].generated_text;
+                        let aiText = data[0].generated_text;
+                        
+                        // ניקוי הטקסט מההודעה המקורית
+                        if (aiText.startsWith(message)) {
+                            aiText = aiText.substring(message.length).trim();
+                        }
+                        
+                        // תרגום בסיסי לעברית
+                        return this.translateToHebrew(aiText) || 'מצטער, לא הצלחתי להבין. אוכל לעזור לך עם שאלות על WearableCode!';
                     }
                 }
                 
-                throw new Error('Hugging Face API לא זמין');
+                throw new Error('No valid response from API');
                 
             } catch (error) {
-                console.log('שגיאה ב-Hugging Face:', error);
-                throw error; // נעבור ל-fallback
+                console.log('❌ שגיאה ב-Hugging Face:', error.message);
+                throw error;
             }
         }
 
