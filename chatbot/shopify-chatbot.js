@@ -7,7 +7,7 @@
     // הגדרות הצ'אט בוט
     const CHATBOT_CONFIG = {
         apiUrl: 'https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill',
-        huggingfaceToken: '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', // טוקן
+        huggingfaceToken: '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', // תחליף רק בשופיפיי!
         position: 'bottom-right',
         zIndex: 999999
     };
