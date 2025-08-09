@@ -59,7 +59,7 @@
         .wc-chat-window {
             position: absolute;
             bottom: 80px;
-            right: 0; /* חלון מוצמד לימין */
+            right: 0; /* מוצמד לימין - כמו שערכת בקונסול */
             width: 380px;
             height: 600px;
             background: white;
@@ -70,9 +70,6 @@
             overflow: hidden;
             border: 1px solid #e5e7eb;
             direction: rtl; /* עברית מימין לשמאל */
-            /* מניעת יציאה מהמסך */
-            max-width: calc(100vw - 40px);
-            max-height: calc(100vh - 120px);
         }
 
         .wc-chat-window.open {
@@ -261,9 +258,9 @@
             }
             
             .wc-chat-window {
-                width: calc(100vw - 30px); /* רוחב מותאם טוב יותר */
+                width: calc(100vw - 30px); /* רוחב מותאם במובייל */
                 height: calc(100vh - 140px);
-                right: -15px; /* מוצמד לימין במובייל */
+                right: 0; /* מוצמד לימין גם במובייל */
                 bottom: 75px;
                 max-width: 350px;
                 max-height: 500px;
