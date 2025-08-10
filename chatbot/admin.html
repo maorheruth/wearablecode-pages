@@ -300,7 +300,7 @@
         }
 
         .form-group textarea {
-            height: 240px; /* כפול גובה מהמקורי */
+            height: 240px;
             resize: vertical;
             line-height: 1.6;
         }
@@ -356,7 +356,7 @@
             color: #94a3b8;
         }
 
-        /* Preview Panel - עיצוב כמו הצ'אטבוט האמיתי */
+        /* Preview Panel */
         .preview-panel {
             background: #1e293b;
             padding: 20px;
@@ -694,7 +694,7 @@
         <div class="login-box">
             <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
             <div class="password-container">
-                <input type="password" id="passwordInput" class="login-input" placeholder="Aawearableadmin" autocomplete="off">
+                <input type="password" id="passwordInput" class="login-input" placeholder="הזן סיסמת מנהל..." autocomplete="off">
                 <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
             </div>
             <button type="button" id="loginButton" class="login-btn" onclick="checkPassword()">כניסה</button>
@@ -706,7 +706,7 @@
     <div class="app-container" id="mainApp">
         <div class="app-header">
             <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
-            <button class="logout-btn" id="logoutButton">🚪 התנתק</button>
+            <button class="logout-btn" onclick="logout()">🚪 התנתק</button>
         </div>
 
         <div class="main-content">
@@ -716,7 +716,7 @@
                 <div id="questionsList">
                     <!-- Questions will be loaded here -->
                 </div>
-                <button class="add-question-btn" id="addQuestionBtn">➕ שאלה חדשה</button>
+                <button class="add-question-btn" onclick="addNewQuestion()">➕ שאלה חדשה</button>
             </div>
 
             <!-- Edit Panel -->
@@ -755,7 +755,7 @@
                     </div>
                     <div class="preview-input-container">
                         <textarea class="preview-input" id="previewInput" placeholder="כתוב הודעה..." rows="1"></textarea>
-                        <button id="testChatbotButton" class="preview-send-btn">
+                        <button onclick="testChatbot()" class="preview-send-btn">
                             <svg viewBox="0 0 24 24">
                                 <path d="M22.01 3L2 10l7 2 2 7z"/>
                             </svg>
@@ -765,7 +765,7 @@
 
                 <div class="update-section">
                     <h3>🔄 עדכון הצ'אטבוט</h3>
-                    <button class="update-btn" id="updateChatbotButton">
+                    <button class="update-btn" onclick="updateChatbot()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
                         </svg>
@@ -777,8 +777,8 @@
     </div>
 
     <script>
-        // הסיסמה הנדרשת - פשוטה וקבועה
-        const ADMIN_PASSWORD = 'Aawearableadmin';
+        // הסיסמה הנדרשת - סיסמה מאובטחת יותר
+        const ADMIN_PASSWORD = 'Aawearableadmin2024!';
         const PASSWORD_KEY = 'wearablecode_admin_auth';
         
         // מאגר התשובות (נתונים התחלתיים)
@@ -813,10 +813,10 @@
 
         // בדיקת התחברות בעת טעינת הדף
         function checkAuth() {
-            const stored = localStorage.getItem('wearablecode_admin_auth');
-            console.log('🔍 בודק התחברות שמורה:', stored);
-            if (stored === 'Aawearableadmin') {
-                console.log('✅ התחברות אוטומטית מוצלחת');
+            const stored = localStorage.getItem(PASSWORD_KEY);
+            console.log('🔍 בודק התחברות שמורה:', stored ? 'קיים' : 'לא קיים');
+            if (stored === 'authenticated') {
+                console.log('✅ התחברות אוטומטית מוצלחה');
                 showMainApp();
             } else {
                 console.log('❌ נדרשת התחברות');
@@ -838,8 +838,8 @@
             loadQuestionsList();
         }
 
-        // פונקציות גלובליות שמוגדרות לפני הכל
-        window.checkPassword = function() {
+        // בדיקת סיסמה
+        function checkPassword() {
             console.log('🔑 checkPassword נקראה');
             const passwordInput = document.getElementById('passwordInput');
             const password = passwordInput.value.trim();
@@ -848,20 +848,22 @@
             console.log('הסיסמה שהוקלדה:', password);
             console.log('אורך הסיסמה:', password.length);
             
-            if (password === 'Aawearableadmin') {
+            if (password === ADMIN_PASSWORD) {
                 console.log('✅ סיסמה נכונה! מתחבר...');
-                localStorage.setItem('wearablecode_admin_auth', password);
+                localStorage.setItem(PASSWORD_KEY, 'authenticated');
                 showMainApp();
                 errorDiv.textContent = '';
+                passwordInput.value = '';
             } else {
                 console.log('❌ סיסמה שגויה');
-                errorDiv.textContent = 'סיסמה שגויה. הסיסמה היא: Aawearableadmin';
-                errorDiv.style.color = '#ef4444';
+                errorDiv.textContent = 'סיסמה שגויה! נסה שוב.';
                 passwordInput.focus();
+                passwordInput.select();
             }
-        };
+        }
 
-        window.togglePassword = function() {
+        // הצגה/הסתרה של הסיסמה
+        function togglePassword() {
             console.log('👁️ togglePassword נקראה');
             const passwordInput = document.getElementById('passwordInput');
             const toggleBtn = document.querySelector('.toggle-password');
@@ -875,7 +877,7 @@
                 toggleBtn.innerHTML = '👁️';
                 console.log('✅ סיסמה מוסתרת');
             }
-        };
+        }
 
         // התנתקות
         function logout() {
@@ -1026,7 +1028,7 @@
             }
         }
 
-        // בדיקת הצ'אטבוט עם Quick Replies
+        // בדיקת הצ'אטבוט
         function testChatbot() {
             const input = document.getElementById('previewInput');
             const message = input.value.trim();
@@ -1047,23 +1049,27 @@
         // Auto-resize textarea בתצוגה מקדימה
         function setupPreviewInput() {
             const input = document.getElementById('previewInput');
-            input.addEventListener('input', () => {
-                input.style.height = 'auto';
-                input.style.height = Math.min(input.scrollHeight, 120) + 'px';
-            });
+            if (input) {
+                input.addEventListener('input', () => {
+                    input.style.height = 'auto';
+                    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+                });
+            }
         }
 
         // Quick replies functionality
         function setupQuickReplies() {
             const quickReplies = document.getElementById('previewQuickReplies');
-            quickReplies.addEventListener('click', (e) => {
-                if (e.target.classList.contains('preview-quick-reply')) {
-                    const message = e.target.getAttribute('data-message');
-                    const input = document.getElementById('previewInput');
-                    input.value = message;
-                    testChatbot();
-                }
-            });
+            if (quickReplies) {
+                quickReplies.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('preview-quick-reply')) {
+                        const message = e.target.getAttribute('data-message');
+                        const input = document.getElementById('previewInput');
+                        input.value = message;
+                        testChatbot();
+                    }
+                });
+            }
         }
 
         // מוסיף הודעה לתצוגה מקדימה
@@ -1097,6 +1103,7 @@
         // עדכון הצ'אטבוט
         function updateChatbot() {
             const btn = document.getElementById('updateChatbotButton');
+            if (!btn) return;
             
             // שמירה ב-localStorage
             localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(chatbotData));
@@ -1126,6 +1133,18 @@
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DOM נטען, מתחיל להגדיר...');
+            
+            // טען נתונים שמורים אם קיימים
+            const savedData = localStorage.getItem('wearablecode_chatbot_data');
+            if (savedData) {
+                try {
+                    chatbotData = JSON.parse(savedData);
+                    console.log('✅ נתונים נטענו מהזיכרון');
+                } catch (e) {
+                    console.log('❌ שגיאה בטעינת נתונים שמורים');
+                }
+            }
+            
             checkAuth();
             
             // התחברות עם Enter
@@ -1139,19 +1158,6 @@
                     }
                 }
             });
-            
-            // Event listeners אחרים
-            const logoutBtn = document.getElementById('logoutButton');
-            if (logoutBtn) logoutBtn.addEventListener('click', logout);
-            
-            const addBtn = document.getElementById('addQuestionBtn');
-            if (addBtn) addBtn.addEventListener('click', addNewQuestion);
-            
-            const testBtn = document.getElementById('testChatbotButton');
-            if (testBtn) testBtn.addEventListener('click', testChatbot);
-            
-            const updateBtn = document.getElementById('updateChatbotButton');
-            if (updateBtn) updateBtn.addEventListener('click', updateChatbot);
             
             // Setup preview components
             setupPreviewInput();
@@ -1168,13 +1174,6 @@
                 });
             }
         });
-
-        // טען נתונים שמורים אם קיימים
-        const savedData = localStorage.getItem('wearablecode_chatbot_data');
-        if (savedData) {
-            try {
-                chatbotData = JSON.parse(savedData);
-            } catch (e) {
-                console.log('שגיאה בטעינת נתונים שמורים');
-            }
-        }
+    </script>
+</body>
+</html>
