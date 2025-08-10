@@ -535,14 +535,14 @@
         <div class="login-box">
             <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
             <input type="password" id="passwordInput" class="login-input" placeholder="הכנס סיסמה..." autocomplete="off">
-            <button onclick="checkPassword()" class="login-btn">כניסה</button>
+            <button id="loginButton" class="login-btn">כניסה</button>
             <div id="errorMessage" class="error-message"></div>
         </div>
     </div>
 
     <!-- Main App -->
     <div class="app-container" id="mainApp">
-        <button class="logout-btn" onclick="logout()">🚪 התנתק</button>
+        <button class="logout-btn" id="logoutButton">🚪 התנתק</button>
         
         <div class="header">
             <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
@@ -555,7 +555,7 @@
             <div id="qaList">
                 <!-- התשובות יטענו כאן דינמית -->
             </div>
-            <button class="add-new" onclick="addNewQA()">
+            <button class="add-new" id="addNewButton">
                 ➕ הוסף תשובה חדשה
             </button>
         </div>
@@ -576,7 +576,7 @@
                 </div>
                 <div class="preview-input-container">
                     <input type="text" id="previewInput" class="preview-input" placeholder="נסה לכתוב משהו...">
-                    <button onclick="testChatbot()" class="preview-send-btn">→</button>
+                    <button id="testChatbotButton" class="preview-send-btn">→</button>
                 </div>
             </div>
         </div>
@@ -585,13 +585,13 @@
         <div class="section export-section">
             <h2>💾 ייצוא ושמירה</h2>
             <p style="margin-bottom: 20px; opacity: 0.9;">שמור את ההגדרות או ייצא לקובץ JavaScript:</p>
-            <button class="export-btn" onclick="exportToJS()">
+            <button class="export-btn" id="exportJSButton">
                 📁 ייצא לקובץ JS
             </button>
-            <button class="export-btn" onclick="saveToLocalStorage()">
+            <button class="export-btn" id="saveLocalButton">
                 💾 שמור מקומית
             </button>
-            <button class="export-btn" onclick="loadFromLocalStorage()">
+            <button class="export-btn" id="loadLocalButton">
                 📂 טען שמור
             </button>
         </div>
@@ -621,10 +621,10 @@
                     <button type="submit" class="btn btn-primary">
                         💾 שמור
                     </button>
-                    <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                    <button type="button" class="btn btn-secondary" id="closeModalButton">
                         ❌ ביטול
                     </button>
-                    <button type="button" class="btn btn-danger" id="deleteBtn" onclick="deleteQA()" style="display: none;">
+                    <button type="button" class="btn btn-danger" id="deleteBtn" style="display: none;">
                         🗑️ מחק
                     </button>
                 </div>
@@ -715,11 +715,41 @@
             document.getElementById('passwordInput').value = '';
         }
 
-        // Enter במסך התחברות
-        document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
-                checkPassword();
-            }
+        // Enter במסך התחברות - גרסה מתוקנת
+        document.addEventListener('DOMContentLoaded', function() {
+            // בדיקת הרשאות בטעינת הדף
+            checkAuth();
+            
+            // הוספת כל ה-event listeners
+            const loginButton = document.getElementById('loginButton');
+            const logoutButton = document.getElementById('logoutButton');
+            const addNewButton = document.getElementById('addNewButton');
+            const testChatbotButton = document.getElementById('testChatbotButton');
+            const exportJSButton = document.getElementById('exportJSButton');
+            const saveLocalButton = document.getElementById('saveLocalButton');
+            const loadLocalButton = document.getElementById('loadLocalButton');
+            const closeModalButton = document.getElementById('closeModalButton');
+            const deleteBtn = document.getElementById('deleteBtn');
+            
+            if (loginButton) loginButton.addEventListener('click', checkPassword);
+            if (logoutButton) logoutButton.addEventListener('click', logout);
+            if (addNewButton) addNewButton.addEventListener('click', addNewQA);
+            if (testChatbotButton) testChatbotButton.addEventListener('click', testChatbot);
+            if (exportJSButton) exportJSButton.addEventListener('click', exportToJS);
+            if (saveLocalButton) saveLocalButton.addEventListener('click', saveToLocalStorage);
+            if (loadLocalButton) loadLocalButton.addEventListener('click', loadFromLocalStorage);
+            if (closeModalButton) closeModalButton.addEventListener('click', closeModal);
+            if (deleteBtn) deleteBtn.addEventListener('click', deleteQA);
+            
+            // Event listener למקש Enter
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const loginScreen = document.getElementById('loginScreen');
+                    if (loginScreen && window.getComputedStyle(loginScreen).display !== 'none') {
+                        checkPassword();
+                    }
+                }
+            });
         });
 
         // טוען את רשימת השאלות והתשובות
@@ -733,7 +763,7 @@
                 qaItem.innerHTML = `
                     <div class="qa-header">
                         <div class="qa-title">${key}</div>
-                        <button class="edit-btn" onclick="editQA('${key}')">
+                        <button class="edit-btn" data-key="${key}">
                             ✏️ ערוך
                         </button>
                     </div>
@@ -742,6 +772,13 @@
                     </div>
                     <div class="response-text">${data.response}</div>
                 `;
+                
+                // הוספת event listener לכפתור עריכה
+                const editBtn = qaItem.querySelector('.edit-btn');
+                editBtn.addEventListener('click', function() {
+                    editQA(this.getAttribute('data-key'));
+                });
+                
                 qaList.appendChild(qaItem);
             }
         }
@@ -924,10 +961,8 @@ const CHATBOT_RESPONSES = ${JSON.stringify(chatbotData, null, 2)};
             }
         });
 
-        // טוען את הנתונים ובודק הרשאות בעת טעינת הדף
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-        });
+        // טוען את הנתונים ובודק הרשאות בעת טעינת הדף - הוסר כפילות
+        // הקוד הועבר לתוך DOMContentLoaded למעלה
 
         // מניעת reload במקש F5 כשיש שינויים לא שמורים
         window.addEventListener('beforeunload', function(e) {
