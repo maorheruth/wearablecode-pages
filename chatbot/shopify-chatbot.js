@@ -1,7 +1,3 @@
-// ===========================================
-// 🔧 קוד מתוקן לצ'אטבוט (chat.js)
-// ===========================================
-
 (function() {
     'use strict';
     
@@ -56,17 +52,11 @@
         '😊 שלום וברוכים הבאים! אני יכול לעזור לך עם כל מה שקשור לחולצות שלנו'
     ];
 
-    // 🔥 פתרון Cross-Domain - כאן הקסם קורה!
-    const GITHUB_API_BASE = 'https://api.github.com/repos/maorhertzig/wearablecode-pages/contents/chatbot';
-    const RAW_BASE = 'https://raw.githubusercontent.com/maorhertzig/wearablecode-pages/main/chatbot';
-
     class WearableCodeChatbot {
         constructor() {
             this.isOpen = false;
             this.messages = [];
             this.isTyping = false;
-            this.lastUpdateCheck = 0;
-            this.updateInterval = 30000; // בדיקה כל 30 שניות
             this.init();
         }
 
@@ -75,11 +65,8 @@
             this.createChatbot();
             this.bindEvents();
             
-            // טעינת נתונים מהגיט מיד בהתחלה
-            this.loadDataFromGitHub();
-            
-            // הגדרת בדיקה תקופתית
-            this.startPeriodicCheck();
+            // טעינת נתונים מהפאנל אדמין מיד בהתחלה
+            this.loadUpdatedResponses();
             
             const welcomeMessage = WELCOME_MESSAGES[Math.floor(Math.random() * WELCOME_MESSAGES.length)];
             this.addMessage(welcomeMessage, 'bot');
@@ -89,55 +76,46 @@
             }, 2000);
         }
 
-        // 🚀 פונקציה חדשה - טעינת נתונים מ-GitHub
-        async loadDataFromGitHub() {
+        // 🔧 פונקציה מתוקנת - טעינת תשובות מהפאנל אדמין  
+        loadUpdatedResponses() {
             try {
-                console.log('🔍 בודק עדכונים מהפאנל אדמין ב-GitHub...');
+                const saved = localStorage.getItem('wearablecode_chatbot_data');
+                console.log('🔍 בודק localStorage:', saved ? 'קיים' : 'לא קיים');
                 
-                // בדיקה אם קיים קובץ data.json
-                const response = await fetch(`${RAW_BASE}/data.json?t=${Date.now()}`, {
-                    method: 'GET',
-                    cache: 'no-cache'
-                });
-                
-                if (response.ok) {
-                    const githubData = await response.json();
+                if (saved) {
+                    const parsedData = JSON.parse(saved);
+                    console.log('📡 נתונים שנמצאו:', parsedData);
                     
-                    // בדיקה אם יש עדכון חדש
-                    const lastUpdate = githubData.lastUpdate || 0;
-                    if (lastUpdate > this.lastUpdateCheck) {
-                        console.log('📡 נמצא עדכון חדש מהפאנל אדמין!');
-                        
-                        // עדכון הנתונים
-                        CHATBOT_RESPONSES = { ...CHATBOT_RESPONSES, ...githubData.responses };
-                        this.lastUpdateCheck = lastUpdate;
+                    // בדיקה אם יש responses בנתונים
+                    if (parsedData.responses) {
+                        // החלפה מלאה של הנתונים (לא מיזוג!)
+                        CHATBOT_RESPONSES = parsedData.responses;
+                        console.log('✅ צ\'אטבוט עודכן עם נתונים חדשים מפאנל האדמין');
+                        console.log('🔍 תשובות עדכניות:', Object.keys(CHATBOT_RESPONSES));
                         
                         // עדכון כפתורי התגובות המהירות
                         this.updateQuickReplies();
                         
-                        // הצגת הודעת עדכון
-                        this.showAdminUpdateNotification();
-                        
-                        console.log('✅ צ\'אטבוט עודכן בהצלחה מ-GitHub');
+                        return true;
+                    } else if (typeof parsedData === 'object') {
+                        // אם הנתונים הם ישירות האובייקט
+                        CHATBOT_RESPONSES = parsedData;
+                        console.log('✅ צ\'אטבוט עודכן (פורמט ישן)');
+                        this.updateQuickReplies();
+                        return true;
                     }
-                } else {
-                    console.log('📂 אין קובץ נתונים ב-GitHub, משתמש בברירת מחדל');
                 }
                 
-            } catch (error) {
-                console.log('⚠️ שגיאה בטעינת נתונים מ-GitHub:', error.message);
-                console.log('🔄 ממשיך עם נתוני ברירת המחדל');
+                console.log('💡 אין נתונים מפאנל האדמין, משתמש בנתונים ברירת המחדל');
+                return false;
+                
+            } catch (e) {
+                console.error('❌ שגיאה בטעינת נתונים מפאנל האדמין:', e);
+                return false;
             }
         }
 
-        // 🔄 בדיקה תקופתית לעדכונים
-        startPeriodicCheck() {
-            setInterval(() => {
-                this.loadDataFromGitHub();
-            }, this.updateInterval);
-        }
-
-        // 🎉 הצגת התראה על עדכון
+        // הצגת התראה על עדכון מהפאנל אדמין
         showAdminUpdateNotification() {
             const notification = document.createElement('div');
             notification.style.cssText = `
@@ -215,6 +193,8 @@
                 
                 quickRepliesContainer.appendChild(button);
             });
+            
+            console.log('🔄 כפתורי התגובות המהירות עודכנו:', availableTopics);
         }
 
         addStyles() {
