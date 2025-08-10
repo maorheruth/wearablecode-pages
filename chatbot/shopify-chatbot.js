@@ -469,7 +469,7 @@
                 @media (max-width: 480px) {
                     .wc-chatbot-container {
                         right: 20px;
-                        bottom: 20px;
+                        bottom: 50px;
                         max-width: calc(100vw - 40px);
                     }
                     
@@ -478,7 +478,7 @@
                         height: calc(100vh - 120px);
                         max-width: 380px;
                         max-height: 600px;
-                        bottom: 70px;
+                        bottom: 100px;
                     }
                     
                     .wc-chat-button {
