@@ -1,4 +1,11 @@
-// WearableCode Claude-Style Chatbot
+.wc-typing-indicator {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 12px 16px;
+                    background: #f1f5f9;
+                    border-radius: 16px;
+                    border// WearableCode Claude-Style Chatbot
 // עיצוב מודרני בהשראת Claude
 
 (function() {
@@ -129,7 +136,8 @@
                     height: 640px;
                     background: white;
                     border-radius: 20px;
-                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+                    border: 2px solid #3b82f6;
+                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1), 0 0 20px rgba(59, 130, 246, 0.2), 0 0 0 1px rgba(59, 130, 246, 0.1);
                     display: none;
                     flex-direction: column;
                     overflow: hidden;
