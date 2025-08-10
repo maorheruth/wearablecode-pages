@@ -108,6 +108,17 @@
                     transform: scale(1.05);
                 }
 
+                /* שמירה על צבע שחור גם אחרי לחיצה */
+                .wc-chat-button:active,
+                .wc-chat-button:focus {
+                    background: #000000;
+                    outline: none;
+                }
+
+                .wc-chat-button.active {
+                    background: #000000;
+                }
+
                 .wc-chat-button-icon {
                     width: 24px;
                     height: 24px;
@@ -123,20 +134,17 @@
 
                 .wc-chat-window {
                     position: absolute;
-                    bottom: 40px;
+                    bottom: 90px;
                     right: 0;
                     width: 420px;
                     height: 640px;
                     background: white;
                     border-radius: 20px;
-                    /* מסגרת שחורה עם אפקט גלאו שחור */
-                    border: 1px solid #000000;
+                    /* הסרת המסגרת השחורה - נשאר רק הצל */
                     box-shadow: 
-                        0 25px 50px rgba(0, 0, 0, 0.1), 
-                        0 0 0 1px rgba(0, 0, 0, 0.05),
-                        0 0 20px rgba(0, 0, 0, 0.4),
-                        0 0 40px rgba(0, 0, 0, 0.2),
-                        0 0 60px rgba(0, 0, 0, 0.1);
+                        0 25px 50px rgba(0, 0, 0, 0.15), 
+                        0 15px 35px rgba(0, 0, 0, 0.1),
+                        0 5px 15px rgba(0, 0, 0, 0.08);
                     display: none;
                     flex-direction: column;
                     overflow: hidden;
@@ -478,7 +486,7 @@
                         height: calc(100vh - 120px);
                         max-width: 380px;
                         max-height: 600px;
-                        bottom: 100px;
+                        bottom: 90px;
                     }
                     
                     .wc-chat-button {
@@ -495,11 +503,11 @@
                 @media (max-width: 360px) {
                     .wc-chatbot-container {
                         right: 15px;
-                        bottom: 15px;
+                        bottom: 50px;
                     }
                     
                     .wc-chat-window {
-                        bottom: 75px;
+                        bottom: 90px;
                     }
                     
                     .wc-chat-messages {
