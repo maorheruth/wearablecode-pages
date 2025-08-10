@@ -1,5 +1,5 @@
 // WearableCode Claude-Style Chatbot
-// עיצוב מודרני בהשראת Claude
+// עיצוב מודרני בהשראת Claude עם מסגרת כחולה וגלאו
 
 (function() {
     'use strict';
@@ -129,7 +129,14 @@
                     height: 640px;
                     background: white;
                     border-radius: 20px;
-                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+                    /* מסגרת כחולה עם אפקט גלאו */
+                    border: 3px solid #3b82f6;
+                    box-shadow: 
+                        0 25px 50px rgba(0, 0, 0, 0.1), 
+                        0 0 0 1px rgba(0, 0, 0, 0.05),
+                        0 0 20px rgba(59, 130, 246, 0.4),
+                        0 0 40px rgba(59, 130, 246, 0.2),
+                        0 0 60px rgba(59, 130, 246, 0.1);
                     display: none;
                     flex-direction: column;
                     overflow: hidden;
@@ -364,7 +371,8 @@
                 }
 
                 .wc-quick-reply {
-                    background: white;
+                    /* רקע אפור בהיר */
+                    background: #f8f9fa;
                     color: #475569;
                     border: 1px solid #e2e8f0;
                     padding: 6px 12px;
@@ -378,7 +386,7 @@
                 }
 
                 .wc-quick-reply:hover {
-                    background: #f8fafc;
+                    background: #f1f5f9;
                     border-color: #cbd5e1;
                     transform: translateY(-1px);
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -403,7 +411,8 @@
                     border-radius: 22px;
                     font-size: 14px;
                     outline: none;
-                    background: #f9fafb;
+                    /* רקע אפור בהיר */
+                    background: #f8f9fa;
                     color: #111827;
                     text-align: right;
                     transition: all 0.2s ease;
@@ -469,7 +478,6 @@
                         height: calc(100vh - 100px);
                         max-width: 380px;
                         max-height: 600px;
-                        border: #4264ff;
                     }
                     
                     .wc-chat-button {
