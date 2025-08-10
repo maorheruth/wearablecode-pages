@@ -130,7 +130,7 @@
                     background: white;
                     border-radius: 20px;
                     /* מסגרת שחורה עם אפקט גלאו שחור */
-                    border: 3px solid #000000;
+                    border: 1px solid #000000;
                     box-shadow: 
                         0 25px 50px rgba(0, 0, 0, 0.1), 
                         0 0 0 1px rgba(0, 0, 0, 0.05),
