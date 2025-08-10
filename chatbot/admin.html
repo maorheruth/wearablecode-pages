@@ -803,3 +803,150 @@
             if (currentEditingKey && currentEditingKey !== name) {
                 delete chatbotData[currentEditingKey];
             }
+
+            // מוסיפים את החדש
+            chatbotData[name] = {
+                response: response,
+                keywords: keywords
+            };
+
+            loadQAList();
+            closeModal();
+        });
+
+        // בדיקת הצ'אטבוט
+        function testChatbot() {
+            const input = document.getElementById('previewInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // הוסף הודעת משתמש
+            addPreviewMessage(message, 'user');
+            input.value = '';
+
+            // חפש תשובה
+            setTimeout(() => {
+                const response = findResponse(message);
+                addPreviewMessage(response, 'bot');
+            }, 500);
+        }
+
+        // מוסיף הודעה לתצוגה מקדימה
+        function addPreviewMessage(text, sender) {
+            const messages = document.getElementById('previewMessages');
+            const div = document.createElement('div');
+            div.className = `preview-message ${sender}`;
+            div.textContent = text;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // חיפוש תשובה (אותה לוגיקה כמו בצ'אטבוט)
+        function findResponse(message) {
+            const lowerMessage = message.toLowerCase().trim();
+            
+            for (const [key, data] of Object.entries(chatbotData)) {
+                if (data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
+                    return data.response;
+                }
+            }
+            
+            return '🤔 אני לא בטוח שהבנתי את השאלה. נסה לשאול בצורה אחרת או צור קשר ישירות.';
+        }
+
+        // ייצוא לקובץ JavaScript
+        function exportToJS() {
+            const jsContent = `// WearableCode Chatbot Data - Generated ${new Date().toLocaleString('he-IL')}
+const CHATBOT_RESPONSES = ${JSON.stringify(chatbotData, null, 2)};
+
+// הוסף את הקוד הזה לתחילת קובץ הצ'אטבוט שלך
+// החלף את המשתנה CHATBOT_RESPONSES הקיים בקוד החדש הזה
+`;
+            
+            const blob = new Blob([jsContent], { type: 'text/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chatbot-responses.js';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // שמירה מקומית
+        function saveToLocalStorage() {
+            localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(chatbotData));
+            
+            // הודעת הצלחה
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ נשמר!';
+            btn.style.background = 'rgba(16, 185, 129, 0.8)';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+            }, 2000);
+        }
+
+        // טעינה מקומית
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('wearablecode_chatbot_data');
+            if (saved) {
+                chatbotData = JSON.parse(saved);
+                loadQAList();
+                
+                // הודעת הצלחה
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ נטען!';
+                btn.style.background = 'rgba(16, 185, 129, 0.8)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            } else {
+                alert('לא נמצאו נתונים שמורים במחשב הזה');
+            }
+        }
+
+        // אירוע Enter בתצוגה מקדימה
+        document.getElementById('previewInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                testChatbot();
+            }
+        });
+
+        // סגירת מודל בלחיצה על הרקע
+        document.getElementById('qaModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // טוען את הנתונים ובודק הרשאות בעת טעינת הדף
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+        });
+
+        // מניעת reload במקש F5 כשיש שינויים לא שמורים
+        window.addEventListener('beforeunload', function(e) {
+            const hasUnsavedChanges = JSON.stringify(chatbotData) !== localStorage.getItem('wearablecode_chatbot_data');
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = 'יש לך שינויים לא שמורים. האם אתה בטוח שברצונך לעזוב?';
+            }
+        });
+
+        // Auto-save כל 30 שניות
+        setInterval(() => {
+            const current = JSON.stringify(chatbotData);
+            const saved = localStorage.getItem('wearablecode_chatbot_data');
+            if (current !== saved) {
+                localStorage.setItem('wearablecode_chatbot_data_backup', current);
+                console.log('🔄 Auto-backup saved');
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
