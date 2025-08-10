@@ -547,7 +547,7 @@
                 <div class="wc-chat-window" id="wcChatWindow">
                     <div class="wc-chat-header">
                         <div class="wc-assistant-avatar">
-                            <img src="https://wearablecode-pages.vercel.app/assets/logos/wearablecode_favicon_48x48.png" alt="WearableCode Assistant" />
+                            <img src="https://wearablecode-pages.vercel.app/assets/logos/wearablecode_favicon_b_48x48.png" alt="WearableCode Assistant" />
                         </div>
                         <div class="wc-assistant-info">
                             <h3>עוזר WearableCode</h3>
