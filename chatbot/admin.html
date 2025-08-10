@@ -278,7 +278,7 @@
         }
 
         .form-group textarea {
-            height: 120px;
+            height: 240px; /* כפול גובה מהמקורי */
             resize: vertical;
             line-height: 1.6;
         }
@@ -475,8 +475,8 @@
             transform: scale(1.05);
         }
 
-        /* Export Section */
-        .export-section {
+        /* Update Section */
+        .update-section {
             margin-top: 20px;
             padding: 20px;
             background: #0f172a;
@@ -484,7 +484,7 @@
             border: 1px solid #334155;
         }
 
-        .export-section h3 {
+        .update-section h3 {
             color: #f1f5f9;
             margin-bottom: 15px;
             font-size: 16px;
@@ -492,29 +492,39 @@
             text-align: center;
         }
 
-        .export-buttons {
+        .update-btn {
+            width: 100%;
+            background: #3b82f6;
+            color: #f1f5f9;
+            border: 1px solid #475569;
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             gap: 8px;
         }
 
-        .export-btn {
-            background: #374151;
-            color: #f1f5f9;
-            border: 1px solid #475569;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-align: center;
+        .update-btn:hover {
+            border-color: #3b82f6;
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
         }
 
-        .export-btn:hover {
-            border-color: #3b82f6;
-            background: #4b5563;
-            transform: translateY(-1px);
+        .update-btn.success {
+            background: #10b981;
+            border-color: #10b981;
+        }
+
+        .update-btn.success:hover {
+            background: #059669;
+            border-color: #059669;
         }
 
         /* Scrollbar styling */
@@ -611,13 +621,14 @@
                     </div>
                 </div>
 
-                <div class="export-section">
-                    <h3>💾 ייצוא ושמירה</h3>
-                    <div class="export-buttons">
-                        <button class="export-btn" id="exportJSButton">📁 ייצא לקובץ JS</button>
-                        <button class="export-btn" id="saveLocalButton">💾 שמור מקומית</button>
-                        <button class="export-btn" id="loadLocalButton">📂 טען שמור</button>
-                    </div>
+                <div class="update-section">
+                    <h3>🔄 עדכון הצ'אטבוט</h3>
+                    <button class="update-btn" id="updateChatbotButton">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                        </svg>
+                        עדכן מידע בצ'אט בוט
+                    </button>
                 </div>
             </div>
         </div>
@@ -892,71 +903,33 @@
             return '🤔 אני לא בטוח שהבנתי את השאלה. נסה לשאול בצורה אחרת או צור קשר ישירות.';
         }
 
-        // ייצוא לקובץ JavaScript
-        function exportToJS() {
-            const jsContent = `// WearableCode Chatbot Data - Generated ${new Date().toLocaleString('he-IL')}
-const CHATBOT_RESPONSES = ${JSON.stringify(chatbotData, null, 2)};
-
-// הוסף את הקוד הזה לתחילת קובץ הצ'אטבוט שלך
-// החלף את המשתנה CHATBOT_RESPONSES הקיים בקוד החדש הזה
-`;
+        // עדכון הצ'אטבוט
+        function updateChatbot() {
+            const btn = document.getElementById('updateChatbotButton');
             
-            const blob = new Blob([jsContent], { type: 'text/javascript' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'chatbot-responses.js';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // שמירה מקומית
-        function saveToLocalStorage() {
+            // שמירה ב-localStorage
             localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(chatbotData));
             
-            const btn = event.target;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '✅ נשמר!';
-            btn.style.background = '#10b981';
-            btn.style.color = 'white';
+            // אנימציה של הכפתור
+            const originalHTML = btn.innerHTML;
+            btn.classList.add('success');
+            btn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                עודכן בהצלחה!
+            `;
+            
+            // אירוע storage כדי לעדכן את הצ'אטבוט באתר
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'wearablecode_chatbot_data',
+                newValue: JSON.stringify(chatbotData)
+            }));
             
             setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = '';
-                btn.style.color = '';
-            }, 2000);
-        }
-
-        // טעינה מקומית
-        function loadFromLocalStorage() {
-            const saved = localStorage.getItem('wearablecode_chatbot_data');
-            if (saved) {
-                chatbotData = JSON.parse(saved);
-                loadQuestionsList();
-                
-                // חזור למצב ריק
-                const editContent = document.getElementById('editContent');
-                editContent.innerHTML = `
-                    <div class="empty-state">
-                        <h3>✅ נתונים נטענו בהצלחה!</h3>
-                        <p>בחר שאלה לעריכה או הוסף שאלה חדשה</p>
-                    </div>
-                `;
-                
-                const btn = event.target;
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '✅ נטען!';
-                btn.style.background = '#10b981';
-                btn.style.color = 'white';
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.style.background = '';
-                    btn.style.color = '';
-                }, 2000);
-            } else {
-                alert('לא נמצאו נתונים שמורים במחשב הזה');
-            }
+                btn.classList.remove('success');
+                btn.innerHTML = originalHTML;
+            }, 3000);
         }
 
         // Event listeners
@@ -967,9 +940,7 @@ const CHATBOT_RESPONSES = ${JSON.stringify(chatbotData, null, 2)};
             document.getElementById('logoutButton').addEventListener('click', logout);
             document.getElementById('addQuestionBtn').addEventListener('click', addNewQuestion);
             document.getElementById('testChatbotButton').addEventListener('click', testChatbot);
-            document.getElementById('exportJSButton').addEventListener('click', exportToJS);
-            document.getElementById('saveLocalButton').addEventListener('click', saveToLocalStorage);
-            document.getElementById('loadLocalButton').addEventListener('click', loadFromLocalStorage);
+            document.getElementById('updateChatbotButton').addEventListener('click', updateChatbot);
             
             // Enter במסך התחברות
             document.addEventListener('keypress', function(e) {
@@ -998,6 +969,3 @@ const CHATBOT_RESPONSES = ${JSON.stringify(chatbotData, null, 2)};
                 console.log('שגיאה בטעינת נתונים שמורים');
             }
         }
-    </script>
-</body>
-</html>
