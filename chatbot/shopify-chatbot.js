@@ -1,5 +1,5 @@
-// WearableCode Smart Chatbot - Updated Design
-// גרסה מעודכנת עם עיצוב לבן ותשובות חכמות
+// WearableCode Smart Chatbot - Claude Style Design
+// גרסה מעודכנת עם עיצוב בסגנון Claude - נקי, מודרני ונעים
 
 (function() {
     'use strict';
@@ -63,6 +63,7 @@
             this.isOpen = false;
             this.messages = [];
             this.currentMessage = '';
+            this.isTyping = false;
             this.init();
         }
 
@@ -84,132 +85,138 @@
         addStyles() {
             const style = document.createElement('style');
             style.textContent = `
-                .wc-smart-chatbot-container {
+                /* Claude-Style Chatbot - Modern & Clean */
+                .wc-claude-chatbot-container {
                     position: fixed;
-                    bottom: 20px;
-                    right: 20px;
+                    bottom: 24px;
+                    right: 24px;
                     z-index: 999999;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
                     direction: rtl;
-                    max-width: 420px;
+                    max-width: 440px;
                 }
 
-                .wc-smart-chat-button {
-                    width: 65px;
-                    height: 65px;
-                    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+                .wc-claude-chat-button {
+                    width: 64px;
+                    height: 64px;
+                    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
                     border-radius: 50%;
-                    border: 3px solid #404040;
+                    border: none;
                     cursor: pointer;
-                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+                    box-shadow: 0 8px 32px rgba(249, 115, 22, 0.3);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    transition: all 0.3s ease;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                     position: relative;
-                    font-size: 28px;
+                    font-size: 24px;
                     color: white;
-                    animation: gentleWave 3s ease-in-out infinite;
+                    animation: gentlePulse 4s ease-in-out infinite;
                 }
 
-                .wc-smart-chat-button:hover {
-                    transform: scale(1.08);
-                    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-                    background: linear-gradient(135deg, #404040 0%, #2c2c2c 100%);
+                .wc-claude-chat-button:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 12px 40px rgba(249, 115, 22, 0.4);
                 }
 
-                .wc-smart-chat-button::before {
-                    content: "👋";
-                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+                .wc-claude-chat-button::before {
+                    content: "💬";
+                    font-size: 28px;
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
                 }
 
-                @keyframes gentleWave {
+                @keyframes gentlePulse {
                     0%, 100% { 
-                        transform: rotate(0deg) scale(1); 
+                        transform: scale(1);
+                        box-shadow: 0 8px 32px rgba(249, 115, 22, 0.3);
                     }
-                    25% { 
-                        transform: rotate(15deg) scale(1.02); 
-                    }
-                    75% { 
-                        transform: rotate(-15deg) scale(1.02); 
+                    50% { 
+                        transform: scale(1.02);
+                        box-shadow: 0 12px 40px rgba(249, 115, 22, 0.4);
                     }
                 }
 
-                .wc-smart-chat-window {
+                .wc-claude-chat-window {
                     position: absolute;
-                    bottom: 85px;
+                    bottom: 80px;
                     right: 0;
                     width: 400px;
                     height: 600px;
                     background: white;
                     border-radius: 16px;
-                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
                     display: none;
                     flex-direction: column;
                     overflow: hidden;
-                    border: 2px solid #e9ecef;
+                    border: 1px solid rgba(0, 0, 0, 0.06);
                     direction: rtl;
                 }
 
-                .wc-smart-chat-window.open {
+                .wc-claude-chat-window.open {
                     display: flex;
-                    animation: slideUp 0.3s ease;
+                    animation: slideUpFade 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                 }
 
-                @keyframes slideUp {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
+                @keyframes slideUpFade {
+                    from { 
+                        opacity: 0; 
+                        transform: translateY(20px) scale(0.95);
+                    }
+                    to { 
+                        opacity: 1; 
+                        transform: translateY(0) scale(1);
+                    }
                 }
 
-                .wc-smart-chat-header {
-                    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
-                    padding: 20px;
-                    color: white;
+                .wc-claude-chat-header {
+                    background: white;
+                    padding: 20px 24px;
+                    color: #1f2937;
                     display: flex;
                     align-items: center;
                     gap: 12px;
                     direction: rtl;
                     text-align: right;
-                    border-bottom: 1px solid #e9ecef;
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
                     position: relative;
                 }
 
-                .wc-smart-assistant-avatar {
+                .wc-claude-assistant-avatar {
                     width: 40px;
                     height: 40px;
-                    background: linear-gradient(135deg, #404040, #2c2c2c);
+                    background: linear-gradient(135deg, #f97316, #ea580c);
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 20px;
-                    border: 2px solid #666;
-                    animation: gentleWave 3s ease-in-out infinite;
+                    font-size: 18px;
+                    color: white;
+                    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.2);
                 }
 
-                .wc-smart-assistant-info h3 {
+                .wc-claude-assistant-info h3 {
                     font-size: 16px;
                     font-weight: 600;
                     margin-bottom: 2px;
-                    color: #ffffff;
+                    color: #1f2937;
                 }
 
-                .wc-smart-assistant-info p {
-                    font-size: 12px;
-                    opacity: 0.8;
-                    color: #cccccc;
+                .wc-claude-assistant-info p {
+                    font-size: 13px;
+                    color: #6b7280;
+                    font-weight: 400;
                 }
 
-                .wc-smart-close-button {
+                .wc-claude-close-button {
                     position: absolute;
-                    top: 15px;
-                    left: 15px;
-                    width: 30px;
-                    height: 30px;
-                    background: rgba(255,255,255,0.1);
-                    border: 1px solid rgba(255,255,255,0.2);
-                    border-radius: 50%;
-                    color: white;
+                    top: 16px;
+                    left: 16px;
+                    width: 32px;
+                    height: 32px;
+                    background: rgba(107, 114, 128, 0.1);
+                    border: none;
+                    border-radius: 8px;
+                    color: #6b7280;
                     cursor: pointer;
                     display: flex;
                     align-items: center;
@@ -218,101 +225,131 @@
                     transition: all 0.2s ease;
                 }
 
-                .wc-smart-close-button:hover {
-                    background: rgba(255,255,255,0.2);
-                    transform: scale(1.1);
+                .wc-claude-close-button:hover {
+                    background: rgba(107, 114, 128, 0.15);
+                    color: #374151;
                 }
 
-                .wc-smart-chat-messages {
+                .wc-claude-chat-messages {
                     flex: 1;
-                    padding: 20px;
+                    padding: 24px;
                     overflow-y: auto;
-                    background: white;
+                    background: #fafafa;
                     direction: rtl;
                     scroll-behavior: smooth;
                 }
 
-                .wc-smart-message {
+                .wc-claude-message {
                     margin-bottom: 16px;
                     display: flex;
                     align-items: flex-start;
-                    gap: 8px;
-                    animation: messageSlide 0.3s ease;
+                    gap: 12px;
+                    animation: messageSlideIn 0.3s ease;
                 }
 
-                @keyframes messageSlide {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
+                @keyframes messageSlideIn {
+                    from { 
+                        opacity: 0; 
+                        transform: translateY(8px);
+                    }
+                    to { 
+                        opacity: 1; 
+                        transform: translateY(0);
+                    }
                 }
 
-                .wc-smart-message.user {
+                .wc-claude-message.user {
                     justify-content: flex-start;
                 }
 
-                .wc-smart-message.bot {
+                .wc-claude-message.bot {
                     justify-content: flex-end;
                 }
 
-                .wc-smart-message-content {
-                    max-width: 80%;
+                .wc-claude-message-avatar {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 14px;
+                    flex-shrink: 0;
+                }
+
+                .wc-claude-message.user .wc-claude-message-avatar {
+                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                    color: white;
+                }
+
+                .wc-claude-message.bot .wc-claude-message-avatar {
+                    background: linear-gradient(135deg, #f97316, #ea580c);
+                    color: white;
+                }
+
+                .wc-claude-message-content {
+                    max-width: 75%;
                     padding: 12px 16px;
                     border-radius: 16px;
                     font-size: 14px;
                     line-height: 1.5;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
                     white-space: pre-line;
                 }
 
-                .wc-smart-message.user .wc-smart-message-content {
-                    background: #6c757d;
-                    color: white;
-                    border-bottom-left-radius: 4px;
+                .wc-claude-message.user .wc-claude-message-content {
+                    background: white;
+                    color: #1f2937;
                     text-align: right;
+                    border: 1px solid rgba(0, 0, 0, 0.06);
+                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
                 }
 
-                .wc-smart-message.bot .wc-smart-message-content {
-                    background: #e9ecef;
-                    color: #333333;
-                    border-bottom-right-radius: 4px;
+                .wc-claude-message.bot .wc-claude-message-content {
+                    background: white;
+                    color: #1f2937;
                     text-align: right;
+                    border: 1px solid rgba(0, 0, 0, 0.06);
+                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
                 }
 
-                .wc-smart-chat-input-container {
-                    padding: 16px 20px;
-                    background: #f8f9fa;
-                    border-top: 1px solid #e9ecef;
+                .wc-claude-chat-input-container {
+                    padding: 20px 24px;
+                    background: white;
+                    border-top: 1px solid rgba(0, 0, 0, 0.06);
                     display: flex;
                     align-items: center;
                     gap: 12px;
                     direction: rtl;
                 }
 
-                .wc-smart-chat-input {
+                .wc-claude-chat-input {
                     flex: 1;
                     padding: 12px 16px;
-                    border: 1px solid #ced4da;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
                     border-radius: 24px;
                     font-size: 14px;
                     outline: none;
-                    background: #ffffff;
-                    color: #333333;
+                    background: #fafafa;
+                    color: #1f2937;
                     text-align: right;
-                    transition: all 0.3s ease;
+                    transition: all 0.2s ease;
+                    font-family: inherit;
                 }
 
-                .wc-smart-chat-input::placeholder {
-                    color: #6c757d;
+                .wc-claude-chat-input::placeholder {
+                    color: #9ca3af;
                 }
 
-                .wc-smart-chat-input:focus {
-                    border-color: #495057;
-                    box-shadow: 0 0 0 3px rgba(73, 80, 87, 0.1);
+                .wc-claude-chat-input:focus {
+                    border-color: #f97316;
+                    background: white;
+                    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
                 }
 
-                .wc-smart-send-button {
+                .wc-claude-send-button {
                     width: 40px;
                     height: 40px;
-                    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+                    background: linear-gradient(135deg, #f97316, #ea580c);
                     border: none;
                     border-radius: 50%;
                     color: white;
@@ -321,87 +358,121 @@
                     align-items: center;
                     justify-content: center;
                     transition: all 0.2s ease;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.2);
                 }
 
-                .wc-smart-send-button:hover {
-                    background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+                .wc-claude-send-button:hover {
                     transform: scale(1.05);
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
                 }
 
-                .wc-smart-send-button::before {
-                    content: "←";
+                .wc-claude-send-button:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                    transform: none;
+                }
+
+                .wc-claude-send-button::before {
+                    content: "↵";
                     font-size: 16px;
-                    font-weight: bold;
+                    font-weight: 600;
                 }
 
-                .wc-smart-typing {
+                .wc-claude-typing {
                     display: flex;
                     gap: 4px;
                     align-items: center;
                     padding: 8px 0;
+                    color: #9ca3af;
+                    font-size: 13px;
                 }
 
-                .wc-smart-typing-dot {
+                .wc-claude-typing-dot {
                     width: 6px;
                     height: 6px;
-                    background: #6c757d;
+                    background: #9ca3af;
                     border-radius: 50%;
-                    animation: typingDot 1.4s infinite;
+                    animation: typingPulse 1.4s infinite;
                 }
 
-                .wc-smart-typing-dot:nth-child(2) { animation-delay: 0.2s; }
-                .wc-smart-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+                .wc-claude-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+                .wc-claude-typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
-                @keyframes typingDot {
-                    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-                    30% { transform: translateY(-8px); opacity: 1; }
+                @keyframes typingPulse {
+                    0%, 60%, 100% { 
+                        transform: scale(1); 
+                        opacity: 0.4; 
+                    }
+                    30% { 
+                        transform: scale(1.2); 
+                        opacity: 1; 
+                    }
                 }
 
                 /* Quick replies */
-                .wc-smart-quick-replies {
-                    padding: 10px 20px 0;
+                .wc-claude-quick-replies {
+                    padding: 8px 24px 16px;
                     background: white;
                     display: flex;
                     gap: 8px;
                     flex-wrap: wrap;
                     justify-content: flex-end;
+                    border-top: 1px solid rgba(0, 0, 0, 0.04);
                 }
 
-                .wc-smart-quick-reply {
-                    background: #f8f9fa;
-                    color: #495057;
-                    border: 1px solid #ced4da;
-                    padding: 8px 12px;
-                    border-radius: 20px;
+                .wc-claude-quick-reply {
+                    background: #f3f4f6;
+                    color: #374151;
+                    border: 1px solid rgba(0, 0, 0, 0.06);
+                    padding: 6px 12px;
+                    border-radius: 16px;
                     font-size: 12px;
                     cursor: pointer;
                     transition: all 0.2s ease;
-                    margin-bottom: 10px;
+                    font-weight: 500;
                 }
 
-                .wc-smart-quick-reply:hover {
-                    background: #e9ecef;
-                    border-color: #adb5bd;
-                    transform: scale(1.02);
+                .wc-claude-quick-reply:hover {
+                    background: #e5e7eb;
+                    border-color: rgba(0, 0, 0, 0.1);
+                    transform: translateY(-1px);
+                }
+
+                /* Scrollbar styling */
+                .wc-claude-chat-messages::-webkit-scrollbar {
+                    width: 6px;
+                }
+
+                .wc-claude-chat-messages::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+
+                .wc-claude-chat-messages::-webkit-scrollbar-thumb {
+                    background: rgba(0, 0, 0, 0.1);
+                    border-radius: 3px;
+                }
+
+                .wc-claude-chat-messages::-webkit-scrollbar-thumb:hover {
+                    background: rgba(0, 0, 0, 0.2);
                 }
 
                 @media (max-width: 480px) {
-                    .wc-smart-chatbot-container {
-                        right: 15px;
-                        bottom: 15px;
-                        max-width: calc(100vw - 80px);
+                    .wc-claude-chatbot-container {
+                        right: 16px;
+                        bottom: 16px;
+                        max-width: calc(100vw - 32px);
                     }
-                    .wc-smart-chat-window {
-                        width: calc(100vw - 30px);
-                        height: calc(100vh - 140px);
-                        max-width: 350px;
-                        max-height: 500px;
+                    .wc-claude-chat-window {
+                        width: calc(100vw - 32px);
+                        height: calc(100vh - 120px);
+                        max-width: 360px;
+                        max-height: 580px;
                     }
-                    .wc-smart-chat-button {
-                        width: 55px;
-                        height: 55px;
+                    .wc-claude-chat-button {
+                        width: 56px;
+                        height: 56px;
+                    }
+                    .wc-claude-chat-button::before {
                         font-size: 24px;
                     }
                 }
@@ -411,63 +482,76 @@
 
         createChatbot() {
             const container = document.createElement('div');
-            container.className = 'wc-smart-chatbot-container';
+            container.className = 'wc-claude-chatbot-container';
             container.innerHTML = `
-                <button class="wc-smart-chat-button" id="wcSmartChatButton"></button>
+                <button class="wc-claude-chat-button" id="wcClaudeChatButton"></button>
                 
-                <div class="wc-smart-chat-window" id="wcSmartChatWindow">
-                    <div class="wc-smart-chat-header">
-                        <div class="wc-smart-assistant-avatar">👋</div>
-                        <div class="wc-smart-assistant-info">
+                <div class="wc-claude-chat-window" id="wcClaudeChatWindow">
+                    <div class="wc-claude-chat-header">
+                        <div class="wc-claude-assistant-avatar">🤖</div>
+                        <div class="wc-claude-assistant-info">
                             <h3>עוזר WearableCode</h3>
-                            <p>תשובות מהירות ומדויקות</p>
+                            <p>כאן לעזור לך 24/7</p>
                         </div>
-                        <button class="wc-smart-close-button" id="wcSmartCloseButton">×</button>
+                        <button class="wc-claude-close-button" id="wcClaudeCloseButton">×</button>
                     </div>
 
-                    <div class="wc-smart-chat-messages" id="wcSmartChatMessages"></div>
+                    <div class="wc-claude-chat-messages" id="wcClaudeChatMessages"></div>
                     
-                    <div class="wc-smart-quick-replies" id="wcSmartQuickReplies">
-                        <div class="wc-smart-quick-reply" data-message="מחירים">מחירים</div>
-                        <div class="wc-smart-quick-reply" data-message="משלוח">משלוח</div>
-                        <div class="wc-smart-quick-reply" data-message="חבילה">מעקב חבילה</div>
-                        <div class="wc-smart-quick-reply" data-message="צור קשר">צור קשר</div>
+                    <div class="wc-claude-quick-replies" id="wcClaudeQuickReplies">
+                        <div class="wc-claude-quick-reply" data-message="מחירים">💰 מחירים</div>
+                        <div class="wc-claude-quick-reply" data-message="משלוח">🚚 משלוח</div>
+                        <div class="wc-claude-quick-reply" data-message="חבילה">📦 מעקב</div>
+                        <div class="wc-claude-quick-reply" data-message="צור קשר">📞 צור קשר</div>
                     </div>
 
-                    <div class="wc-smart-chat-input-container">
-                        <input type="text" class="wc-smart-chat-input" id="wcSmartChatInput" placeholder="כתוב הודעה..." />
-                        <button class="wc-smart-send-button" id="wcSmartSendButton"></button>
+                    <div class="wc-claude-chat-input-container">
+                        <input type="text" class="wc-claude-chat-input" id="wcClaudeChatInput" placeholder="כתוב הודעה..." />
+                        <button class="wc-claude-send-button" id="wcClaudeSendButton"></button>
                     </div>
                 </div>
             `;
 
             document.body.appendChild(container);
             
-            this.chatButton = document.getElementById('wcSmartChatButton');
-            this.chatWindow = document.getElementById('wcSmartChatWindow');
-            this.chatMessages = document.getElementById('wcSmartChatMessages');
-            this.chatInput = document.getElementById('wcSmartChatInput');
-            this.sendButton = document.getElementById('wcSmartSendButton');
-            this.closeButton = document.getElementById('wcSmartCloseButton');
-            this.quickReplies = document.getElementById('wcSmartQuickReplies');
+            this.chatButton = document.getElementById('wcClaudeChatButton');
+            this.chatWindow = document.getElementById('wcClaudeChatWindow');
+            this.chatMessages = document.getElementById('wcClaudeChatMessages');
+            this.chatInput = document.getElementById('wcClaudeChatInput');
+            this.sendButton = document.getElementById('wcClaudeSendButton');
+            this.closeButton = document.getElementById('wcClaudeCloseButton');
+            this.quickReplies = document.getElementById('wcClaudeQuickReplies');
         }
 
         bindEvents() {
             this.chatButton.addEventListener('click', () => this.toggleChat());
             this.closeButton.addEventListener('click', () => this.toggleChat());
             this.sendButton.addEventListener('click', () => this.sendMessage());
+            
             this.chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
                     this.sendMessage();
                 }
             });
 
+            this.chatInput.addEventListener('input', () => {
+                this.sendButton.disabled = !this.chatInput.value.trim();
+            });
+
             // Quick replies
             this.quickReplies.addEventListener('click', (e) => {
-                if (e.target.classList.contains('wc-smart-quick-reply')) {
+                if (e.target.classList.contains('wc-claude-quick-reply')) {
                     const message = e.target.getAttribute('data-message');
                     this.chatInput.value = message;
                     this.sendMessage();
+                }
+            });
+
+            // Close on escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.isOpen) {
+                    this.toggleChat();
                 }
             });
         }
@@ -477,6 +561,7 @@
             if (this.isOpen) {
                 this.chatWindow.classList.add('open');
                 this.chatInput.focus();
+                this.sendButton.disabled = !this.chatInput.value.trim();
             } else {
                 this.chatWindow.classList.remove('open');
             }
@@ -484,8 +569,23 @@
 
         addMessage(content, sender) {
             const messageDiv = document.createElement('div');
-            messageDiv.className = `wc-smart-message ${sender}`;
-            messageDiv.innerHTML = `<div class="wc-smart-message-content">${content}</div>`;
+            messageDiv.className = `wc-claude-message ${sender}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'wc-claude-message-avatar';
+            avatar.textContent = sender === 'bot' ? '🤖' : '👤';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'wc-claude-message-content';
+            messageContent.textContent = content;
+            
+            if (sender === 'user') {
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(messageContent);
+            } else {
+                messageDiv.appendChild(messageContent);
+                messageDiv.appendChild(avatar);
+            }
             
             this.chatMessages.appendChild(messageDiv);
             this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
@@ -494,29 +594,41 @@
         }
 
         showTyping() {
+            if (this.isTyping) return;
+            this.isTyping = true;
+            
             const typingDiv = document.createElement('div');
-            typingDiv.className = 'wc-smart-message bot';
-            typingDiv.id = 'wcSmartTyping';
-            typingDiv.innerHTML = `
-                <div class="wc-smart-message-content">
-                    <div class="wc-smart-typing">
-                        <div class="wc-smart-typing-dot"></div>
-                        <div class="wc-smart-typing-dot"></div>
-                        <div class="wc-smart-typing-dot"></div>
-                        <span style="margin-right: 8px; color: #6c757d; font-size: 13px;">כותב...</span>
-                    </div>
+            typingDiv.className = 'wc-claude-message bot';
+            typingDiv.id = 'wcClaudeTyping';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'wc-claude-message-avatar';
+            avatar.textContent = '🤖';
+            
+            const typingContent = document.createElement('div');
+            typingContent.className = 'wc-claude-message-content';
+            typingContent.innerHTML = `
+                <div class="wc-claude-typing">
+                    <div class="wc-claude-typing-dot"></div>
+                    <div class="wc-claude-typing-dot"></div>
+                    <div class="wc-claude-typing-dot"></div>
+                    <span style="margin-right: 8px;">כותב...</span>
                 </div>
             `;
+            
+            typingDiv.appendChild(typingContent);
+            typingDiv.appendChild(avatar);
             
             this.chatMessages.appendChild(typingDiv);
             this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
         }
 
         hideTyping() {
-            const typingDiv = document.getElementById('wcSmartTyping');
+            const typingDiv = document.getElementById('wcClaudeTyping');
             if (typingDiv) {
                 typingDiv.remove();
             }
+            this.isTyping = false;
         }
 
         // פונקציה חכמה לחיפוש תשובה מתאימה
@@ -525,7 +637,6 @@
             
             // חיפוש מדויק במילות המפתח
             for (const [key, data] of Object.entries(CHATBOT_RESPONSES)) {
-                // בדיקה אם המסר מכיל אחת ממילות המפתח
                 if (data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
                     return data.response;
                 }
@@ -550,11 +661,12 @@
 
         sendMessage() {
             const message = this.chatInput.value.trim();
-            if (!message) return;
+            if (!message || this.isTyping) return;
 
             // הוסף הודעת משתמש
             this.addMessage(message, 'user');
             this.chatInput.value = '';
+            this.sendButton.disabled = true;
             
             // הראה שהבוט כותב
             this.showTyping();
@@ -564,7 +676,9 @@
                 this.hideTyping();
                 const response = this.findResponse(message);
                 this.addMessage(response, 'bot');
-            }, 800 + Math.random() * 1000); // דיליי של 0.8-1.8 שניות
+                this.sendButton.disabled = false;
+                this.chatInput.focus();
+            }, 1200 + Math.random() * 800); // דיליי של 1.2-2 שניות
         }
     }
 
