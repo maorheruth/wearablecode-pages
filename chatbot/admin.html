@@ -12,137 +12,247 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #1a1a1a;
+            color: #f5f5f5;
             min-height: 100vh;
-            padding: 20px;
             direction: rtl;
         }
 
-        .container {
+        /* Login Screen */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+
+        .login-box {
+            background: #2d2d2d;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid #404040;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .login-box h1 {
+            margin-bottom: 30px;
+            color: #f5f5f5;
+            font-size: 24px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #404040;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: #f5f5f5;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            text-align: center;
+        }
+
+        .login-input:focus {
+            border-color: #0ea5e9;
+        }
+
+        .login-input::placeholder {
+            color: #888;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            transform: translateY(-1px);
+        }
+
+        .error-message {
+            color: #ef4444;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* Main App */
+        .app-container {
+            display: none;
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            overflow: hidden;
+            padding: 20px;
         }
 
         .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
+            background: #2d2d2d;
+            border-radius: 16px;
             padding: 30px;
+            margin-bottom: 30px;
             text-align: center;
+            border: 1px solid #404040;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         .header h1 {
             font-size: 28px;
             margin-bottom: 10px;
+            color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
 
         .header p {
-            opacity: 0.9;
+            color: #a1a1aa;
             font-size: 16px;
         }
 
-        .content {
-            padding: 40px;
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
         }
 
         .section {
-            margin-bottom: 40px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid #e9ecef;
+            background: #2d2d2d;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #404040;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         .section h2 {
-            color: #2c3e50;
-            margin-bottom: 20px;
+            color: #f5f5f5;
+            margin-bottom: 25px;
             font-size: 22px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #404040;
         }
 
         .qa-item {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid #dee2e6;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #404040;
+            transition: all 0.3s ease;
+        }
+
+        .qa-item:hover {
+            border-color: #0ea5e9;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.1);
         }
 
         .qa-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .qa-title {
             font-weight: 600;
-            color: #2c3e50;
-            font-size: 16px;
+            color: #f5f5f5;
+            font-size: 18px;
         }
 
         .edit-btn {
-            background: #3498db;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .edit-btn:hover {
-            background: #2980b9;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
             transform: translateY(-1px);
         }
 
         .keywords {
-            background: #e3f2fd;
+            background: #374151;
             border-radius: 20px;
-            padding: 5px 12px;
+            padding: 6px 14px;
             display: inline-block;
-            margin: 3px;
-            font-size: 12px;
-            color: #1976d2;
-            border: 1px solid #bbdefb;
+            margin: 4px;
+            font-size: 13px;
+            color: #d1d5db;
+            border: 1px solid #4b5563;
         }
 
         .response-text {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            border-right: 4px solid #3498db;
-            margin-top: 10px;
-            line-height: 1.6;
+            background: #374151;
+            padding: 20px;
+            border-radius: 12px;
+            border-right: 4px solid #0ea5e9;
+            margin-top: 15px;
+            line-height: 1.7;
             white-space: pre-line;
+            color: #e5e7eb;
         }
 
         .add-new {
-            background: #27ae60;
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
+            padding: 18px 35px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 16px;
             width: 100%;
-            margin-top: 20px;
+            margin-top: 25px;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .add-new:hover {
-            background: #2ecc71;
+            background: linear-gradient(135deg, #059669, #047857);
             transform: translateY(-2px);
         }
 
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -150,9 +260,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 1000;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
 
         .modal-content {
@@ -160,38 +270,43 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
+            background: #2d2d2d;
+            border-radius: 16px;
+            padding: 40px;
             width: 90%;
-            max-width: 600px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 700px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid #404040;
         }
 
         .modal h3 {
-            margin-bottom: 20px;
-            color: #2c3e50;
+            margin-bottom: 30px;
+            color: #f5f5f5;
             text-align: center;
+            font-size: 24px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
-            color: #2c3e50;
+            color: #f5f5f5;
+            font-size: 16px;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e9ecef;
+            padding: 15px;
+            border: 2px solid #404040;
             border-radius: 8px;
             font-size: 14px;
+            background: #1a1a1a;
+            color: #f5f5f5;
             transition: border-color 0.3s ease;
             text-align: right;
         }
@@ -199,119 +314,131 @@
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #0ea5e9;
         }
 
         .form-group textarea {
-            height: 120px;
+            height: 140px;
             resize: vertical;
+            line-height: 1.6;
         }
 
         .modal-buttons {
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-top: 25px;
+            margin-top: 35px;
         }
 
         .btn {
-            padding: 12px 25px;
+            padding: 15px 30px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: #3498db;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #2980b9;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
         }
 
         .btn-secondary {
-            background: #95a5a6;
+            background: #6b7280;
             color: white;
         }
 
         .btn-secondary:hover {
-            background: #7f8c8d;
+            background: #4b5563;
         }
 
         .btn-danger {
-            background: #e74c3c;
+            background: #dc2626;
             color: white;
         }
 
         .btn-danger:hover {
-            background: #c0392b;
+            background: #b91c1c;
         }
 
+        /* Export Section */
         .export-section {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 20px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 12px;
+            padding: 25px;
             margin-top: 30px;
+            color: white;
         }
 
         .export-btn {
-            background: #f39c12;
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 12px 25px;
             border-radius: 8px;
             cursor: pointer;
             margin: 5px;
             transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .export-btn:hover {
-            background: #e67e22;
+            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-1px);
         }
 
+        /* Preview Section */
         .preview-section {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            color: white;
         }
 
         .chatbot-preview {
             max-width: 400px;
-            margin: 0 auto;
+            margin: 20px auto 0;
             background: #1a1a1a;
-            border-radius: 15px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            border: 2px solid #404040;
         }
 
         .preview-header {
             background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
             color: white;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 600;
         }
 
         .preview-messages {
             background: white;
-            height: 200px;
+            height: 250px;
             overflow-y: auto;
-            padding: 15px;
+            padding: 20px;
         }
 
         .preview-message {
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            max-width: 80%;
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            max-width: 85%;
+            line-height: 1.5;
         }
 
         .preview-message.bot {
@@ -319,6 +446,7 @@
             color: #333;
             margin-left: auto;
             text-align: right;
+            border-bottom-right-radius: 4px;
         }
 
         .preview-message.user {
@@ -326,67 +454,146 @@
             color: white;
             margin-right: auto;
             text-align: right;
+            border-bottom-left-radius: 4px;
+        }
+
+        .preview-input-container {
+            padding: 15px;
+            background: #f8f9fa;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .preview-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 20px;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .preview-send-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
         }
 
         @media (max-width: 768px) {
-            .content {
-                padding: 20px;
+            .app-container {
+                padding: 15px;
             }
             
             .modal-content {
-                padding: 20px;
+                padding: 25px;
                 width: 95%;
             }
+            
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top-color: #0ea5e9;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-box">
+            <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
+            <input type="password" id="passwordInput" class="login-input" placeholder="הכנס סיסמה..." autocomplete="off">
+            <button onclick="checkPassword()" class="login-btn">כניסה</button>
+            <div id="errorMessage" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="app-container" id="mainApp">
+        <button class="logout-btn" onclick="logout()">🚪 התנתק</button>
+        
         <div class="header">
             <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
             <p>ערוך תשובות, הוסף שאלות חדשות וצפה בתצוגה מקדימה</p>
         </div>
 
-        <div class="content">
-            <!-- סעיף תשובות אוטומטיות -->
-            <div class="section">
-                <h2>💬 תשובות אוטומטיות</h2>
-                <div id="qaList">
-                    <!-- התשובות יטענו כאן דינמית -->
-                </div>
-                <button class="add-new" onclick="addNewQA()">➕ הוסף תשובה חדשה</button>
+        <!-- תשובות אוטומטיות -->
+        <div class="section">
+            <h2>💬 תשובות אוטומטיות</h2>
+            <div id="qaList">
+                <!-- התשובות יטענו כאן דינמית -->
             </div>
+            <button class="add-new" onclick="addNewQA()">
+                ➕ הוסף תשובה חדשה
+            </button>
+        </div>
 
-            <!-- תצוגה מקדימה -->
-            <div class="section preview-section">
-                <h2>👀 תצוגה מקדימה</h2>
-                <p style="margin-bottom: 15px; text-align: center; color: #666;">בדוק איך הצ'אטבוט שלך נראה:</p>
-                <div class="chatbot-preview">
-                    <div class="preview-header">
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                            <span>👋</span>
-                            <span>עוזר WearableCode</span>
-                        </div>
-                    </div>
-                    <div class="preview-messages" id="previewMessages">
-                        <div class="preview-message bot">שלום! איך אני יכול לעזור לך היום?</div>
-                    </div>
-                    <div style="padding: 10px; background: #f8f9fa; text-align: center;">
-                        <input type="text" id="previewInput" placeholder="נסה לכתוב משהו..." 
-                               style="width: 80%; padding: 8px; border-radius: 15px; border: 1px solid #ddd; text-align: right;">
-                        <button onclick="testChatbot()" style="margin-right: 5px; padding: 8px 12px; background: #6c757d; color: white; border: none; border-radius: 50%;">→</button>
+        <!-- תצוגה מקדימה -->
+        <div class="section preview-section">
+            <h2>👀 תצוגה מקדימה</h2>
+            <p style="margin-bottom: 20px; text-align: center; opacity: 0.9;">בדוק איך הצ'אטבוט שלך נראה:</p>
+            <div class="chatbot-preview">
+                <div class="preview-header">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <span>👋</span>
+                        <span>עוזר WearableCode</span>
                     </div>
                 </div>
+                <div class="preview-messages" id="previewMessages">
+                    <div class="preview-message bot">שלום! איך אני יכול לעזור לך היום?</div>
+                </div>
+                <div class="preview-input-container">
+                    <input type="text" id="previewInput" class="preview-input" placeholder="נסה לכתוב משהו...">
+                    <button onclick="testChatbot()" class="preview-send-btn">→</button>
+                </div>
             </div>
+        </div>
 
-            <!-- ייצוא ושמירה -->
-            <div class="section export-section">
-                <h2>💾 ייצוא ושמירה</h2>
-                <p style="margin-bottom: 15px;">שמור את ההגדרות או ייצא לקובץ JavaScript:</p>
-                <button class="export-btn" onclick="exportToJS()">📁 ייצא לקובץ JS</button>
-                <button class="export-btn" onclick="saveToLocalStorage()">💾 שמור מקומית</button>
-                <button class="export-btn" onclick="loadFromLocalStorage()">📂 טען שמור</button>
-            </div>
+        <!-- ייצוא ושמירה -->
+        <div class="section export-section">
+            <h2>💾 ייצוא ושמירה</h2>
+            <p style="margin-bottom: 20px; opacity: 0.9;">שמור את ההגדרות או ייצא לקובץ JavaScript:</p>
+            <button class="export-btn" onclick="exportToJS()">
+                📁 ייצא לקובץ JS
+            </button>
+            <button class="export-btn" onclick="saveToLocalStorage()">
+                💾 שמור מקומית
+            </button>
+            <button class="export-btn" onclick="loadFromLocalStorage()">
+                📂 טען שמור
+            </button>
         </div>
     </div>
 
@@ -411,15 +618,25 @@
                 </div>
                 
                 <div class="modal-buttons">
-                    <button type="submit" class="btn btn-primary">💾 שמור</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeModal()">❌ ביטול</button>
-                    <button type="button" class="btn btn-danger" id="deleteBtn" onclick="deleteQA()" style="display: none;">🗑️ מחק</button>
+                    <button type="submit" class="btn btn-primary">
+                        💾 שמור
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                        ❌ ביטול
+                    </button>
+                    <button type="button" class="btn btn-danger" id="deleteBtn" onclick="deleteQA()" style="display: none;">
+                        🗑️ מחק
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
+        // הסיסמה הנדרשת
+        const ADMIN_PASSWORD = 'Aawearableadmin';
+        const PASSWORD_KEY = 'wearablecode_admin_auth';
+        
         // מאגר התשובות (נתונים התחלתיים)
         let chatbotData = {
             'מחירים': {
@@ -450,6 +667,61 @@
 
         let currentEditingKey = null;
 
+        // בדיקת התחברות בעת טעינת הדף
+        function checkAuth() {
+            const stored = localStorage.getItem(PASSWORD_KEY);
+            if (stored === ADMIN_PASSWORD) {
+                showMainApp();
+            } else {
+                showLoginScreen();
+            }
+        }
+
+        // הצגת מסך התחברות
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('passwordInput').focus();
+        }
+
+        // הצגת האפליקציה הראשית
+        function showMainApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            loadQAList();
+        }
+
+        // בדיקת סיסמה
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const errorDiv = document.getElementById('errorMessage');
+            
+            if (password === ADMIN_PASSWORD) {
+                // שמירת הסיסמה במחשב
+                localStorage.setItem(PASSWORD_KEY, password);
+                showMainApp();
+                errorDiv.textContent = '';
+            } else {
+                errorDiv.textContent = 'סיסמה שגויה. נסה שוב.';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        // התנתקות
+        function logout() {
+            localStorage.removeItem(PASSWORD_KEY);
+            showLoginScreen();
+            document.getElementById('passwordInput').value = '';
+        }
+
+        // Enter במסך התחברות
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
+                checkPassword();
+            }
+        });
+
         // טוען את רשימת השאלות והתשובות
         function loadQAList() {
             const qaList = document.getElementById('qaList');
@@ -461,7 +733,9 @@
                 qaItem.innerHTML = `
                     <div class="qa-header">
                         <div class="qa-title">${key}</div>
-                        <button class="edit-btn" onclick="editQA('${key}')">✏️ ערוך</button>
+                        <button class="edit-btn" onclick="editQA('${key}')">
+                            ✏️ ערוך
+                        </button>
                     </div>
                     <div>
                         ${data.keywords.map(keyword => `<span class="keywords">${keyword}</span>`).join('')}
@@ -529,110 +803,3 @@
             if (currentEditingKey && currentEditingKey !== name) {
                 delete chatbotData[currentEditingKey];
             }
-
-            // מוסיפים את החדש
-            chatbotData[name] = {
-                response: response,
-                keywords: keywords
-            };
-
-            loadQAList();
-            closeModal();
-        });
-
-        // בדיקת הצ'אטבוט
-        function testChatbot() {
-            const input = document.getElementById('previewInput');
-            const message = input.value.trim();
-            if (!message) return;
-
-            // הוסף הודעת משתמש
-            addPreviewMessage(message, 'user');
-            input.value = '';
-
-            // חפש תשובה
-            setTimeout(() => {
-                const response = findResponse(message);
-                addPreviewMessage(response, 'bot');
-            }, 500);
-        }
-
-        // מוסיף הודעה לתצוגה מקדימה
-        function addPreviewMessage(text, sender) {
-            const messages = document.getElementById('previewMessages');
-            const div = document.createElement('div');
-            div.className = `preview-message ${sender}`;
-            div.textContent = text;
-            messages.appendChild(div);
-            messages.scrollTop = messages.scrollHeight;
-        }
-
-        // חיפוש תשובה (אותה לוגיקה כמו בצ'אטבוט)
-        function findResponse(message) {
-            const lowerMessage = message.toLowerCase().trim();
-            
-            for (const [key, data] of Object.entries(chatbotData)) {
-                if (data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
-                    return data.response;
-                }
-            }
-            
-            return '🤔 אני לא בטוח שהבנתי את השאלה. נסה לשאול בצורה אחרת או צור קשר ישירות.';
-        }
-
-        // ייצוא לקובץ JavaScript
-        function exportToJS() {
-            const jsContent = `// WearableCode Chatbot Data - Generated ${new Date().toLocaleString('he-IL')}
-const CHATBOT_RESPONSES = ${JSON.stringify(chatbotData, null, 2)};
-
-// הוסף את הקוד הזה לתחילת קובץ הצ'אטבוט שלך
-`;
-            
-            const blob = new Blob([jsContent], { type: 'text/javascript' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'chatbot-data.js';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // שמירה מקומית
-        function saveToLocalStorage() {
-            localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(chatbotData));
-            alert('הנתונים נשמרו בהצלחה!');
-        }
-
-        // טעינה מקומית
-        function loadFromLocalStorage() {
-            const saved = localStorage.getItem('wearablecode_chatbot_data');
-            if (saved) {
-                chatbotData = JSON.parse(saved);
-                loadQAList();
-                alert('הנתונים נטענו בהצלחה!');
-            } else {
-                alert('לא נמצאו נתונים שמורים');
-            }
-        }
-
-        // אירוע Enter בתצוגה מקדימה
-        document.getElementById('previewInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                testChatbot();
-            }
-        });
-
-        // סגירת מודל בלחיצה על הרקע
-        document.getElementById('qaModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-
-        // טוען את הנתונים בעת טעינת הדף
-        document.addEventListener('DOMContentLoaded', function() {
-            loadQAList();
-        });
-    </script>
-</body>
-</html>
