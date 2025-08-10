@@ -1,15 +1,3 @@
-.wc-typing-indicator {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    padding: 12px 16px;
-                    background: #f1f5f9;
-                    border-radius: 16px;
-                    border-bottom-left-radius: 6px;
-                    max-width: 85%;
-                    border: 1px solid #e2e8f0;
-                }// WearableCode Claude-Style Chatbot
-// עיצוב מודרני בהשראת Claude
 
 (function() {
     'use strict';
@@ -117,6 +105,19 @@
                     background: #333333;
                     transform: scale(1.05);
                 }
+
+                .wc-typing-indicator {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                    padding: 12px 16px;
+                                    background: #f1f5f9;
+                                    border-radius: 16px;
+                                    border-bottom-left-radius: 6px;
+                                    max-width: 85%;
+                                    border: 1px solid #e2e8f0;
+                                }// WearableCode Claude-Style Chatbot
+                // עיצוב מודרני בהשראת Claude
 
                 .wc-chat-button-icon {
                     width: 24px;
