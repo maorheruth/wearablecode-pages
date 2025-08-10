@@ -5,7 +5,10 @@
                     padding: 12px 16px;
                     background: #f1f5f9;
                     border-radius: 16px;
-                    border// WearableCode Claude-Style Chatbot
+                    border-bottom-left-radius: 6px;
+                    max-width: 85%;
+                    border: 1px solid #e2e8f0;
+                }// WearableCode Claude-Style Chatbot
 // עיצוב מודרני בהשראת Claude
 
 (function() {
