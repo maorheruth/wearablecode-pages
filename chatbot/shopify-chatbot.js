@@ -81,7 +81,7 @@
             style.textContent = `
                 .wc-chatbot-container {
                     position: fixed;
-                    bottom: 24px;
+                    bottom: 48px;
                     right: 24px;
                     z-index: 999999;
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
@@ -90,42 +90,27 @@
                 }
 
                 .wc-chat-button {
-                    width: 64px;
-                    height: 64px;
-                    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+                    width: 48px;
+                    height: 48px;
+                    background: #000000;
                     border-radius: 50%;
                     border: none;
                     cursor: pointer;
-                    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    transition: all 0.3s ease;
                     position: relative;
-                    overflow: hidden;
-                }
-
-                .wc-chat-button::before {
-                    content: '';
-                    position: absolute;
-                    inset: 0;
-                    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
                 }
 
                 .wc-chat-button:hover {
-                    transform: scale(1.05) translateY(-1px);
-                    box-shadow: 0 12px 40px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15);
-                }
-
-                .wc-chat-button:hover::before {
-                    opacity: 1;
+                    background: #333333;
+                    transform: scale(1.05);
                 }
 
                 .wc-chat-button-icon {
-                    width: 28px;
-                    height: 28px;
+                    width: 24px;
+                    height: 24px;
                     fill: white;
                     position: relative;
                     z-index: 1;
@@ -307,6 +292,7 @@
                     background: #3b82f6;
                     color: white;
                     border-bottom-left-radius: 6px;
+                    border-bottom-right-radius: 16px;
                     text-align: right;
                     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
                 }
@@ -315,6 +301,7 @@
                     background: #f1f5f9;
                     color: #334155;
                     border-bottom-right-radius: 6px;
+                    border-bottom-left-radius: 16px;
                     text-align: right;
                     border: 1px solid #e2e8f0;
                 }
@@ -367,12 +354,12 @@
                 }
 
                 .wc-quick-replies {
-                    padding: 16px 24px 0;
+                    padding: 12px 24px 0;
                     background: #fefefe;
                     display: flex;
-                    gap: 8px;
+                    gap: 6px;
                     flex-wrap: wrap;
-                    justify-content: flex-end;
+                    justify-content: flex-start;
                     border-top: 1px solid #f1f5f9;
                 }
 
@@ -380,13 +367,14 @@
                     background: white;
                     color: #475569;
                     border: 1px solid #e2e8f0;
-                    padding: 8px 14px;
+                    padding: 6px 12px;
                     border-radius: 20px;
                     font-size: 13px;
                     cursor: pointer;
                     transition: all 0.2s ease;
-                    margin-bottom: 12px;
+                    margin-bottom: 8px;
                     font-weight: 500;
+                    line-height: 1.2;
                 }
 
                 .wc-quick-reply:hover {
@@ -484,13 +472,13 @@
                     }
                     
                     .wc-chat-button {
-                        width: 56px;
-                        height: 56px;
+                        width: 48px;
+                        height: 48px;
                     }
                     
                     .wc-chat-button-icon {
-                        width: 24px;
-                        height: 24px;
+                        width: 20px;
+                        height: 20px;
                     }
                 }
 
@@ -552,7 +540,7 @@
                         <textarea class="wc-chat-input" id="wcChatInput" placeholder="כתוב הודעה..." rows="1"></textarea>
                         <button class="wc-send-button" id="wcSendButton">
                             <svg viewBox="0 0 24 24">
-                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                <path d="M22.01 3L2 10l7 2 2 7z"/>
                             </svg>
                         </button>
                     </div>
@@ -626,7 +614,8 @@
             this.isOpen = !this.isOpen;
             if (this.isOpen) {
                 this.chatWindow.classList.add('open');
-                this.chatInput.focus();
+                // לא מפעילים focus אוטומטית כדי שהמקלדת לא תיפתח
+                // this.chatInput.focus();
             } else {
                 this.chatWindow.classList.remove('open');
             }
