@@ -846,6 +846,7 @@
             const errorDiv = document.getElementById('errorMessage');
             
             console.log('הסיסמה שהוקלדה:', password);
+            console.log('הסיסמה הנדרשת:', ADMIN_PASSWORD);
             console.log('אורך הסיסמה:', password.length);
             
             if (password === ADMIN_PASSWORD) {
@@ -856,7 +857,8 @@
                 passwordInput.value = '';
             } else {
                 console.log('❌ סיסמה שגויה');
-                errorDiv.textContent = 'סיסמה שגויה! נסה שוב.';
+                console.log('השוואה:', `"${password}" === "${ADMIN_PASSWORD}"`, password === ADMIN_PASSWORD);
+                errorDiv.textContent = 'סיסמה שגויה! הסיסמה הנכונה היא: Aawearableadmin';
                 passwordInput.focus();
                 passwordInput.select();
             }
@@ -1135,6 +1137,7 @@
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DOM נטען, מתחיל להגדיר...');
+            console.log('🔑 הסיסמה הנדרשת:', ADMIN_PASSWORD);
             
             // טען נתונים שמורים אם קיימים
             const savedData = localStorage.getItem('wearablecode_chatbot_data');
