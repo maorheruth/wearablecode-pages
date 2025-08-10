@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניהול צ'אטבוט WearableCode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qa-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .qa-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .qa-title {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .edit-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+
+        .keywords {
+            background: #e3f2fd;
+            border-radius: 20px;
+            padding: 5px 12px;
+            display: inline-block;
+            margin: 3px;
+            font-size: 12px;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+        }
+
+        .response-text {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-right: 4px solid #3498db;
+            margin-top: 10px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .add-new {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .add-new:hover {
+            background: #2ecc71;
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            text-align: right;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .export-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .export-btn {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            background: #e67e22;
+            transform: translateY(-1px);
+        }
+
+        .preview-section {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .chatbot-preview {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .preview-header {
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .preview-messages {
+            background: white;
+            height: 200px;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .preview-message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            max-width: 80%;
+        }
+
+        .preview-message.bot {
+            background: #e9ecef;
+            color: #333;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .preview-message.user {
+            background: #6c757d;
+            color: white;
+            margin-right: auto;
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
+            <p>ערוך תשובות, הוסף שאלות חדשות וצפה בתצוגה מקדימה</p>
+        </div>
+
+        <div class="content">
+            <!-- סעיף תשובות אוטומטיות -->
+            <div class="section">
+                <h2>💬 תשובות אוטומטיות</h2>
+                <div id="qaList">
+                    <!-- התשובות יטענו כאן דינמית -->
+                </div>
+                <button class="add-new" onclick="addNewQA()">➕ הוסף תשובה חדשה</button>
+            </div>
+
+            <!-- תצוגה מקדימה -->
+            <div class="section preview-section">
+                <h2>👀 תצוגה מקדימה</h2>
+                <p style="margin-bottom: 15px; text-align: center; color: #666;">בדוק איך הצ'אטבוט שלך נראה:</p>
+                <div class="chatbot-preview">
+                    <div class="preview-header">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <span>👋</span>
+                            <span>עוזר WearableCode</span>
+                        </div>
+                    </div>
+                    <div class="preview-messages" id="previewMessages">
+                        <div class="preview-message bot">שלום! איך אני יכול לעזור לך היום?</div>
+                    </div>
+                    <div style="padding: 10px; background: #f8f9fa; text-align: center;">
+                        <input type="text" id="previewInput" placeholder="נסה לכתוב משהו..." 
+                               style="width: 80%; padding: 8px; border-radius: 15px; border: 1px solid #ddd; text-align: right;">
+                        <button onclick="testChatbot()" style="margin-right: 5px; padding: 8px 12px; background: #6c757d; color: white; border: none; border-radius: 50%;">→</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ייצוא ושמירה -->
+            <div class="section export-section">
+                <h2>💾 ייצוא ושמירה</h2>
+                <p style="margin-bottom: 15px;">שמור את ההגדרות או ייצא לקובץ JavaScript:</p>
+                <button class="export-btn" onclick="exportToJS()">📁 ייצא לקובץ JS</button>
+                <button class="export-btn" onclick="saveToLocalStorage()">💾 שמור מקומית</button>
+                <button class="export-btn" onclick="loadFromLocalStorage()">📂 טען שמור</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal לעריכת/הוספת שאלות -->
+    <div class="modal" id="qaModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">עריכת תשובה</h3>
+            <form id="qaForm">
+                <div class="form-group">
+                    <label>שם התשובה (למטרות ניהול):</label>
+                    <input type="text" id="qaName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>מילות מפתח (מופרדות בפסיקים):</label>
+                    <input type="text" id="qaKeywords" placeholder="מחיר, כמה עולה, עלות" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>תשובת הבוט:</label>
+                    <textarea id="qaResponse" placeholder="הכנס כאן את התשובה המלאה..." required></textarea>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-primary">💾 שמור</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">❌ ביטול</button>
+                    <button type="button" class="btn btn-danger" id="deleteBtn" onclick="deleteQA()" style="display: none;">🗑️ מחק</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // מאגר התשובות (נתונים התחלתיים)
+        let chatbotData = {
+            'מחירים': {
+                response: '💰 המחירים שלנו:\n• חולצה רגילה: ₪79-89\n• חולצה פרימיום: ₪99-109\n• מבצע ללקוחות חדשים: 15% הנחה!\n• משלוח חינם מעל ₪150',
+                keywords: ['מחיר', 'כמה עולה', 'עלות', 'כסף', '₪', 'זול', 'יקר']
+            },
+            'משלוח': {
+                response: '🚚 פרטי משלוח:\n• משלוח רגיל: ₪25 (3-5 ימי עסקים)\n• משלוח מהיר: ₪35 (1-2 ימי עסקים)\n• משלוח חינם מעל ₪150!\n• שליח עד הבית או לנקודת איסוף',
+                keywords: ['משלוח', 'דואר', 'הגעה', 'כמה זמן', 'שליח', 'איסוף']
+            },
+            'מעקב חבילה': {
+                response: '📦 למעקב אחר החבילה שלך:\n• היכנס לאזור האישי באתר\n• או שלח לנו את מספר ההזמנה בווטסאפ\n• נשלח לך קישור למעקב ישירות\n• זמן משלוח: 3-5 ימי עסקים',
+                keywords: ['חבילה', 'מעקב', 'איפה החבילה', 'הזמנה', 'משלוח', 'הגיע', 'מתי יגיע']
+            },
+            'מידות': {
+                response: '📏 המידות שלנו:\n• S - חזה 90-94 ס"מ\n• M - חזה 94-98 ס"מ\n• L - חזה 98-104 ס"מ\n• XL - חזה 104-110 ס"מ\n• XXL - חזה 110-116 ס"מ\n\nיש מדריך מידות מלא באתר!',
+                keywords: ['מידה', 'גודל', 'מידות', 'small', 'medium', 'large', 's', 'm', 'l', 'xl', 'xxl']
+            },
+            'החזרות': {
+                response: '🔄 מדיניות החזרות נדיבה:\n• החזרה תוך 30 יום\n• החלפת מידה חינם\n• החזר כספי מלא (לא כולל משלוח)\n• המוצר חייב להיות במצב חדש\n• פשוט ליצור קשר ונסדר!',
+                keywords: ['החזרה', 'החלפה', 'החזר', 'לא מתאים', 'מידה לא טובה', 'להחליף']
+            },
+            'צור קשר': {
+                response: '📞 אפשר ליצור קשר:\n• WhatsApp: 050-123-4567\n• מייל: hello@wearablecode.com\n• פייסבוק: WearableCode Israel\n• אינסטגרם: @wearablecode_il\n\nאנחנו כאן בשבילכם! 😊',
+                keywords: ['צור קשר', 'טלפון', 'מייל', 'פייסבוק', 'אינסטגרם', 'ווטסאפ', 'עזרה']
+            }
+        };
+
+        let currentEditingKey = null;
+
+        // טוען את רשימת השאלות והתשובות
+        function loadQAList() {
+            const qaList = document.getElementById('qaList');
+            qaList.innerHTML = '';
+
+            for (const [key, data] of Object.entries(chatbotData)) {
+                const qaItem = document.createElement('div');
+                qaItem.className = 'qa-item';
+                qaItem.innerHTML = `
+                    <div class="qa-header">
+                        <div class="qa-title">${key}</div>
+                        <button class="edit-btn" onclick="editQA('${key}')">✏️ ערוך</button>
+                    </div>
+                    <div>
+                        ${data.keywords.map(keyword => `<span class="keywords">${keyword}</span>`).join('')}
+                    </div>
+                    <div class="response-text">${data.response}</div>
+                `;
+                qaList.appendChild(qaItem);
+            }
+        }
+
+        // פותח מודל לעריכה
+        function editQA(key) {
+            currentEditingKey = key;
+            const data = chatbotData[key];
+            
+            document.getElementById('modalTitle').textContent = 'עריכת תשובה';
+            document.getElementById('qaName').value = key;
+            document.getElementById('qaKeywords').value = data.keywords.join(', ');
+            document.getElementById('qaResponse').value = data.response;
+            document.getElementById('deleteBtn').style.display = 'block';
+            
+            document.getElementById('qaModal').style.display = 'block';
+        }
+
+        // פותח מודל להוספה
+        function addNewQA() {
+            currentEditingKey = null;
+            
+            document.getElementById('modalTitle').textContent = 'הוספת תשובה חדשה';
+            document.getElementById('qaForm').reset();
+            document.getElementById('deleteBtn').style.display = 'none';
+            
+            document.getElementById('qaModal').style.display = 'block';
+        }
+
+        // סוגר מודל
+        function closeModal() {
+            document.getElementById('qaModal').style.display = 'none';
+            currentEditingKey = null;
+        }
+
+        // מוחק תשובה
+        function deleteQA() {
+            if (currentEditingKey && confirm('האם אתה בטוח שברצונך למחוק את התשובה הזו?')) {
+                delete chatbotData[currentEditingKey];
+                loadQAList();
+                closeModal();
+            }
+        }
+
+        // שומר תשובה (עריכה או הוספה)
+        document.getElementById('qaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('qaName').value.trim();
+            const keywords = document.getElementById('qaKeywords').value.split(',').map(k => k.trim()).filter(k => k);
+            const response = document.getElementById('qaResponse').value.trim();
+            
+            if (!name || !keywords.length || !response) {
+                alert('אנא מלא את כל השדות');
+                return;
+            }
+
+            // אם עורכים, מוחקים את הישן
+            if (currentEditingKey && currentEditingKey !== name) {
+                delete chatbotData[currentEditingKey];
+            }
+
+            // מוסיפים את החדש
+            chatbotData[name] = {
+                response: response,
+                keywords: keywords
+            };
+
+            loadQAList();
+            closeModal();
+        });
+
+        // בדיקת הצ'אטבוט
+        function testChatbot() {
+            const input = document.getElementById('previewInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // הוסף הודעת משתמש
+            addPreviewMessage(message, 'user');
+            input.value = '';
+
+            // חפש תשובה
+            setTimeout(() => {
+                const response = findResponse(message);
+                addPreviewMessage(response, 'bot');
+            }, 500);
+        }
+
+        // מוסיף הודעה לתצוגה מקדימה
+        function addPreviewMessage(text, sender) {
+            const messages = document.getElementById('previewMessages');
+            const div = document.createElement('div');
+            div.className = `preview-message ${sender}`;
+            div.textContent = text;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // חיפוש תשובה (אותה לוגיקה כמו בצ'אטבוט)
+        function findResponse(message) {
+            const lowerMessage = message.toLowerCase().trim();
+            
+            for (const [key, data] of Object.entries(chatbotData)) {
+                if (data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
+                    return data.response;
+                }
+            }
+            
+            return '🤔 אני לא בטוח שהבנתי את השאלה. נסה לשאול בצורה אחרת או צור קשר ישירות.';
+        }
+
+        // ייצוא לקובץ JavaScript
+        function exportToJS() {
+            const jsContent = `// WearableCode Chatbot Data - Generated ${new Date().toLocaleString('he-IL')}
+const CHATBOT_RESPONSES = ${JSON.stringify(chatbotData, null, 2)};
+
+// הוסף את הקוד הזה לתחילת קובץ הצ'אטבוט שלך
+`;
+            
+            const blob = new Blob([jsContent], { type: 'text/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chatbot-data.js';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // שמירה מקומית
+        function saveToLocalStorage() {
+            localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(chatbotData));
+            alert('הנתונים נשמרו בהצלחה!');
+        }
+
+        // טעינה מקומית
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('wearablecode_chatbot_data');
+            if (saved) {
+                chatbotData = JSON.parse(saved);
+                loadQAList();
+                alert('הנתונים נטענו בהצלחה!');
+            } else {
+                alert('לא נמצאו נתונים שמורים');
+            }
+        }
+
+        // אירוע Enter בתצוגה מקדימה
+        document.getElementById('previewInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                testChatbot();
+            }
+        });
+
+        // סגירת מודל בלחיצה על הרקע
+        document.getElementById('qaModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // טוען את הנתונים בעת טעינת הדף
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQAList();
+        });
+    </script>
+</body>
+</html>
