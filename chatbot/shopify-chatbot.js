@@ -81,9 +81,9 @@
             style.textContent = `
                 .wc-chatbot-container {
                     position: fixed;
-                    bottom: 48px;
-                    right: 24px;
-                    z-index: 999999;
+                    bottom: 50px;
+                    right: 25px;
+                    z-index: 98;
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
                     direction: rtl;
                     max-width: 440px;
@@ -291,8 +291,8 @@
                 .wc-message.user .wc-message-content {
                     background: #3b82f6;
                     color: white;
-                    border-bottom-left-radius: 6px;
-                    border-bottom-right-radius: 16px;
+                    border-bottom-right-radius: 6px;
+                    border-bottom-left-radius: 16px;
                     text-align: right;
                     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
                 }
@@ -300,8 +300,8 @@
                 .wc-message.bot .wc-message-content {
                     background: #f1f5f9;
                     color: #334155;
-                    border-bottom-right-radius: 6px;
-                    border-bottom-left-radius: 16px;
+                    border-bottom-left-radius: 6px;
+                    border-bottom-right-radius: 16px;
                     text-align: right;
                     border: 1px solid #e2e8f0;
                 }
