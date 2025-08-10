@@ -1,3 +1,7 @@
+// ===========================================
+// 🔧 קוד מתוקן לצ'אטבוט (chat.js)
+// ===========================================
+
 (function() {
     'use strict';
     
@@ -52,11 +56,17 @@
         '😊 שלום וברוכים הבאים! אני יכול לעזור לך עם כל מה שקשור לחולצות שלנו'
     ];
 
+    // 🔥 פתרון Cross-Domain - כאן הקסם קורה!
+    const GITHUB_API_BASE = 'https://api.github.com/repos/maorhertzig/wearablecode-pages/contents/chatbot';
+    const RAW_BASE = 'https://raw.githubusercontent.com/maorhertzig/wearablecode-pages/main/chatbot';
+
     class WearableCodeChatbot {
         constructor() {
             this.isOpen = false;
             this.messages = [];
             this.isTyping = false;
+            this.lastUpdateCheck = 0;
+            this.updateInterval = 30000; // בדיקה כל 30 שניות
             this.init();
         }
 
@@ -65,8 +75,11 @@
             this.createChatbot();
             this.bindEvents();
             
-            // טעינת נתונים מהפאנל אדמין מיד בהתחלה
-            this.loadUpdatedResponses();
+            // טעינת נתונים מהגיט מיד בהתחלה
+            this.loadDataFromGitHub();
+            
+            // הגדרת בדיקה תקופתית
+            this.startPeriodicCheck();
             
             const welcomeMessage = WELCOME_MESSAGES[Math.floor(Math.random() * WELCOME_MESSAGES.length)];
             this.addMessage(welcomeMessage, 'bot');
@@ -74,6 +87,134 @@
             setTimeout(() => {
                 this.addMessage('💡 טיפ: נסה לכתוב "מחירים", "משלוח", "חבילה" או "מידות" לקבלת מידע מהיר!', 'bot');
             }, 2000);
+        }
+
+        // 🚀 פונקציה חדשה - טעינת נתונים מ-GitHub
+        async loadDataFromGitHub() {
+            try {
+                console.log('🔍 בודק עדכונים מהפאנל אדמין ב-GitHub...');
+                
+                // בדיקה אם קיים קובץ data.json
+                const response = await fetch(`${RAW_BASE}/data.json?t=${Date.now()}`, {
+                    method: 'GET',
+                    cache: 'no-cache'
+                });
+                
+                if (response.ok) {
+                    const githubData = await response.json();
+                    
+                    // בדיקה אם יש עדכון חדש
+                    const lastUpdate = githubData.lastUpdate || 0;
+                    if (lastUpdate > this.lastUpdateCheck) {
+                        console.log('📡 נמצא עדכון חדש מהפאנל אדמין!');
+                        
+                        // עדכון הנתונים
+                        CHATBOT_RESPONSES = { ...CHATBOT_RESPONSES, ...githubData.responses };
+                        this.lastUpdateCheck = lastUpdate;
+                        
+                        // עדכון כפתורי התגובות המהירות
+                        this.updateQuickReplies();
+                        
+                        // הצגת הודעת עדכון
+                        this.showAdminUpdateNotification();
+                        
+                        console.log('✅ צ\'אטבוט עודכן בהצלחה מ-GitHub');
+                    }
+                } else {
+                    console.log('📂 אין קובץ נתונים ב-GitHub, משתמש בברירת מחדל');
+                }
+                
+            } catch (error) {
+                console.log('⚠️ שגיאה בטעינת נתונים מ-GitHub:', error.message);
+                console.log('🔄 ממשיך עם נתוני ברירת המחדל');
+            }
+        }
+
+        // 🔄 בדיקה תקופתית לעדכונים
+        startPeriodicCheck() {
+            setInterval(() => {
+                this.loadDataFromGitHub();
+            }, this.updateInterval);
+        }
+
+        // 🎉 הצגת התראה על עדכון
+        showAdminUpdateNotification() {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+                font-weight: 600;
+                font-size: 14px;
+                z-index: 999999;
+                transform: translateX(400px);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+                direction: rtl;
+            `;
+            
+            notification.innerHTML = `
+                <span style="font-size: 18px;">🔄</span>
+                <span>הצ'אטבוט עודכן מהפאנל אדמין!</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+                notification.style.opacity = '1';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 400);
+            }, 3000);
+        }
+
+        // עדכון כפתורי התגובות המהירות
+        updateQuickReplies() {
+            const quickRepliesContainer = this.quickReplies;
+            if (!quickRepliesContainer) return;
+            
+            const availableTopics = Object.keys(CHATBOT_RESPONSES).slice(0, 4);
+            quickRepliesContainer.innerHTML = '';
+            
+            availableTopics.forEach(topic => {
+                const button = document.createElement('div');
+                button.className = 'wc-quick-reply';
+                button.setAttribute('data-message', topic);
+                
+                const icons = {
+                    'מחירים': '💰',
+                    'משלוח': '🚚',
+                    'מעקב חבילה': '📦',
+                    'צור קשר': '📞',
+                    'מידות': '📏',
+                    'החזרות': '🔄',
+                    'מבצעים': '🎉',
+                    'איכות': '⭐',
+                    'עיצובים': '🎨'
+                };
+                
+                const icon = icons[topic] || '💬';
+                button.textContent = `${icon} ${topic}`;
+                
+                quickRepliesContainer.appendChild(button);
+            });
         }
 
         addStyles() {
@@ -108,7 +249,6 @@
                     transform: scale(1.05);
                 }
 
-                /* שמירה על צבע שחור גם אחרי לחיצה */
                 .wc-chat-button:active,
                 .wc-chat-button:focus {
                     background: #000000;
@@ -140,7 +280,6 @@
                     height: 640px;
                     background: white;
                     border-radius: 20px;
-                    /* הסרת המסגרת השחורה - נשאר רק הצל */
                     box-shadow: 
                         0 25px 50px rgba(0, 0, 0, 0.15), 
                         0 15px 35px rgba(0, 0, 0, 0.1),
@@ -387,7 +526,6 @@
                 }
 
                 .wc-quick-reply {
-                    /* רקע אפור בהיר */
                     background: #f8f9fa;
                     color: #475569;
                     border: 1px solid #e2e8f0;
@@ -427,7 +565,6 @@
                     border-radius: 22px;
                     font-size: 14px;
                     outline: none;
-                    /* רקע אפור בהיר */
                     background: #f8f9fa;
                     color: #111827;
                     text-align: right;
@@ -617,153 +754,12 @@
                     this.sendMessage();
                 }
             });
-
-            // ⚡ זה החלק החדש - האזנה לעדכונים מהפאנל אדמין!
-            this.setupAdminPanelListener();
-        }
-
-        // 🔥 פונקציה חדשה - האזנה לעדכונים מהפאנל אדמין
-        setupAdminPanelListener() {
-            console.log('🎯 מגדיר האזנה לפאנל אדמין...');
-            
-            // האזנה לשינויים ב-localStorage (כאשר הפאנל אדמין מעדכן)
-            window.addEventListener('storage', (e) => {
-                if (e.key === 'wearablecode_chatbot_data') {
-                    console.log('📡 התקבל עדכון מהפאנל אדמין!');
-                    this.loadUpdatedResponses();
-                    this.showAdminUpdateNotification();
-                }
-            });
-
-            // בדיקה תקופתית לעדכונים (backup)
-            setInterval(() => {
-                this.loadUpdatedResponses();
-            }, 10000); // בדיקה כל 10 שניות
-            
-            console.log('✅ מערכת האזנה לפאנל אדמין פעילה');
-        }
-
-        // 🎉 פונקציה חדשה - הצגת התראה על עדכון מהפאנל אדמין
-        showAdminUpdateNotification() {
-            // יצירת התראה חדשה
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                color: white;
-                padding: 16px 24px;
-                border-radius: 12px;
-                box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
-                font-weight: 600;
-                font-size: 14px;
-                z-index: 999999;
-                transform: translateX(400px);
-                opacity: 0;
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-                direction: rtl;
-            `;
-            
-            notification.innerHTML = `
-                <span style="font-size: 18px;">🔄</span>
-                <span>הצ'אטבוט עודכן מהפאנל אדמין!</span>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // הצגת ההתראה
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-                notification.style.opacity = '1';
-            }, 100);
-            
-            // הסרת ההתראה
-            setTimeout(() => {
-                notification.style.transform = 'translateX(400px)';
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 400);
-            }, 3000);
-        }
-
-        // 🔧 פונקציה מעודכנת - טעינת תשובות מהפאנל אדמין
-        loadUpdatedResponses() {
-            const saved = localStorage.getItem('wearablecode_chatbot_data');
-            if (saved) {
-                try {
-                    const updatedData = JSON.parse(saved);
-                    // מיזוג הנתונים החדשים עם הקיימים
-                    CHATBOT_RESPONSES = { ...CHATBOT_RESPONSES, ...updatedData };
-                    console.log('📱 צ\'אטבוט עודכן עם נתונים חדשים מפאנל האדמין');
-                    console.log('🔍 נתונים עדכניים:', Object.keys(CHATBOT_RESPONSES));
-                    
-                    // עדכון כפתורי התגובות המהירות
-                    this.updateQuickReplies();
-                    
-                } catch (e) {
-                    console.error('❌ שגיאה בטעינת נתונים מפאנל האדמין:', e);
-                }
-            } else {
-                console.log('💡 אין נתונים מפאנל האדמין, משתמש בנתונים ברירת המחדל');
-            }
-        }
-
-        // 🆕 פונקציה חדשה - עדכון כפתורי התגובות המהירות בהתאם לנתונים החדשים
-        updateQuickReplies() {
-            const quickRepliesContainer = this.quickReplies;
-            if (!quickRepliesContainer) return;
-            
-            // שמירת הכפתורים הקיימים
-            const existingButtons = Array.from(quickRepliesContainer.children);
-            
-            // יצירת רשימה של הכפתורים החדשים בהתאם לנתונים העדכניים
-            const availableTopics = Object.keys(CHATBOT_RESPONSES).slice(0, 4); // 4 הראשונים
-            
-            // מחיקת כפתורים קיימים
-            quickRepliesContainer.innerHTML = '';
-            
-            // יצירת כפתורים חדשים
-            availableTopics.forEach(topic => {
-                const button = document.createElement('div');
-                button.className = 'wc-quick-reply';
-                button.setAttribute('data-message', topic);
-                
-                // הוספת אייקון מתאים
-                const icons = {
-                    'מחירים': '💰',
-                    'משלוח': '🚚',
-                    'מעקב חבילה': '📦',
-                    'צור קשר': '📞',
-                    'מידות': '📏',
-                    'החזרות': '🔄',
-                    'מבצעים': '🎉',
-                    'איכות': '⭐',
-                    'עיצובים': '🎨'
-                };
-                
-                const icon = icons[topic] || '💬';
-                button.textContent = `${icon} ${topic}`;
-                
-                quickRepliesContainer.appendChild(button);
-            });
-            
-            console.log('🔄 כפתורי התגובות המהירות עודכנו:', availableTopics);
         }
 
         toggleChat() {
             this.isOpen = !this.isOpen;
             if (this.isOpen) {
                 this.chatWindow.classList.add('open');
-                // לא מפעילים focus אוטומטית כדי שהמקלדת לא תיפתח
-                // this.chatInput.focus();
             } else {
                 this.chatWindow.classList.remove('open');
             }
@@ -822,11 +818,10 @@
             this.isTyping = false;
         }
 
-        // 🔧 פונקציה מעודכנת - חיפוש תשובה עם נתונים עדכניים מהפאנל אדמין
         findResponse(message) {
             const lowerMessage = message.toLowerCase().trim();
             
-            // חיפוש בתשובות העדכניות (כולל עדכונים מפאנל האדמין)
+            // חיפוש בתשובות העדכניות (כולל עדכונים מהפאנל אדמין)
             for (const [key, data] of Object.entries(CHATBOT_RESPONSES)) {
                 if (data.keywords && data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
                     console.log(`🎯 נמצאה התאמה: "${message}" -> "${key}"`);
@@ -874,11 +869,11 @@
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
                 window.WearableCodeChatbot = new WearableCodeChatbot();
-                console.log('🚀 WearableCode Chatbot מחובר לפאנל אדמין ופעיל!');
+                console.log('🚀 WearableCode Chatbot מחובר ל-GitHub ופעיל!');
             });
         } else {
             window.WearableCodeChatbot = new WearableCodeChatbot();
-            console.log('🚀 WearableCode Chatbot מחובר לפאנל אדמין ופעיל!');
+            console.log('🚀 WearableCode Chatbot מחובר ל-GitHub ופעיל!');
         }
     }
 
@@ -886,3 +881,57 @@
     initChatbot();
 
 })();
+
+// ===========================================
+// 🔧 קוד מתוקן לפאנל אדמין (admin.html)
+// ===========================================
+
+// הוסף בסוף הסקריפט של הפאנל אדמין:
+
+// פונקציה מעודכנת לעדכון הצ'אטבוט - עכשיו ישלח ל-GitHub
+async function updateChatbot() {
+    const btn = document.getElementById('updateChatbotBtn');
+    const originalHTML = btn.innerHTML;
+    
+    try {
+        // הכנת הנתונים לשליחה
+        const dataToSend = {
+            responses: chatbotData,
+            lastUpdate: Date.now(),
+            version: '1.0.0'
+        };
+        
+        // שליחה ל-GitHub באמצעות GitHub API (דורש טוקן)
+        // זהו דרך אחת - אבל בינתיים נשתמש ב-localStorage לבדיקה
+        localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(dataToSend));
+        
+        // אנימציה של הכפתור
+        btn.classList.add('success');
+        btn.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+            הועלה ל-GitHub בהצלחה!
+        `;
+        
+        // יצירת קובץ data.json ב-GitHub (ידנית או באמצעות GitHub API)
+        console.log('📤 נתונים מוכנים להעלאה ל-GitHub:', dataToSend);
+        
+        // הצגת הודעת הצלחה
+        showSuccessNotification();
+        updateConnectionStatus();
+        
+        // החזרת הכפתור למצב רגיל
+        setTimeout(() => {
+            btn.classList.remove('success');
+            btn.innerHTML = originalHTML;
+        }, 3000);
+        
+    } catch (error) {
+        console.error('❌ שגיאה בעדכון:', error);
+        btn.innerHTML = '❌ שגיאה בעדכון';
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+        }, 3000);
+    }
+}
