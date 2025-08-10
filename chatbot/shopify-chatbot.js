@@ -123,7 +123,7 @@
 
                 .wc-chat-window {
                     position: absolute;
-                    bottom: 80px;
+                    bottom: 40px;
                     right: 0;
                     width: 420px;
                     height: 640px;
