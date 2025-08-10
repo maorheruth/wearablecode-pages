@@ -1,5 +1,5 @@
-// WearableCode Smart Chatbot - Dark Mode Claude Style
-// גרסה מעודכנת עם עיצוב dark mode בסגנון Claude עם RTL נכון
+// WearableCode Smart Chatbot - Complete Dark Mode Claude Style
+// גרסה מלאה עם עיצוב dark mode בסגנון Claude עם RTL נכון
 
 (function() {
     'use strict';
@@ -474,3 +474,192 @@
                             <h3>עוזר WearableCode</h3>
                             <p>כאן לעזור לך 24/7</p>
                         </div>
+                        <button class="wc-dark-close-button" id="wcDarkCloseButton">×</button>
+                    </div>
+
+                    <div class="wc-dark-chat-messages" id="wcDarkChatMessages"></div>
+                    
+                    <div class="wc-dark-quick-replies" id="wcDarkQuickReplies">
+                        <div class="wc-dark-quick-reply" data-message="מחירים">💰 מחירים</div>
+                        <div class="wc-dark-quick-reply" data-message="משלוח">🚚 משלוח</div>
+                        <div class="wc-dark-quick-reply" data-message="חבילה">📦 מעקב</div>
+                        <div class="wc-dark-quick-reply" data-message="צור קשר">📞 צור קשר</div>
+                    </div>
+
+                    <div class="wc-dark-chat-input-container">
+                        <input type="text" class="wc-dark-chat-input" id="wcDarkChatInput" placeholder="כתוב הודעה..." />
+                        <button class="wc-dark-send-button" id="wcDarkSendButton"></button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(container);
+            
+            this.chatButton = document.getElementById('wcDarkChatButton');
+            this.chatWindow = document.getElementById('wcDarkChatWindow');
+            this.chatMessages = document.getElementById('wcDarkChatMessages');
+            this.chatInput = document.getElementById('wcDarkChatInput');
+            this.sendButton = document.getElementById('wcDarkSendButton');
+            this.closeButton = document.getElementById('wcDarkCloseButton');
+            this.quickReplies = document.getElementById('wcDarkQuickReplies');
+        }
+
+        bindEvents() {
+            this.chatButton.addEventListener('click', () => this.toggleChat());
+            this.closeButton.addEventListener('click', () => this.toggleChat());
+            this.sendButton.addEventListener('click', () => this.sendMessage());
+            
+            this.chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    this.sendMessage();
+                }
+            });
+
+            this.chatInput.addEventListener('input', () => {
+                this.sendButton.disabled = !this.chatInput.value.trim();
+            });
+
+            // Quick replies
+            this.quickReplies.addEventListener('click', (e) => {
+                if (e.target.classList.contains('wc-dark-quick-reply')) {
+                    const message = e.target.getAttribute('data-message');
+                    this.chatInput.value = message;
+                    this.sendMessage();
+                }
+            });
+
+            // Close on escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.isOpen) {
+                    this.toggleChat();
+                }
+            });
+        }
+
+        toggleChat() {
+            this.isOpen = !this.isOpen;
+            if (this.isOpen) {
+                this.chatWindow.classList.add('open');
+                this.chatInput.focus();
+                this.sendButton.disabled = !this.chatInput.value.trim();
+            } else {
+                this.chatWindow.classList.remove('open');
+            }
+        }
+
+        addMessage(content, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `wc-dark-message ${sender}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'wc-dark-message-content';
+            messageContent.textContent = content;
+            
+            messageDiv.appendChild(messageContent);
+            
+            this.chatMessages.appendChild(messageDiv);
+            this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            
+            this.messages.push({ content, sender, timestamp: new Date() });
+        }
+
+        showTyping() {
+            if (this.isTyping) return;
+            this.isTyping = true;
+            
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'wc-dark-message bot';
+            typingDiv.id = 'wcDarkTyping';
+            
+            const typingContent = document.createElement('div');
+            typingContent.className = 'wc-dark-message-content';
+            typingContent.innerHTML = `
+                <div class="wc-dark-typing">
+                    <div class="wc-dark-typing-dot"></div>
+                    <div class="wc-dark-typing-dot"></div>
+                    <div class="wc-dark-typing-dot"></div>
+                    <span style="margin-right: 8px;">כותב...</span>
+                </div>
+            `;
+            
+            typingDiv.appendChild(typingContent);
+            
+            this.chatMessages.appendChild(typingDiv);
+            this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+        }
+
+        hideTyping() {
+            const typingDiv = document.getElementById('wcDarkTyping');
+            if (typingDiv) {
+                typingDiv.remove();
+            }
+            this.isTyping = false;
+        }
+
+        // פונקציה חכמה לחיפוש תשובה מתאימה
+        findResponse(message) {
+            const lowerMessage = message.toLowerCase().trim();
+            
+            // חיפוש מדויק במילות המפתח
+            for (const [key, data] of Object.entries(CHATBOT_RESPONSES)) {
+                if (data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
+                    return data.response;
+                }
+            }
+            
+            // תשובות חכמות נוספות לשאלות נפוצות
+            if (lowerMessage.includes('שלום') || lowerMessage.includes('היי') || lowerMessage.includes('בוקר טוב')) {
+                return '👋 שלום וברוכים הבאים ל-WearableCode! איך אני יכול לעזור לך היום?';
+            }
+            
+            if (lowerMessage.includes('תודה') || lowerMessage.includes('תנקיו')) {
+                return '😊 בכיף! אני כאן בשבילך. יש עוד משהו שאני יכול לעזור בו?';
+            }
+            
+            if (lowerMessage.includes('להתראות') || lowerMessage.includes('ביי')) {
+                return '👋 להתראות! תמיד אפשר לחזור אלינו. תהיה בריא!';
+            }
+            
+            // אם לא נמצאה תשובה ספציפית
+            return '🤔 אני לא בטוח שהבנתי את השאלה. בואו ננסה כמה אפשרויות:\n\n• כתוב "מחירים" למידע על מחירים\n• כתוב "משלוח" לפרטי משלוח\n• כתוב "חבילה" למעקב אחר חבילה\n• כתוב "צור קשר" לפרטי התקשרות\n\nאו פשוט שאל אותי משהו ספציפי! 😊';
+        }
+
+        sendMessage() {
+            const message = this.chatInput.value.trim();
+            if (!message || this.isTyping) return;
+
+            // הוסף הודעת משתמש
+            this.addMessage(message, 'user');
+            this.chatInput.value = '';
+            this.sendButton.disabled = true;
+            
+            // הראה שהבוט כותב
+            this.showTyping();
+
+            // חפש תשובה ושלח אחרי דיליי קצר (לריאליזם)
+            setTimeout(() => {
+                this.hideTyping();
+                const response = this.findResponse(message);
+                this.addMessage(response, 'bot');
+                this.sendButton.disabled = false;
+                this.chatInput.focus();
+            }, 1200 + Math.random() * 800); // דיליי של 1.2-2 שניות
+        }
+    }
+
+    // אתחול הצ'אט בוט
+    function initSmartChatbot() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                window.WearableCodeSmartChatbot = new WearableCodeSmartChatbot();
+            });
+        } else {
+            window.WearableCodeSmartChatbot = new WearableCodeSmartChatbot();
+        }
+    }
+
+    // התחל!
+    initSmartChatbot();
+
+})();
