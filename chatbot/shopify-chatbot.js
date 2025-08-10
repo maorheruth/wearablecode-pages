@@ -81,7 +81,7 @@
             style.textContent = `
                 .wc-chatbot-container {
                     position: fixed;
-                    bottom: 50px;
+                    bottom: 25px;
                     right: 25px;
                     z-index: 98;
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
