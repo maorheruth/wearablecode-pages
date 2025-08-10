@@ -1,1003 +1,476 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ניהול צ'אטבוט WearableCode</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: #0f1419;
-            min-height: 100vh;
-            direction: rtl;
-            overflow: hidden;
-            color: #f1f5f9;
-        }
-
-        /* Login Screen */
-        .login-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #0f1419;
-        }
-
-        .login-box {
-            background: #1e293b;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            border: 1px solid #334155;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
-
-        .login-box h1 {
-            margin-bottom: 30px;
-            color: #f1f5f9;
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .login-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #475569;
-            border-radius: 12px;
-            background: #0f172a;
-            color: #f1f5f9;
-            font-size: 16px;
-            margin-bottom: 20px;
-            outline: none;
-            transition: all 0.3s ease;
-            text-align: center;
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-            letter-spacing: 2px;
-        }
-
-        .login-input:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .login-input::placeholder {
-            color: #64748b;
-            letter-spacing: normal;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 15px;
-            background: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .login-btn:hover {
-            background: #2563eb;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
-        }
-
-        .error-message {
-            color: #ef4444;
-            margin-top: 15px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Main App */
-        .app-container {
-            display: none;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .app-header {
-            background: #1e293b;
-            padding: 20px 30px;
-            border-bottom: 1px solid #334155;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 100;
-        }
-
-        .app-header h1 {
-            font-size: 24px;
-            color: #f1f5f9;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logout-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: #dc2626;
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 300px 1fr 350px;
-            height: calc(100vh - 80px);
-            gap: 0;
-        }
-
-        /* Questions List */
-        .questions-panel {
-            background: #1e293b;
-            border-right: 1px solid #334155;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .questions-panel h2 {
-            color: #f1f5f9;
-            margin-bottom: 20px;
-            font-size: 18px;
-            font-weight: 600;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #334155;
-        }
-
-        .question-item {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .question-item:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .question-item.active {
-            border-color: #3b82f6;
-            background: rgba(59, 130, 246, 0.1);
-            color: #f1f5f9;
-        }
-
-        .question-title {
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 8px;
-            color: #f1f5f9;
-        }
-
-        .question-keywords {
-            font-size: 12px;
-            color: #94a3b8;
-            line-height: 1.4;
-        }
-
-        .add-question-btn {
-            width: 100%;
-            padding: 15px;
-            background: #10b981;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .add-question-btn:hover {
-            background: #059669;
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        /* Edit Panel */
-        .edit-panel {
-            background: #0f1419;
-            border-right: 1px solid #334155;
-            padding: 30px;
-            overflow-y: auto;
-        }
-
-        .edit-panel h2 {
-            color: #f1f5f9;
-            margin-bottom: 25px;
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #f1f5f9;
-            font-size: 14px;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #334155;
-            border-radius: 8px;
-            font-size: 14px;
-            background: #1e293b;
-            color: #f1f5f9;
-            transition: border-color 0.3s ease;
-            text-align: right;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: #64748b;
-        }
-
-        .form-group textarea {
-            height: 120px;
-            resize: vertical;
-            line-height: 1.6;
-        }
-
-        .edit-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            flex: 1;
-        }
-
-        .btn-primary {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
-        }
-
-        .empty-state {
-            text-align: center;
-            color: #64748b;
-            padding: 50px 20px;
-        }
-
-        .empty-state h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #94a3b8;
-        }
-
-        /* Preview Panel */
-        .preview-panel {
-            background: #1e293b;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .preview-panel h2 {
-            color: #f1f5f9;
-            margin-bottom: 20px;
-            font-size: 18px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .chatbot-preview {
-            background: #0f172a;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid #334155;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            max-height: 400px;
-        }
-
-        .preview-header {
-            background: #1e293b;
-            color: #f1f5f9;
-            padding: 15px 20px;
-            text-align: center;
-            font-weight: 600;
-            border-bottom: 1px solid #334155;
-        }
-
-        .preview-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background: #0f172a;
-            min-height: 250px;
-            direction: rtl;
-        }
-
-        .preview-message {
-            margin-bottom: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            animation: messageSlide 0.3s ease;
-        }
-
-        @keyframes messageSlide {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .preview-message.user {
-            justify-content: flex-end;
-        }
-
-        .preview-message.bot {
-            justify-content: flex-start;
-        }
-
-        .preview-message-content {
-            padding: 10px 14px;
-            border-radius: 18px;
-            font-size: 13px;
-            max-width: 85%;
-            line-height: 1.5;
-            white-space: pre-line;
-            text-align: right;
-        }
-
-        .preview-message.user .preview-message-content {
-            background: #3b82f6;
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .preview-message.bot .preview-message-content {
-            background: #374151;
-            color: #f1f5f9;
-            border-bottom-left-radius: 4px;
-            border: 1px solid #4b5563;
-        }
-
-        .preview-input-container {
-            padding: 15px;
-            background: #1e293b;
-            border-top: 1px solid #334155;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            direction: rtl;
-        }
-
-        .preview-input {
-            flex: 1;
-            padding: 10px 14px;
-            border: 1px solid #475569;
-            border-radius: 20px;
-            text-align: right;
-            font-size: 13px;
-            outline: none;
-            background: #0f172a;
-            color: #f1f5f9;
-        }
-
-        .preview-input:focus {
-            border-color: #3b82f6;
-        }
-
-        .preview-input::placeholder {
-            color: #64748b;
-        }
-
-        .preview-send-btn {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .preview-send-btn:hover {
-            background: #2563eb;
-            transform: scale(1.05);
-        }
-
-        /* Export Section */
-        .export-section {
-            margin-top: 20px;
-            padding: 20px;
-            background: #0f172a;
-            border-radius: 12px;
-            border: 1px solid #334155;
-        }
-
-        .export-section h3 {
-            color: #f1f5f9;
-            margin-bottom: 15px;
-            font-size: 16px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .export-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .export-btn {
-            background: #374151;
-            color: #f1f5f9;
-            border: 1px solid #475569;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .export-btn:hover {
-            border-color: #3b82f6;
-            background: #4b5563;
-            transform: translateY(-1px);
-        }
-
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
-
-        @media (max-width: 1200px) {
-            .main-content {
-                grid-template-columns: 250px 1fr 300px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto 1fr auto;
-            }
+// WearableCode Smart Chatbot - Dark Mode Claude Style
+// גרסה מעודכנת עם עיצוב dark mode בסגנון Claude עם RTL נכון
+
+(function() {
+    'use strict';
+    
+    // בדיקה שלא נטען כבר
+    if (window.WearableCodeSmartChatbot) {
+        return;
+    }
+
+    // *** נתוני הצ'אטבוט - ערוך כאן או השתמש בדף הניהול ***
+    const CHATBOT_RESPONSES = {
+        'מחירים': {
+            response: '💰 המחירים שלנו:\n• חולצה רגילה: ₪79-89\n• חולצה פרימיום: ₪99-109\n• מבצע ללקוחות חדשים: 15% הנחה!\n• משלוח חינם מעל ₪150',
+            keywords: ['מחיר', 'כמה עולה', 'עלות', 'כסף', '₪', 'זול', 'יקר']
+        },
+        'משלוח': {
+            response: '🚚 פרטי משלוח:\n• משלוח רגיל: ₪25 (3-5 ימי עסקים)\n• משלוח מהיר: ₪35 (1-2 ימי עסקים)\n• משלוח חינם מעל ₪150!\n• שליח עד הבית או לנקודת איסוף',
+            keywords: ['משלוח', 'דואר', 'הגעה', 'כמה זמן', 'שליח', 'איסוף']
+        },
+        'מעקב חבילה': {
+            response: '📦 למעקב אחר החבילה שלך:\n• היכנס לאזור האישי באתר\n• או שלח לנו את מספר ההזמנה בווטסאפ\n• נשלח לך קישור למעקב ישירות\n• זמן משלוח: 3-5 ימי עסקים',
+            keywords: ['חבילה', 'מעקב', 'איפה החבילה', 'הזמנה', 'משלוח', 'הגיע', 'מתי יגיע']
+        },
+        'מידות': {
+            response: '📏 המידות שלנו:\n• S - חזה 90-94 ס"מ\n• M - חזה 94-98 ס"מ\n• L - חזה 98-104 ס"מ\n• XL - חזה 104-110 ס"מ\n• XXL - חזה 110-116 ס"מ\n\nיש מדריך מידות מלא באתר!',
+            keywords: ['מידה', 'גודל', 'מידות', 'small', 'medium', 'large', 's', 'm', 'l', 'xl', 'xxl']
+        },
+        'איכות': {
+            response: '⭐ איכות פרימיום:\n• 100% כותנה איכותית\n• הדפסה עמידה במכונת כביסה\n• תפרים חזקים ועמידים\n• צבעים שלא דוהים\n• אחריות על כל מוצר!',
+            keywords: ['איכות', 'חומר', 'כותנה', 'הדפסה', 'עמיד', 'כביסה']
+        },
+        'החזרות': {
+            response: '🔄 מדיניות החזרות נדיבה:\n• החזרה תוך 30 יום\n• החלפת מידה חינם\n• החזר כספי מלא (לא כולל משלוח)\n• המוצר חייב להיות במצב חדש\n• פשוט ליצור קשר ונסדר!',
+            keywords: ['החזרה', 'החלפה', 'החזר', 'לא מתאים', 'מידה לא טובה', 'להחליף']
+        },
+        'עיצובים': {
+            response: '🎨 הקטגוריות שלנו:\n• ציטוטים מסדרות (יו, חברים, משרד וכו\')\n• מימים ישראליים\n• עיצובים מצחיקים\n• ציטוטים מעצימים\n• עיצובים מותאמים אישית\n\nכל העיצובים יחודיים ובלעדיים!',
+            keywords: ['עיצוב', 'חולצה', 'דיזני', 'סדרות', 'מימים', 'מצחיק', 'ציטוט']
+        },
+        'צור קשר': {
+            response: '📞 אפשר ליצור קשר:\n• WhatsApp: 050-123-4567\n• מייל: hello@wearablecode.com\n• פייסבוק: WearableCode Israel\n• אינסטגרם: @wearablecode_il\n\nאנחנו כאן בשבילכם! 😊',
+            keywords: ['צור קשר', 'טלפון', 'מייל', 'פייסבוק', 'אינסטגרם', 'ווטסאפ', 'עזרה']
+        },
+        'מבצעים': {
+            response: '🎉 המבצעים הנוכחיים:\n• 15% הנחה ללקוחות חדשים (קוד: NEW15)\n• קנה 2 קבל שלישית ב-50% הנחה\n• משלוח חינם מעל ₪150\n• מבצע חברי מועדון: 20% הנחה\n\nעקבו אחרינו לעוד מבצעים!',
+            keywords: ['מבצע', 'הנחה', 'זול יותר', 'קופון', 'קוד', 'חסכון']
+        }
+    };
+
+    // הודעות ברוכים הבאים אקראיות
+    const WELCOME_MESSAGES = [
+        '👋 שלום! אני העוזר הווירטואלי של WearableCode. איך אני יכול לעזור לך היום?',
+        '🎨 ברוכים הבאים ל-WearableCode! אני כאן לעזור לך למצוא את החולצה המושלמת',
+        '👕 היי! רוצה לשמוע על החולצות הכי מגניבות בישראל? אני כאן בשבילך!',
+        '😊 שלום וברוכים הבאים! אני יכול לעזור לך עם כל מה שקשור לחולצות שלנו'
+    ];
+
+    // יצירת הצ'אט בוט החכם
+    class WearableCodeSmartChatbot {
+        constructor() {
+            this.isOpen = false;
+            this.messages = [];
+            this.currentMessage = '';
+            this.isTyping = false;
+            this.init();
+        }
+
+        init() {
+            this.addStyles();
+            this.createChatbot();
+            this.bindEvents();
             
-            .questions-panel,
-            .preview-panel {
-                height: auto;
-                max-height: 200px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Login Screen -->
-    <div class="login-container" id="loginScreen">
-        <div class="login-box">
-            <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
-            <input type="password" id="passwordInput" class="login-input" placeholder="הכנס סיסמה..." autocomplete="off">
-            <button id="loginButton" class="login-btn">כניסה</button>
-            <div id="errorMessage" class="error-message"></div>
-        </div>
-    </div>
-
-    <!-- Main App -->
-    <div class="app-container" id="mainApp">
-        <div class="app-header">
-            <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
-            <button class="logout-btn" id="logoutButton">🚪 התנתק</button>
-        </div>
-
-        <div class="main-content">
-            <!-- Questions List -->
-            <div class="questions-panel">
-                <h2>📝 רשימת שאלות</h2>
-                <div id="questionsList">
-                    <!-- Questions will be loaded here -->
-                </div>
-                <button class="add-question-btn" id="addQuestionBtn">➕ שאלה חדשה</button>
-            </div>
-
-            <!-- Edit Panel -->
-            <div class="edit-panel">
-                <div id="editContent">
-                    <div class="empty-state">
-                        <h3>👈 בחר שאלה לעריכה</h3>
-                        <p>או לחץ על "שאלה חדשה" כדי להוסיף שאלה חדשה</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Preview Panel -->
-            <div class="preview-panel">
-                <h2>👀 תצוגה מקדימה</h2>
-                <div class="chatbot-preview">
-                    <div class="preview-header">
-                        עוזר WearableCode
-                    </div>
-                    <div class="preview-messages" id="previewMessages">
-                        <div class="preview-message bot">
-                            <div class="preview-message-content">שלום! איך אני יכול לעזור לך היום?</div>
-                        </div>
-                    </div>
-                    <div class="preview-input-container">
-                        <input type="text" id="previewInput" class="preview-input" placeholder="נסה לכתוב משהו...">
-                        <button id="testChatbotButton" class="preview-send-btn">→</button>
-                    </div>
-                </div>
-
-                <div class="export-section">
-                    <h3>💾 ייצוא ושמירה</h3>
-                    <div class="export-buttons">
-                        <button class="export-btn" id="exportJSButton">📁 ייצא לקובץ JS</button>
-                        <button class="export-btn" id="saveLocalButton">💾 שמור מקומית</button>
-                        <button class="export-btn" id="loadLocalButton">📂 טען שמור</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // הסיסמה הנדרשת
-        const ADMIN_PASSWORD = 'Aawearableadmin';
-        const PASSWORD_KEY = 'wearablecode_admin_auth';
-        
-        // מאגר התשובות (נתונים התחלתיים)
-        let chatbotData = {
-            'מחירים': {
-                response: '💰 המחירים שלנו:\n• חולצה רגילה: ₪79-89\n• חולצה פרימיום: ₪99-109\n• מבצע ללקוחות חדשים: 15% הנחה!\n• משלוח חינם מעל ₪150',
-                keywords: ['מחיר', 'כמה עולה', 'עלות', 'כסף', '₪', 'זול', 'יקר']
-            },
-            'משלוח': {
-                response: '🚚 פרטי משלוח:\n• משלוח רגיל: ₪25 (3-5 ימי עסקים)\n• משלוח מהיר: ₪35 (1-2 ימי עסקים)\n• משלוח חינם מעל ₪150!\n• שליח עד הבית או לנקודת איסוף',
-                keywords: ['משלוח', 'דואר', 'הגעה', 'כמה זמן', 'שליח', 'איסוף']
-            },
-            'מעקב חבילה': {
-                response: '📦 למעקב אחר החבילה שלך:\n• היכנס לאזור האישי באתר\n• או שלח לנו את מספר ההזמנה בווטסאפ\n• נשלח לך קישור למעקב ישירות\n• זמן משלוח: 3-5 ימי עסקים',
-                keywords: ['חבילה', 'מעקב', 'איפה החבילה', 'הזמנה', 'משלוח', 'הגיע', 'מתי יגיע']
-            },
-            'מידות': {
-                response: '📏 המידות שלנו:\n• S - חזה 90-94 ס"מ\n• M - חזה 94-98 ס"מ\n• L - חזה 98-104 ס"מ\n• XL - חזה 104-110 ס"מ\n• XXL - חזה 110-116 ס"מ\n\nיש מדריך מידות מלא באתר!',
-                keywords: ['מידה', 'גודל', 'מידות', 'small', 'medium', 'large', 's', 'm', 'l', 'xl', 'xxl']
-            },
-            'החזרות': {
-                response: '🔄 מדיניות החזרות נדיבה:\n• החזרה תוך 30 יום\n• החלפת מידה חינם\n• החזר כספי מלא (לא כולל משלוח)\n• המוצר חייב להיות במצב חדש\n• פשוט ליצור קשר ונסדר!',
-                keywords: ['החזרה', 'החלפה', 'החזר', 'לא מתאים', 'מידה לא טובה', 'להחליף']
-            },
-            'צור קשר': {
-                response: '📞 אפשר ליצור קשר:\n• WhatsApp: 050-123-4567\n• מייל: hello@wearablecode.com\n• פייסבוק: WearableCode Israel\n• אינסטגרם: @wearablecode_il\n\nאנחנו כאן בשבילכם! 😊',
-                keywords: ['צור קשר', 'טלפון', 'מייל', 'פייסבוק', 'אינסטגרם', 'ווטסאפ', 'עזרה']
-            }
-        };
-
-        let currentEditingKey = null;
-
-        // בדיקת התחברות בעת טעינת הדף
-        function checkAuth() {
-            const stored = localStorage.getItem(PASSWORD_KEY);
-            if (stored === ADMIN_PASSWORD) {
-                showMainApp();
-            } else {
-                showLoginScreen();
-            }
-        }
-
-        // הצגת מסך התחברות
-        function showLoginScreen() {
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('passwordInput').focus();
-        }
-
-        // הצגת האפליקציה הראשית
-        function showMainApp() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            loadQuestionsList();
-        }
-
-        // בדיקת סיסמה
-        function checkPassword() {
-            const password = document.getElementById('passwordInput').value;
-            const errorDiv = document.getElementById('errorMessage');
+            // הודעת ברוכים הבאים אקראית
+            const welcomeMessage = WELCOME_MESSAGES[Math.floor(Math.random() * WELCOME_MESSAGES.length)];
+            this.addMessage(welcomeMessage, 'bot');
             
-            if (password === ADMIN_PASSWORD) {
-                localStorage.setItem(PASSWORD_KEY, password);
-                showMainApp();
-                errorDiv.textContent = '';
-            } else {
-                errorDiv.textContent = 'סיסמה שגויה. נסה שוב.';
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('passwordInput').focus();
-            }
-        }
-
-        // התנתקות
-        function logout() {
-            localStorage.removeItem(PASSWORD_KEY);
-            showLoginScreen();
-            document.getElementById('passwordInput').value = '';
-        }
-
-        // טעינת רשימת השאלות
-        function loadQuestionsList() {
-            const questionsList = document.getElementById('questionsList');
-            questionsList.innerHTML = '';
-
-            for (const [key, data] of Object.entries(chatbotData)) {
-                const questionItem = document.createElement('div');
-                questionItem.className = 'question-item';
-                questionItem.onclick = () => selectQuestion(key);
-                questionItem.innerHTML = `
-                    <div class="question-title">${key}</div>
-                    <div class="question-keywords">${data.keywords.slice(0, 3).join(', ')}${data.keywords.length > 3 ? '...' : ''}</div>
-                `;
-                questionsList.appendChild(questionItem);
-            }
-        }
-
-        // בחירת שאלה לעריכה
-        function selectQuestion(key) {
-            // הסרת סימון מכל הפריטים
-            document.querySelectorAll('.question-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            // סימון הפריט הנוכחי
-            event.target.closest('.question-item').classList.add('active');
-
-            currentEditingKey = key;
-            const data = chatbotData[key];
-
-            const editContent = document.getElementById('editContent');
-            editContent.innerHTML = `
-                <h2>✏️ עריכת תשובה</h2>
-                <div class="form-group">
-                    <label>שם התשובה:</label>
-                    <input type="text" id="qaName" value="${key}">
-                </div>
-                
-                <div class="form-group">
-                    <label>מילות מפתח (מופרדות בפסיקים):</label>
-                    <input type="text" id="qaKeywords" value="${data.keywords.join(', ')}">
-                </div>
-                
-                <div class="form-group">
-                    <label>תשובת הבוט:</label>
-                    <textarea id="qaResponse">${data.response}</textarea>
-                </div>
-                
-                <div class="edit-buttons">
-                    <button class="btn btn-primary" onclick="saveQuestion()">💾 שמור</button>
-                    <button class="btn btn-danger" onclick="deleteQuestion()">🗑️ מחק</button>
-                </div>
-            `;
-        }
-
-        // הוספת שאלה חדשה
-        function addNewQuestion() {
-            // הסרת סימון מכל הפריטים
-            document.querySelectorAll('.question-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            currentEditingKey = null;
-
-            const editContent = document.getElementById('editContent');
-            editContent.innerHTML = `
-                <h2>➕ שאלה חדשה</h2>
-                <div class="form-group">
-                    <label>שם התשובה:</label>
-                    <input type="text" id="qaName" placeholder="לדוגמה: מבצעים">
-                </div>
-                
-                <div class="form-group">
-                    <label>מילות מפתח (מופרדות בפסיקים):</label>
-                    <input type="text" id="qaKeywords" placeholder="מבצע, הנחה, זול יותר">
-                </div>
-                
-                <div class="form-group">
-                    <label>תשובת הבוט:</label>
-                    <textarea id="qaResponse" placeholder="הכנס כאן את התשובה המלאה..."></textarea>
-                </div>
-                
-                <div class="edit-buttons">
-                    <button class="btn btn-primary" onclick="saveQuestion()">💾 שמור</button>
-                </div>
-            `;
-        }
-
-        // שמירת שאלה
-        function saveQuestion() {
-            const name = document.getElementById('qaName').value.trim();
-            const keywords = document.getElementById('qaKeywords').value.split(',').map(k => k.trim()).filter(k => k);
-            const response = document.getElementById('qaResponse').value.trim();
-            
-            if (!name || !keywords.length || !response) {
-                alert('אנא מלא את כל השדות');
-                return;
-            }
-
-            // אם עורכים, מוחקים את הישן
-            if (currentEditingKey && currentEditingKey !== name) {
-                delete chatbotData[currentEditingKey];
-            }
-
-            // מוסיפים את החדש
-            chatbotData[name] = {
-                response: response,
-                keywords: keywords
-            };
-
-            loadQuestionsList();
-            
-            // הצגת הודעת הצלחה
-            const saveBtn = event.target;
-            const originalText = saveBtn.innerHTML;
-            saveBtn.innerHTML = '✅ נשמר!';
-            saveBtn.style.background = '#10b981';
-            
+            // הוספת הודעת עזרה
             setTimeout(() => {
-                saveBtn.innerHTML = originalText;
-                saveBtn.style.background = '';
+                this.addMessage('💡 טיפ: נסה לכתוב "מחירים", "משלוח", "חבילה" או "מידות" לקבלת מידע מהיר!', 'bot');
             }, 2000);
         }
 
-        // מחיקת שאלה
-        function deleteQuestion() {
-            if (currentEditingKey && confirm('האם אתה בטוח שברצונך למחוק את התשובה הזו?')) {
-                delete chatbotData[currentEditingKey];
-                loadQuestionsList();
-                
-                // חזור למצב ריק
-                const editContent = document.getElementById('editContent');
-                editContent.innerHTML = `
-                    <div class="empty-state">
-                        <h3>👈 בחר שאלה לעריכה</h3>
-                        <p>או לחץ על "שאלה חדשה" כדי להוסיף שאלה חדשה</p>
-                    </div>
-                `;
-                currentEditingKey = null;
-            }
-        }
-
-        // בדיקת הצ'אטבוט
-        function testChatbot() {
-            const input = document.getElementById('previewInput');
-            const message = input.value.trim();
-            if (!message) return;
-
-            // הוסף הודעת משתמש
-            addPreviewMessage(message, 'user');
-            input.value = '';
-
-            // חפש תשובה
-            setTimeout(() => {
-                const response = findResponse(message);
-                addPreviewMessage(response, 'bot');
-            }, 500);
-        }
-
-        // מוסיף הודעה לתצוגה מקדימה
-        function addPreviewMessage(text, sender) {
-            const messages = document.getElementById('previewMessages');
-            const div = document.createElement('div');
-            div.className = `preview-message ${sender}`;
-            
-            const content = document.createElement('div');
-            content.className = 'preview-message-content';
-            content.textContent = text;
-            div.appendChild(content);
-            
-            messages.appendChild(div);
-            messages.scrollTop = messages.scrollHeight;
-        }
-
-        // חיפוש תשובה
-        function findResponse(message) {
-            const lowerMessage = message.toLowerCase().trim();
-            
-            for (const [key, data] of Object.entries(chatbotData)) {
-                if (data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
-                    return data.response;
+        addStyles() {
+            const style = document.createElement('style');
+            style.textContent = `
+                /* Dark Mode Chatbot - Claude Style */
+                .wc-dark-chatbot-container {
+                    position: fixed;
+                    bottom: 24px;
+                    right: 24px;
+                    z-index: 999999;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                    direction: rtl;
+                    max-width: 440px;
                 }
-            }
-            
-            return '🤔 אני לא בטוח שהבנתי את השאלה. נסה לשאול בצורה אחרת או צור קשר ישירות.';
-        }
 
-        // ייצוא לקובץ JavaScript
-        function exportToJS() {
-            const jsContent = `// WearableCode Chatbot Data - Generated ${new Date().toLocaleString('he-IL')}
-const CHATBOT_RESPONSES = ${JSON.stringify(chatbotData, null, 2)};
+                .wc-dark-chat-button {
+                    width: 64px;
+                    height: 64px;
+                    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+                    border-radius: 50%;
+                    border: none;
+                    cursor: pointer;
+                    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    position: relative;
+                    font-size: 24px;
+                    color: white;
+                    animation: gentlePulse 4s ease-in-out infinite;
+                }
 
-// הוסף את הקוד הזה לתחילת קובץ הצ'אטבוט שלך
-// החלף את המשתנה CHATBOT_RESPONSES הקיים בקוד החדש הזה
-`;
-            
-            const blob = new Blob([jsContent], { type: 'text/javascript' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'chatbot-responses.js';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
+                .wc-dark-chat-button:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
+                }
 
-        // שמירה מקומית
-        function saveToLocalStorage() {
-            localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(chatbotData));
-            
-            const btn = event.target;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '✅ נשמר!';
-            btn.style.background = '#10b981';
-            btn.style.color = 'white';
-            
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = '';
-                btn.style.color = '';
-            }, 2000);
-        }
+                .wc-dark-chat-button::before {
+                    content: "💬";
+                    font-size: 28px;
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+                }
 
-        // טעינה מקומית
-        function loadFromLocalStorage() {
-            const saved = localStorage.getItem('wearablecode_chatbot_data');
-            if (saved) {
-                chatbotData = JSON.parse(saved);
-                loadQuestionsList();
-                
-                // חזור למצב ריק
-                const editContent = document.getElementById('editContent');
-                editContent.innerHTML = `
-                    <div class="empty-state">
-                        <h3>✅ נתונים נטענו בהצלחה!</h3>
-                        <p>בחר שאלה לעריכה או הוסף שאלה חדשה</p>
-                    </div>
-                `;
-                
-                const btn = event.target;
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '✅ נטען!';
-                btn.style.background = '#10b981';
-                btn.style.color = 'white';
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.style.background = '';
-                    btn.style.color = '';
-                }, 2000);
-            } else {
-                alert('לא נמצאו נתונים שמורים במחשב הזה');
-            }
-        }
-
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-            
-            document.getElementById('loginButton').addEventListener('click', checkPassword);
-            document.getElementById('logoutButton').addEventListener('click', logout);
-            document.getElementById('addQuestionBtn').addEventListener('click', addNewQuestion);
-            document.getElementById('testChatbotButton').addEventListener('click', testChatbot);
-            document.getElementById('exportJSButton').addEventListener('click', exportToJS);
-            document.getElementById('saveLocalButton').addEventListener('click', saveToLocalStorage);
-            document.getElementById('loadLocalButton').addEventListener('click', loadFromLocalStorage);
-            
-            // Enter במסך התחברות
-            document.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    const loginScreen = document.getElementById('loginScreen');
-                    if (loginScreen && window.getComputedStyle(loginScreen).display !== 'none') {
-                        checkPassword();
+                @keyframes gentlePulse {
+                    0%, 100% { 
+                        transform: scale(1);
+                        box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+                    }
+                    50% { 
+                        transform: scale(1.02);
+                        box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
                     }
                 }
-            });
 
-            // Enter בתצוגה מקדימה
-            document.getElementById('previewInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    testChatbot();
+                .wc-dark-chat-window {
+                    position: absolute;
+                    bottom: 80px;
+                    right: 0;
+                    width: 400px;
+                    height: 600px;
+                    background: #0f1419;
+                    border-radius: 16px;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.2);
+                    display: none;
+                    flex-direction: column;
+                    overflow: hidden;
+                    border: 1px solid #334155;
+                    direction: rtl;
                 }
-            });
-        });
 
-        // טען נתונים שמורים אם קיימים
-        const savedData = localStorage.getItem('wearablecode_chatbot_data');
-        if (savedData) {
-            try {
-                chatbotData = JSON.parse(savedData);
-            } catch (e) {
-                console.log('שגיאה בטעינת נתונים שמורים');
-            }
+                .wc-dark-chat-window.open {
+                    display: flex;
+                    animation: slideUpFade 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+
+                @keyframes slideUpFade {
+                    from { 
+                        opacity: 0; 
+                        transform: translateY(20px) scale(0.95);
+                    }
+                    to { 
+                        opacity: 1; 
+                        transform: translateY(0) scale(1);
+                    }
+                }
+
+                .wc-dark-chat-header {
+                    background: #1e293b;
+                    padding: 20px 24px;
+                    color: #f1f5f9;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    direction: rtl;
+                    text-align: right;
+                    border-bottom: 1px solid #334155;
+                    position: relative;
+                }
+
+                .wc-dark-assistant-avatar {
+                    width: 40px;
+                    height: 40px;
+                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 18px;
+                    color: white;
+                    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+                }
+
+                .wc-dark-assistant-info h3 {
+                    font-size: 16px;
+                    font-weight: 600;
+                    margin-bottom: 2px;
+                    color: #f1f5f9;
+                }
+
+                .wc-dark-assistant-info p {
+                    font-size: 13px;
+                    color: #94a3b8;
+                    font-weight: 400;
+                }
+
+                .wc-dark-close-button {
+                    position: absolute;
+                    top: 16px;
+                    left: 16px;
+                    width: 32px;
+                    height: 32px;
+                    background: rgba(148, 163, 184, 0.1);
+                    border: none;
+                    border-radius: 8px;
+                    color: #94a3b8;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 18px;
+                    transition: all 0.2s ease;
+                }
+
+                .wc-dark-close-button:hover {
+                    background: rgba(148, 163, 184, 0.2);
+                    color: #f1f5f9;
+                }
+
+                .wc-dark-chat-messages {
+                    flex: 1;
+                    padding: 24px;
+                    overflow-y: auto;
+                    background: #0f1419;
+                    direction: rtl;
+                    scroll-behavior: smooth;
+                }
+
+                .wc-dark-message {
+                    margin-bottom: 16px;
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 8px;
+                    animation: messageSlideIn 0.3s ease;
+                }
+
+                @keyframes messageSlideIn {
+                    from { 
+                        opacity: 0; 
+                        transform: translateY(8px);
+                    }
+                    to { 
+                        opacity: 1; 
+                        transform: translateY(0);
+                    }
+                }
+
+                .wc-dark-message.user {
+                    justify-content: flex-end;
+                    flex-direction: row;
+                }
+
+                .wc-dark-message.bot {
+                    justify-content: flex-start;
+                    flex-direction: row-reverse;
+                }
+
+                .wc-dark-message-content {
+                    max-width: 75%;
+                    padding: 12px 16px;
+                    border-radius: 18px;
+                    font-size: 14px;
+                    line-height: 1.5;
+                    white-space: pre-line;
+                    text-align: right;
+                }
+
+                .wc-dark-message.user .wc-dark-message-content {
+                    background: #3b82f6;
+                    color: white;
+                    border-bottom-right-radius: 4px;
+                    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+                }
+
+                .wc-dark-message.bot .wc-dark-message-content {
+                    background: #374151;
+                    color: #f1f5f9;
+                    border-bottom-left-radius: 4px;
+                    border: 1px solid #4b5563;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                .wc-dark-chat-input-container {
+                    padding: 20px 24px;
+                    background: #1e293b;
+                    border-top: 1px solid #334155;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    direction: rtl;
+                }
+
+                .wc-dark-chat-input {
+                    flex: 1;
+                    padding: 12px 16px;
+                    border: 1px solid #475569;
+                    border-radius: 24px;
+                    font-size: 14px;
+                    outline: none;
+                    background: #0f172a;
+                    color: #f1f5f9;
+                    text-align: right;
+                    transition: all 0.2s ease;
+                    font-family: inherit;
+                }
+
+                .wc-dark-chat-input::placeholder {
+                    color: #64748b;
+                }
+
+                .wc-dark-chat-input:focus {
+                    border-color: #3b82f6;
+                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                }
+
+                .wc-dark-send-button {
+                    width: 40px;
+                    height: 40px;
+                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                    border: none;
+                    border-radius: 50%;
+                    color: white;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+                }
+
+                .wc-dark-send-button:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+                }
+
+                .wc-dark-send-button:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                    transform: none;
+                }
+
+                .wc-dark-send-button::before {
+                    content: "↵";
+                    font-size: 16px;
+                    font-weight: 600;
+                }
+
+                .wc-dark-typing {
+                    display: flex;
+                    gap: 4px;
+                    align-items: center;
+                    padding: 8px 0;
+                    color: #64748b;
+                    font-size: 13px;
+                }
+
+                .wc-dark-typing-dot {
+                    width: 6px;
+                    height: 6px;
+                    background: #64748b;
+                    border-radius: 50%;
+                    animation: typingPulse 1.4s infinite;
+                }
+
+                .wc-dark-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+                .wc-dark-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+                @keyframes typingPulse {
+                    0%, 60%, 100% { 
+                        transform: scale(1); 
+                        opacity: 0.4; 
+                    }
+                    30% { 
+                        transform: scale(1.2); 
+                        opacity: 1; 
+                    }
+                }
+
+                /* Quick replies */
+                .wc-dark-quick-replies {
+                    padding: 8px 24px 16px;
+                    background: #1e293b;
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                    justify-content: flex-end;
+                    border-top: 1px solid rgba(51, 65, 85, 0.5);
+                }
+
+                .wc-dark-quick-reply {
+                    background: #374151;
+                    color: #d1d5db;
+                    border: 1px solid #4b5563;
+                    padding: 6px 12px;
+                    border-radius: 16px;
+                    font-size: 12px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    font-weight: 500;
+                }
+
+                .wc-dark-quick-reply:hover {
+                    background: #4b5563;
+                    border-color: #6b7280;
+                    transform: translateY(-1px);
+                    color: #f1f5f9;
+                }
+
+                /* Scrollbar styling */
+                .wc-dark-chat-messages::-webkit-scrollbar {
+                    width: 6px;
+                }
+
+                .wc-dark-chat-messages::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+
+                .wc-dark-chat-messages::-webkit-scrollbar-thumb {
+                    background: rgba(75, 85, 99, 0.5);
+                    border-radius: 3px;
+                }
+
+                .wc-dark-chat-messages::-webkit-scrollbar-thumb:hover {
+                    background: rgba(75, 85, 99, 0.8);
+                }
+
+                @media (max-width: 480px) {
+                    .wc-dark-chatbot-container {
+                        right: 16px;
+                        bottom: 16px;
+                        max-width: calc(100vw - 32px);
+                    }
+                    .wc-dark-chat-window {
+                        width: calc(100vw - 32px);
+                        height: calc(100vh - 120px);
+                        max-width: 360px;
+                        max-height: 580px;
+                    }
+                    .wc-dark-chat-button {
+                        width: 56px;
+                        height: 56px;
+                    }
+                    .wc-dark-chat-button::before {
+                        font-size: 24px;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
         }
-    </script>
-</body>
-</html>
+
+        createChatbot() {
+            const container = document.createElement('div');
+            container.className = 'wc-dark-chatbot-container';
+            container.innerHTML = `
+                <button class="wc-dark-chat-button" id="wcDarkChatButton"></button>
+                
+                <div class="wc-dark-chat-window" id="wcDarkChatWindow">
+                    <div class="wc-dark-chat-header">
+                        <div class="wc-dark-assistant-avatar">🤖</div>
+                        <div class="wc-dark-assistant-info">
+                            <h3>עוזר WearableCode</h3>
+                            <p>כאן לעזור לך 24/7</p>
+                        </div>
