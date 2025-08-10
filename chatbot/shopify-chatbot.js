@@ -886,4 +886,3 @@
     initChatbot();
 
 })();
-</script>
