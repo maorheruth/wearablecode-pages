@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WearableCode Chatbot</title>
-</head>
-<body>
-
-<script>
-// WearableCode Claude-Style Chatbot
-// עיצוב מודרני בהשראת Claude עם מסגרת כחולה וגלאו
-// + חיבור לפאנל אדמין
-
 (function() {
     'use strict';
     
@@ -901,6 +887,3 @@
 
 })();
 </script>
-
-</body>
-</html>
