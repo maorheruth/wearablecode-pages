@@ -129,14 +129,14 @@
                     height: 640px;
                     background: white;
                     border-radius: 20px;
-                    /* מסגרת כחולה עם אפקט גלאו */
-                    border: 3px solid #3b82f6;
+                    /* מסגרת שחורה עם אפקט גלאו שחור */
+                    border: 3px solid #000000;
                     box-shadow: 
                         0 25px 50px rgba(0, 0, 0, 0.1), 
                         0 0 0 1px rgba(0, 0, 0, 0.05),
-                        0 0 20px rgba(59, 130, 246, 0.4),
-                        0 0 40px rgba(59, 130, 246, 0.2),
-                        0 0 60px rgba(59, 130, 246, 0.1);
+                        0 0 20px rgba(0, 0, 0, 0.4),
+                        0 0 40px rgba(0, 0, 0, 0.2),
+                        0 0 60px rgba(0, 0, 0, 0.1);
                     display: none;
                     flex-direction: column;
                     overflow: hidden;
@@ -173,12 +173,12 @@
                 .wc-assistant-avatar {
                     width: 48px;
                     height: 48px;
-                    background: linear-gradient(135deg, #3b82f6, #2563eb);
-                    border-radius: 12px;
+                    background: linear-gradient(135deg, #000000, #333333);
+                    border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
                     flex-shrink: 0;
                 }
 
@@ -426,15 +426,15 @@
                 }
 
                 .wc-chat-input:focus {
-                    border-color: #3b82f6;
+                    border-color: #000000;
                     background: white;
-                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
                 }
 
                 .wc-send-button {
                     width: 44px;
                     height: 44px;
-                    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                    background: linear-gradient(135deg, #000000 0%, #333333 100%);
                     border: none;
                     border-radius: 50%;
                     color: white;
@@ -443,14 +443,14 @@
                     align-items: center;
                     justify-content: center;
                     transition: all 0.2s ease;
-                    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
                     flex-shrink: 0;
                 }
 
                 .wc-send-button:hover {
-                    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+                    background: linear-gradient(135deg, #333333 0%, #555555 100%);
                     transform: scale(1.05);
-                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
                 }
 
                 .wc-send-button:disabled {
@@ -468,30 +468,40 @@
 
                 @media (max-width: 480px) {
                     .wc-chatbot-container {
-                        right: 16px;
-                        bottom: 16px;
-                        max-width: calc(100vw - 32px);
+                        right: 20px;
+                        bottom: 20px;
+                        max-width: calc(100vw - 40px);
                     }
                     
                     .wc-chat-window {
-                        width: calc(100vw - 32px);
-                        height: calc(100vh - 100px);
+                        width: calc(100vw - 40px);
+                        height: calc(100vh - 120px);
                         max-width: 380px;
                         max-height: 600px;
+                        bottom: 70px;
                     }
                     
                     .wc-chat-button {
-                        width: 48px;
-                        height: 48px;
+                        width: 56px;
+                        height: 56px;
                     }
                     
                     .wc-chat-button-icon {
-                        width: 20px;
-                        height: 20px;
+                        width: 24px;
+                        height: 24px;
                     }
                 }
 
                 @media (max-width: 360px) {
+                    .wc-chatbot-container {
+                        right: 15px;
+                        bottom: 15px;
+                    }
+                    
+                    .wc-chat-window {
+                        bottom: 75px;
+                    }
+                    
                     .wc-chat-messages {
                         padding: 16px;
                     }
@@ -522,7 +532,7 @@
                     <div class="wc-chat-header">
                         <div class="wc-assistant-avatar">
                             <svg viewBox="0 0 24 24">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                             </svg>
                         </div>
                         <div class="wc-assistant-info">
