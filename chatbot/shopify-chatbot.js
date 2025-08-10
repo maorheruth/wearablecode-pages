@@ -36,7 +36,7 @@
             this.bindEvents();
             
             // הודעת ברוכים הבאים
-            this.addMessage('🤖 שלום! אני עוזר WearableCode החכם. איך אני יכול לעזור לך היום?', 'bot');
+            this.addMessage('👋 שלום! אני עוזר WearableCode החכם. איך אני יכול לעזור לך היום?', 'bot');
         }
 
         addStyles() {
@@ -75,7 +75,7 @@
                 }
 
                 .wc-chat-button::before {
-                    content: "🤖";
+                    content: "👋";
                 }
 
                 .wc-chat-window {
@@ -283,7 +283,7 @@
                 
                 <div class="wc-chat-window" id="wcChatWindow">
                     <div class="wc-chat-header">
-                        <div class="wc-assistant-avatar">🤖</div>
+                        <div class="wc-assistant-avatar">👋</div>
                         <div class="wc-assistant-info">
                             <h3>עוזר WearableCode</h3>
                             <p>מופעל על ידי Google Gemini</p>
