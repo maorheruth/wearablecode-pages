@@ -13,16 +13,15 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             direction: rtl;
             overflow: hidden;
-            height: 100vh;
         }
 
         /* Login Screen */
         .login-container {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -30,263 +29,246 @@
         }
 
         .login-box {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 48px;
+            padding: 40px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            max-width: 420px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 400px;
             width: 90%;
             text-align: center;
         }
 
         .login-box h1 {
-            margin-bottom: 32px;
-            color: #1e293b;
+            margin-bottom: 30px;
+            color: #2d3748;
             font-size: 28px;
             font-weight: 700;
         }
 
         .login-input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 15px 20px;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            background: #f8fafc;
-            color: #1e293b;
+            background: white;
+            color: #2d3748;
             font-size: 16px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             text-align: center;
-            font-family: 'Courier New', monospace;
+            font-family: monospace;
             letter-spacing: 2px;
         }
 
         .login-input:focus {
-            border-color: #3b82f6;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .login-input::placeholder {
-            color: #64748b;
+            color: #a0aec0;
             letter-spacing: normal;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         .login-btn {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .login-btn:hover {
-            background: linear-gradient(135deg, #2563eb, #1e40af);
-            transform: translateY(-1px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
         }
 
         .error-message {
-            color: #ef4444;
-            margin-top: 16px;
+            color: #e53e3e;
+            margin-top: 15px;
             font-size: 14px;
             font-weight: 500;
         }
 
-        /* Main App Layout */
+        /* Main App */
         .app-container {
             display: none;
             height: 100vh;
-            background: #f8fafc;
+            overflow: hidden;
         }
 
-        .header {
-            background: white;
-            padding: 20px 32px;
-            border-bottom: 1px solid #e2e8f0;
+        .app-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
         }
 
-        .header h1 {
+        .app-header h1 {
             font-size: 24px;
+            color: #2d3748;
             font-weight: 700;
-            color: #1e293b;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .logout-btn {
-            position: absolute;
-            top: 24px;
-            left: 32px;
-            background: #ef4444;
+            background: linear-gradient(135deg, #e53e3e, #c53030);
             color: white;
             border: none;
-            padding: 10px 16px;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 500;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .logout-btn:hover {
-            background: #dc2626;
             transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.3);
         }
 
         .main-content {
-            display: flex;
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
             height: calc(100vh - 80px);
+            gap: 0;
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: 300px;
-            background: white;
-            border-left: 1px solid #e2e8f0;
+        /* Questions List */
+        .questions-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(226, 232, 240, 0.8);
             overflow-y: auto;
-            padding: 24px;
+            padding: 20px;
         }
 
-        .sidebar h2 {
+        .questions-panel h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
             font-size: 18px;
             font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             border-bottom: 2px solid #e2e8f0;
         }
 
         .question-item {
-            background: #f8fafc;
+            background: white;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            padding: 16px;
+            padding: 15px;
             margin-bottom: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .question-item:hover {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-            transform: translateX(-2px);
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
         }
 
         .question-item.active {
-            background: #dbeafe;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
         }
 
         .question-title {
             font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 4px;
+            font-size: 14px;
+            margin-bottom: 8px;
         }
 
         .question-keywords {
             font-size: 12px;
-            color: #64748b;
+            opacity: 0.7;
+            line-height: 1.4;
         }
 
         .add-question-btn {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #10b981, #059669);
+            padding: 15px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
             color: white;
             border: none;
             border-radius: 12px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 16px;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            margin-top: 10px;
         }
 
         .add-question-btn:hover {
-            background: linear-gradient(135deg, #059669, #047857);
             transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);
         }
 
-        /* Main Editor */
-        .editor-area {
-            flex: 1;
-            padding: 32px;
-            background: white;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
+        /* Edit Panel */
+        .edit-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 30px;
+            overflow-y: auto;
         }
 
-        .editor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .editor-title {
+        .edit-panel h2 {
+            color: #2d3748;
+            margin-bottom: 25px;
             font-size: 20px;
-            font-weight: 700;
-            color: #1e293b;
-        }
-
-        .save-btn {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .save-btn:hover {
-            background: linear-gradient(135deg, #2563eb, #1e40af);
-            transform: translateY(-1px);
         }
 
         .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: 600;
-            color: #374151;
+            color: #2d3748;
             font-size: 14px;
         }
 
         .form-group input,
         .form-group textarea {
+            width: 100%;
             padding: 12px 16px;
-            border: 1px solid #d1d5db;
+            border: 2px solid #e2e8f0;
             border-radius: 8px;
             font-size: 14px;
-            background: #f9fafb;
-            color: #111827;
-            transition: all 0.2s ease;
+            background: white;
+            color: #2d3748;
+            transition: border-color 0.3s ease;
+            text-align: right;
+            font-family: inherit;
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #3b82f6;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .form-group textarea {
@@ -295,52 +277,97 @@
             line-height: 1.6;
         }
 
-        /* Right Panel */
-        .right-panel {
-            width: 350px;
-            background: white;
-            border-right: 1px solid #e2e8f0;
-            padding: 24px;
+        .edit-buttons {
             display: flex;
-            flex-direction: column;
-            gap: 24px;
+            gap: 10px;
+            margin-top: 25px;
         }
 
-        /* Preview */
-        .preview-section {
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
             flex: 1;
         }
 
-        .preview-section h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 16px;
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
         }
 
-        .chatbot-preview {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            overflow: hidden;
-            height: 400px;
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #a0aec0;
+            padding: 50px 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
             display: flex;
             flex-direction: column;
         }
 
+        .preview-panel h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .chatbot-preview {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 400px;
+        }
+
         .preview-header {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
             color: white;
-            padding: 16px;
+            padding: 15px 20px;
             text-align: center;
             font-weight: 600;
         }
 
         .preview-messages {
             flex: 1;
-            padding: 16px;
+            padding: 15px;
             overflow-y: auto;
-            background: white;
+            background: #f7fafc;
+            min-height: 250px;
         }
 
         .preview-message {
@@ -349,19 +376,26 @@
             border-radius: 12px;
             font-size: 13px;
             max-width: 85%;
-            line-height: 1.4;
+            line-height: 1.5;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .preview-message.bot {
-            background: #f1f5f9;
-            color: #334155;
+            background: white;
+            color: #2d3748;
             margin-left: auto;
             text-align: right;
             border-bottom-right-radius: 4px;
+            border: 1px solid #e2e8f0;
         }
 
         .preview-message.user {
-            background: #3b82f6;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             margin-right: auto;
             text-align: right;
@@ -369,103 +403,119 @@
         }
 
         .preview-input-container {
-            padding: 12px;
-            background: #f8fafc;
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
         }
 
         .preview-input {
             flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 16px;
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
             text-align: right;
             font-size: 13px;
-            background: white;
+            outline: none;
+        }
+
+        .preview-input:focus {
+            border-color: #667eea;
         }
 
         .preview-send-btn {
-            background: #3b82f6;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 10px 14px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 14px;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Actions */
-        .actions-section h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 16px;
-        }
-
-        .action-btn {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            background: white;
-            color: #374151;
-            cursor: pointer;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
             transition: all 0.2s ease;
         }
 
-        .action-btn:hover {
-            background: #f9fafb;
-            border-color: #9ca3af;
+        .preview-send-btn:hover {
+            transform: scale(1.05);
         }
 
-        .delete-btn {
-            background: #fef2f2;
-            color: #dc2626;
-            border-color: #fecaca;
+        /* Export Section */
+        .export-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
         }
 
-        .delete-btn:hover {
-            background: #fee2e2;
-            border-color: #fca5a5;
-        }
-
-        /* Empty state */
-        .empty-state {
+        .export-section h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
             text-align: center;
-            color: #64748b;
-            padding: 48px 24px;
         }
 
-        .empty-state h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #374151;
+        .export-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
+        .export-btn {
+            background: white;
+            color: #2d3748;
+            border: 1px solid #e2e8f0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .export-btn:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+            transform: translateY(-1px);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(226, 232, 240, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.3);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.5);
+        }
+
+        @media (max-width: 1200px) {
             .main-content {
-                flex-direction: column;
+                grid-template-columns: 250px 1fr 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto;
             }
             
-            .sidebar {
-                width: 100%;
-                height: 200px;
-            }
-            
-            .right-panel {
-                width: 100%;
-                height: 300px;
+            .questions-panel,
+            .preview-panel {
+                height: auto;
+                max-height: 200px;
             }
         }
     </style>
@@ -483,79 +533,54 @@
 
     <!-- Main App -->
     <div class="app-container" id="mainApp">
-        <div class="header">
+        <div class="app-header">
             <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
-            <button class="logout-btn" id="logoutButton">התנתק</button>
+            <button class="logout-btn" id="logoutButton">🚪 התנתק</button>
         </div>
 
         <div class="main-content">
-            <!-- Sidebar - Questions List -->
-            <div class="sidebar">
-                <h2>שאלות ותשובות</h2>
+            <!-- Questions List -->
+            <div class="questions-panel">
+                <h2>📝 רשימת שאלות</h2>
                 <div id="questionsList">
                     <!-- Questions will be loaded here -->
                 </div>
-                <button class="add-question-btn" id="addQuestionBtn">
-                    ➕ הוסף שאלה חדשה
-                </button>
+                <button class="add-question-btn" id="addQuestionBtn">➕ שאלה חדשה</button>
             </div>
 
-            <!-- Main Editor Area -->
-            <div class="editor-area">
-                <div class="editor-header">
-                    <div class="editor-title" id="editorTitle">בחר שאלה לעריכה</div>
-                    <button class="save-btn" id="saveBtn" style="display: none;">שמור שינויים</button>
-                </div>
-
-                <div id="editorContent" class="empty-state">
-                    <h3>בחר שאלה מהרשימה</h3>
-                    <p>בחר שאלה מהרשימה בצד ימין כדי להתחיל לערוך</p>
-                </div>
-
-                <div id="editorForm" style="display: none;">
-                    <div class="form-group">
-                        <label>שם השאלה:</label>
-                        <input type="text" id="questionName">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>מילות מפתח (מופרדות בפסיקים):</label>
-                        <input type="text" id="questionKeywords" placeholder="מחיר, כמה עולה, עלות">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>תשובת הבוט:</label>
-                        <textarea id="questionResponse" placeholder="הכנס כאן את התשובה המלאה..."></textarea>
+            <!-- Edit Panel -->
+            <div class="edit-panel">
+                <div id="editContent">
+                    <div class="empty-state">
+                        <h3>👈 בחר שאלה לעריכה</h3>
+                        <p>או לחץ על "שאלה חדשה" כדי להוסיף שאלה חדשה</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Panel -->
-            <div class="right-panel">
-                <!-- Preview -->
-                <div class="preview-section">
-                    <h3>👀 תצוגה מקדימה</h3>
-                    <div class="chatbot-preview">
-                        <div class="preview-header">
-                            עוזר WearableCode
-                        </div>
-                        <div class="preview-messages" id="previewMessages">
-                            <div class="preview-message bot">שלום! איך אני יכול לעזור לך היום?</div>
-                        </div>
-                        <div class="preview-input-container">
-                            <input type="text" id="previewInput" class="preview-input" placeholder="נסה לכתוב משהו...">
-                            <button id="testChatbotButton" class="preview-send-btn">→</button>
-                        </div>
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <h2>👀 תצוגה מקדימה</h2>
+                <div class="chatbot-preview">
+                    <div class="preview-header">
+                        עוזר WearableCode
+                    </div>
+                    <div class="preview-messages" id="previewMessages">
+                        <div class="preview-message bot">שלום! איך אני יכול לעזור לך היום?</div>
+                    </div>
+                    <div class="preview-input-container">
+                        <input type="text" id="previewInput" class="preview-input" placeholder="נסה לכתוב משהו...">
+                        <button id="testChatbotButton" class="preview-send-btn">→</button>
                     </div>
                 </div>
 
-                <!-- Actions -->
-                <div class="actions-section">
-                    <h3>פעולות</h3>
-                    <button class="action-btn" id="exportBtn">📁 ייצא לקובץ JS</button>
-                    <button class="action-btn" id="saveLocalBtn">💾 שמור מקומית</button>
-                    <button class="action-btn" id="loadLocalBtn">📂 טען שמור</button>
-                    <button class="action-btn delete-btn" id="deleteBtn" style="display: none;">🗑️ מחק שאלה</button>
+                <div class="export-section">
+                    <h3>💾 ייצוא ושמירה</h3>
+                    <div class="export-buttons">
+                        <button class="export-btn" id="exportJSButton">📁 ייצא לקובץ JS</button>
+                        <button class="export-btn" id="saveLocalButton">💾 שמור מקומית</button>
+                        <button class="export-btn" id="loadLocalButton">📂 טען שמור</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -596,52 +621,7 @@
 
         let currentEditingKey = null;
 
-        // Elements
-        let loginScreen, mainApp, passwordInput, questionsList, editorTitle, editorContent, editorForm;
-        let questionName, questionKeywords, questionResponse, saveBtn, deleteBtn;
-
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeElements();
-            bindEvents();
-            checkAuth();
-        });
-
-        function initializeElements() {
-            loginScreen = document.getElementById('loginScreen');
-            mainApp = document.getElementById('mainApp');
-            passwordInput = document.getElementById('passwordInput');
-            questionsList = document.getElementById('questionsList');
-            editorTitle = document.getElementById('editorTitle');
-            editorContent = document.getElementById('editorContent');
-            editorForm = document.getElementById('editorForm');
-            questionName = document.getElementById('questionName');
-            questionKeywords = document.getElementById('questionKeywords');
-            questionResponse = document.getElementById('questionResponse');
-            saveBtn = document.getElementById('saveBtn');
-            deleteBtn = document.getElementById('deleteBtn');
-        }
-
-        function bindEvents() {
-            document.getElementById('loginButton').addEventListener('click', checkPassword);
-            document.getElementById('logoutButton').addEventListener('click', logout);
-            document.getElementById('addQuestionBtn').addEventListener('click', addNewQuestion);
-            document.getElementById('saveBtn').addEventListener('click', saveQuestion);
-            document.getElementById('deleteBtn').addEventListener('click', deleteQuestion);
-            document.getElementById('testChatbotButton').addEventListener('click', testChatbot);
-            document.getElementById('exportBtn').addEventListener('click', exportToJS);
-            document.getElementById('saveLocalBtn').addEventListener('click', saveToLocalStorage);
-            document.getElementById('loadLocalBtn').addEventListener('click', loadFromLocalStorage);
-
-            // Enter key events
-            passwordInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') checkPassword();
-            });
-
-            document.getElementById('previewInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') testChatbot();
-            });
-        }
-
+        // בדיקת התחברות בעת טעינת הדף
         function checkAuth() {
             const stored = localStorage.getItem(PASSWORD_KEY);
             if (stored === ADMIN_PASSWORD) {
@@ -651,20 +631,23 @@
             }
         }
 
+        // הצגת מסך התחברות
         function showLoginScreen() {
-            loginScreen.style.display = 'flex';
-            mainApp.style.display = 'none';
-            passwordInput.focus();
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('passwordInput').focus();
         }
 
+        // הצגת האפליקציה הראשית
         function showMainApp() {
-            loginScreen.style.display = 'none';
-            mainApp.style.display = 'block';
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
             loadQuestionsList();
         }
 
+        // בדיקת סיסמה
         function checkPassword() {
-            const password = passwordInput.value;
+            const password = document.getElementById('passwordInput').value;
             const errorDiv = document.getElementById('errorMessage');
             
             if (password === ADMIN_PASSWORD) {
@@ -673,141 +656,178 @@
                 errorDiv.textContent = '';
             } else {
                 errorDiv.textContent = 'סיסמה שגויה. נסה שוב.';
-                passwordInput.value = '';
-                passwordInput.focus();
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
             }
         }
 
+        // התנתקות
         function logout() {
             localStorage.removeItem(PASSWORD_KEY);
             showLoginScreen();
-            passwordInput.value = '';
+            document.getElementById('passwordInput').value = '';
         }
 
+        // טעינת רשימת השאלות
         function loadQuestionsList() {
+            const questionsList = document.getElementById('questionsList');
             questionsList.innerHTML = '';
-            
+
             for (const [key, data] of Object.entries(chatbotData)) {
                 const questionItem = document.createElement('div');
                 questionItem.className = 'question-item';
-                questionItem.setAttribute('data-key', key);
+                questionItem.onclick = () => selectQuestion(key);
                 questionItem.innerHTML = `
                     <div class="question-title">${key}</div>
                     <div class="question-keywords">${data.keywords.slice(0, 3).join(', ')}${data.keywords.length > 3 ? '...' : ''}</div>
                 `;
-                
-                questionItem.addEventListener('click', () => selectQuestion(key));
                 questionsList.appendChild(questionItem);
             }
         }
 
+        // בחירת שאלה לעריכה
         function selectQuestion(key) {
-            // Remove active class from all items
+            // הסרת סימון מכל הפריטים
             document.querySelectorAll('.question-item').forEach(item => {
                 item.classList.remove('active');
             });
-            
-            // Add active class to selected item
-            document.querySelector(`[data-key="${key}"]`).classList.add('active');
-            
-            // Load question data
+
+            // סימון הפריט הנוכחי
+            event.target.closest('.question-item').classList.add('active');
+
             currentEditingKey = key;
             const data = chatbotData[key];
-            
-            editorTitle.textContent = `עריכת: ${key}`;
-            editorContent.style.display = 'none';
-            editorForm.style.display = 'block';
-            saveBtn.style.display = 'block';
-            deleteBtn.style.display = 'block';
-            
-            questionName.value = key;
-            questionKeywords.value = data.keywords.join(', ');
-            questionResponse.value = data.response;
+
+            const editContent = document.getElementById('editContent');
+            editContent.innerHTML = `
+                <h2>✏️ עריכת תשובה</h2>
+                <div class="form-group">
+                    <label>שם התשובה:</label>
+                    <input type="text" id="qaName" value="${key}">
+                </div>
+                
+                <div class="form-group">
+                    <label>מילות מפתח (מופרדות בפסיקים):</label>
+                    <input type="text" id="qaKeywords" value="${data.keywords.join(', ')}">
+                </div>
+                
+                <div class="form-group">
+                    <label>תשובת הבוט:</label>
+                    <textarea id="qaResponse">${data.response}</textarea>
+                </div>
+                
+                <div class="edit-buttons">
+                    <button class="btn btn-primary" onclick="saveQuestion()">💾 שמור</button>
+                    <button class="btn btn-danger" onclick="deleteQuestion()">🗑️ מחק</button>
+                </div>
+            `;
         }
 
+        // הוספת שאלה חדשה
         function addNewQuestion() {
-            // Clear selection
+            // הסרת סימון מכל הפריטים
             document.querySelectorAll('.question-item').forEach(item => {
                 item.classList.remove('active');
             });
-            
+
             currentEditingKey = null;
-            editorTitle.textContent = 'שאלה חדשה';
-            editorContent.style.display = 'none';
-            editorForm.style.display = 'block';
-            saveBtn.style.display = 'block';
-            deleteBtn.style.display = 'none';
-            
-            questionName.value = '';
-            questionKeywords.value = '';
-            questionResponse.value = '';
-            questionName.focus();
+
+            const editContent = document.getElementById('editContent');
+            editContent.innerHTML = `
+                <h2>➕ שאלה חדשה</h2>
+                <div class="form-group">
+                    <label>שם התשובה:</label>
+                    <input type="text" id="qaName" placeholder="לדוגמה: מבצעים">
+                </div>
+                
+                <div class="form-group">
+                    <label>מילות מפתח (מופרדות בפסיקים):</label>
+                    <input type="text" id="qaKeywords" placeholder="מבצע, הנחה, זול יותר">
+                </div>
+                
+                <div class="form-group">
+                    <label>תשובת הבוט:</label>
+                    <textarea id="qaResponse" placeholder="הכנס כאן את התשובה המלאה..."></textarea>
+                </div>
+                
+                <div class="edit-buttons">
+                    <button class="btn btn-primary" onclick="saveQuestion()">💾 שמור</button>
+                </div>
+            `;
         }
 
+        // שמירת שאלה
         function saveQuestion() {
-            const name = questionName.value.trim();
-            const keywords = questionKeywords.value.split(',').map(k => k.trim()).filter(k => k);
-            const response = questionResponse.value.trim();
+            const name = document.getElementById('qaName').value.trim();
+            const keywords = document.getElementById('qaKeywords').value.split(',').map(k => k.trim()).filter(k => k);
+            const response = document.getElementById('qaResponse').value.trim();
             
             if (!name || !keywords.length || !response) {
                 alert('אנא מלא את כל השדות');
                 return;
             }
 
-            // Remove old key if editing
+            // אם עורכים, מוחקים את הישן
             if (currentEditingKey && currentEditingKey !== name) {
                 delete chatbotData[currentEditingKey];
             }
 
-            // Add/update question
+            // מוסיפים את החדש
             chatbotData[name] = {
                 response: response,
                 keywords: keywords
             };
 
-            currentEditingKey = name;
             loadQuestionsList();
-            selectQuestion(name);
             
-            // Success feedback
-            const originalText = saveBtn.textContent;
-            saveBtn.textContent = '✅ נשמר!';
-            saveBtn.style.background = '#10b981';
+            // הצגת הודעת הצלחה
+            const saveBtn = event.target;
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '✅ נשמר!';
+            saveBtn.style.background = 'linear-gradient(135deg, #48bb78, #38a169)';
+            
             setTimeout(() => {
-                saveBtn.textContent = originalText;
+                saveBtn.innerHTML = originalText;
                 saveBtn.style.background = '';
             }, 2000);
         }
 
+        // מחיקת שאלה
         function deleteQuestion() {
-            if (currentEditingKey && confirm('האם אתה בטוח שברצונך למחוק את השאלה הזו?')) {
+            if (currentEditingKey && confirm('האם אתה בטוח שברצונך למחוק את התשובה הזו?')) {
                 delete chatbotData[currentEditingKey];
-                currentEditingKey = null;
-                
-                editorTitle.textContent = 'בחר שאלה לעריכה';
-                editorContent.style.display = 'block';
-                editorForm.style.display = 'none';
-                saveBtn.style.display = 'none';
-                deleteBtn.style.display = 'none';
-                
                 loadQuestionsList();
+                
+                // חזור למצב ריק
+                const editContent = document.getElementById('editContent');
+                editContent.innerHTML = `
+                    <div class="empty-state">
+                        <h3>👈 בחר שאלה לעריכה</h3>
+                        <p>או לחץ על "שאלה חדשה" כדי להוסיף שאלה חדשה</p>
+                    </div>
+                `;
+                currentEditingKey = null;
             }
         }
 
+        // בדיקת הצ'אטבוט
         function testChatbot() {
             const input = document.getElementById('previewInput');
             const message = input.value.trim();
             if (!message) return;
 
+            // הוסף הודעת משתמש
             addPreviewMessage(message, 'user');
             input.value = '';
 
+            // חפש תשובה
             setTimeout(() => {
                 const response = findResponse(message);
                 addPreviewMessage(response, 'bot');
             }, 500);
         }
 
+        // מוסיף הודעה לתצוגה מקדימה
         function addPreviewMessage(text, sender) {
             const messages = document.getElementById('previewMessages');
             const div = document.createElement('div');
@@ -817,6 +837,7 @@
             messages.scrollTop = messages.scrollHeight;
         }
 
+        // חיפוש תשובה
         function findResponse(message) {
             const lowerMessage = message.toLowerCase().trim();
             
@@ -829,6 +850,7 @@
             return '🤔 אני לא בטוח שהבנתי את השאלה. נסה לשאול בצורה אחרת או צור קשר ישירות.';
         }
 
+        // ייצוא לקובץ JavaScript
         function exportToJS() {
             const jsContent = `// WearableCode Chatbot Data - Generated ${new Date().toLocaleString('he-IL')}
 const CHATBOT_RESPONSES = ${JSON.stringify(chatbotData, null, 2)};
@@ -846,41 +868,92 @@ const CHATBOT_RESPONSES = ${JSON.stringify(chatbotData, null, 2)};
             URL.revokeObjectURL(url);
         }
 
+        // שמירה מקומית
         function saveToLocalStorage() {
             localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(chatbotData));
             
-            const btn = document.getElementById('saveLocalBtn');
-            const originalText = btn.textContent;
-            btn.textContent = '✅ נשמר!';
-            btn.style.background = '#10b981';
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ נשמר!';
+            btn.style.background = '#48bb78';
             btn.style.color = 'white';
             
             setTimeout(() => {
-                btn.textContent = originalText;
+                btn.innerHTML = originalText;
                 btn.style.background = '';
                 btn.style.color = '';
             }, 2000);
         }
 
+        // טעינה מקומית
         function loadFromLocalStorage() {
             const saved = localStorage.getItem('wearablecode_chatbot_data');
             if (saved) {
                 chatbotData = JSON.parse(saved);
                 loadQuestionsList();
                 
-                const btn = document.getElementById('loadLocalBtn');
-                const originalText = btn.textContent;
-                btn.textContent = '✅ נטען!';
-                btn.style.background = '#10b981';
+                // חזור למצב ריק
+                const editContent = document.getElementById('editContent');
+                editContent.innerHTML = `
+                    <div class="empty-state">
+                        <h3>✅ נתונים נטענו בהצלחה!</h3>
+                        <p>בחר שאלה לעריכה או הוסף שאלה חדשה</p>
+                    </div>
+                `;
+                
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ נטען!';
+                btn.style.background = '#48bb78';
                 btn.style.color = 'white';
                 
                 setTimeout(() => {
-                    btn.textContent = originalText;
+                    btn.innerHTML = originalText;
                     btn.style.background = '';
                     btn.style.color = '';
                 }, 2000);
             } else {
                 alert('לא נמצאו נתונים שמורים במחשב הזה');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            
+            document.getElementById('loginButton').addEventListener('click', checkPassword);
+            document.getElementById('logoutButton').addEventListener('click', logout);
+            document.getElementById('addQuestionBtn').addEventListener('click', addNewQuestion);
+            document.getElementById('testChatbotButton').addEventListener('click', testChatbot);
+            document.getElementById('exportJSButton').addEventListener('click', exportToJS);
+            document.getElementById('saveLocalButton').addEventListener('click', saveToLocalStorage);
+            document.getElementById('loadLocalButton').addEventListener('click', loadFromLocalStorage);
+            
+            // Enter במסך התחברות
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const loginScreen = document.getElementById('loginScreen');
+                    if (loginScreen && window.getComputedStyle(loginScreen).display !== 'none') {
+                        checkPassword();
+                    }
+                }
+            });
+
+            // Enter בתצוגה מקדימה
+            document.getElementById('previewInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    testChatbot();
+                }
+            });
+        });
+
+        // טען נתונים שמורים אם קיימים
+        const savedData = localStorage.getItem('wearablecode_chatbot_data');
+        if (savedData) {
+            try {
+                chatbotData = JSON.parse(savedData);
+            } catch (e) {
+                console.log('שגיאה בטעינת נתונים שמורים');
             }
         }
     </script>
