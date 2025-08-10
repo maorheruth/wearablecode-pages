@@ -1,3 +1,5 @@
+// WearableCode Claude-Style Chatbot
+// עיצוב מודרני בהשראת Claude
 
 (function() {
     'use strict';
@@ -106,19 +108,6 @@
                     transform: scale(1.05);
                 }
 
-                .wc-typing-indicator {
-                                    display: flex;
-                                    align-items: center;
-                                    gap: 8px;
-                                    padding: 12px 16px;
-                                    background: #f1f5f9;
-                                    border-radius: 16px;
-                                    border-bottom-left-radius: 6px;
-                                    max-width: 85%;
-                                    border: 1px solid #e2e8f0;
-                                }// WearableCode Claude-Style Chatbot
-                // עיצוב מודרני בהשראת Claude
-
                 .wc-chat-button-icon {
                     width: 24px;
                     height: 24px;
@@ -140,8 +129,7 @@
                     height: 640px;
                     background: white;
                     border-radius: 20px;
-                    border: 2px solid #3b82f6;
-                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1), 0 0 20px rgba(59, 130, 246, 0.2), 0 0 0 1px rgba(59, 130, 246, 0.1);
+                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
                     display: none;
                     flex-direction: column;
                     overflow: hidden;
@@ -481,6 +469,7 @@
                         height: calc(100vh - 100px);
                         max-width: 380px;
                         max-height: 600px;
+                        border: #4264ff;
                     }
                     
                     .wc-chat-button {
