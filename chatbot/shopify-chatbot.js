@@ -1,16 +1,15 @@
-// WearableCode Smart Chatbot - Complete Dark Mode Claude Style
-// גרסה מלאה עם עיצוב dark mode בסגנון Claude עם RTL נכון
+// WearableCode Claude-Style Chatbot
+// עיצוב מודרני בהשראת Claude
 
 (function() {
     'use strict';
     
-    // בדיקה שלא נטען כבר
-    if (window.WearableCodeSmartChatbot) {
+    if (window.WearableCodeChatbot) {
         return;
     }
 
-    // *** נתוני הצ'אטבוט - ערוך כאן או השתמש בדף הניהול ***
-    const CHATBOT_RESPONSES = {
+    // נתוני הצ'אטבוט
+    let CHATBOT_RESPONSES = {
         'מחירים': {
             response: '💰 המחירים שלנו:\n• חולצה רגילה: ₪79-89\n• חולצה פרימיום: ₪99-109\n• מבצע ללקוחות חדשים: 15% הנחה!\n• משלוח חינם מעל ₪150',
             keywords: ['מחיר', 'כמה עולה', 'עלות', 'כסף', '₪', 'זול', 'יקר']
@@ -37,7 +36,7 @@
         },
         'עיצובים': {
             response: '🎨 הקטגוריות שלנו:\n• ציטוטים מסדרות (יו, חברים, משרד וכו\')\n• מימים ישראליים\n• עיצובים מצחיקים\n• ציטוטים מעצימים\n• עיצובים מותאמים אישית\n\nכל העיצובים יחודיים ובלעדיים!',
-            keywords: ['עיצוב', 'חולצה', 'דיזני', 'סדרות', 'מימים', 'מצחיק', 'ציטוט']
+            keywords: ['עיצוב', 'חולצה', 'סדרות', 'מימים', 'מצחיק', 'ציטוט', 'טישרט']
         },
         'צור קשר': {
             response: '📞 אפשר ליצור קשר:\n• WhatsApp: 050-123-4567\n• מייל: hello@wearablecode.com\n• פייסבוק: WearableCode Israel\n• אינסטגרם: @wearablecode_il\n\nאנחנו כאן בשבילכם! 😊',
@@ -49,7 +48,6 @@
         }
     };
 
-    // הודעות ברוכים הבאים אקראיות
     const WELCOME_MESSAGES = [
         '👋 שלום! אני העוזר הווירטואלי של WearableCode. איך אני יכול לעזור לך היום?',
         '🎨 ברוכים הבאים ל-WearableCode! אני כאן לעזור לך למצוא את החולצה המושלמת',
@@ -57,12 +55,10 @@
         '😊 שלום וברוכים הבאים! אני יכול לעזור לך עם כל מה שקשור לחולצות שלנו'
     ];
 
-    // יצירת הצ'אט בוט החכם
-    class WearableCodeSmartChatbot {
+    class WearableCodeChatbot {
         constructor() {
             this.isOpen = false;
             this.messages = [];
-            this.currentMessage = '';
             this.isTyping = false;
             this.init();
         }
@@ -72,11 +68,9 @@
             this.createChatbot();
             this.bindEvents();
             
-            // הודעת ברוכים הבאים אקראית
             const welcomeMessage = WELCOME_MESSAGES[Math.floor(Math.random() * WELCOME_MESSAGES.length)];
             this.addMessage(welcomeMessage, 'bot');
             
-            // הוספת הודעת עזרה
             setTimeout(() => {
                 this.addMessage('💡 טיפ: נסה לכתוב "מחירים", "משלוח", "חבילה" או "מידות" לקבלת מידע מהיר!', 'bot');
             }, 2000);
@@ -85,251 +79,365 @@
         addStyles() {
             const style = document.createElement('style');
             style.textContent = `
-                /* Dark Mode Chatbot - Claude Style */
-                .wc-dark-chatbot-container {
+                .wc-chatbot-container {
                     position: fixed;
                     bottom: 24px;
                     right: 24px;
                     z-index: 999999;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
                     direction: rtl;
                     max-width: 440px;
                 }
 
-                .wc-dark-chat-button {
+                .wc-chat-button {
                     width: 64px;
                     height: 64px;
-                    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+                    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
                     border-radius: 50%;
                     border: none;
                     cursor: pointer;
-                    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+                    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                     position: relative;
-                    font-size: 24px;
-                    color: white;
-                    animation: gentlePulse 4s ease-in-out infinite;
+                    overflow: hidden;
                 }
 
-                .wc-dark-chat-button:hover {
-                    transform: scale(1.05);
-                    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
+                .wc-chat-button::before {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
                 }
 
-                .wc-dark-chat-button::before {
-                    content: "💬";
-                    font-size: 28px;
-                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+                .wc-chat-button:hover {
+                    transform: scale(1.05) translateY(-1px);
+                    box-shadow: 0 12px 40px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15);
                 }
 
-                @keyframes gentlePulse {
-                    0%, 100% { 
-                        transform: scale(1);
-                        box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
-                    }
-                    50% { 
-                        transform: scale(1.02);
-                        box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
-                    }
+                .wc-chat-button:hover::before {
+                    opacity: 1;
                 }
 
-                .wc-dark-chat-window {
+                .wc-chat-button-icon {
+                    width: 28px;
+                    height: 28px;
+                    fill: white;
+                    position: relative;
+                    z-index: 1;
+                    transition: transform 0.3s ease;
+                }
+
+                .wc-chat-button:hover .wc-chat-button-icon {
+                    transform: scale(1.1);
+                }
+
+                .wc-chat-window {
                     position: absolute;
                     bottom: 80px;
                     right: 0;
-                    width: 400px;
-                    height: 600px;
-                    background: #0f1419;
-                    border-radius: 16px;
-                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.2);
+                    width: 420px;
+                    height: 640px;
+                    background: white;
+                    border-radius: 20px;
+                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
                     display: none;
                     flex-direction: column;
                     overflow: hidden;
-                    border: 1px solid #334155;
                     direction: rtl;
+                    backdrop-filter: blur(20px);
                 }
 
-                .wc-dark-chat-window.open {
+                .wc-chat-window.open {
                     display: flex;
-                    animation: slideUpFade 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                 }
 
-                @keyframes slideUpFade {
+                @keyframes slideUp {
                     from { 
                         opacity: 0; 
-                        transform: translateY(20px) scale(0.95);
+                        transform: translateY(20px) scale(0.95); 
                     }
                     to { 
                         opacity: 1; 
-                        transform: translateY(0) scale(1);
+                        transform: translateY(0) scale(1); 
                     }
                 }
 
-                .wc-dark-chat-header {
-                    background: #1e293b;
-                    padding: 20px 24px;
-                    color: #f1f5f9;
+                .wc-chat-header {
+                    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                    padding: 24px;
+                    border-bottom: 1px solid #e2e8f0;
                     display: flex;
                     align-items: center;
-                    gap: 12px;
-                    direction: rtl;
-                    text-align: right;
-                    border-bottom: 1px solid #334155;
+                    gap: 16px;
                     position: relative;
                 }
 
-                .wc-dark-assistant-avatar {
-                    width: 40px;
-                    height: 40px;
-                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-                    border-radius: 50%;
+                .wc-assistant-avatar {
+                    width: 48px;
+                    height: 48px;
+                    background: linear-gradient(135deg, #3b82f6, #2563eb);
+                    border-radius: 12px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 18px;
-                    color: white;
-                    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+                    flex-shrink: 0;
                 }
 
-                .wc-dark-assistant-info h3 {
+                .wc-assistant-avatar svg {
+                    width: 24px;
+                    height: 24px;
+                    fill: white;
+                }
+
+                .wc-assistant-info {
+                    flex: 1;
+                    text-align: right;
+                }
+
+                .wc-assistant-info h3 {
                     font-size: 16px;
                     font-weight: 600;
+                    color: #1e293b;
                     margin-bottom: 2px;
-                    color: #f1f5f9;
+                    line-height: 1.2;
                 }
 
-                .wc-dark-assistant-info p {
+                .wc-assistant-info p {
                     font-size: 13px;
-                    color: #94a3b8;
-                    font-weight: 400;
+                    color: #64748b;
+                    line-height: 1.3;
                 }
 
-                .wc-dark-close-button {
+                .wc-close-button {
                     position: absolute;
                     top: 16px;
                     left: 16px;
                     width: 32px;
                     height: 32px;
-                    background: rgba(148, 163, 184, 0.1);
+                    background: rgba(100, 116, 139, 0.1);
                     border: none;
                     border-radius: 8px;
-                    color: #94a3b8;
+                    color: #64748b;
                     cursor: pointer;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 18px;
                     transition: all 0.2s ease;
                 }
 
-                .wc-dark-close-button:hover {
-                    background: rgba(148, 163, 184, 0.2);
-                    color: #f1f5f9;
+                .wc-close-button:hover {
+                    background: rgba(100, 116, 139, 0.15);
+                    color: #475569;
                 }
 
-                .wc-dark-chat-messages {
+                .wc-chat-messages {
                     flex: 1;
                     padding: 24px;
                     overflow-y: auto;
-                    background: #0f1419;
+                    background: #fefefe;
                     direction: rtl;
                     scroll-behavior: smooth;
+                    scrollbar-width: thin;
+                    scrollbar-color: #cbd5e1 transparent;
                 }
 
-                .wc-dark-message {
+                .wc-chat-messages::-webkit-scrollbar {
+                    width: 6px;
+                }
+
+                .wc-chat-messages::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+
+                .wc-chat-messages::-webkit-scrollbar-thumb {
+                    background: #cbd5e1;
+                    border-radius: 3px;
+                }
+
+                .wc-chat-messages::-webkit-scrollbar-thumb:hover {
+                    background: #94a3b8;
+                }
+
+                .wc-message {
                     margin-bottom: 16px;
                     display: flex;
                     align-items: flex-start;
                     gap: 8px;
-                    animation: messageSlideIn 0.3s ease;
+                    animation: messageSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                 }
 
-                @keyframes messageSlideIn {
+                @keyframes messageSlide {
                     from { 
                         opacity: 0; 
-                        transform: translateY(8px);
+                        transform: translateY(12px); 
                     }
                     to { 
                         opacity: 1; 
-                        transform: translateY(0);
+                        transform: translateY(0); 
                     }
                 }
 
-                .wc-dark-message.user {
-                    justify-content: flex-end;
-                    flex-direction: row;
-                }
-
-                .wc-dark-message.bot {
+                .wc-message.user {
                     justify-content: flex-start;
-                    flex-direction: row-reverse;
                 }
 
-                .wc-dark-message-content {
-                    max-width: 75%;
+                .wc-message.bot {
+                    justify-content: flex-end;
+                }
+
+                .wc-message-content {
+                    max-width: 85%;
                     padding: 12px 16px;
-                    border-radius: 18px;
+                    border-radius: 16px;
                     font-size: 14px;
                     line-height: 1.5;
                     white-space: pre-line;
-                    text-align: right;
+                    word-wrap: break-word;
+                    position: relative;
                 }
 
-                .wc-dark-message.user .wc-dark-message-content {
+                .wc-message.user .wc-message-content {
                     background: #3b82f6;
                     color: white;
-                    border-bottom-right-radius: 4px;
+                    border-bottom-left-radius: 6px;
+                    text-align: right;
                     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
                 }
 
-                .wc-dark-message.bot .wc-dark-message-content {
-                    background: #374151;
-                    color: #f1f5f9;
-                    border-bottom-left-radius: 4px;
-                    border: 1px solid #4b5563;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                .wc-message.bot .wc-message-content {
+                    background: #f1f5f9;
+                    color: #334155;
+                    border-bottom-right-radius: 6px;
+                    text-align: right;
+                    border: 1px solid #e2e8f0;
                 }
 
-                .wc-dark-chat-input-container {
-                    padding: 20px 24px;
-                    background: #1e293b;
-                    border-top: 1px solid #334155;
+                .wc-typing-indicator {
                     display: flex;
                     align-items: center;
+                    gap: 8px;
+                    padding: 12px 16px;
+                    background: #f1f5f9;
+                    border-radius: 16px;
+                    border-bottom-right-radius: 6px;
+                    max-width: 85%;
+                    border: 1px solid #e2e8f0;
+                }
+
+                .wc-typing-dots {
+                    display: flex;
+                    gap: 4px;
+                    align-items: center;
+                }
+
+                .wc-typing-dot {
+                    width: 6px;
+                    height: 6px;
+                    background: #94a3b8;
+                    border-radius: 50%;
+                    animation: typingBounce 1.4s infinite ease-in-out;
+                }
+
+                .wc-typing-dot:nth-child(1) { animation-delay: -0.32s; }
+                .wc-typing-dot:nth-child(2) { animation-delay: -0.16s; }
+                .wc-typing-dot:nth-child(3) { animation-delay: 0s; }
+
+                @keyframes typingBounce {
+                    0%, 80%, 100% {
+                        transform: scale(0.8);
+                        opacity: 0.5;
+                    }
+                    40% {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                }
+
+                .wc-typing-text {
+                    font-size: 12px;
+                    color: #64748b;
+                    font-style: italic;
+                }
+
+                .wc-quick-replies {
+                    padding: 16px 24px 0;
+                    background: #fefefe;
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                    justify-content: flex-end;
+                    border-top: 1px solid #f1f5f9;
+                }
+
+                .wc-quick-reply {
+                    background: white;
+                    color: #475569;
+                    border: 1px solid #e2e8f0;
+                    padding: 8px 14px;
+                    border-radius: 20px;
+                    font-size: 13px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    margin-bottom: 12px;
+                    font-weight: 500;
+                }
+
+                .wc-quick-reply:hover {
+                    background: #f8fafc;
+                    border-color: #cbd5e1;
+                    transform: translateY(-1px);
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                }
+
+                .wc-chat-input-container {
+                    padding: 20px 24px;
+                    background: white;
+                    border-top: 1px solid #e2e8f0;
+                    display: flex;
+                    align-items: flex-end;
                     gap: 12px;
                     direction: rtl;
                 }
 
-                .wc-dark-chat-input {
+                .wc-chat-input {
                     flex: 1;
+                    min-height: 44px;
+                    max-height: 120px;
                     padding: 12px 16px;
-                    border: 1px solid #475569;
-                    border-radius: 24px;
+                    border: 1px solid #d1d5db;
+                    border-radius: 22px;
                     font-size: 14px;
                     outline: none;
-                    background: #0f172a;
-                    color: #f1f5f9;
+                    background: #f9fafb;
+                    color: #111827;
                     text-align: right;
                     transition: all 0.2s ease;
+                    resize: none;
                     font-family: inherit;
+                    line-height: 1.4;
                 }
 
-                .wc-dark-chat-input::placeholder {
-                    color: #64748b;
+                .wc-chat-input::placeholder {
+                    color: #9ca3af;
                 }
 
-                .wc-dark-chat-input:focus {
+                .wc-chat-input:focus {
                     border-color: #3b82f6;
+                    background: white;
                     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
                 }
 
-                .wc-dark-send-button {
-                    width: 40px;
-                    height: 40px;
-                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                .wc-send-button {
+                    width: 44px;
+                    height: 44px;
+                    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
                     border: none;
                     border-radius: 50%;
                     color: white;
@@ -338,123 +446,65 @@
                     align-items: center;
                     justify-content: center;
                     transition: all 0.2s ease;
-                    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+                    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+                    flex-shrink: 0;
                 }
 
-                .wc-dark-send-button:hover {
+                .wc-send-button:hover {
+                    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
                     transform: scale(1.05);
-                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
                 }
 
-                .wc-dark-send-button:disabled {
-                    opacity: 0.5;
+                .wc-send-button:disabled {
+                    background: #e5e7eb;
                     cursor: not-allowed;
                     transform: none;
+                    box-shadow: none;
                 }
 
-                .wc-dark-send-button::before {
-                    content: "↵";
-                    font-size: 16px;
-                    font-weight: 600;
-                }
-
-                .wc-dark-typing {
-                    display: flex;
-                    gap: 4px;
-                    align-items: center;
-                    padding: 8px 0;
-                    color: #64748b;
-                    font-size: 13px;
-                }
-
-                .wc-dark-typing-dot {
-                    width: 6px;
-                    height: 6px;
-                    background: #64748b;
-                    border-radius: 50%;
-                    animation: typingPulse 1.4s infinite;
-                }
-
-                .wc-dark-typing-dot:nth-child(2) { animation-delay: 0.2s; }
-                .wc-dark-typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-                @keyframes typingPulse {
-                    0%, 60%, 100% { 
-                        transform: scale(1); 
-                        opacity: 0.4; 
-                    }
-                    30% { 
-                        transform: scale(1.2); 
-                        opacity: 1; 
-                    }
-                }
-
-                /* Quick replies */
-                .wc-dark-quick-replies {
-                    padding: 8px 24px 16px;
-                    background: #1e293b;
-                    display: flex;
-                    gap: 8px;
-                    flex-wrap: wrap;
-                    justify-content: flex-end;
-                    border-top: 1px solid rgba(51, 65, 85, 0.5);
-                }
-
-                .wc-dark-quick-reply {
-                    background: #374151;
-                    color: #d1d5db;
-                    border: 1px solid #4b5563;
-                    padding: 6px 12px;
-                    border-radius: 16px;
-                    font-size: 12px;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    font-weight: 500;
-                }
-
-                .wc-dark-quick-reply:hover {
-                    background: #4b5563;
-                    border-color: #6b7280;
-                    transform: translateY(-1px);
-                    color: #f1f5f9;
-                }
-
-                /* Scrollbar styling */
-                .wc-dark-chat-messages::-webkit-scrollbar {
-                    width: 6px;
-                }
-
-                .wc-dark-chat-messages::-webkit-scrollbar-track {
-                    background: transparent;
-                }
-
-                .wc-dark-chat-messages::-webkit-scrollbar-thumb {
-                    background: rgba(75, 85, 99, 0.5);
-                    border-radius: 3px;
-                }
-
-                .wc-dark-chat-messages::-webkit-scrollbar-thumb:hover {
-                    background: rgba(75, 85, 99, 0.8);
+                .wc-send-button svg {
+                    width: 20px;
+                    height: 20px;
+                    fill: currentColor;
                 }
 
                 @media (max-width: 480px) {
-                    .wc-dark-chatbot-container {
+                    .wc-chatbot-container {
                         right: 16px;
                         bottom: 16px;
                         max-width: calc(100vw - 32px);
                     }
-                    .wc-dark-chat-window {
+                    
+                    .wc-chat-window {
                         width: calc(100vw - 32px);
-                        height: calc(100vh - 120px);
-                        max-width: 360px;
-                        max-height: 580px;
+                        height: calc(100vh - 100px);
+                        max-width: 380px;
+                        max-height: 600px;
                     }
-                    .wc-dark-chat-button {
+                    
+                    .wc-chat-button {
                         width: 56px;
                         height: 56px;
                     }
-                    .wc-dark-chat-button::before {
-                        font-size: 24px;
+                    
+                    .wc-chat-button-icon {
+                        width: 24px;
+                        height: 24px;
+                    }
+                }
+
+                @media (max-width: 360px) {
+                    .wc-chat-messages {
+                        padding: 16px;
+                    }
+                    
+                    .wc-chat-input-container {
+                        padding: 16px;
+                    }
+                    
+                    .wc-chat-header {
+                        padding: 16px;
                     }
                 }
             `;
@@ -463,45 +513,61 @@
 
         createChatbot() {
             const container = document.createElement('div');
-            container.className = 'wc-dark-chatbot-container';
+            container.className = 'wc-chatbot-container';
             container.innerHTML = `
-                <button class="wc-dark-chat-button" id="wcDarkChatButton"></button>
+                <button class="wc-chat-button" id="wcChatButton">
+                    <svg class="wc-chat-button-icon" viewBox="0 0 24 24">
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                    </svg>
+                </button>
                 
-                <div class="wc-dark-chat-window" id="wcDarkChatWindow">
-                    <div class="wc-dark-chat-header">
-                        <div class="wc-dark-assistant-avatar">🤖</div>
-                        <div class="wc-dark-assistant-info">
-                            <h3>עוזר WearableCode</h3>
-                            <p>כאן לעזור לך 24/7</p>
+                <div class="wc-chat-window" id="wcChatWindow">
+                    <div class="wc-chat-header">
+                        <div class="wc-assistant-avatar">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
                         </div>
-                        <button class="wc-dark-close-button" id="wcDarkCloseButton">×</button>
+                        <div class="wc-assistant-info">
+                            <h3>עוזר WearableCode</h3>
+                            <p>כאן לעזור לך עם כל השאלות 🚀</p>
+                        </div>
+                        <button class="wc-close-button" id="wcCloseButton">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                            </svg>
+                        </button>
                     </div>
 
-                    <div class="wc-dark-chat-messages" id="wcDarkChatMessages"></div>
+                    <div class="wc-chat-messages" id="wcChatMessages"></div>
                     
-                    <div class="wc-dark-quick-replies" id="wcDarkQuickReplies">
-                        <div class="wc-dark-quick-reply" data-message="מחירים">💰 מחירים</div>
-                        <div class="wc-dark-quick-reply" data-message="משלוח">🚚 משלוח</div>
-                        <div class="wc-dark-quick-reply" data-message="חבילה">📦 מעקב</div>
-                        <div class="wc-dark-quick-reply" data-message="צור קשר">📞 צור קשר</div>
+                    <div class="wc-quick-replies" id="wcQuickReplies">
+                        <div class="wc-quick-reply" data-message="מחירים">💰 מחירים</div>
+                        <div class="wc-quick-reply" data-message="משלוח">🚚 משלוח</div>
+                        <div class="wc-quick-reply" data-message="חבילה">📦 מעקב</div>
+                        <div class="wc-quick-reply" data-message="צור קשר">📞 צור קשר</div>
                     </div>
 
-                    <div class="wc-dark-chat-input-container">
-                        <input type="text" class="wc-dark-chat-input" id="wcDarkChatInput" placeholder="כתוב הודעה..." />
-                        <button class="wc-dark-send-button" id="wcDarkSendButton"></button>
+                    <div class="wc-chat-input-container">
+                        <textarea class="wc-chat-input" id="wcChatInput" placeholder="כתוב הודעה..." rows="1"></textarea>
+                        <button class="wc-send-button" id="wcSendButton">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             `;
 
             document.body.appendChild(container);
             
-            this.chatButton = document.getElementById('wcDarkChatButton');
-            this.chatWindow = document.getElementById('wcDarkChatWindow');
-            this.chatMessages = document.getElementById('wcDarkChatMessages');
-            this.chatInput = document.getElementById('wcDarkChatInput');
-            this.sendButton = document.getElementById('wcDarkSendButton');
-            this.closeButton = document.getElementById('wcDarkCloseButton');
-            this.quickReplies = document.getElementById('wcDarkQuickReplies');
+            this.chatButton = document.getElementById('wcChatButton');
+            this.chatWindow = document.getElementById('wcChatWindow');
+            this.chatMessages = document.getElementById('wcChatMessages');
+            this.chatInput = document.getElementById('wcChatInput');
+            this.sendButton = document.getElementById('wcSendButton');
+            this.closeButton = document.getElementById('wcCloseButton');
+            this.quickReplies = document.getElementById('wcQuickReplies');
         }
 
         bindEvents() {
@@ -509,32 +575,51 @@
             this.closeButton.addEventListener('click', () => this.toggleChat());
             this.sendButton.addEventListener('click', () => this.sendMessage());
             
-            this.chatInput.addEventListener('keypress', (e) => {
+            this.chatInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     this.sendMessage();
                 }
             });
 
+            // Auto-resize textarea
             this.chatInput.addEventListener('input', () => {
-                this.sendButton.disabled = !this.chatInput.value.trim();
+                this.chatInput.style.height = 'auto';
+                this.chatInput.style.height = Math.min(this.chatInput.scrollHeight, 120) + 'px';
             });
 
             // Quick replies
             this.quickReplies.addEventListener('click', (e) => {
-                if (e.target.classList.contains('wc-dark-quick-reply')) {
+                if (e.target.classList.contains('wc-quick-reply')) {
                     const message = e.target.getAttribute('data-message');
                     this.chatInput.value = message;
                     this.sendMessage();
                 }
             });
 
-            // Close on escape
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && this.isOpen) {
-                    this.toggleChat();
+            // Load updated responses from localStorage
+            this.loadUpdatedResponses();
+            
+            // Listen for updates from admin panel
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'wearablecode_chatbot_data') {
+                    this.loadUpdatedResponses();
                 }
             });
+        }
+
+        loadUpdatedResponses() {
+            const saved = localStorage.getItem('wearablecode_chatbot_data');
+            if (saved) {
+                try {
+                    const updatedData = JSON.parse(saved);
+                    // Update the chatbot responses
+                    CHATBOT_RESPONSES = { ...CHATBOT_RESPONSES, ...updatedData };
+                    console.log('📱 צ\'אטבוט עודכן עם נתונים חדשים מפאנל האדמין');
+                } catch (e) {
+                    console.error('שגיאה בטעינת נתונים:', e);
+                }
+            }
         }
 
         toggleChat() {
@@ -542,21 +627,27 @@
             if (this.isOpen) {
                 this.chatWindow.classList.add('open');
                 this.chatInput.focus();
-                this.sendButton.disabled = !this.chatInput.value.trim();
             } else {
                 this.chatWindow.classList.remove('open');
             }
         }
 
-        addMessage(content, sender) {
+        addMessage(content, sender, showTyping = false) {
+            if (showTyping && sender === 'bot') {
+                this.showTyping();
+                setTimeout(() => {
+                    this.hideTyping();
+                    this.actuallyAddMessage(content, sender);
+                }, 1000 + Math.random() * 1000);
+            } else {
+                this.actuallyAddMessage(content, sender);
+            }
+        }
+
+        actuallyAddMessage(content, sender) {
             const messageDiv = document.createElement('div');
-            messageDiv.className = `wc-dark-message ${sender}`;
-            
-            const messageContent = document.createElement('div');
-            messageContent.className = 'wc-dark-message-content';
-            messageContent.textContent = content;
-            
-            messageDiv.appendChild(messageContent);
+            messageDiv.className = `wc-message ${sender}`;
+            messageDiv.innerHTML = `<div class="wc-message-content">${content}</div>`;
             
             this.chatMessages.appendChild(messageDiv);
             this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
@@ -569,46 +660,42 @@
             this.isTyping = true;
             
             const typingDiv = document.createElement('div');
-            typingDiv.className = 'wc-dark-message bot';
-            typingDiv.id = 'wcDarkTyping';
-            
-            const typingContent = document.createElement('div');
-            typingContent.className = 'wc-dark-message-content';
-            typingContent.innerHTML = `
-                <div class="wc-dark-typing">
-                    <div class="wc-dark-typing-dot"></div>
-                    <div class="wc-dark-typing-dot"></div>
-                    <div class="wc-dark-typing-dot"></div>
-                    <span style="margin-right: 8px;">כותב...</span>
+            typingDiv.className = 'wc-message bot';
+            typingDiv.id = 'wcTyping';
+            typingDiv.innerHTML = `
+                <div class="wc-typing-indicator">
+                    <div class="wc-typing-dots">
+                        <div class="wc-typing-dot"></div>
+                        <div class="wc-typing-dot"></div>
+                        <div class="wc-typing-dot"></div>
+                    </div>
+                    <span class="wc-typing-text">כותב...</span>
                 </div>
             `;
-            
-            typingDiv.appendChild(typingContent);
             
             this.chatMessages.appendChild(typingDiv);
             this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
         }
 
         hideTyping() {
-            const typingDiv = document.getElementById('wcDarkTyping');
+            const typingDiv = document.getElementById('wcTyping');
             if (typingDiv) {
                 typingDiv.remove();
             }
             this.isTyping = false;
         }
 
-        // פונקציה חכמה לחיפוש תשובה מתאימה
         findResponse(message) {
             const lowerMessage = message.toLowerCase().trim();
             
-            // חיפוש מדויק במילות המפתח
+            // Search in current responses (including updates from admin panel)
             for (const [key, data] of Object.entries(CHATBOT_RESPONSES)) {
-                if (data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
+                if (data.keywords && data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
                     return data.response;
                 }
             }
             
-            // תשובות חכמות נוספות לשאלות נפוצות
+            // Smart responses for common greetings
             if (lowerMessage.includes('שלום') || lowerMessage.includes('היי') || lowerMessage.includes('בוקר טוב')) {
                 return '👋 שלום וברוכים הבאים ל-WearableCode! איך אני יכול לעזור לך היום?';
             }
@@ -621,45 +708,37 @@
                 return '👋 להתראות! תמיד אפשר לחזור אלינו. תהיה בריא!';
             }
             
-            // אם לא נמצאה תשובה ספציפית
+            // Default response
             return '🤔 אני לא בטוח שהבנתי את השאלה. בואו ננסה כמה אפשרויות:\n\n• כתוב "מחירים" למידע על מחירים\n• כתוב "משלוח" לפרטי משלוח\n• כתוב "חבילה" למעקב אחר חבילה\n• כתוב "צור קשר" לפרטי התקשרות\n\nאו פשוט שאל אותי משהו ספציפי! 😊';
         }
 
         sendMessage() {
             const message = this.chatInput.value.trim();
-            if (!message || this.isTyping) return;
+            if (!message) return;
 
-            // הוסף הודעת משתמש
+            // Add user message
             this.addMessage(message, 'user');
             this.chatInput.value = '';
-            this.sendButton.disabled = true;
-            
-            // הראה שהבוט כותב
-            this.showTyping();
+            this.chatInput.style.height = 'auto';
 
-            // חפש תשובה ושלח אחרי דיליי קצר (לריאליזם)
-            setTimeout(() => {
-                this.hideTyping();
-                const response = this.findResponse(message);
-                this.addMessage(response, 'bot');
-                this.sendButton.disabled = false;
-                this.chatInput.focus();
-            }, 1200 + Math.random() * 800); // דיליי של 1.2-2 שניות
+            // Find and send bot response with typing effect
+            const response = this.findResponse(message);
+            this.addMessage(response, 'bot', true);
         }
     }
 
-    // אתחול הצ'אט בוט
-    function initSmartChatbot() {
+    // Initialize chatbot
+    function initChatbot() {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
-                window.WearableCodeSmartChatbot = new WearableCodeSmartChatbot();
+                window.WearableCodeChatbot = new WearableCodeChatbot();
             });
         } else {
-            window.WearableCodeSmartChatbot = new WearableCodeSmartChatbot();
+            window.WearableCodeChatbot = new WearableCodeChatbot();
         }
     }
 
-    // התחל!
-    initSmartChatbot();
+    // Start!
+    initChatbot();
 
 })();
