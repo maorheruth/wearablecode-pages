@@ -777,8 +777,8 @@
     </div>
 
     <script>
-        // הסיסמה הנדרשת - סיסמה מאובטחת יותר
-        const ADMIN_PASSWORD = 'Aawearableadmin2024!';
+        // הסיסמה הנדרשת
+        const ADMIN_PASSWORD = 'Aawearableadmin';
         const PASSWORD_KEY = 'wearablecode_admin_auth';
         
         // מאגר התשובות (נתונים התחלתיים)
@@ -868,14 +868,16 @@
             const passwordInput = document.getElementById('passwordInput');
             const toggleBtn = document.querySelector('.toggle-password');
             
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleBtn.innerHTML = '🙈';
-                console.log('✅ סיסמה מוצגת');
-            } else {
-                passwordInput.type = 'password';
-                toggleBtn.innerHTML = '👁️';
-                console.log('✅ סיסמה מוסתרת');
+            if (passwordInput && toggleBtn) {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleBtn.innerHTML = '🙈';
+                    console.log('✅ סיסמה מוצגת');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleBtn.innerHTML = '👁️';
+                    console.log('✅ סיסמה מוסתרת');
+                }
             }
         }
 
