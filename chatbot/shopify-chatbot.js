@@ -181,13 +181,21 @@
                 .wc-assistant-avatar {
                     width: 48px;
                     height: 48px;
-                    background: linear-gradient(135deg, #000000, #333333);
+                    background: #ffffff;
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
                     flex-shrink: 0;
+                    overflow: hidden;
+                }
+
+                .wc-assistant-avatar img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 50%;
                 }
 
                 .wc-assistant-avatar svg {
@@ -539,9 +547,7 @@
                 <div class="wc-chat-window" id="wcChatWindow">
                     <div class="wc-chat-header">
                         <div class="wc-assistant-avatar">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                            </svg>
+                            <img src="https://wearablecode-pages.vercel.app/assets/logos/wearablecode_favicon_48x48.png" alt="WearableCode Assistant" />
                         </div>
                         <div class="wc-assistant-info">
                             <h3>עוזר WearableCode</h3>
