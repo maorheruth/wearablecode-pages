@@ -694,10 +694,10 @@
         <div class="login-box">
             <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
             <div class="password-container">
-                <input type="password" id="passwordInput" class="login-input" placeholder="הכנס סיסמה..." autocomplete="off">
-                <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+                <input type="password" id="passwordInput" class="login-input" placeholder="Aawearableadmin" autocomplete="off">
+                <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
             </div>
-            <button id="loginButton" class="login-btn">כניסה</button>
+            <button type="button" id="loginButton" class="login-btn" onclick="checkPassword()">כניסה</button>
             <div id="errorMessage" class="error-message"></div>
         </div>
     </div>
@@ -811,12 +811,12 @@
 
         let currentEditingKey = null;
 
-        // בדיקת התחברות בעת טעינת הדף - פשוטה יותר
+        // בדיקת התחברות בעת טעינת הדף
         function checkAuth() {
-            const stored = localStorage.getItem(PASSWORD_KEY);
-            console.log('🔍 בודק התחברות:', stored);
+            const stored = localStorage.getItem('wearablecode_admin_auth');
+            console.log('🔍 בודק התחברות שמורה:', stored);
             if (stored === 'Aawearableadmin') {
-                console.log('✅ התחברות אוטומטית');
+                console.log('✅ התחברות אוטומטית מוצלחת');
                 showMainApp();
             } else {
                 console.log('❌ נדרשת התחברות');
@@ -838,41 +838,44 @@
             loadQuestionsList();
         }
 
-        // בדיקת סיסמה - פשוטה ויעילה
-        function checkPassword() {
+        // פונקציות גלובליות שמוגדרות לפני הכל
+        window.checkPassword = function() {
+            console.log('🔑 checkPassword נקראה');
             const passwordInput = document.getElementById('passwordInput');
-            const password = passwordInput.value;
+            const password = passwordInput.value.trim();
             const errorDiv = document.getElementById('errorMessage');
             
-            // בדיקה פשוטה וישירה
+            console.log('הסיסמה שהוקלדה:', password);
+            console.log('אורך הסיסמה:', password.length);
+            
             if (password === 'Aawearableadmin') {
-                localStorage.setItem(PASSWORD_KEY, password);
+                console.log('✅ סיסמה נכונה! מתחבר...');
+                localStorage.setItem('wearablecode_admin_auth', password);
                 showMainApp();
                 errorDiv.textContent = '';
-                console.log('✅ התחברות הצליחה');
             } else {
-                errorDiv.textContent = `סיסמה שגויה. הסיסמה הנכונה היא: Aawearableadmin`;
-                passwordInput.value = '';
+                console.log('❌ סיסמה שגויה');
+                errorDiv.textContent = 'סיסמה שגויה. הסיסמה היא: Aawearableadmin';
+                errorDiv.style.color = '#ef4444';
                 passwordInput.focus();
-                console.log('❌ סיסמה שגויה:', password);
             }
-        }
+        };
 
-        // הצגה/הסתרה של סיסמה - תיקון מלא
-        function togglePassword() {
+        window.togglePassword = function() {
+            console.log('👁️ togglePassword נקראה');
             const passwordInput = document.getElementById('passwordInput');
-            const toggleBtn = document.getElementById('togglePassword');
+            const toggleBtn = document.querySelector('.toggle-password');
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleBtn.innerHTML = '🙈';
-                console.log('👁️ הסיסמה מוצגת');
+                console.log('✅ סיסמה מוצגת');
             } else {
                 passwordInput.type = 'password';
                 toggleBtn.innerHTML = '👁️';
-                console.log('🙈 הסיסמה מוסתרת');
+                console.log('✅ סיסמה מוסתרת');
             }
-        }
+        };
 
         // התנתקות
         function logout() {
@@ -1122,62 +1125,48 @@
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM נטען, מתחיל להגדיר...');
             checkAuth();
             
-            document.getElementById('loginButton').addEventListener('click', function() {
-                console.log('🔘 לחיצה על כפתור התחברות');
-                checkPassword();
-            });
-            document.getElementById('logoutButton').addEventListener('click', logout);
-            document.getElementById('addQuestionBtn').addEventListener('click', addNewQuestion);
-            document.getElementById('testChatbotButton').addEventListener('click', testChatbot);
-            document.getElementById('updateChatbotButton').addEventListener('click', updateChatbot);
-            
-            // תיקון כפתור העין
-            const toggleBtn = document.getElementById('togglePassword');
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('👁️ לחיצה על כפתור העין');
-                    togglePassword();
-                });
-            }
-            
-            // Setup preview components
-            setupPreviewInput();
-            setupQuickReplies();
-            
-            // Enter במסך התחברות - מחוזק ומשופר
+            // התחברות עם Enter
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
                     const loginScreen = document.getElementById('loginScreen');
                     if (loginScreen && window.getComputedStyle(loginScreen).display !== 'none') {
-                        e.preventDefault(); // מונע שליחת טופס
-                        console.log('⌨️ Enter נלחץ במסך התחברות');
+                        e.preventDefault();
+                        console.log('⌨️ Enter נלחץ - מתחבר');
                         checkPassword();
                     }
                 }
             });
             
-            // Enter גם על שדה הסיסמה עצמו
-            const passwordInput = document.getElementById('passwordInput');
-            if (passwordInput) {
-                passwordInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') {
+            // Event listeners אחרים
+            const logoutBtn = document.getElementById('logoutButton');
+            if (logoutBtn) logoutBtn.addEventListener('click', logout);
+            
+            const addBtn = document.getElementById('addQuestionBtn');
+            if (addBtn) addBtn.addEventListener('click', addNewQuestion);
+            
+            const testBtn = document.getElementById('testChatbotButton');
+            if (testBtn) testBtn.addEventListener('click', testChatbot);
+            
+            const updateBtn = document.getElementById('updateChatbotButton');
+            if (updateBtn) updateBtn.addEventListener('click', updateChatbot);
+            
+            // Setup preview components
+            setupPreviewInput();
+            setupQuickReplies();
+
+            // Enter בתצוגה מקדימה
+            const previewInput = document.getElementById('previewInput');
+            if (previewInput) {
+                previewInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
-                        console.log('⌨️ Enter נלחץ בשדה הסיסמה');
-                        checkPassword();
+                        testChatbot();
                     }
                 });
             }
-
-            // Enter בתצוגה מקדימה
-            document.getElementById('previewInput').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    testChatbot();
-                }
-            });
         });
 
         // טען נתונים שמורים אם קיימים
