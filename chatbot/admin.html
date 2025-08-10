@@ -631,6 +631,8 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            position: relative;
+            overflow: hidden;
         }
 
         .update-btn:hover {
@@ -643,11 +645,86 @@
         .update-btn.success {
             background: #10b981;
             border-color: #10b981;
+            animation: successPulse 0.6s ease-out;
         }
 
         .update-btn.success:hover {
             background: #059669;
             border-color: #059669;
+        }
+
+        @keyframes successPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        /* Success Notification */
+        .success-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 1000;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .success-notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .success-notification .icon {
+            font-size: 18px;
+        }
+
+        /* Status indicator */
+        .status-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ef4444;
+            transition: all 0.3s ease;
+        }
+
+        .status-indicator.connected {
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
         }
 
         /* Scrollbar styling */
@@ -689,6 +766,12 @@
     </style>
 </head>
 <body>
+    <!-- Success Notification -->
+    <div class="success-notification" id="successNotification">
+        <span class="icon">✅</span>
+        <span>המידע הועבר לצ'אטבוט בהצלחה!</span>
+    </div>
+
     <!-- Login Screen -->
     <div class="login-container" id="loginScreen">
         <div class="login-box">
@@ -734,6 +817,7 @@
                 <h2>👀 תצוגה מקדימה</h2>
                 <div class="chatbot-preview">
                     <div class="preview-header">
+                        <div class="status-indicator" id="statusIndicator"></div>
                         <div class="preview-avatar">
                             <img src="https://wearablecode-pages.vercel.app/assets/logos/wearablecode_favicon_48x48.png" alt="WearableCode Assistant" />
                         </div>
@@ -765,7 +849,7 @@
 
                 <div class="update-section">
                     <h3>🔄 עדכון הצ'אטבוט</h3>
-                    <button class="update-btn" onclick="updateChatbot()">
+                    <button class="update-btn" id="updateChatbotBtn" onclick="updateChatbot()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
                         </svg>
@@ -836,6 +920,7 @@
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             loadQuestionsList();
+            updateConnectionStatus();
         }
 
         // בדיקת סיסמה
@@ -888,6 +973,30 @@
             localStorage.removeItem(PASSWORD_KEY);
             showLoginScreen();
             document.getElementById('passwordInput').value = '';
+        }
+
+        // עדכון סטטוס החיבור
+        function updateConnectionStatus() {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const hasChatbotData = localStorage.getItem('wearablecode_chatbot_data');
+            
+            if (hasChatbotData) {
+                statusIndicator.classList.add('connected');
+                statusIndicator.title = 'הצ\'אטבוט מחובר ומעודכן';
+            } else {
+                statusIndicator.classList.remove('connected');
+                statusIndicator.title = 'הצ\'אטבוט טרם עודכן';
+            }
+        }
+
+        // הצגת הודעת הצלחה
+        function showSuccessNotification() {
+            const notification = document.getElementById('successNotification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
 
         // טעינת רשימת השאלות
@@ -1104,16 +1213,15 @@
             return '🤔 אני לא בטוח שהבנתי את השאלה. נסה לשאול בצורה אחרת או צור קשר ישירות.';
         }
 
-        // עדכון הצ'אטבוט
+        // עדכון הצ'אטבוט - כאן הקסם קורה! 🎉
         function updateChatbot() {
-            const btn = document.getElementById('updateChatbotButton');
-            if (!btn) return;
+            const btn = document.getElementById('updateChatbotBtn');
+            const originalHTML = btn.innerHTML;
             
             // שמירה ב-localStorage
             localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(chatbotData));
             
             // אנימציה של הכפתור
-            const originalHTML = btn.innerHTML;
             btn.classList.add('success');
             btn.innerHTML = `
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -1128,10 +1236,19 @@
                 newValue: JSON.stringify(chatbotData)
             }));
             
+            // הצגת הודעת הצלחה
+            showSuccessNotification();
+            
+            // עדכון סטטוס החיבור
+            updateConnectionStatus();
+            
+            // החזרת הכפתור למצב רגיל
             setTimeout(() => {
                 btn.classList.remove('success');
                 btn.innerHTML = originalHTML;
             }, 3000);
+            
+            console.log('🚀 המידע עודכן בצ\'אטבוט!', chatbotData);
         }
 
         // Event listeners
