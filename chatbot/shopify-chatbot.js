@@ -121,8 +121,7 @@
                 console.log('⏹️ מנגנון העדכון האוטומטי נעצר');
             }
         }
-
-        // טעינת נתונים עדכניים מהשרת + localStorage
+// טעינת נתונים עדכניים מהשרת + localStorage
 async loadUpdatedResponses() {
     // ניקוי cache מלא בכל פעם
     console.log('🧹 מנקה cache לפני טעינה...');
@@ -152,6 +151,12 @@ async loadUpdatedResponses() {
                     
                     // עדכון כפתורי התגובה המהירה בממשק
                     this.updateQuickReplies();
+                    
+                    // אלץ עדכון מיידי של הממשק
+                    console.log('🔄 מאלץ עדכון ממשק...');
+                    setTimeout(() => {
+                        this.updateQuickReplies();
+                    }, 100);
                     
                     // שמירה גם ב-localStorage לפעם הבאה
                     try {
@@ -234,6 +239,12 @@ async loadUpdatedResponses() {
                 // עדכון כפתורי התגובה המהירה בממשק
                 this.updateQuickReplies();
                 
+                // אלץ עדכון מיידי של הממשק
+                console.log('🔄 מאלץ עדכון ממשק...');
+                setTimeout(() => {
+                    this.updateQuickReplies();
+                }, 100);
+                
                 // שמירה גם ב-localStorage לפעם הבאה
                 try {
                     localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(data));
@@ -272,6 +283,12 @@ async loadUpdatedResponses() {
                 
                 this.updateQuickReplies();
                 
+                // אלץ עדכון מיידי של הממשק
+                console.log('🔄 מאלץ עדכון ממשק...');
+                setTimeout(() => {
+                    this.updateQuickReplies();
+                }, 100);
+                
                 try {
                     localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(data));
                     localStorage.setItem('wearablecode_last_update', Date.now().toString());
@@ -306,6 +323,12 @@ async loadUpdatedResponses() {
                 }
                 
                 this.updateQuickReplies();
+                
+                // אלץ עדכון מיידי של הממשק
+                console.log('🔄 מאלץ עדכון ממשק...');
+                setTimeout(() => {
+                    this.updateQuickReplies();
+                }, 100);
                 
                 console.log('✅ נתונים נטענו מ-localStorage', isDataFresh ? '(טריים)' : '(ישנים)');
                 return true;
