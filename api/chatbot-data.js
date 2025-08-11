@@ -1,5 +1,5 @@
 // api/chatbot-data.js
-// ורסל API endpoint לניהול נתוני הצ'אטבוט - גרסה דינמית
+// ורסל API endpoint לניהול נתוני הצ'אטבוט - גרסה דינמית עם CORS מתוקן
 
 // נתונים שנשמרים בזיכרון - יתעדכנו רק מהפאנל אדמין
 let chatbotData = null;
@@ -10,6 +10,8 @@ const defaultData = {
         { text: 'מחירים', icon: '💰', topic: 'מחירים' },
         { text: 'משלוח', icon: '🚚', topic: 'משלוח' },
         { text: 'מעקב', icon: '📦', topic: 'מעקב חבילה' },
+        { text: 'מידות', icon: '📏', topic: 'מידות' },
+        { text: 'החזרות', icon: '🔄', topic: 'החזרות' },
         { text: 'צור קשר', icon: '📞', topic: 'צור קשר' }
     ],
     responses: {
@@ -43,40 +45,27 @@ const defaultData = {
 };
 
 export default function handler(req, res) {
-    console.log('🚀 API נקרא:', {
-        method: req.method,
-        url: req.url,
-        query: req.query,
-        origin: req.headers.origin,
-        timestamp: new Date().toISOString(),
-        hasStoredData: chatbotData !== null
-    });
-
-    // הגדרת CORS מתקדם כדי לאפשר גישה מכל הדומיינים של שופיפיי
-    const origin = req.headers.origin;
-    
-    // רשימת דומיינים מורשים
-    const allowedOrigins = [
-        'https://wearablecode.com',
-        'https://www.wearablecode.com',
-        'https://wearablecode.myshopify.com'
-    ];
-    
-    // אפשר לכל origin של שופיפיי או ורסל
-    if (origin && (allowedOrigins.includes(origin) || origin.includes('shopify') || origin.includes('wearablecode') || origin.includes('vercel.app'))) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    } else {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-    }
-    
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    // הגדרות CORS מיידיות - פתוח לכל הדומיינים
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    res.setHeader('Access-Control-Allow-Credentials', 'false');
+    res.setHeader('Access-Control-Max-Age', '86400');
     
     // הגדרת Cache headers
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
+    
+    console.log('🚀 API נקרא:', {
+        method: req.method,
+        url: req.url,
+        query: req.query,
+        origin: req.headers.origin,
+        userAgent: req.headers['user-agent']?.slice(0, 50),
+        timestamp: new Date().toISOString(),
+        hasStoredData: chatbotData !== null
+    });
 
     // טיפול ב-OPTIONS request (CORS preflight)
     if (req.method === 'OPTIONS') {
@@ -134,7 +123,7 @@ export default function handler(req, res) {
         // בדיקה אם זה בקשת JSONP (עוקף CORS)
         const callback = req.query.callback;
         
-        // החזר נתונים מהפאנל אדמין אם קיימים, אחרת ברירת מחדל
+        // החזר נתונים מהפאנל אדמין אם קיימים, אחרת ברירת מחדל מעודכנת
         const responseData = {
             success: true,
             ...(chatbotData || defaultData),
