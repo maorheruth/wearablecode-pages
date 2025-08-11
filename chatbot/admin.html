@@ -364,6 +364,8 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
+            max-height: calc(100vh - 80px);
         }
 
         .preview-panel h2 {
@@ -382,11 +384,11 @@
                 0 25px 50px rgba(0, 0, 0, 0.15), 
                 0 15px 35px rgba(0, 0, 0, 0.1),
                 0 5px 15px rgba(0, 0, 0, 0.08);
-            flex: 1;
             display: flex;
             flex-direction: column;
-            max-height: 300px;
+            height: 350px;
             direction: rtl;
+            margin-bottom: 20px;
         }
 
         .preview-header {
@@ -675,17 +677,18 @@
             background: #1e293b;
             border: 1px solid #475569;
             border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
             display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .quick-reply-controls {
             display: flex;
-            gap: 8px;
-            flex: 1;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .quick-reply-input {
@@ -693,8 +696,8 @@
             border: 1px solid #334155;
             border-radius: 6px;
             color: #f1f5f9;
-            padding: 8px 12px;
-            font-size: 13px;
+            padding: 6px 8px;
+            font-size: 12px;
             outline: none;
             text-align: right;
         }
@@ -704,16 +707,17 @@
         }
 
         .quick-reply-input.icon {
-            width: 60px;
+            width: 40px;
             text-align: center;
         }
 
         .quick-reply-input.text {
-            width: 120px;
+            width: 80px;
         }
 
         .quick-reply-input.topic {
             flex: 1;
+            min-width: 100px;
         }
 
         .quick-reply-delete {
@@ -721,10 +725,11 @@
             color: white;
             border: none;
             border-radius: 6px;
-            padding: 8px 12px;
+            padding: 6px 10px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             transition: background 0.3s ease;
+            white-space: nowrap;
         }
 
         .quick-reply-delete:hover {
@@ -735,11 +740,13 @@
             background: #f8f9fa;
             color: #475569;
             border: 1px solid #e2e8f0;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            margin-left: 10px;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 11px;
+            text-align: center;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* Success Notification */
@@ -1125,18 +1132,19 @@
                         <input type="text" class="quick-reply-input icon" 
                                value="${reply.icon}" 
                                onchange="updateQuickReply(${index}, 'icon', this.value)"
-                               placeholder="🔥">
+                               placeholder="🔥" title="אייקון">
                         <input type="text" class="quick-reply-input text" 
                                value="${reply.text}" 
                                onchange="updateQuickReply(${index}, 'text', this.value)"
-                               placeholder="טקסט הכפתור">
+                               placeholder="טקסט" title="טקסט הכפתור">
                         <select class="quick-reply-input topic" 
-                                onchange="updateQuickReply(${index}, 'topic', this.value)">
+                                onchange="updateQuickReply(${index}, 'topic', this.value)"
+                                title="נושא">
                             ${generateTopicOptions(reply.topic)}
                         </select>
+                        <button class="quick-reply-delete" onclick="deleteQuickReply(${index})" title="מחק">🗑️</button>
                     </div>
                     <div class="quick-reply-preview">${reply.icon} ${reply.text}</div>
-                    <button class="quick-reply-delete" onclick="deleteQuickReply(${index})">🗑️</button>
                 `;
                 container.appendChild(item);
             });
