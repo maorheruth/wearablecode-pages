@@ -1089,6 +1089,7 @@
             loadQuickRepliesManager(); // טען גם את הכפתורים המהירים
             updatePreviewQuickReplies(); // עדכן התצוגה המקדימה
             updateConnectionStatus();
+            testConnection(); // בדיקת חיבור ראשונית
         }
 
         // בדיקת סיסמה
@@ -1156,7 +1157,23 @@
                 statusIndicator.title = 'הצ\'אטבוט טרם עודכן';
             }
         }
-
+        // בדיקת חיבור לשרת
+        async function testConnection() {
+            try {
+                const response = await fetch('https://wearablecode-pages.vercel.app/api/chatbot-data?test=1', {
+                    method: 'GET',
+                    headers: { 'Cache-Control': 'no-cache' }
+                });
+                
+                if (response.ok) {
+                    console.log('✅ חיבור לשרת תקין');
+                    return true;
+                }
+            } catch (error) {
+                console.log('❌ בעיה בחיבור לשרת:', error.message);
+            }
+            return false;
+        }
         // הצגת הודעת הצלחה
         function showSuccessNotification() {
             const notification = document.getElementById('successNotification');
@@ -1582,7 +1599,9 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
                     },
+                    mode: 'cors',
                     body: JSON.stringify(dataToSend)
                 })
                 .then(response => {
