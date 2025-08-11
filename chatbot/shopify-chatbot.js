@@ -90,13 +90,11 @@
                 this.addMessage('💡 טיפ: נסה לכתוב "מחירים", "משלוח", "חבילה" או "מידות" לקבלת מידע מהיר!', 'bot');
             }, 2000);
         }
-
-// בצ'אטבוט - שנה את loadUpdatedResponses()
+// בצ'אטבוט - עדכן את הפונקציה loadUpdatedResponses()
 async loadUpdatedResponses() {
     console.log('🔍 טוען נתונים מורסל API...');
     
     try {
-        // קריאה מהורסל API
         const response = await fetch('https://wearablecode-pages.vercel.app/api/chatbot-data', {
             method: 'GET',
             headers: {
@@ -110,9 +108,15 @@ async loadUpdatedResponses() {
             
             if (data.responses) {
                 CHATBOT_RESPONSES = data.responses;
+                
+                // עדכון כפתורי התגובה המהירה
+                if (data.quickReplies) {
+                    this.customQuickReplies = data.quickReplies;
+                    console.log('🔘 עודכנו כפתורי תגובה מהירה:', data.quickReplies);
+                }
+                
                 this.updateQuickReplies();
                 console.log('✅ נתונים נטענו מורסל API בהצלחה!');
-                console.log('🔄 עודכנו:', Object.keys(CHATBOT_RESPONSES).length, 'תשובות');
                 return true;
             }
         } else {
@@ -122,14 +126,16 @@ async loadUpdatedResponses() {
         console.log('❌ שגיאה בטעינה מורסל API:', error.message);
     }
     
-    // Fallback - ניסיון עם localStorage
-    console.log('🔄 מנסה localStorage כ-fallback...');
+    // Fallback - localStorage
     try {
         const saved = localStorage.getItem('wearablecode_chatbot_data');
         if (saved) {
             const parsedData = JSON.parse(saved);
             if (parsedData.responses) {
                 CHATBOT_RESPONSES = parsedData.responses;
+                if (parsedData.quickReplies) {
+                    this.customQuickReplies = parsedData.quickReplies;
+                }
                 this.updateQuickReplies();
                 console.log('✅ נתונים נטענו מ-localStorage');
                 return true;
@@ -139,113 +145,33 @@ async loadUpdatedResponses() {
         console.log('❌ localStorage גם לא זמין:', e.message);
     }
     
-    console.log('⚠️ נשארנו עם נתוני ברירת המחדל');
     return false;
 }
 
-        // האזנה לעדכונים מהפאנל אדמין
-        setupAdminPanelListener() {
-            // האזנה לשינויים ב-localStorage
-            window.addEventListener('message', (event) => {
-                if (event.data && event.data.type === 'WEARABLECODE_CHATBOT_UPDATE') {
-                    console.log('📡 התקבל עדכון מהפאנל אדמין!');
-                    CHATBOT_RESPONSES = event.data.data.responses;
-                    this.updateQuickReplies();
-                    this.showAdminUpdateNotification();
-                }
-            });
-
-            // בדיקה מיידית בפתיחת הצ'אטבוט
-            const originalToggleChat = this.toggleChat.bind(this);
-            this.toggleChat = () => {
-                originalToggleChat();
-                if (this.isOpen) {
-                    // בדיקת עדכונים בכל פתיחה
-                    this.loadUpdatedResponses();
-                }
-            };
-        }
-
-        // הצגת התראה על עדכון מהפאנל אדמין
-        showAdminUpdateNotification() {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                color: white;
-                padding: 16px 24px;
-                border-radius: 12px;
-                box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
-                font-weight: 600;
-                font-size: 14px;
-                z-index: 999999;
-                transform: translateX(400px);
-                opacity: 0;
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-                direction: rtl;
-            `;
-            
-            notification.innerHTML = `
-                <span style="font-size: 18px;">🔄</span>
-                <span>הצ'אטבוט עודכן מהפאנל אדמין!</span>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-                notification.style.opacity = '1';
-            }, 100);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(400px)';
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 400);
-            }, 3000);
-        }
-
-        // עדכון כפתורי התגובות המהירות
-        updateQuickReplies() {
-            if (!this.quickReplies) return;
-            
-            const availableTopics = Object.keys(CHATBOT_RESPONSES).slice(0, 4);
-            this.quickReplies.innerHTML = '';
-            
-            availableTopics.forEach(topic => {
-                const button = document.createElement('div');
-                button.className = 'wc-quick-reply';
-                button.setAttribute('data-message', topic);
-                
-                const icons = {
-                    'מחירים': '💰',
-                    'משלוח': '🚚',
-                    'מעקב חבילה': '📦',
-                    'צור קשר': '📞',
-                    'מידות': '📏',
-                    'החזרות': '🔄',
-                    'מבצעים': '🎉',
-                    'איכות': '⭐',
-                    'עיצובים': '🎨'
-                };
-                
-                const icon = icons[topic] || '💬';
-                button.textContent = `${icon} ${topic}`;
-                
-                this.quickReplies.appendChild(button);
-            });
-            
-            console.log('🔄 כפתורי התגובות המהירות עודכנו:', availableTopics);
-        }
+// עדכון פונקציית updateQuickReplies בצ'אטבוט
+updateQuickReplies() {
+    if (!this.quickReplies) return;
+    
+    this.quickReplies.innerHTML = '';
+    
+    // השתמש בכפתורים המותאמים אישית אם קיימים
+    const repliesData = this.customQuickReplies || [
+        { text: 'מחירים', icon: '💰', topic: 'מחירים' },
+        { text: 'משלוח', icon: '🚚', topic: 'משלוח' },
+        { text: 'מעקב', icon: '📦', topic: 'מעקב חבילה' },
+        { text: 'צור קשר', icon: '📞', topic: 'צור קשר' }
+    ];
+    
+    repliesData.forEach(reply => {
+        const button = document.createElement('div');
+        button.className = 'wc-quick-reply';
+        button.setAttribute('data-message', reply.topic);
+        button.textContent = `${reply.icon} ${reply.text}`;
+        this.quickReplies.appendChild(button);
+    });
+    
+    console.log('🔄 כפתורי התגובות המהירות עודכנו:', repliesData.length, 'כפתורים');
+}
 
         addStyles() {
             const style = document.createElement('style');
