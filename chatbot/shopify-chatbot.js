@@ -124,6 +124,11 @@
 
         // טעינת נתונים עדכניים מהשרת + localStorage
 async loadUpdatedResponses() {
+    // ניקוי cache מלא בכל פעם
+    console.log('🧹 מנקה cache לפני טעינה...');
+    localStorage.removeItem('wearablecode_chatbot_data');
+    localStorage.removeItem('wearablecode_last_update');
+    
     console.log('🔍 טוען נתונים מורסל API...');
     
     // ניסיון מספר 1: JSONP עם script tag (עוקף CORS)
