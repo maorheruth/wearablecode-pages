@@ -121,7 +121,7 @@
                 console.log('⏹️ מנגנון העדכון האוטומטי נעצר');
             }
         }
-// טעינת נתונים עדכניים מהשרת + localStorage
+// טעינת נתונים עדכניים מהשרת - בלי localStorage fallback
 async loadUpdatedResponses() {
     // ניקוי cache מלא בכל פעם
     console.log('🧹 מנקה cache לפני טעינה...');
@@ -158,7 +158,7 @@ async loadUpdatedResponses() {
                         this.updateQuickReplies();
                     }, 100);
                     
-                    // שמירה גם ב-localStorage לפעם הבאה
+                    // שמירה גם ב-localStorage לפעם הבאה (אופציונלי)
                     try {
                         localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(data));
                         localStorage.setItem('wearablecode_last_update', Date.now().toString());
@@ -245,7 +245,7 @@ async loadUpdatedResponses() {
                     this.updateQuickReplies();
                 }, 100);
                 
-                // שמירה גם ב-localStorage לפעם הבאה
+                // שמירה גם ב-localStorage לפעם הבאה (אופציונלי)
                 try {
                     localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(data));
                     localStorage.setItem('wearablecode_last_update', Date.now().toString());
@@ -304,41 +304,8 @@ async loadUpdatedResponses() {
         console.log('❌ גם Proxy נכשל:', error.message);
     }
     
-    // Fallback - localStorage
-    try {
-        const saved = localStorage.getItem('wearablecode_chatbot_data');
-        const lastUpdate = localStorage.getItem('wearablecode_last_update');
-        
-        if (saved) {
-            const parsedData = JSON.parse(saved);
-            
-            // בדיקה אם הנתונים לא ישנים מידי (יותר מ-24 שעות)
-            const isDataFresh = lastUpdate && (Date.now() - parseInt(lastUpdate)) < 24 * 60 * 60 * 1000;
-            
-            if (parsedData.responses && Object.keys(parsedData.responses).length > 0) {
-                CHATBOT_RESPONSES = { ...parsedData.responses };
-                
-                if (parsedData.quickReplies && Array.isArray(parsedData.quickReplies)) {
-                    this.customQuickReplies = [...parsedData.quickReplies];
-                }
-                
-                this.updateQuickReplies();
-                
-                // אלץ עדכון מיידי של הממשק
-                console.log('🔄 מאלץ עדכון ממשק...');
-                setTimeout(() => {
-                    this.updateQuickReplies();
-                }, 100);
-                
-                console.log('✅ נתונים נטענו מ-localStorage', isDataFresh ? '(טריים)' : '(ישנים)');
-                return true;
-            }
-        }
-    } catch (e) {
-        console.log('❌ localStorage גם לא זמין:', e.message);
-    }
-    
-    console.log('⚠️ משתמש בנתונים המוגדרים בקוד');
+    // אם הכל נכשל - משתמש בנתונים המוגדרים בקוד בלבד
+    console.log('⚠️ כל הניסיונות נכשלו - משתמש בנתונים המוגדרים בקוד בלבד');
     return false;
 }
         // עדכון כפתורי התגובה המהירה - משופר
