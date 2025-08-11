@@ -189,7 +189,7 @@ updateQuickReplies() {
                 .wc-chat-button {
                     width: 48px;
                     height: 48px;
-                    background: #000000;
+                    background: #e7e7e7;
                     border-radius: 50%;
                     border: none;
                     cursor: pointer;
@@ -201,7 +201,7 @@ updateQuickReplies() {
                 }
 
                 .wc-chat-button:hover {
-                    background: #333333;
+                    background: #e7e7e7;
                     transform: scale(1.05);
                 }
 
@@ -218,7 +218,7 @@ updateQuickReplies() {
                 .wc-chat-button-icon {
                     width: 24px;
                     height: 24px;
-                    fill: white;
+                    fill: #8f8f8f;
                     position: relative;
                     z-index: 1;
                     transition: transform 0.3s ease;
