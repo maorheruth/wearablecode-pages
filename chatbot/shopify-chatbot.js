@@ -119,12 +119,14 @@
         // האזנה לעדכונים מהפאנל אדמין
         setupAdminPanelListener() {
             // האזנה לשינויים ב-localStorage
-                window.addEventListener('wearablecode_chatbot_update', (e) => {
+            window.addEventListener('message', (event) => {
+                if (event.data && event.data.type === 'WEARABLECODE_CHATBOT_UPDATE') {
                     console.log('📡 התקבל עדכון מהפאנל אדמין!');
-                    CHATBOT_RESPONSES = e.detail.responses;
+                    CHATBOT_RESPONSES = event.data.data.responses;
                     this.updateQuickReplies();
                     this.showAdminUpdateNotification();
-                });
+                }
+            });
 
             // בדיקה מיידית בפתיחת הצ'אטבוט
             const originalToggleChat = this.toggleChat.bind(this);
