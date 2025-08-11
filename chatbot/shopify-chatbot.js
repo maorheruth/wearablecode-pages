@@ -57,9 +57,8 @@
             this.isOpen = false;
             this.messages = [];
             this.isTyping = false;
-            this.lastUpdateCheck = 0; // מתי בדקנו עדכונים בפעם האחרונה
-            this.updateCheckInterval = 30000; // בדיקה כל 30 שניות
-            this.autoUpdateTimer = null;
+            this.customQuickReplies = null; // כפתורים מותאמים מהפאנל אדמין
+            this.hasLoadedFromAdmin = false; // האם כבר טענו נתונים מהאדמין
             this.init();
         }
 
@@ -68,17 +67,18 @@
             this.createChatbot();
             this.bindEvents();
             
-            // טעינת נתונים מהפאנל אדמין מיד בהתחלה
+            // טעינת נתונים ראשונית מהפאנל אדמין
             this.loadUpdatedResponses().then((success) => {
                 if (success) {
-                    console.log('✅ נתונים נטענו בהצלחה בהתחלה');
+                    console.log('✅ נתונים נטענו בהצלחה בהתחלה מהפאנל אדמין');
+                    this.hasLoadedFromAdmin = true;
                 } else {
-                    console.log('⚠️ לא נמצאו נתונים עדכניים, משתמש בברירות מחדל');
+                    console.log('⚠️ לא נמצאו נתונים מהפאנל אדמין, משתמש בברירות מחדל');
                 }
+                
+                // עדכון כפתורים אחרי טעינה ראשונית
+                this.updateQuickReplies();
             });
-            
-            // התחלת מנגנון עדכון אוטומטי
-            this.startAutoUpdateCheck();
             
             const welcomeMessage = WELCOME_MESSAGES[Math.floor(Math.random() * WELCOME_MESSAGES.length)];
             this.addMessage(welcomeMessage, 'bot');
@@ -88,276 +88,158 @@
             }, 2000);
         }
 
-        // מנגנון עדכון אוטומטי כל 30 שניות
-        startAutoUpdateCheck() {
-            console.log('🔄 התחלת מנגנון עדכון אוטומטי');
+        // טעינת נתונים עדכניים מהשרת - רק כשנדרש
+        async loadUpdatedResponses() {
+            console.log('🔍 טוען נתונים מורסל API...');
             
-            this.autoUpdateTimer = setInterval(async () => {
-                const now = Date.now();
+            // ניסיון מספר 1: JSONP עם script tag (עוקף CORS)
+            try {
+                const jsonpUrl = `https://wearablecode-pages.vercel.app/api/chatbot-data?callback=wcChatbotData&_t=${Date.now()}&bust=${Math.random()}`;
                 
-                // בדיקה רק אם עבר זמן מספיק מהבדיקה האחרונה
-                if (now - this.lastUpdateCheck > this.updateCheckInterval) {
-                    console.log('🔍 בדיקת עדכונים אוטומטית...');
-                    
-                    try {
-                        const success = await this.loadUpdatedResponses();
-                        if (success) {
-                            console.log('✅ נתונים עודכנו אוטומטיות');
+                const success = await new Promise((resolve) => {
+                    // יצירת callback גלובלי
+                    window.wcChatbotData = (data) => {
+                        console.log('📡 נתונים התקבלו דרך JSONP:', data);
+                        
+                        if (data.responses && Object.keys(data.responses).length > 0) {
+                            // עדכון הנתונים הגלובליים
+                            CHATBOT_RESPONSES = { ...data.responses };
+                            
+                            // עדכון כפתורי התגובה המהירה
+                            if (data.quickReplies && Array.isArray(data.quickReplies)) {
+                                this.customQuickReplies = [...data.quickReplies];
+                                console.log('🔘 עודכנו כפתורי תגובה מהירה:', data.quickReplies);
+                            }
+                            
+                            console.log('✅ נתונים נטענו מורסל API דרך JSONP בהצלחה!');
+                            resolve(true);
+                        } else {
+                            resolve(false);
                         }
-                    } catch (error) {
-                        console.log('❌ שגיאה בעדכון אוטומטי:', error.message);
-                    }
+                        
+                        // ניקוי
+                        delete window.wcChatbotData;
+                        if (document.head.contains(script)) {
+                            document.head.removeChild(script);
+                        }
+                    };
                     
-                    this.lastUpdateCheck = now;
+                    // יצירת script tag
+                    const script = document.createElement('script');
+                    script.src = jsonpUrl;
+                    script.onerror = () => {
+                        console.log('❌ JSONP נכשל');
+                        delete window.wcChatbotData;
+                        if (document.head.contains(script)) {
+                            document.head.removeChild(script);
+                        }
+                        resolve(false);
+                    };
+                    
+                    // timeout של 10 שניות
+                    setTimeout(() => {
+                        if (window.wcChatbotData) {
+                            console.log('⏰ JSONP timeout');
+                            delete window.wcChatbotData;
+                            if (document.head.contains(script)) {
+                                document.head.removeChild(script);
+                            }
+                            resolve(false);
+                        }
+                    }, 10000);
+                    
+                    document.head.appendChild(script);
+                });
+                
+                if (success) {
+                    return true;
                 }
-            }, 10000); // בדיקה כל 10 שניות, אבל רק עדכון כל 30 שניות
+                
+            } catch (error) {
+                console.log('❌ שגיאה ב-JSONP:', error.message);
+            }
+            
+            // ניסיון מספר 2: Fetch רגיל
+            try {
+                const response = await fetch('https://wearablecode-pages.vercel.app/api/chatbot-data', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    },
+                    mode: 'cors'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('📡 נתונים התקבלו מהשרת (fetch):', data);
+                    
+                    if (data.responses && Object.keys(data.responses).length > 0) {
+                        CHATBOT_RESPONSES = { ...data.responses };
+                        
+                        if (data.quickReplies && Array.isArray(data.quickReplies)) {
+                            this.customQuickReplies = [...data.quickReplies];
+                            console.log('🔘 עודכנו כפתורי תגובה מהירה:', data.quickReplies);
+                        }
+                        
+                        console.log('✅ נתונים נטענו מורסל API בהצלחה!');
+                        return true;
+                    }
+                } else {
+                    console.log('⚠️ שרת החזיר שגיאה:', response.status);
+                }
+            } catch (error) {
+                console.log('❌ שגיאה בטעינה מורסל API:', error.message);
+            }
+            
+            // אם הכל נכשל
+            console.log('⚠️ כל הניסיונות נכשלו - משתמש בנתונים המוגדרים בקוד בלבד');
+            return false;
         }
 
-        // עצירת מנגנון העדכון (לניקוי זיכרון)
-        stopAutoUpdateCheck() {
-            if (this.autoUpdateTimer) {
-                clearInterval(this.autoUpdateTimer);
-                this.autoUpdateTimer = null;
-                console.log('⏹️ מנגנון העדכון האוטומטי נעצר');
+        // עדכון כפתורי התגובה המהירה
+        updateQuickReplies() {
+            console.log('🔄 מעדכן כפתורי תגובה מהירה...');
+            
+            if (!this.quickReplies) {
+                console.log('❌ אלמנט quickReplies לא נמצא');
+                return;
             }
-        }
-// טעינת נתונים עדכניים מהשרת - בלי localStorage fallback
-async loadUpdatedResponses() {
-    // ניקוי cache מלא בכל פעם
-    console.log('🧹 מנקה cache לפני טעינה...');
-    localStorage.removeItem('wearablecode_chatbot_data');
-    localStorage.removeItem('wearablecode_last_update');
-    
-    console.log('🔍 טוען נתונים מורסל API...');
-    
-    // ניסיון מספר 1: JSONP עם script tag (עוקף CORS)
-    try {
-        const jsonpUrl = `https://wearablecode-pages.vercel.app/api/chatbot-data?callback=wcChatbotData&_t=${Date.now()}&bust=${Math.random()}`;
-        
-        const success = await new Promise((resolve) => {
-            // יצירת callback גלובלי
-            window.wcChatbotData = (data) => {
-                console.log('📡 נתונים התקבלו דרך JSONP:', data);
-                
-                if (data.responses && Object.keys(data.responses).length > 0) {
-                    // עדכון הנתונים הגלובליים
-                    CHATBOT_RESPONSES = { ...data.responses };
-                    
-                    // עדכון כפתורי התגובה המהירה
-                    if (data.quickReplies && Array.isArray(data.quickReplies)) {
-                        this.customQuickReplies = [...data.quickReplies];
-                        console.log('🔘 עודכנו כפתורי תגובה מהירה:', data.quickReplies);
-                    }
-                    
-                    // עדכון כפתורי התגובה המהירה בממשק
-                    this.updateQuickReplies();
-                    
-                    // אלץ עדכון מיידי של הממשק
-                    console.log('🔄 מאלץ עדכון ממשק...');
-                    setTimeout(() => {
-                        this.updateQuickReplies();
-                    }, 100);
-                    
-                    // שמירה גם ב-localStorage לפעם הבאה (אופציונלי)
-                    try {
-                        localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(data));
-                        localStorage.setItem('wearablecode_last_update', Date.now().toString());
-                        console.log('💾 נתונים נשמרו גם ב-localStorage');
-                    } catch (e) {
-                        console.log('⚠️ לא ניתן לשמור ב-localStorage:', e.message);
-                    }
-                    
-                    console.log('✅ נתונים נטענו מורסל API דרך JSONP בהצלחה!');
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-                
-                // ניקוי
-                delete window.wcChatbotData;
-                document.head.removeChild(script);
-            };
             
-            // יצירת script tag
-            const script = document.createElement('script');
-            script.src = jsonpUrl;
-            script.onerror = () => {
-                console.log('❌ JSONP נכשל');
-                delete window.wcChatbotData;
-                document.head.removeChild(script);
-                resolve(false);
-            };
+            // ניקוי מלא של הכפתורים הקיימים
+            this.quickReplies.innerHTML = '';
             
-            // timeout של 10 שניות
-            setTimeout(() => {
-                if (window.wcChatbotData) {
-                    console.log('⏰ JSONP timeout');
-                    delete window.wcChatbotData;
-                    if (document.head.contains(script)) {
-                        document.head.removeChild(script);
-                    }
-                    resolve(false);
-                }
-            }, 10000);
+            // השתמש בכפתורים המותאמים אישית אם קיימים ונטענו מהאדמין
+            let repliesData = this.customQuickReplies;
             
-            document.head.appendChild(script);
-        });
-        
-        if (success) {
-            return true;
-        }
-        
-    } catch (error) {
-        console.log('❌ שגיאה ב-JSONP:', error.message);
-    }
-    
-    // ניסיון מספר 2: Fetch רגיל (אולי יעבד לפעמים)
-    try {
-        const response = await fetch('https://wearablecode-pages.vercel.app/api/chatbot-data', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache'
-            },
-            mode: 'cors'
-        });
-        
-        if (response.ok) {
-            const data = await response.json();
-            console.log('📡 נתונים התקבלו מהשרת (fetch):', data);
-            
-            if (data.responses && Object.keys(data.responses).length > 0) {
-                // עדכון הנתונים הגלובליים
-                CHATBOT_RESPONSES = { ...data.responses };
-                
-                // עדכון כפתורי התגובה המהירה
-                if (data.quickReplies && Array.isArray(data.quickReplies)) {
-                    this.customQuickReplies = [...data.quickReplies];
-                    console.log('🔘 עודכנו כפתורי תגובה מהירה:', data.quickReplies);
-                }
-                
-                // עדכון כפתורי התגובה המהירה בממשק
-                this.updateQuickReplies();
-                
-                // אלץ עדכון מיידי של הממשק
-                console.log('🔄 מאלץ עדכון ממשק...');
-                setTimeout(() => {
-                    this.updateQuickReplies();
-                }, 100);
-                
-                // שמירה גם ב-localStorage לפעם הבאה (אופציונלי)
-                try {
-                    localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(data));
-                    localStorage.setItem('wearablecode_last_update', Date.now().toString());
-                    console.log('💾 נתונים נשמרו גם ב-localStorage');
-                } catch (e) {
-                    console.log('⚠️ לא ניתן לשמור ב-localStorage:', e.message);
-                }
-                
-                console.log('✅ נתונים נטענו מורסל API בהצלחה!');
-                return true;
+            // אם אין כפתורים מותאמים או שלא נטענו מהאדמין, השתמש בברירת מחדל מתקדמת
+            if (!repliesData || !Array.isArray(repliesData) || repliesData.length === 0) {
+                console.log('⚠️ לא נמצאו כפתורים מותאמים, משתמש בברירת מחדל מתקדמת');
+                repliesData = [
+                    { text: 'מחירים', icon: '💰', topic: 'מחירים' },
+                    { text: 'משלוח', icon: '🚚', topic: 'משלוח' },
+                    { text: 'מעקב', icon: '📦', topic: 'מעקב חבילה' },
+                    { text: 'מידות', icon: '📏', topic: 'מידות' },
+                    { text: 'החזרות', icon: '🔄', topic: 'החזרות' },
+                    { text: 'צור קשר', icon: '📞', topic: 'צור קשר' }
+                ];
             }
-        } else {
-            console.log('⚠️ שרת החזיר שגיאה:', response.status);
-        }
-    } catch (error) {
-        console.log('❌ שגיאה בטעינה מורסל API:', error.message);
-    }
-    
-    // ניסיון מספר 3: Proxy fallback
-    try {
-        console.log('🔄 מנסה דרך Proxy...');
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent('https://wearablecode-pages.vercel.app/api/chatbot-data')}&_t=${Date.now()}`;
-        const response = await fetch(proxyUrl);
-        
-        if (response.ok) {
-            const proxyData = await response.json();
-            const data = JSON.parse(proxyData.contents);
             
-            if (data.responses && Object.keys(data.responses).length > 0) {
-                CHATBOT_RESPONSES = { ...data.responses };
+            console.log('🔘 יוצר כפתורים:', repliesData.length, repliesData);
+            
+            // יצירת הכפתורים החדשים
+            repliesData.forEach((reply, index) => {
+                const button = document.createElement('div');
+                button.className = 'wc-quick-reply';
+                button.setAttribute('data-message', reply.topic || reply.text);
+                button.textContent = `${reply.icon || '💬'} ${reply.text}`;
                 
-                if (data.quickReplies && Array.isArray(data.quickReplies)) {
-                    this.customQuickReplies = [...data.quickReplies];
-                }
-                
-                this.updateQuickReplies();
-                
-                // אלץ עדכון מיידי של הממשק
-                console.log('🔄 מאלץ עדכון ממשק...');
-                setTimeout(() => {
-                    this.updateQuickReplies();
-                }, 100);
-                
-                try {
-                    localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(data));
-                    localStorage.setItem('wearablecode_last_update', Date.now().toString());
-                } catch (e) {
-                    console.log('⚠️ לא ניתן לשמור ב-localStorage:', e.message);
-                }
-                
-                console.log('✅ נתונים נטענו דרך Proxy בהצלחה!');
-                return true;
-            }
+                this.quickReplies.appendChild(button);
+                console.log(`✅ נוצר כפתור ${index + 1}: ${reply.icon} ${reply.text}`);
+            });
+            
+            console.log(`🎯 סה"כ נוצרו ${repliesData.length} כפתורים בממשק`);
         }
-    } catch (error) {
-        console.log('❌ גם Proxy נכשל:', error.message);
-    }
-    
-    // אם הכל נכשל - משתמש בנתונים המוגדרים בקוד בלבד
-    console.log('⚠️ כל הניסיונות נכשלו - משתמש בנתונים המוגדרים בקוד בלבד');
-    return false;
-}
-        // עדכון כפתורי התגובה המהירה - משופר
-updateQuickReplies() {
-    console.log('🔄 מעדכן כפתורי תגובה מהירה...');
-    
-    if (!this.quickReplies) {
-        console.log('❌ אלמנט quickReplies לא נמצא');
-        return;
-    }
-    
-    // ניקוי מלא של הכפתורים הקיימים
-    this.quickReplies.innerHTML = '';
-    
-    // השתמש בכפתורים המותאמים אישית אם קיימים
-    let repliesData = this.customQuickReplies;
-    
-    // אם אין כפתורים מותאמים, השתמש בברירת מחדל
-    if (!repliesData || !Array.isArray(repliesData) || repliesData.length === 0) {
-        console.log('⚠️ לא נמצאו כפתורים מותאמים, משתמש בברירת מחדל');
-        repliesData = [
-            { text: 'מחירים', icon: '💰', topic: 'מחירים' },
-            { text: 'משלוח', icon: '🚚', topic: 'משלוח' },
-            { text: 'מעקב', icon: '📦', topic: 'מעקב חבילה' },
-            { text: 'צור קשר', icon: '📞', topic: 'צור קשר' }
-        ];
-    }
-    
-    console.log('🔘 יוצר כפתורים:', repliesData.length, repliesData);
-    
-    // יצירת הכפתורים החדשים
-    repliesData.forEach((reply, index) => {
-        const button = document.createElement('div');
-        button.className = 'wc-quick-reply';
-        button.setAttribute('data-message', reply.topic || reply.text);
-        button.textContent = `${reply.icon || '💬'} ${reply.text}`;
-        
-        // הוספת event listener לכל כפתור
-        button.addEventListener('click', () => {
-            const message = reply.topic || reply.text;
-            if (this.chatInput) {
-                this.chatInput.value = message;
-                this.sendMessage();
-            }
-        });
-        
-        this.quickReplies.appendChild(button);
-        console.log(`✅ נוצר כפתור ${index + 1}: ${reply.icon} ${reply.text}`);
-    });
-    
-    console.log(`🎯 סה"כ נוצרו ${repliesData.length} כפתורים בממשק`);
-}
 
         addStyles() {
             const style = document.createElement('style');
@@ -842,10 +724,7 @@ updateQuickReplies() {
                     <div class="wc-chat-messages" id="wcChatMessages"></div>
                     
                     <div class="wc-quick-replies" id="wcQuickReplies">
-                        <div class="wc-quick-reply" data-message="מחירים">💰 מחירים</div>
-                        <div class="wc-quick-reply" data-message="משלוח">🚚 משלוח</div>
-                        <div class="wc-quick-reply" data-message="חבילה">📦 מעקב</div>
-                        <div class="wc-quick-reply" data-message="צור קשר">📞 צור קשר</div>
+                        <!-- כפתורים יתווספו דינמית -->
                     </div>
 
                     <div class="wc-chat-input-container">
@@ -896,23 +775,22 @@ updateQuickReplies() {
                     this.sendMessage();
                 }
             });
-
-            // ניקוי זיכרון כשהחלון נסגר
-            window.addEventListener('beforeunload', () => {
-                this.stopAutoUpdateCheck();
-            });
         }
 
         toggleChat() {
             this.isOpen = !this.isOpen;
             if (this.isOpen) {
                 this.chatWindow.classList.add('open');
-                // בדיקת עדכונים בכל פתיחה (מיידית)
-                this.loadUpdatedResponses().then((success) => {
-                    if (success) {
-                        console.log('✅ נתונים עודכנו בפתיחת הצ\'אט');
-                    }
-                });
+                // טעינת עדכונים רק בפתיחה (לא אוטומטי)
+                if (!this.hasLoadedFromAdmin) {
+                    this.loadUpdatedResponses().then((success) => {
+                        if (success) {
+                            console.log('✅ נתונים עודכנו בפתיחת הצ\'אט');
+                            this.hasLoadedFromAdmin = true;
+                            this.updateQuickReplies();
+                        }
+                    });
+                }
             } else {
                 this.chatWindow.classList.remove('open');
             }
@@ -1015,6 +893,17 @@ updateQuickReplies() {
             const response = this.findResponse(message);
             this.addMessage(response, 'bot', true);
         }
+
+        // פונקציה ידנית לעדכון (לקריאה מבחוץ)
+        async forceUpdate() {
+            console.log('🔄 עדכון ידני נדרש...');
+            const success = await this.loadUpdatedResponses();
+            if (success) {
+                this.updateQuickReplies();
+                console.log('✅ עדכון ידני הושלם בהצלחה!');
+            }
+            return success;
+        }
     }
 
     // Initialize chatbot
@@ -1022,11 +911,11 @@ updateQuickReplies() {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
                 window.WearableCodeChatbot = new WearableCodeChatbot();
-                console.log('🚀 WearableCode Chatbot עם עדכון אוטומטי פעיל!');
+                console.log('🚀 WearableCode Chatbot מוכן לפעולה!');
             });
         } else {
             window.WearableCodeChatbot = new WearableCodeChatbot();
-            console.log('🚀 WearableCode Chatbot עם עדכון אוטומטי פעיל!');
+            console.log('🚀 WearableCode Chatbot מוכן לפעולה!');
         }
     }
 
