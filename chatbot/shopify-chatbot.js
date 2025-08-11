@@ -58,6 +58,20 @@
             this.messages = [];
             this.isTyping = false;
             this.init();
+            // בדיקה - הדפס מידע על הסביבה
+            console.log('🔍 סביבת הצ\'אטבוט:');
+            console.log('window.location:', window.location.href);
+            console.log('typeof browser:', typeof browser);
+            console.log('typeof localStorage:', typeof localStorage);
+            console.log('בדיקת localStorage מיידית:', localStorage.getItem('wearablecode_chatbot_data'));
+            
+            // נסיון לשמור ולקרוא
+            try {
+                localStorage.setItem('test', 'hello');
+                console.log('localStorage test:', localStorage.getItem('test'));
+            } catch (e) {
+                console.log('localStorage error:', e);
+            }
         }
 
         init() {
