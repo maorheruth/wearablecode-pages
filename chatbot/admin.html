@@ -742,8 +742,8 @@
             border: 1px solid #475569;
             border-radius: 8px;
             padding: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            z-index: 9999;
             display: none;
             grid-template-columns: repeat(6, 1fr);
             gap: 5px;
@@ -1265,29 +1265,31 @@
                 const pickerWidth = 240;
                 const pickerHeight = 180;
                 
-                // מיקום אופטימלי - בצד ימין של השדה אם יש מקום, אחרת בצד שמאל
-                let left = rect.right + 5;
+                // מיקום בצד שמאל של השדה (עדיפות לשמאל)
+                let left = rect.left - pickerWidth - 5;
                 let top = rect.top;
                 
-                // בדיקה אם התיבה יוצאת מהמסך ימינה
-                if (left + pickerWidth > window.innerWidth) {
-                    left = rect.left - pickerWidth - 5;
+                // בדיקה אם התיבה יוצאת מהמסך שמאלה - אז נעבור לצד ימין
+                if (left < 10) {
+                    left = rect.right + 5;
                 }
                 
-                // בדיקה אם התיבה יוצאת מהמסך שמאלה
-                if (left < 0) {
-                    left = 10;
+                // בדיקה אם עדיין יוצאת מהמסך ימינה - נמקם במרכז
+                if (left + pickerWidth > window.innerWidth - 10) {
+                    left = Math.max(10, (window.innerWidth - pickerWidth) / 2);
                 }
                 
                 // בדיקה אם התיבה יוצאת מהמסך למטה
-                if (top + pickerHeight > window.innerHeight) {
-                    top = window.innerHeight - pickerHeight - 10;
+                if (top + pickerHeight > window.innerHeight - 10) {
+                    top = Math.max(10, window.innerHeight - pickerHeight - 10);
                 }
                 
                 // בדיקה אם התיבה יוצאת מהמסך למעלה
-                if (top < 0) {
+                if (top < 10) {
                     top = 10;
                 }
+                
+                console.log('🎯 מיקום בוחר אימוג\'י:', { left, top, pickerWidth, pickerHeight });
                 
                 picker.style.left = left + 'px';
                 picker.style.top = top + 'px';
