@@ -64,6 +64,7 @@
             this.addStyles();
             this.createChatbot();
             this.bindEvents();
+            this.setupAdminPanelListener();
             
             // טעינת נתונים מהפאנל אדמין מיד בהתחלה
             this.loadUpdatedResponses();
@@ -75,134 +76,69 @@
                 this.addMessage('💡 טיפ: נסה לכתוב "מחירים", "משלוח", "חבילה" או "מידות" לקבלת מידע מהיר!', 'bot');
             }, 2000);
         }
-// ===========================================
-// 🔧 תיקון פשוט לצ'אטבוט - אותו דומיין
-// החלף רק את החלק הזה בקוד הצ'אטבוט:
-// ===========================================
 
-// במקום כל הסיבוך עם GitHub - פשוט תקן את loadUpdatedResponses:
-
-// 🔧 פונקציה מתוקנת - טעינת תשובות מהפאנל אדמין  
-loadUpdatedResponses() {
-    try {
-        const saved = localStorage.getItem('wearablecode_chatbot_data');
-        console.log('🔍 בודק localStorage:', saved ? 'קיים' : 'לא קיים');
-        
-        if (saved) {
-            const parsedData = JSON.parse(saved);
-            console.log('📡 נתונים שנמצאו:', parsedData);
-            
-            // בדיקה אם יש responses בנתונים
-            if (parsedData.responses) {
-                // החלפה מלאה של הנתונים (לא מיזוג!)
-                CHATBOT_RESPONSES = parsedData.responses;
-                console.log('✅ צ\'אטבוט עודכן עם נתונים חדשים מפאנל האדמין');
-                console.log('🔍 תשובות עדכניות:', Object.keys(CHATBOT_RESPONSES));
+        // 🔧 תיקון פונקציה - טעינת תשובות מהפאנל אדמין
+        loadUpdatedResponses() {
+            try {
+                const saved = localStorage.getItem('wearablecode_chatbot_data');
+                console.log('🔍 בודק localStorage:', saved ? 'קיים' : 'לא קיים');
                 
-                // עדכון כפתורי התגובות המהירות
-                this.updateQuickReplies();
+                if (saved) {
+                    const parsedData = JSON.parse(saved);
+                    console.log('📡 נתונים שנמצאו:', parsedData);
+                    
+                    // בדיקה אם יש responses בנתונים
+                    if (parsedData.responses) {
+                        // החלפה מלאה של הנתונים (לא מיזוג!)
+                        CHATBOT_RESPONSES = parsedData.responses;
+                        console.log('✅ צ\'אטבוט עודכן עם נתונים חדשים מפאנל האדמין');
+                        console.log('🔍 תשובות עדכניות:', Object.keys(CHATBOT_RESPONSES));
+                        
+                        // עדכון כפתורי התגובות המהירות
+                        this.updateQuickReplies();
+                        
+                        return true;
+                    } else if (typeof parsedData === 'object') {
+                        // אם הנתונים הם ישירות האובייקט
+                        CHATBOT_RESPONSES = parsedData;
+                        console.log('✅ צ\'אטבוט עודכן (פורמט ישן)');
+                        this.updateQuickReplies();
+                        return true;
+                    }
+                }
                 
-                return true;
-            } else if (typeof parsedData === 'object') {
-                // אם הנתונים הם ישירות האובייקט
-                CHATBOT_RESPONSES = parsedData;
-                console.log('✅ צ\'אטבוט עודכן (פורמט ישן)');
-                this.updateQuickReplies();
-                return true;
+                console.log('💡 אין נתונים מפאנל האדמין, משתמש בנתונים ברירת המחדל');
+                return false;
+                
+            } catch (e) {
+                console.error('❌ שגיאה בטעינת נתונים מפאנל האדמין:', e);
+                return false;
             }
         }
-        
-        console.log('💡 אין נתונים מפאנל האדמין, משתמש בנתונים ברירת המחדל');
-        return false;
-        
-    } catch (e) {
-        console.error('❌ שגיאה בטעינת נתונים מפאנל האדמין:', e);
-        return false;
-    }
-}
 
-// ===========================================
-// 🔧 תיקון לפאנל אדמין - פורמט נכון
-// החלף את הפונקציה updateChatbot בפאנל:
-// ===========================================
-
-function updateChatbot() {
-    const btn = document.getElementById('updateChatbotBtn');
-    const originalHTML = btn.innerHTML;
-    
-    try {
-        // 🔥 הפורמט הנכון - עם responses wrapper
-        const dataToSend = {
-            responses: chatbotData,  // זה החשוב!
-            lastUpdate: Date.now(),
-            version: '1.0.0'
-        };
-        
-        // שמירה ב-localStorage עם הפורמט הנכון
-        localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(dataToSend));
-        
-        console.log('💾 נתונים נשמרו:', dataToSend);
-        console.log('🔍 בדיקה:', localStorage.getItem('wearablecode_chatbot_data'));
-        
-        // אירוע storage לעדכון מיידי של הצ'אטבוט
-        window.dispatchEvent(new StorageEvent('storage', {
-            key: 'wearablecode_chatbot_data',
-            newValue: JSON.stringify(dataToSend),
-            oldValue: null,
-            storageArea: localStorage
-        }));
-        
-        // אנימציה של הכפתור
-        btn.classList.add('success');
-        btn.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-            </svg>
-            עודכן בהצלחה!
-        `;
-        
-        // הצגת הודעת הצלחה
-        showSuccessNotification();
-        updateConnectionStatus();
-        
-        console.log('🚀 המידע עודכן בצ\'אטבוט!');
-        
-        // החזרת הכפתור למצב רגיל
-        setTimeout(() => {
-            btn.classList.remove('success');
-            btn.innerHTML = originalHTML;
-        }, 3000);
-        
-    } catch (error) {
-        console.error('❌ שגיאה בעדכון:', error);
-        btn.innerHTML = '❌ שגיאה בעדכון';
-        setTimeout(() => {
-            btn.innerHTML = originalHTML;
-        }, 3000);
-    }
-}
-        // ===========================================
-        // 🔧 תיקון נוסף לצ'אטבוט - עדכון מיידי
-        // הוסף את זה ל-setupAdminPanelListener:
-        // ===========================================
-        
-        // האזנה לשינויים ב-localStorage
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'wearablecode_chatbot_data') {
-                console.log('📡 התקבל עדכון מהפאנל אדמין!');
-                const success = this.loadUpdatedResponses();
-                if (success) {
-                    this.showAdminUpdateNotification();
+        // האזנה לעדכונים מהפאנל אדמין
+        setupAdminPanelListener() {
+            // האזנה לשינויים ב-localStorage
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'wearablecode_chatbot_data') {
+                    console.log('📡 התקבל עדכון מהפאנל אדמין!');
+                    const success = this.loadUpdatedResponses();
+                    if (success) {
+                        this.showAdminUpdateNotification();
+                    }
                 }
-            }
-        });
-        
-        // בדיקה מיידית בפתיחת הצ'אטבוט
-        this.chatButton.addEventListener('click', () => {
-            this.toggleChat();
-            // בדיקת עדכונים בכל פתיחה
-            this.loadUpdatedResponses();
-        });
+            });
+
+            // בדיקה מיידית בפתיחת הצ'אטבוט
+            const originalToggleChat = this.toggleChat.bind(this);
+            this.toggleChat = () => {
+                originalToggleChat();
+                if (this.isOpen) {
+                    // בדיקת עדכונים בכל פתיחה
+                    this.loadUpdatedResponses();
+                }
+            };
+        }
 
         // הצגת התראה על עדכון מהפאנל אדמין
         showAdminUpdateNotification() {
@@ -254,11 +190,10 @@ function updateChatbot() {
 
         // עדכון כפתורי התגובות המהירות
         updateQuickReplies() {
-            const quickRepliesContainer = this.quickReplies;
-            if (!quickRepliesContainer) return;
+            if (!this.quickReplies) return;
             
             const availableTopics = Object.keys(CHATBOT_RESPONSES).slice(0, 4);
-            quickRepliesContainer.innerHTML = '';
+            this.quickReplies.innerHTML = '';
             
             availableTopics.forEach(topic => {
                 const button = document.createElement('div');
@@ -280,7 +215,7 @@ function updateChatbot() {
                 const icon = icons[topic] || '💬';
                 button.textContent = `${icon} ${topic}`;
                 
-                quickRepliesContainer.appendChild(button);
+                this.quickReplies.appendChild(button);
             });
             
             console.log('🔄 כפתורי התגובות המהירות עודכנו:', availableTopics);
@@ -829,6 +764,8 @@ function updateChatbot() {
             this.isOpen = !this.isOpen;
             if (this.isOpen) {
                 this.chatWindow.classList.add('open');
+                // בדיקת עדכונים בכל פתיחה
+                this.loadUpdatedResponses();
             } else {
                 this.chatWindow.classList.remove('open');
             }
@@ -938,11 +875,11 @@ function updateChatbot() {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
                 window.WearableCodeChatbot = new WearableCodeChatbot();
-                console.log('🚀 WearableCode Chatbot מחובר ל-GitHub ופעיל!');
+                console.log('🚀 WearableCode Chatbot מתוקן ופעיל!');
             });
         } else {
             window.WearableCodeChatbot = new WearableCodeChatbot();
-            console.log('🚀 WearableCode Chatbot מחובר ל-GitHub ופעיל!');
+            console.log('🚀 WearableCode Chatbot מתוקן ופעיל!');
         }
     }
 
@@ -950,57 +887,3 @@ function updateChatbot() {
     initChatbot();
 
 })();
-
-// ===========================================
-// 🔧 קוד מתוקן לפאנל אדמין (admin.html)
-// ===========================================
-
-// הוסף בסוף הסקריפט של הפאנל אדמין:
-
-// פונקציה מעודכנת לעדכון הצ'אטבוט - עכשיו ישלח ל-GitHub
-async function updateChatbot() {
-    const btn = document.getElementById('updateChatbotBtn');
-    const originalHTML = btn.innerHTML;
-    
-    try {
-        // הכנת הנתונים לשליחה
-        const dataToSend = {
-            responses: chatbotData,
-            lastUpdate: Date.now(),
-            version: '1.0.0'
-        };
-        
-        // שליחה ל-GitHub באמצעות GitHub API (דורש טוקן)
-        // זהו דרך אחת - אבל בינתיים נשתמש ב-localStorage לבדיקה
-        localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(dataToSend));
-        
-        // אנימציה של הכפתור
-        btn.classList.add('success');
-        btn.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-            </svg>
-            הועלה ל-GitHub בהצלחה!
-        `;
-        
-        // יצירת קובץ data.json ב-GitHub (ידנית או באמצעות GitHub API)
-        console.log('📤 נתונים מוכנים להעלאה ל-GitHub:', dataToSend);
-        
-        // הצגת הודעת הצלחה
-        showSuccessNotification();
-        updateConnectionStatus();
-        
-        // החזרת הכפתור למצב רגיל
-        setTimeout(() => {
-            btn.classList.remove('success');
-            btn.innerHTML = originalHTML;
-        }, 3000);
-        
-    } catch (error) {
-        console.error('❌ שגיאה בעדכון:', error);
-        btn.innerHTML = '❌ שגיאה בעדכון';
-        setTimeout(() => {
-            btn.innerHTML = originalHTML;
-        }, 3000);
-    }
-}
