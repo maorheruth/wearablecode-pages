@@ -586,7 +586,7 @@ updateQuickReplies() {
                         height: calc(100vh - 120px);
                         max-width: 380px;
                         max-height: 600px;
-                        bottom: 90px;
+                        bottom: 60px;
                     }
                     
                     .wc-chat-button {
