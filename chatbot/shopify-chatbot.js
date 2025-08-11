@@ -218,7 +218,7 @@ updateQuickReplies() {
                 .wc-chat-button-icon {
                     width: 24px;
                     height: 24px;
-                    fill: #8f8f8f;
+                    fill: black;
                     position: relative;
                     z-index: 1;
                     transition: transform 0.3s ease;
