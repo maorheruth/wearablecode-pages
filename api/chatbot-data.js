@@ -1,6 +1,11 @@
 // api/chatbot-data.js
-// ורסל API endpoint לניהול נתוני הצ'אטבוט
-let chatbotData = {
+// ורסל API endpoint לניהול נתוני הצ'אטבוט - גרסה דינמית
+
+// נתונים שנשמרים בזיכרון - יתעדכנו רק מהפאנל אדמין
+let chatbotData = null;
+
+// ברירות מחדל רק לפעם הראשונה (יימחקו אחרי העדכון הראשון)
+const defaultData = {
     quickReplies: [
         { text: 'מחירים', icon: '💰', topic: 'מחירים' },
         { text: 'משלוח', icon: '🚚', topic: 'משלוח' },
@@ -43,7 +48,8 @@ export default function handler(req, res) {
         url: req.url,
         query: req.query,
         origin: req.headers.origin,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        hasStoredData: chatbotData !== null
     });
 
     // הגדרת CORS מתקדם כדי לאפשר גישה מכל הדומיינים של שופיפיי
@@ -92,25 +98,26 @@ export default function handler(req, res) {
                 });
             }
 
-            // עדכון הנתונים (שמירה על המבנה הקיים)
+            // עדכון הנתונים המאוחסנים (יחליף את ברירת המחדל)
             chatbotData = {
-                ...chatbotData,
                 ...newData,
                 lastUpdate: Date.now()
             };
             
-            console.log('🔄 נתוני הצ\'אטבוט עודכנו:', {
+            console.log('🔄 נתוני הצ\'אטבוט עודכנו מהפאנל אדמין:', {
                 timestamp: new Date().toISOString(),
                 responses: Object.keys(chatbotData.responses || {}).length,
-                quickReplies: (chatbotData.quickReplies || []).length
+                quickReplies: (chatbotData.quickReplies || []).length,
+                dataSource: 'admin-panel'
             });
             
             return res.status(200).json({ 
                 success: true, 
-                message: 'נתונים עודכנו בהצלחה',
+                message: 'נתונים עודכנו בהצלחה מהפאנל אדמין',
                 timestamp: chatbotData.lastUpdate,
                 responses: Object.keys(chatbotData.responses || {}).length,
-                quickReplies: (chatbotData.quickReplies || []).length
+                quickReplies: (chatbotData.quickReplies || []).length,
+                dataSource: 'admin-panel'
             });
         } catch (error) {
             console.error('❌ שגיאה בעדכון נתונים:', error);
@@ -127,22 +134,24 @@ export default function handler(req, res) {
         // בדיקה אם זה בקשת JSONP (עוקף CORS)
         const callback = req.query.callback;
         
+        // החזר נתונים מהפאנל אדמין אם קיימים, אחרת ברירת מחדל
         const responseData = {
             success: true,
-            ...chatbotData,
+            ...(chatbotData || defaultData),
             timestamp: Date.now(),
-            source: 'vercel-api'
+            source: 'vercel-api',
+            dataSource: chatbotData ? 'admin-panel' : 'default'
         };
 
         if (callback) {
             // JSONP response - עוקף בעיות CORS
-            console.log('🔄 מחזיר JSONP עם callback:', callback);
+            console.log('🔄 מחזיר JSONP עם callback:', callback, '- מקור נתונים:', responseData.dataSource);
             res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
             const jsonpResponse = `${callback}(${JSON.stringify(responseData)});`;
             return res.status(200).send(jsonpResponse);
         } else {
             // JSON רגיל
-            console.log('📤 מחזיר JSON רגיל');
+            console.log('📤 מחזיר JSON רגיל - מקור נתונים:', responseData.dataSource);
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             return res.status(200).json(responseData);
         }
