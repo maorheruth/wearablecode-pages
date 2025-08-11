@@ -92,35 +92,55 @@
         }
 
 // בצ'אטבוט - שנה את loadUpdatedResponses()
-loadUpdatedResponses() {
-    // אם יש browser API - השתמש בו
-    if (typeof browser !== 'undefined' && browser.localStorage) {
-        browser.localStorage.getItem('wearablecode_chatbot_data')
-            .then(savedData => {
-                if (savedData) {
-                    const parsedData = JSON.parse(savedData);
-                    if (parsedData.responses) {
-                        CHATBOT_RESPONSES = parsedData.responses;
-                        this.updateQuickReplies();
-                        console.log('✅ נתונים נטענו מ-Shopify Browser API');
-                    }
-                }
-            });
-    } else {
-        // נסיון עם localStorage רגיל כ-fallback
-        try {
-            const saved = localStorage.getItem('wearablecode_chatbot_data');
-            if (saved) {
-                const parsedData = JSON.parse(saved);
-                if (parsedData.responses) {
-                    CHATBOT_RESPONSES = parsedData.responses;
-                    this.updateQuickReplies();
-                }
+async loadUpdatedResponses() {
+    console.log('🔍 טוען נתונים מורסל API...');
+    
+    try {
+        // קריאה מהורסל API
+        const response = await fetch('https://wearablecode-pages.vercel.app/api/chatbot-data', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
             }
-        } catch (e) {
-            console.log('localStorage לא זמין');
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            console.log('📡 נתונים התקבלו מהשרת:', data);
+            
+            if (data.responses) {
+                CHATBOT_RESPONSES = data.responses;
+                this.updateQuickReplies();
+                console.log('✅ נתונים נטענו מורסל API בהצלחה!');
+                console.log('🔄 עודכנו:', Object.keys(CHATBOT_RESPONSES).length, 'תשובות');
+                return true;
+            }
+        } else {
+            console.log('⚠️ שרת החזיר שגיאה:', response.status);
         }
+    } catch (error) {
+        console.log('❌ שגיאה בטעינה מורסל API:', error.message);
     }
+    
+    // Fallback - ניסיון עם localStorage
+    console.log('🔄 מנסה localStorage כ-fallback...');
+    try {
+        const saved = localStorage.getItem('wearablecode_chatbot_data');
+        if (saved) {
+            const parsedData = JSON.parse(saved);
+            if (parsedData.responses) {
+                CHATBOT_RESPONSES = parsedData.responses;
+                this.updateQuickReplies();
+                console.log('✅ נתונים נטענו מ-localStorage');
+                return true;
+            }
+        }
+    } catch (e) {
+        console.log('❌ localStorage גם לא זמין:', e.message);
+    }
+    
+    console.log('⚠️ נשארנו עם נתוני ברירת המחדל');
+    return false;
 }
 
         // האזנה לעדכונים מהפאנל אדמין
