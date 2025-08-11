@@ -1266,12 +1266,9 @@
                 console.log('💾 נתונים נשמרו:', dataToSend);
                 console.log('🔍 בדיקה:', localStorage.getItem('wearablecode_chatbot_data'));
                 
-                // אירוע storage לעדכון מיידי של הצ'אטבוט
-                window.dispatchEvent(new StorageEvent('storage', {
-                    key: 'wearablecode_chatbot_data',
-                    newValue: JSON.stringify(dataToSend),
-                    oldValue: null,
-                    storageArea: localStorage
+                // יצירת custom event שיעבוד באותו טאב
+                window.dispatchEvent(new CustomEvent('wearablecode_chatbot_update', {
+                    detail: dataToSend
                 }));
                 
                 // אנימציה של הכפתור
