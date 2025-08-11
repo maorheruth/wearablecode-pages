@@ -578,7 +578,7 @@ updateQuickReplies() {
                 @media (max-width: 480px) {
                     .wc-chatbot-container {
                         right: 20px;
-                        bottom: 50px;
+                        bottom: 28px;
                         max-width: calc(100vw - 40px);
                     }
                     
@@ -604,7 +604,7 @@ updateQuickReplies() {
                 @media (max-width: 360px) {
                     .wc-chatbot-container {
                         right: 15px;
-                        bottom: 50px;
+                        bottom: 28px;
                     }
                     
                     .wc-chat-window {
