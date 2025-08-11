@@ -672,6 +672,23 @@
             }
         }
 
+        /* Quick Replies Section in Edit Panel */
+        .quick-replies-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #0f172a;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+
+        .quick-replies-section h3 {
+            color: #f1f5f9;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+        }
+
         /* Quick Replies Manager */
         .quick-reply-item {
             background: #1e293b;
@@ -893,6 +910,19 @@
                         <p>או לחץ על "שאלה חדשה" כדי להוסיף שאלה חדשה</p>
                     </div>
                 </div>
+
+                <!-- Quick Replies Manager - תמיד נראה -->
+                <div class="quick-replies-section">
+                    <h3>🔘 ניהול כפתורי תגובה מהירה</h3>
+                    <div id="quickRepliesManager">
+                        <div class="quick-replies-list" id="quickRepliesList">
+                            <!-- כפתורים יתווספו כאן דינמית -->
+                        </div>
+                        <button class="btn btn-primary" onclick="addQuickReply()" style="width: 100%; margin-top: 10px;">
+                            ➕ הוסף כפתור חדש
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Preview Panel -->
@@ -928,18 +958,6 @@
                 </div>
 
                 <!-- Quick Replies Manager -->
-                <div class="update-section">
-                    <h3>🔘 ניהול כפתורי תגובה מהירה</h3>
-                    <div id="quickRepliesManager">
-                        <div class="quick-replies-list" id="quickRepliesList">
-                            <!-- כפתורים יתווספו כאן דינמית -->
-                        </div>
-                        <button class="btn btn-primary" onclick="addQuickReply()" style="width: 100%; margin-top: 10px;">
-                            ➕ הוסף כפתור חדש
-                        </button>
-                    </div>
-                </div>
-
                 <div class="update-section">
                     <h3>🔄 עדכון הצ'אטבוט</h3>
                     <button class="update-btn" id="updateChatbotBtn" onclick="updateChatbot()">
@@ -1021,8 +1039,8 @@
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             loadQuestionsList();
-            loadQuickRepliesManager();
-            updatePreviewQuickReplies();
+            loadQuickRepliesManager(); // טען גם את הכפתורים המהירים
+            updatePreviewQuickReplies(); // עדכן התצוגה המקדימה
             updateConnectionStatus();
         }
 
@@ -1244,6 +1262,9 @@
                     <button class="btn btn-danger" onclick="deleteQuestion()">🗑️ מחק</button>
                 </div>
             `;
+            
+            // הבטח שהכפתורים המהירים נטענים
+            loadQuickRepliesManager();
         }
 
         // הוספת שאלה חדשה
@@ -1277,6 +1298,9 @@
                     <button class="btn btn-primary" onclick="saveQuestion()">💾 שמור</button>
                 </div>
             `;
+            
+            // הבטח שהכפתורים המהירים נטענים
+            loadQuickRepliesManager();
         }
 
         // שמירת שאלה
@@ -1332,6 +1356,9 @@
                     </div>
                 `;
                 currentEditingKey = null;
+                
+                // הבטח שהכפתורים המהירים נטענים
+                loadQuickRepliesManager();
             }
         }
 
