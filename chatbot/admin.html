@@ -1464,6 +1464,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     try {
         const dataToSend = {
+            quickReplies: quickRepliesData, // כפתורי התגובה המהירה
             responses: chatbotData,
             lastUpdate: Date.now(),
             version: '1.0.0'
