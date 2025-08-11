@@ -77,44 +77,37 @@
             }, 2000);
         }
 
-        // 🔧 תיקון פונקציה - טעינת תשובות מהפאנל אדמין
-        loadUpdatedResponses() {
-            try {
-                const saved = localStorage.getItem('wearablecode_chatbot_data');
-                console.log('🔍 בודק localStorage:', saved ? 'קיים' : 'לא קיים');
-                
-                if (saved) {
-                    const parsedData = JSON.parse(saved);
-                    console.log('📡 נתונים שנמצאו:', parsedData);
-                    
-                    // בדיקה אם יש responses בנתונים
+// בצ'אטבוט - שנה את loadUpdatedResponses()
+loadUpdatedResponses() {
+    // אם יש browser API - השתמש בו
+    if (typeof browser !== 'undefined' && browser.localStorage) {
+        browser.localStorage.getItem('wearablecode_chatbot_data')
+            .then(savedData => {
+                if (savedData) {
+                    const parsedData = JSON.parse(savedData);
                     if (parsedData.responses) {
-                        // החלפה מלאה של הנתונים (לא מיזוג!)
                         CHATBOT_RESPONSES = parsedData.responses;
-                        console.log('✅ צ\'אטבוט עודכן עם נתונים חדשים מפאנל האדמין');
-                        console.log('🔍 תשובות עדכניות:', Object.keys(CHATBOT_RESPONSES));
-                        
-                        // עדכון כפתורי התגובות המהירות
                         this.updateQuickReplies();
-                        
-                        return true;
-                    } else if (typeof parsedData === 'object') {
-                        // אם הנתונים הם ישירות האובייקט
-                        CHATBOT_RESPONSES = parsedData;
-                        console.log('✅ צ\'אטבוט עודכן (פורמט ישן)');
-                        this.updateQuickReplies();
-                        return true;
+                        console.log('✅ נתונים נטענו מ-Shopify Browser API');
                     }
                 }
-                
-                console.log('💡 אין נתונים מפאנל האדמין, משתמש בנתונים ברירת המחדל');
-                return false;
-                
-            } catch (e) {
-                console.error('❌ שגיאה בטעינת נתונים מפאנל האדמין:', e);
-                return false;
+            });
+    } else {
+        // נסיון עם localStorage רגיל כ-fallback
+        try {
+            const saved = localStorage.getItem('wearablecode_chatbot_data');
+            if (saved) {
+                const parsedData = JSON.parse(saved);
+                if (parsedData.responses) {
+                    CHATBOT_RESPONSES = parsedData.responses;
+                    this.updateQuickReplies();
+                }
             }
+        } catch (e) {
+            console.log('localStorage לא זמין');
         }
+    }
+}
 
         // האזנה לעדכונים מהפאנל אדמין
         setupAdminPanelListener() {
