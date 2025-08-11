@@ -126,19 +126,95 @@
         async loadUpdatedResponses() {
             console.log('🔍 טוען נתונים מורסל API...');
             
+            // ניסיון מספר 1: JSONP עם script tag (עוקף CORS)
             try {
-                // ניסיון ראשון - Vercel API
+                const jsonpUrl = `https://wearablecode-pages.vercel.app/api/chatbot-data?callback=wcChatbotData&_t=${Date.now()}`;
+                
+                const success = await new Promise((resolve) => {
+                    // יצירת callback גלובלי
+                    window.wcChatbotData = (data) => {
+                        console.log('📡 נתונים התקבלו דרך JSONP:', data);
+                        
+                        if (data.responses && Object.keys(data.responses).length > 0) {
+                            // עדכון הנתונים הגלובליים
+                            CHATBOT_RESPONSES = { ...data.responses };
+                            
+                            // עדכון כפתורי התגובה המהירה
+                            if (data.quickReplies && Array.isArray(data.quickReplies)) {
+                                this.customQuickReplies = [...data.quickReplies];
+                                console.log('🔘 עודכנו כפתורי תגובה מהירה:', data.quickReplies);
+                            }
+                            
+                            // עדכון כפתורי התגובה המהירה בממשק
+                            this.updateQuickReplies();
+                            
+                            // שמירה גם ב-localStorage לפעם הבאה
+                            try {
+                                localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(data));
+                                localStorage.setItem('wearablecode_last_update', Date.now().toString());
+                                console.log('💾 נתונים נשמרו גם ב-localStorage');
+                            } catch (e) {
+                                console.log('⚠️ לא ניתן לשמור ב-localStorage:', e.message);
+                            }
+                            
+                            console.log('✅ נתונים נטענו מורסל API דרך JSONP בהצלחה!');
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                        
+                        // ניקוי
+                        delete window.wcChatbotData;
+                        document.head.removeChild(script);
+                    };
+                    
+                    // יצירת script tag
+                    const script = document.createElement('script');
+                    script.src = jsonpUrl;
+                    script.onerror = () => {
+                        console.log('❌ JSONP נכשל');
+                        delete window.wcChatbotData;
+                        document.head.removeChild(script);
+                        resolve(false);
+                    };
+                    
+                    // timeout של 10 שניות
+                    setTimeout(() => {
+                        if (window.wcChatbotData) {
+                            console.log('⏰ JSONP timeout');
+                            delete window.wcChatbotData;
+                            if (document.head.contains(script)) {
+                                document.head.removeChild(script);
+                            }
+                            resolve(false);
+                        }
+                    }, 10000);
+                    
+                    document.head.appendChild(script);
+                });
+                
+                if (success) {
+                    return true;
+                }
+                
+            } catch (error) {
+                console.log('❌ שגיאה ב-JSONP:', error.message);
+            }
+            
+            // ניסיון מספר 2: Fetch רגיל (אולי יעבד לפעמים)
+            try {
                 const response = await fetch('https://wearablecode-pages.vercel.app/api/chatbot-data', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Cache-Control': 'no-cache'
-                    }
+                    },
+                    mode: 'cors'
                 });
                 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('📡 נתונים התקבלו מהשרת:', data);
+                    console.log('📡 נתונים התקבלו מהשרת (fetch):', data);
                     
                     if (data.responses && Object.keys(data.responses).length > 0) {
                         // עדכון הנתונים הגלובליים
