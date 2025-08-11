@@ -1247,29 +1247,35 @@
             return '🤔 אני לא בטוח שהבנתי את השאלה. נסה לשאול בצורה אחרת או צור קשר ישירות.';
         }
 
-        // 🔧 פונקציה מתוקנת - עדכון הצ'אטבוט 
         function updateChatbot() {
             const btn = document.getElementById('updateChatbotBtn');
             const originalHTML = btn.innerHTML;
             
             try {
-                // 🔥 הפורמט הנכון - עם responses wrapper
                 const dataToSend = {
-                    responses: chatbotData,  // זה החשוב!
+                    responses: chatbotData,
                     lastUpdate: Date.now(),
                     version: '1.0.0'
                 };
                 
-                // שמירה ב-localStorage עם הפורמט הנכון
+                // שמירה ב-localStorage (לבדיקות מקומיות)
                 localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(dataToSend));
                 
-                console.log('💾 נתונים נשמרו:', dataToSend);
-                console.log('🔍 בדיקה:', localStorage.getItem('wearablecode_chatbot_data'));
+                // שליחת הודעה לכל החלונות הפתוחים
+                window.postMessage({
+                    type: 'WEARABLECODE_CHATBOT_UPDATE',
+                    data: dataToSend
+                }, '*');
                 
-                // יצירת custom event שיעבוד באותו טאב
-                window.dispatchEvent(new CustomEvent('wearablecode_chatbot_update', {
-                    detail: dataToSend
-                }));
+                // ניסיון לשלוח לדומיינים אחרים
+                try {
+                    window.parent.postMessage({
+                        type: 'WEARABLECODE_CHATBOT_UPDATE',
+                        data: dataToSend
+                    }, 'https://wearablecode.com');
+                } catch (e) {
+                    console.log('Could not send to parent window');
+                }
                 
                 // אנימציה של הכפתור
                 btn.classList.add('success');
@@ -1280,7 +1286,6 @@
                     עודכן בהצלחה!
                 `;
                 
-                // הצגת הודעת הצלחה
                 showSuccessNotification();
                 updateConnectionStatus();
                 
