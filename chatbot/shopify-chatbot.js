@@ -198,7 +198,7 @@ updateQuickReplies() {
                     justify-content: center;
                     transition: all 0.3s ease;
                     position: relative;
-                    box-shadow: 0px 0px 20px rgb(27 0 151 / 60%);
+                    box-shadow: 0px 0px 12px rgb(27 0 151 / 40%);
                 }
 
                 .wc-chat-button:hover {
