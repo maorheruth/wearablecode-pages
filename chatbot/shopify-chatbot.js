@@ -318,30 +318,56 @@ async loadUpdatedResponses() {
     console.log('⚠️ משתמש בנתונים המוגדרים בקוד');
     return false;
 }
-        // עדכון כפתורי התגובה המהירה
-        updateQuickReplies() {
-            if (!this.quickReplies) return;
-            
-            this.quickReplies.innerHTML = '';
-            
-            // השתמש בכפתורים המותאמים אישית אם קיימים
-            const repliesData = this.customQuickReplies || [
-                { text: 'מחירים', icon: '💰', topic: 'מחירים' },
-                { text: 'משלוח', icon: '🚚', topic: 'משלוח' },
-                { text: 'מעקב', icon: '📦', topic: 'מעקב חבילה' },
-                { text: 'צור קשר', icon: '📞', topic: 'צור קשר' }
-            ];
-            
-            repliesData.forEach(reply => {
-                const button = document.createElement('div');
-                button.className = 'wc-quick-reply';
-                button.setAttribute('data-message', reply.topic);
-                button.textContent = `${reply.icon} ${reply.text}`;
-                this.quickReplies.appendChild(button);
-            });
-            
-            console.log('🔄 כפתורי התגובות המהירות עודכנו:', repliesData.length, 'כפתורים');
-        }
+        // עדכון כפתורי התגובה המהירה - משופר
+updateQuickReplies() {
+    console.log('🔄 מעדכן כפתורי תגובה מהירה...');
+    
+    if (!this.quickReplies) {
+        console.log('❌ אלמנט quickReplies לא נמצא');
+        return;
+    }
+    
+    // ניקוי מלא של הכפתורים הקיימים
+    this.quickReplies.innerHTML = '';
+    
+    // השתמש בכפתורים המותאמים אישית אם קיימים
+    let repliesData = this.customQuickReplies;
+    
+    // אם אין כפתורים מותאמים, השתמש בברירת מחדל
+    if (!repliesData || !Array.isArray(repliesData) || repliesData.length === 0) {
+        console.log('⚠️ לא נמצאו כפתורים מותאמים, משתמש בברירת מחדל');
+        repliesData = [
+            { text: 'מחירים', icon: '💰', topic: 'מחירים' },
+            { text: 'משלוח', icon: '🚚', topic: 'משלוח' },
+            { text: 'מעקב', icon: '📦', topic: 'מעקב חבילה' },
+            { text: 'צור קשר', icon: '📞', topic: 'צור קשר' }
+        ];
+    }
+    
+    console.log('🔘 יוצר כפתורים:', repliesData.length, repliesData);
+    
+    // יצירת הכפתורים החדשים
+    repliesData.forEach((reply, index) => {
+        const button = document.createElement('div');
+        button.className = 'wc-quick-reply';
+        button.setAttribute('data-message', reply.topic || reply.text);
+        button.textContent = `${reply.icon || '💬'} ${reply.text}`;
+        
+        // הוספת event listener לכל כפתור
+        button.addEventListener('click', () => {
+            const message = reply.topic || reply.text;
+            if (this.chatInput) {
+                this.chatInput.value = message;
+                this.sendMessage();
+            }
+        });
+        
+        this.quickReplies.appendChild(button);
+        console.log(`✅ נוצר כפתור ${index + 1}: ${reply.icon} ${reply.text}`);
+    });
+    
+    console.log(`🎯 סה"כ נוצרו ${repliesData.length} כפתורים בממשק`);
+}
 
         addStyles() {
             const style = document.createElement('style');
