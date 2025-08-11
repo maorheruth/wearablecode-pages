@@ -1,6 +1,5 @@
 // api/chatbot-data.js
 // ורסל API endpoint לניהול נתוני הצ'אטבוט
-
 let chatbotData = {
     quickReplies: [
         { text: 'מחירים', icon: '💰', topic: 'מחירים' },
@@ -39,44 +38,121 @@ let chatbotData = {
 };
 
 export default function handler(req, res) {
-    // הגדרת CORS כדי לאפשר גישה מכל הדומיינים
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    console.log('🚀 API נקרא:', {
+        method: req.method,
+        url: req.url,
+        query: req.query,
+        origin: req.headers.origin,
+        timestamp: new Date().toISOString()
+    });
+
+    // הגדרת CORS מתקדם כדי לאפשר גישה מכל הדומיינים של שופיפיי
+    const origin = req.headers.origin;
+    
+    // רשימת דומיינים מורשים
+    const allowedOrigins = [
+        'https://wearablecode.com',
+        'https://www.wearablecode.com',
+        'https://wearablecode.myshopify.com'
+    ];
+    
+    // אפשר לכל origin של שופיפיי או ורסל
+    if (origin && (allowedOrigins.includes(origin) || origin.includes('shopify') || origin.includes('wearablecode') || origin.includes('vercel.app'))) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    } else {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+    }
+    
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    
+    // הגדרת Cache headers
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
 
     // טיפול ב-OPTIONS request (CORS preflight)
     if (req.method === 'OPTIONS') {
+        console.log('✅ OPTIONS preflight handled');
         return res.status(200).end();
     }
 
     if (req.method === 'POST') {
         // עדכון נתונים מהאדמין פאנל
         try {
-            chatbotData = req.body;
-            console.log('🔄 נתוני הצ\'אטבוט עודכנו:', new Date().toISOString());
+            const newData = req.body;
+            
+            // ולידציה בסיסית
+            if (!newData || typeof newData !== 'object') {
+                console.log('❌ נתונים לא תקינים בPOST');
+                return res.status(400).json({
+                    success: false,
+                    message: 'נתונים לא תקינים'
+                });
+            }
+
+            // עדכון הנתונים (שמירה על המבנה הקיים)
+            chatbotData = {
+                ...chatbotData,
+                ...newData,
+                lastUpdate: Date.now()
+            };
+            
+            console.log('🔄 נתוני הצ\'אטבוט עודכנו:', {
+                timestamp: new Date().toISOString(),
+                responses: Object.keys(chatbotData.responses || {}).length,
+                quickReplies: (chatbotData.quickReplies || []).length
+            });
+            
             return res.status(200).json({ 
                 success: true, 
                 message: 'נתונים עודכנו בהצלחה',
-                timestamp: Date.now()
+                timestamp: chatbotData.lastUpdate,
+                responses: Object.keys(chatbotData.responses || {}).length,
+                quickReplies: (chatbotData.quickReplies || []).length
             });
         } catch (error) {
             console.error('❌ שגיאה בעדכון נתונים:', error);
             return res.status(500).json({ 
                 success: false, 
-                message: 'שגיאה בעדכון הנתונים' 
+                message: 'שגיאה בעדכון הנתונים: ' + error.message
             });
         }
     }
 
     if (req.method === 'GET') {
-        // קריאת נתונים לצ'אטבוט
         console.log('📡 בקשה לקריאת נתוני צ\'אטבוט:', new Date().toISOString());
-        return res.status(200).json(chatbotData);
+        
+        // בדיקה אם זה בקשת JSONP (עוקף CORS)
+        const callback = req.query.callback;
+        
+        const responseData = {
+            success: true,
+            ...chatbotData,
+            timestamp: Date.now(),
+            source: 'vercel-api'
+        };
+
+        if (callback) {
+            // JSONP response - עוקף בעיות CORS
+            console.log('🔄 מחזיר JSONP עם callback:', callback);
+            res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+            const jsonpResponse = `${callback}(${JSON.stringify(responseData)});`;
+            return res.status(200).send(jsonpResponse);
+        } else {
+            // JSON רגיל
+            console.log('📤 מחזיר JSON רגיל');
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            return res.status(200).json(responseData);
+        }
     }
 
     // Method לא נתמך
+    console.log('❌ שיטה לא נתמכת:', req.method);
     res.status(405).json({ 
         error: 'Method not allowed',
-        allowedMethods: ['GET', 'POST', 'OPTIONS']
+        allowedMethods: ['GET', 'POST', 'OPTIONS'],
+        received: req.method
     });
 }
