@@ -1248,6 +1248,15 @@
         }
 
         function updateChatbot() {
+            // בדיקה מיידית
+            console.log('🔍 אדמין פאנל - מה קורה:');
+            console.log('window.location:', window.location.href);
+            console.log('chatbotData:', chatbotData);
+            
+            const btn = document.getElementById('updateChatbotBtn');
+            const originalHTML = btn.innerHTML;
+            
+            // המשך הפונקציה...
             const btn = document.getElementById('updateChatbotBtn');
             const originalHTML = btn.innerHTML;
             
