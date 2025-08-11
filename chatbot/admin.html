@@ -1383,5 +1383,207 @@
             }
         });
     </script>
+    <!-- הוסף את זה באדמין פאנל, אחרי סקצית העדכון -->
+<div class="update-section" style="margin-top: 20px;">
+    <h3>🔘 ניהול כפתורי תגובה מהירה</h3>
+    <div id="quickRepliesManager">
+        <div class="quick-replies-list" id="quickRepliesList">
+            <!-- כפתורים יתווספו כאן דינמית -->
+        </div>
+        <button class="btn btn-primary" onclick="addQuickReply()" style="width: 100%; margin-top: 10px;">
+            ➕ הוסף כפתור חדש
+        </button>
+    </div>
+</div>
+
+<style>
+.quick-reply-item {
+    background: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quick-reply-controls {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+}
+
+.quick-reply-input {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    color: #f1f5f9;
+    padding: 8px 12px;
+    font-size: 13px;
+    outline: none;
+    text-align: right;
+}
+
+.quick-reply-input:focus {
+    border-color: #3b82f6;
+}
+
+.quick-reply-input.icon {
+    width: 60px;
+    text-align: center;
+}
+
+.quick-reply-input.text {
+    width: 120px;
+}
+
+.quick-reply-input.topic {
+    flex: 1;
+}
+
+.quick-reply-delete {
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease;
+}
+
+.quick-reply-delete:hover {
+    background: #dc2626;
+}
+
+.quick-reply-preview {
+    background: #f8f9fa;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+</style>
+
+<script>
+// נתוני כפתורים - יתעדכנו מה-API
+let quickRepliesData = [
+    { text: 'מחירים', icon: '💰', topic: 'מחירים' },
+    { text: 'משלוח', icon: '🚚', topic: 'משלוח' },
+    { text: 'מעקב', icon: '📦', topic: 'מעקב חבילה' },
+    { text: 'צור קשר', icon: '📞', topic: 'צור קשר' }
+];
+
+// טעינת כפתורים לממשק
+function loadQuickRepliesManager() {
+    const container = document.getElementById('quickRepliesList');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    quickRepliesData.forEach((reply, index) => {
+        const item = document.createElement('div');
+        item.className = 'quick-reply-item';
+        item.innerHTML = `
+            <div class="quick-reply-controls">
+                <input type="text" class="quick-reply-input icon" 
+                       value="${reply.icon}" 
+                       onchange="updateQuickReply(${index}, 'icon', this.value)"
+                       placeholder="🔥">
+                <input type="text" class="quick-reply-input text" 
+                       value="${reply.text}" 
+                       onchange="updateQuickReply(${index}, 'text', this.value)"
+                       placeholder="טקסט הכפתור">
+                <select class="quick-reply-input topic" 
+                        onchange="updateQuickReply(${index}, 'topic', this.value)">
+                    ${generateTopicOptions(reply.topic)}
+                </select>
+            </div>
+            <div class="quick-reply-preview">${reply.icon} ${reply.text}</div>
+            <button class="quick-reply-delete" onclick="deleteQuickReply(${index})">🗑️</button>
+        `;
+        container.appendChild(item);
+    });
+}
+
+// יצירת אפשרויות נושאים
+function generateTopicOptions(selectedTopic) {
+    const topics = Object.keys(chatbotData);
+    return topics.map(topic => 
+        `<option value="${topic}" ${topic === selectedTopic ? 'selected' : ''}>${topic}</option>`
+    ).join('');
+}
+
+// עדכון כפתור
+function updateQuickReply(index, field, value) {
+    if (quickRepliesData[index]) {
+        quickRepliesData[index][field] = value;
+        loadQuickRepliesManager(); // רענון התצוגה
+        updatePreviewQuickReplies(); // עדכון התצוגה המקדימה
+    }
+}
+
+// הוספת כפתור חדש
+function addQuickReply() {
+    const availableTopics = Object.keys(chatbotData);
+    const newReply = {
+        text: 'חדש',
+        icon: '💬',
+        topic: availableTopics[0] || 'מחירים'
+    };
+    
+    quickRepliesData.push(newReply);
+    loadQuickRepliesManager();
+    updatePreviewQuickReplies();
+}
+
+// מחיקת כפתור
+function deleteQuickReply(index) {
+    if (confirm('האם אתה בטוח שברצונך למחוק את הכפתור הזה?')) {
+        quickRepliesData.splice(index, 1);
+        loadQuickRepliesManager();
+        updatePreviewQuickReplies();
+    }
+}
+
+// עדכון התצוגה המקדימה
+function updatePreviewQuickReplies() {
+    const previewContainer = document.getElementById('previewQuickReplies');
+    if (!previewContainer) return;
+    
+    previewContainer.innerHTML = '';
+    
+    quickRepliesData.forEach(reply => {
+        const button = document.createElement('div');
+        button.className = 'preview-quick-reply';
+        button.setAttribute('data-message', reply.topic);
+        button.textContent = `${reply.icon} ${reply.text}`;
+        previewContainer.appendChild(button);
+    });
+}
+
+// עדכון הפונקציה updateChatbot כדי לכלול את הכפתורים
+function updateChatbotWithQuickReplies() {
+    const dataToSend = {
+        quickReplies: quickRepliesData, // הוספנו את זה!
+        responses: chatbotData,
+        lastUpdate: Date.now(),
+        version: '1.0.0'
+    };
+    
+    // השאר הקוד זהה...
+    return dataToSend;
+}
+
+// אתחול בטעינת הדף
+document.addEventListener('DOMContentLoaded', function() {
+    loadQuickRepliesManager();
+    updatePreviewQuickReplies();
+});
+</script>
 </body>
 </html>
