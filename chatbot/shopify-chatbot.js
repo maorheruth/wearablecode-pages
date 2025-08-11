@@ -207,7 +207,6 @@ updateQuickReplies() {
 
                 .wc-chat-button:active,
                 .wc-chat-button:focus {
-                    background: #000000;
                     outline: none;
                 }
 
