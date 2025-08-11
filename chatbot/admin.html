@@ -737,9 +737,7 @@
 
         /* Emoji Picker */
         .emoji-picker {
-            position: absolute;
-            top: 100%;
-            left: 0;
+            position: fixed;
             background: #1e293b;
             border: 1px solid #475569;
             border-radius: 8px;
@@ -749,8 +747,8 @@
             display: none;
             grid-template-columns: repeat(6, 1fr);
             gap: 5px;
-            width: 200px;
-            max-height: 150px;
+            width: 240px;
+            max-height: 180px;
             overflow-y: auto;
         }
 
@@ -1259,13 +1257,46 @@
             
             // פתח את הבוחר הנוכחי
             const picker = document.getElementById(`emojiPicker${index}`);
-            if (picker) {
+            const iconInput = document.querySelector(`input[onclick*="showEmojiPicker(${index})"]`);
+            
+            if (picker && iconInput) {
+                // חישוב מיקום התיבה
+                const rect = iconInput.getBoundingClientRect();
+                const pickerWidth = 240;
+                const pickerHeight = 180;
+                
+                // מיקום אופטימלי - בצד ימין של השדה אם יש מקום, אחרת בצד שמאל
+                let left = rect.right + 5;
+                let top = rect.top;
+                
+                // בדיקה אם התיבה יוצאת מהמסך ימינה
+                if (left + pickerWidth > window.innerWidth) {
+                    left = rect.left - pickerWidth - 5;
+                }
+                
+                // בדיקה אם התיבה יוצאת מהמסך שמאלה
+                if (left < 0) {
+                    left = 10;
+                }
+                
+                // בדיקה אם התיבה יוצאת מהמסך למטה
+                if (top + pickerHeight > window.innerHeight) {
+                    top = window.innerHeight - pickerHeight - 10;
+                }
+                
+                // בדיקה אם התיבה יוצאת מהמסך למעלה
+                if (top < 0) {
+                    top = 10;
+                }
+                
+                picker.style.left = left + 'px';
+                picker.style.top = top + 'px';
                 picker.classList.add('show');
                 
                 // סגור בלחיצה מחוץ לבוחר
                 setTimeout(() => {
                     document.addEventListener('click', function closeEmojiPicker(e) {
-                        if (!picker.contains(e.target) && !e.target.classList.contains('icon')) {
+                        if (!picker.contains(e.target) && !iconInput.contains(e.target)) {
                             picker.classList.remove('show');
                             document.removeEventListener('click', closeEmojiPicker);
                         }
