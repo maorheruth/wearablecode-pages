@@ -726,6 +726,49 @@
         .quick-reply-input.icon {
             width: 35px;
             text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .quick-reply-input.icon:hover {
+            background: #1e293b;
+            border-color: #3b82f6;
+        }
+
+        /* Emoji Picker */
+        .emoji-picker {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            width: 200px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .emoji-picker.show {
+            display: grid;
+        }
+
+        .emoji-option {
+            padding: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background 0.2s ease;
+        }
+
+        .emoji-option:hover {
+            background: #334155;
         }
 
         .quick-reply-input.text {
@@ -863,6 +906,12 @@
                 max-height: 200px;
             }
         }
+
+        /* Animation for spin */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -957,7 +1006,7 @@
                     </div>
                 </div>
 
-                <!-- Quick Replies Manager -->
+                <!-- Update Section -->
                 <div class="update-section">
                     <h3>🔄 עדכון הצ'אטבוט</h3>
                     <button class="update-btn" id="updateChatbotBtn" onclick="updateChatbot()">
@@ -1137,6 +1186,14 @@
             }
         }
 
+        // יצירת אפשרויות נושאים
+        function generateTopicOptions(selectedTopic) {
+            const topics = Object.keys(chatbotData);
+            return topics.map(topic => 
+                `<option value="${topic}" ${topic === selectedTopic ? 'selected' : ''}>${topic}</option>`
+            ).join('');
+        }
+
         // טעינת ניהול כפתורים מהירים
         function loadQuickRepliesManager() {
             const container = document.getElementById('quickRepliesList');
@@ -1149,10 +1206,16 @@
                 item.className = 'quick-reply-item';
                 item.innerHTML = `
                     <div class="quick-reply-controls">
-                        <input type="text" class="quick-reply-input icon" 
-                               value="${reply.icon}" 
-                               onchange="updateQuickReply(${index}, 'icon', this.value)"
-                               placeholder="🔥" title="אייקון">
+                        <div style="position: relative;">
+                            <input type="text" class="quick-reply-input icon" 
+                                   value="${reply.icon}" 
+                                   onchange="updateQuickReply(${index}, 'icon', this.value)"
+                                   onclick="showEmojiPicker(${index})"
+                                   placeholder="🔥" title="לחץ לבחירת אימוג'י" readonly>
+                            <div class="emoji-picker" id="emojiPicker${index}">
+                                ${generateEmojiOptions(index)}
+                            </div>
+                        </div>
                         <input type="text" class="quick-reply-input text" 
                                value="${reply.text}" 
                                onchange="updateQuickReply(${index}, 'text', this.value)"
@@ -1170,12 +1233,60 @@
             });
         }
 
-        // יצירת אפשרויות נושאים
-        function generateTopicOptions(selectedTopic) {
-            const topics = Object.keys(chatbotData);
-            return topics.map(topic => 
-                `<option value="${topic}" ${topic === selectedTopic ? 'selected' : ''}>${topic}</option>`
+        // מאגר אימוג'ים לבחירה
+        const emojiCollection = [
+            '💰', '🚚', '📦', '📞', '🔄', '📏', '⭐', '❤️', 
+            '🎉', '🔥', '💎', '🌟', '⚡', '🎯', '🚀', '💡',
+            '📱', '💻', '🛒', '🎁', '🏆', '👕', '👔', '👗',
+            '💳', '🔐', '🌍', '🏠', '📍', '⏰', '📅', '📝',
+            '✅', '❌', '❓', '❗', '💬', '📢', '🔔', '🎵',
+            '😊', '😍', '🤔', '👍', '👎', '💪', '🙌', '👏'
+        ];
+
+        // יצירת אפשרויות אימוג'ים
+        function generateEmojiOptions(index) {
+            return emojiCollection.map(emoji => 
+                `<div class="emoji-option" onclick="selectEmoji(${index}, '${emoji}')">${emoji}</div>`
             ).join('');
+        }
+
+        // הצגת בוחר האימוג'ים
+        function showEmojiPicker(index) {
+            // סגור את כל הבוחרים האחרים
+            document.querySelectorAll('.emoji-picker').forEach(picker => {
+                picker.classList.remove('show');
+            });
+            
+            // פתח את הבוחר הנוכחי
+            const picker = document.getElementById(`emojiPicker${index}`);
+            if (picker) {
+                picker.classList.add('show');
+                
+                // סגור בלחיצה מחוץ לבוחר
+                setTimeout(() => {
+                    document.addEventListener('click', function closeEmojiPicker(e) {
+                        if (!picker.contains(e.target) && !e.target.classList.contains('icon')) {
+                            picker.classList.remove('show');
+                            document.removeEventListener('click', closeEmojiPicker);
+                        }
+                    });
+                }, 100);
+            }
+        }
+
+        // בחירת אימוג'י
+        function selectEmoji(index, emoji) {
+            if (quickRepliesData[index]) {
+                quickRepliesData[index].icon = emoji;
+                loadQuickRepliesManager();
+                updatePreviewQuickReplies();
+            }
+            
+            // סגור את הבוחר
+            const picker = document.getElementById(`emojiPicker${index}`);
+            if (picker) {
+                picker.classList.remove('show');
+            }
         }
 
         // עדכון כפתור מהיר
