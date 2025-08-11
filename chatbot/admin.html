@@ -677,18 +677,18 @@
             background: #1e293b;
             border: 1px solid #475569;
             border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 8px;
+            padding: 8px;
+            margin-bottom: 6px;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            align-items: center;
+            gap: 6px;
         }
 
         .quick-reply-controls {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             align-items: center;
-            flex-wrap: wrap;
+            flex: 1;
         }
 
         .quick-reply-input {
@@ -696,8 +696,8 @@
             border: 1px solid #334155;
             border-radius: 6px;
             color: #f1f5f9;
-            padding: 6px 8px;
-            font-size: 12px;
+            padding: 4px 6px;
+            font-size: 11px;
             outline: none;
             text-align: right;
         }
@@ -707,29 +707,30 @@
         }
 
         .quick-reply-input.icon {
-            width: 40px;
+            width: 35px;
             text-align: center;
         }
 
         .quick-reply-input.text {
-            width: 80px;
+            width: 60px;
         }
 
         .quick-reply-input.topic {
             flex: 1;
-            min-width: 100px;
+            min-width: 80px;
         }
 
         .quick-reply-delete {
             background: #ef4444;
             color: white;
             border: none;
-            border-radius: 6px;
-            padding: 6px 10px;
+            border-radius: 4px;
+            padding: 4px 8px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 10px;
             transition: background 0.3s ease;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .quick-reply-delete:hover {
@@ -740,13 +741,14 @@
             background: #f8f9fa;
             color: #475569;
             border: 1px solid #e2e8f0;
-            padding: 4px 8px;
-            border-radius: 15px;
-            font-size: 11px;
-            text-align: center;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            max-width: 80px;
+            flex-shrink: 0;
         }
 
         /* Success Notification */
@@ -1142,9 +1144,9 @@
                                 title="נושא">
                             ${generateTopicOptions(reply.topic)}
                         </select>
-                        <button class="quick-reply-delete" onclick="deleteQuickReply(${index})" title="מחק">🗑️</button>
                     </div>
                     <div class="quick-reply-preview">${reply.icon} ${reply.text}</div>
+                    <button class="quick-reply-delete" onclick="deleteQuickReply(${index})" title="מחק">🗑️</button>
                 `;
                 container.appendChild(item);
             });
