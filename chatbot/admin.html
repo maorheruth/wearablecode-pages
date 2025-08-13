@@ -776,7 +776,7 @@
             }
         }
 
-        // Event listeners
+        // Event listeners - תיקון
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DOM נטען, מתחיל להגדיר...');
             console.log('🔑 הסיסמה הנדרשת:', ADMIN_PASSWORD);
@@ -799,6 +799,7 @@
             
             checkAuth();
             
+            // התחברות עם Enter
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
                     const loginScreen = document.getElementById('loginScreen');
@@ -822,7 +823,28 @@
                     }
                 });
             }
+
+            // תיקון: הוספת מאזין לכפתור שאלה חדשה
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('add-question-btn')) {
+                    e.preventDefault();
+                    console.log('🆕 לוחץ על כפתור שאלה חדשה');
+                    addNewQuestion();
+                }
+            });
         });
+
+        // ווידוא שהפונקציה זמינה גלובלית
+        window.addNewQuestion = addNewQuestion;
+        window.selectQuestion = selectQuestion;
+        window.saveQuestion = saveQuestion;
+        window.deleteQuestion = deleteQuestion;
+        window.updateChatbot = updateChatbot;
+        window.saveToServer = saveToServer;
+        window.testChatbot = testChatbot;
+        window.checkPassword = checkPassword;
+        window.togglePassword = togglePassword;
+        window.logout = logout;
     </script>
 </body>
 </html>רדות בפסיקים):</label>
