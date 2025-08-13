@@ -1,4 +1,866 @@
-<!DOCTYPE html>
+<button class="logout-btn" onclick="logout()">🚪 התנתק</button>
+        </div>
+
+        <div class="main-content">
+            <!-- Questions List -->
+            <div class="questions-panel">
+                <h2>📝 רשימת שאלות</h2>
+                <div id="questionsList">
+                    <!-- Questions will be loaded here -->
+                </div>
+                <button class="add-question-btn" onclick="addNewQuestion()">➕ שאלה חדשה</button>
+            </div>
+
+            <!-- Edit Panel -->
+            <div class="edit-panel">
+                <div id="editContent">
+                    <div class="empty-state">
+                        <h3>👈 בחר שאלה לעריכה</h3>
+                        <p>או לחץ על "שאלה חדשה" כדי להוסיף שאלה חדשה</p>
+                    </div>
+                </div>
+
+                <!-- Quick Replies Manager - תמיד נראה -->
+                <div class="quick-replies-section">
+                    <h3>🔘 ניהול כפתורי תגובה מהירה</h3>
+                    <div id="quickRepliesManager">
+                        <div class="quick-replies-list" id="quickRepliesList">
+                            <!-- כפתורים יתווספו כאן דינמית -->
+                        </div>
+                        <button class="btn btn-primary" onclick="addQuickReply()" style="width: 100%; margin-top: 10px;">
+                            ➕ הוסף כפתור חדש
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <h2>👀 תצוגה מקדימה</h2>
+                <div class="chatbot-preview">
+                    <div class="preview-header">
+                        <div class="status-indicator" id="statusIndicator"></div>
+                        <div class="preview-avatar">
+                            <img src="https://wearablecode-pages.vercel.app/assets/logos/wearablecode_favicon_48x48.png" alt="WearableCode Assistant" />
+                        </div>
+                        <div class="preview-assistant-info">
+                            <h3>עוזר WearableCode</h3>
+                            <p>כאן לעזור לך עם כל השאלות 🚀</p>
+                        </div>
+                    </div>
+                    <div class="preview-messages" id="previewMessages">
+                        <div class="preview-message bot">
+                            <div class="preview-message-content">שלום! איך אני יכול לעזור לך היום?</div>
+                        </div>
+                    </div>
+                    <div class="preview-quick-replies" id="previewQuickReplies">
+                        <!-- Quick replies will be loaded here -->
+                    </div>
+                    <div class="preview-input-container">
+                        <textarea class="preview-input" id="previewInput" placeholder="כתוב הודעה..." rows="1"></textarea>
+                        <button onclick="testChatbot()" class="preview-send-btn">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M22.01 3L2 10l7 2 2 7z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Update Section -->
+                <div class="update-section">
+                    <h3>🔄 עדכון הצ'אטבוט</h3>
+                    <!-- הכפתור המקורי שלך - נשאר בדיוק כמו שהיה -->
+                    <button class="update-btn" id="updateChatbotBtn" onclick="updateChatbot()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                        </svg>
+                        עדכן מידע בצ'אט בוט
+                    </button>
+                    
+                    <!-- כפתור חדש לשמירה בשרת -->
+                    <button class="server-save-btn" id="serverSaveBtn" onclick="saveToServer()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/>
+                        </svg>
+                        שמור בשרת (חדש!)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // הסיסמה הנדרשת
+        const ADMIN_PASSWORD = 'Aawearableadmin';
+        const PASSWORD_KEY = 'wearablecode_admin_auth';
+        const API_BASE_URL = window.location.origin; // נוסף לשמירה בשרת
+        
+        // מאגר התשובות (נתונים התחלתיים)
+        let chatbotData = {
+            'מחירים': {
+                response: '💰 המחירים שלנו:\n• חולצה רגילה: ₪79-89\n• חולצה פרימיום: ₪99-109\n• מבצע ללקוחות חדשים: 15% הנחה!\n• משלוח חינם מעל ₪150',
+                keywords: ['מחיר', 'כמה עולה', 'עלות', 'כסף', '₪', 'זול', 'יקר']
+            },
+            'משלוח': {
+                response: '🚚 פרטי משלוח:\n• משלוח רגיל: ₪25 (3-5 ימי עסקים)\n• משלוח מהיר: ₪35 (1-2 ימי עסקים)\n• משלוח חינם מעל ₪150!\n• שליח עד הבית או לנקודת איסוף',
+                keywords: ['משלוח', 'דואר', 'הגעה', 'כמה זמן', 'שליח', 'איסוף']
+            },
+            'מעקב חבילה': {
+                response: '📦 למעקב אחר החבילה שלך:\n• היכנס לאזור האישי באתר\n• או שלח לנו את מספר ההזמנה בווטסאפ\n• נשלח לך קישור למעקב ישירות\n• זמן משלוח: 3-5 ימי עסקים',
+                keywords: ['חבילה', 'מעקב', 'איפה החבילה', 'הזמנה', 'משלוח', 'הגיע', 'מתי יגיע']
+            },
+            'מידות': {
+                response: '📏 המידות שלנו:\n• S - חזה 90-94 ס"מ\n• M - חזה 94-98 ס"מ\n• L - חזה 98-104 ס"מ\n• XL - חזה 104-110 ס"מ\n• XXL - חזה 110-116 ס"מ\n\nיש מדריך מידות מלא באתר!',
+                keywords: ['מידה', 'גודל', 'מידות', 'small', 'medium', 'large', 's', 'm', 'l', 'xl', 'xxl']
+            },
+            'החזרות': {
+                response: '🔄 מדיניות החזרות נדיבה:\n• החזרה תוך 30 יום\n• החלפת מידה חינם\n• החזר כספי מלא (לא כולל משלוח)\n• המוצר חייב להיות במצב חדש\n• פשוט ליצור קשר ונסדר!',
+                keywords: ['החזרה', 'החלפה', 'החזר', 'לא מתאים', 'מידה לא טובה', 'להחליף']
+            },
+            'צור קשר': {
+                response: '📞 אפשר ליצור קשר:\n• WhatsApp: 050-123-4567\n• מייל: hello@wearablecode.com\n• פייסבוק: WearableCode Israel\n• אינסטגרם: @wearablecode_il\n\nאנחנו כאן בשבילכם! 😊',
+                keywords: ['צור קשר', 'טלפון', 'מייל', 'פייסבוק', 'אינסטגרם', 'ווטסאפ', 'עזרה']
+            }
+        };
+
+        // נתוני כפתורים מהירים
+        let quickRepliesData = [
+            { text: 'מחירים', icon: '💰', topic: 'מחירים' },
+            { text: 'משלוח', icon: '🚚', topic: 'משלוח' },
+            { text: 'מעקב', icon: '📦', topic: 'מעקב חבילה' },
+            { text: 'צור קשר', icon: '📞', topic: 'צור קשר' }
+        ];
+
+        let currentEditingKey = null;
+
+        // טעינת נתונים מהשרת - פונקציה חדשה
+        async function loadDataFromServer() {
+            try {
+                console.log('📡 מנסה לטעון נתונים מהשרת...');
+                const response = await fetch(`${API_BASE_URL}/api/chatbot-store`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        if (result.data.responses) {
+                            chatbotData = result.data.responses;
+                        }
+                        if (result.data.quickReplies) {
+                            quickRepliesData = result.data.quickReplies;
+                        }
+                        console.log('✅ נתונים נטענו מהשרת בהצלחה!');
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.log('⚠️ לא ניתן לטעון מהשרת, משתמש בנתונים מקומיים:', error.message);
+            }
+            return false;
+        }
+
+        // שמירה בשרת - פונקציה חדשה
+        async function saveToServer() {
+            const btn = document.getElementById('serverSaveBtn');
+            const originalHTML = btn.innerHTML;
+            
+            try {
+                btn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="animation: spin 1s linear infinite;">
+                        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                    </svg>
+                    שומר בשרת...
+                `;
+                btn.disabled = true;
+
+                const dataToSave = {
+                    quickReplies: quickRepliesData,
+                    responses: chatbotData,
+                    version: '1.0.0'
+                };
+
+                const response = await fetch(`${API_BASE_URL}/api/chatbot-store`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: ADMIN_PASSWORD,
+                        data: dataToSave
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    btn.classList.add('success');
+                    btn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                        נשמר בשרת!
+                    `;
+                    
+                    // הצג הודעת הצלחה
+                    const notification = document.getElementById('successNotification');
+                    notification.querySelector('span:last-child').textContent = 'המידע נשמר בשרת בהצלחה!';
+                    showSuccessNotification();
+                    
+                    console.log('🚀 נתונים נשמרו בשרת בהצלחה!');
+                } else {
+                    throw new Error(result.message || 'שגיאה בשמירה');
+                }
+
+            } catch (error) {
+                console.error('❌ שגיאה בשמירה בשרת:', error);
+                btn.innerHTML = `❌ שגיאה: ${error.message}`;
+            } finally {
+                btn.disabled = false;
+                setTimeout(() => {
+                    btn.classList.remove('success');
+                    btn.innerHTML = originalHTML;
+                }, 3000);
+            }
+        }
+
+        // כל שאר הקוד שלך נשאר בדיוק כמו שהיה...
+        
+        // בדיקת התחברות בעת טעינת הדף
+        function checkAuth() {
+            const stored = localStorage.getItem(PASSWORD_KEY);
+            console.log('🔍 בודק התחברות שמורה:', stored ? 'קיים' : 'לא קיים');
+            if (stored === 'authenticated') {
+                console.log('✅ התחברות אוטומטית מוצלחה');
+                showMainApp();
+            } else {
+                console.log('❌ נדרשת התחברות');
+                showLoginScreen();
+            }
+        }
+
+        // הצגת מסך התחברות
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('passwordInput').focus();
+        }
+
+        // הצגת האפליקציה הראשית - עודכן לטעון מהשרת
+        async function showMainApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            
+            // נסה לטעון נתונים מהשרת
+            await loadDataFromServer();
+            
+            loadQuestionsList();
+            loadQuickRepliesManager();
+            updatePreviewQuickReplies();
+            updateConnectionStatus();
+        }
+
+        // בדיקת סיסמה
+        function checkPassword() {
+            console.log('🔑 checkPassword נקראה');
+            const passwordInput = document.getElementById('passwordInput');
+            const password = passwordInput.value.trim();
+            const errorDiv = document.getElementById('errorMessage');
+            
+            console.log('הסיסמה שהוקלדה:', password);
+            console.log('הסיסמה הנדרשת:', ADMIN_PASSWORD);
+            console.log('אורך הסיסמה:', password.length);
+            
+            if (password === ADMIN_PASSWORD) {
+                console.log('✅ סיסמה נכונה! מתחבר...');
+                localStorage.setItem(PASSWORD_KEY, 'authenticated');
+                showMainApp();
+                errorDiv.textContent = '';
+                passwordInput.value = '';
+            } else {
+                console.log('❌ סיסמה שגויה');
+                console.log('השוואה:', `"${password}" === "${ADMIN_PASSWORD}"`, password === ADMIN_PASSWORD);
+                errorDiv.textContent = 'סיסמה שגויה! הסיסמה הנכונה היא: Aawearableadmin';
+                passwordInput.focus();
+                passwordInput.select();
+            }
+        }
+
+        // הצגה/הסתרה של הסיסמה
+        function togglePassword() {
+            console.log('👁️ togglePassword נקראה');
+            const passwordInput = document.getElementById('passwordInput');
+            const toggleBtn = document.querySelector('.toggle-password');
+            
+            if (passwordInput && toggleBtn) {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleBtn.innerHTML = '🙈';
+                    console.log('✅ סיסמה מוצגת');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleBtn.innerHTML = '👁️';
+                    console.log('✅ סיסמה מוסתרת');
+                }
+            }
+        }
+
+        // התנתקות
+        function logout() {
+            localStorage.removeItem(PASSWORD_KEY);
+            showLoginScreen();
+            document.getElementById('passwordInput').value = '';
+        }
+
+        // עדכון סטטוס החיבור
+        function updateConnectionStatus() {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const hasChatbotData = localStorage.getItem('wearablecode_chatbot_data');
+            
+            if (hasChatbotData) {
+                statusIndicator.classList.add('connected');
+                statusIndicator.title = 'הצ\'אטבוט מחובר ומעודכן';
+            } else {
+                statusIndicator.classList.remove('connected');
+                statusIndicator.title = 'הצ\'אטבוט טרם עודכן';
+            }
+        }
+
+        // הצגת הודעת הצלחה
+        function showSuccessNotification() {
+            const notification = document.getElementById('successNotification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // טעינת רשימת השאלות
+        function loadQuestionsList() {
+            const questionsList = document.getElementById('questionsList');
+            questionsList.innerHTML = '';
+
+            for (const [key, data] of Object.entries(chatbotData)) {
+                const questionItem = document.createElement('div');
+                questionItem.className = 'question-item';
+                questionItem.onclick = () => selectQuestion(key);
+                questionItem.innerHTML = `
+                    <div class="question-title">${key}</div>
+                    <div class="question-keywords">${data.keywords.slice(0, 3).join(', ')}${data.keywords.length > 3 ? '...' : ''}</div>
+                `;
+                questionsList.appendChild(questionItem);
+            }
+        }
+
+        // יצירת אפשרויות נושאים
+        function generateTopicOptions(selectedTopic) {
+            const topics = Object.keys(chatbotData);
+            return topics.map(topic => 
+                `<option value="${topic}" ${topic === selectedTopic ? 'selected' : ''}>${topic}</option>`
+            ).join('');
+        }
+
+        // טעינת ניהול כפתורים מהירים
+        function loadQuickRepliesManager() {
+            const container = document.getElementById('quickRepliesList');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            quickRepliesData.forEach((reply, index) => {
+                const item = document.createElement('div');
+                item.className = 'quick-reply-item';
+                item.innerHTML = `
+                    <div class="quick-reply-controls">
+                        <div style="position: relative;">
+                            <input type="text" class="quick-reply-input icon" 
+                                   value="${reply.icon}" 
+                                   onchange="updateQuickReply(${index}, 'icon', this.value)"
+                                   onclick="showEmojiPicker(${index})"
+                                   placeholder="🔥" title="לחץ לבחירת אימוג'י" readonly>
+                            <div class="emoji-picker" id="emojiPicker${index}">
+                                ${generateEmojiOptions(index)}
+                            </div>
+                        </div>
+                        <input type="text" class="quick-reply-input text" 
+                               value="${reply.text}" 
+                               onchange="updateQuickReply(${index}, 'text', this.value)"
+                               placeholder="טקסט" title="טקסט הכפתור">
+                        <select class="quick-reply-input topic" 
+                                onchange="updateQuickReply(${index}, 'topic', this.value)"
+                                title="נושא">
+                            ${generateTopicOptions(reply.topic)}
+                        </select>
+                    </div>
+                    <div class="quick-reply-preview">${reply.icon} ${reply.text}</div>
+                    <button class="quick-reply-delete" onclick="deleteQuickReply(${index})" title="מחק">🗑️</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // מאגר אימוג'ים לבחירה
+        const emojiCollection = [
+            '💰', '🚚', '📦', '📞', '🔄', '📏', '⭐', '❤️', 
+            '🎉', '🔥', '💎', '🌟', '⚡', '🎯', '🚀', '💡',
+            '📱', '💻', '🛒', '🎁', '🏆', '👕', '👔', '👗',
+            '💳', '🔐', '🌍', '🏠', '📍', '⏰', '📅', '📝',
+            '✅', '❌', '❓', '❗', '💬', '📢', '🔔', '🎵',
+            '😊', '😍', '🤔', '👍', '👎', '💪', '🙌', '👏'
+        ];
+
+        // יצירת אפשרויות אימוג'ים
+        function generateEmojiOptions(index) {
+            return emojiCollection.map(emoji => 
+                `<div class="emoji-option" onclick="selectEmoji(${index}, '${emoji}')">${emoji}</div>`
+            ).join('');
+        }
+
+        // הצגת בוחר האימוג'ים
+        function showEmojiPicker(index) {
+            document.querySelectorAll('.emoji-picker').forEach(picker => {
+                picker.classList.remove('show');
+            });
+            
+            const picker = document.getElementById(`emojiPicker${index}`);
+            const iconInput = document.querySelector(`input[onclick*="showEmojiPicker(${index})"]`);
+            
+            if (picker && iconInput) {
+                const rect = iconInput.getBoundingClientRect();
+                const pickerWidth = 240;
+                const pickerHeight = 180;
+                
+                let left = rect.left - pickerWidth - 5;
+                let top = rect.top;
+                
+                if (left < 10) {
+                    left = rect.right + 5;
+                }
+                
+                if (left + pickerWidth > window.innerWidth - 10) {
+                    left = Math.max(10, (window.innerWidth - pickerWidth) / 2);
+                }
+                
+                if (top + pickerHeight > window.innerHeight - 10) {
+                    top = Math.max(10, window.innerHeight - pickerHeight - 10);
+                }
+                
+                if (top < 10) {
+                    top = 10;
+                }
+                
+                picker.style.left = left + 'px';
+                picker.style.top = top + 'px';
+                picker.classList.add('show');
+                
+                setTimeout(() => {
+                    document.addEventListener('click', function closeEmojiPicker(e) {
+                        if (!picker.contains(e.target) && !iconInput.contains(e.target)) {
+                            picker.classList.remove('show');
+                            document.removeEventListener('click', closeEmojiPicker);
+                        }
+                    });
+                }, 100);
+            }
+        }
+
+        // בחירת אימוג'י
+        function selectEmoji(index, emoji) {
+            if (quickRepliesData[index]) {
+                quickRepliesData[index].icon = emoji;
+                loadQuickRepliesManager();
+                updatePreviewQuickReplies();
+            }
+            
+            const picker = document.getElementById(`emojiPicker${index}`);
+            if (picker) {
+                picker.classList.remove('show');
+            }
+        }
+
+        // עדכון כפתור מהיר
+        function updateQuickReply(index, field, value) {
+            if (quickRepliesData[index]) {
+                quickRepliesData[index][field] = value;
+                loadQuickRepliesManager();
+                updatePreviewQuickReplies();
+            }
+        }
+
+        // הוספת כפתור מהיר חדש
+        function addQuickReply() {
+            const availableTopics = Object.keys(chatbotData);
+            const newReply = {
+                text: 'חדש',
+                icon: '💬',
+                topic: availableTopics[0] || 'מחירים'
+            };
+            
+            quickRepliesData.push(newReply);
+            loadQuickRepliesManager();
+            updatePreviewQuickReplies();
+        }
+
+        // מחיקת כפתור מהיר
+        function deleteQuickReply(index) {
+            if (confirm('האם אתה בטוח שברצונך למחוק את הכפתור הזה?')) {
+                quickRepliesData.splice(index, 1);
+                loadQuickRepliesManager();
+                updatePreviewQuickReplies();
+            }
+        }
+
+        // עדכון התצוגה המקדימה של הכפתורים
+        function updatePreviewQuickReplies() {
+            const previewContainer = document.getElementById('previewQuickReplies');
+            if (!previewContainer) return;
+            
+            previewContainer.innerHTML = '';
+            
+            quickRepliesData.forEach(reply => {
+                const button = document.createElement('div');
+                button.className = 'preview-quick-reply';
+                button.setAttribute('data-message', reply.topic);
+                button.textContent = `${reply.icon} ${reply.text}`;
+                previewContainer.appendChild(button);
+            });
+        }
+
+        // בחירת שאלה לעריכה
+        function selectQuestion(key) {
+            document.querySelectorAll('.question-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            event.target.closest('.question-item').classList.add('active');
+
+            currentEditingKey = key;
+            const data = chatbotData[key];
+
+            const editContent = document.getElementById('editContent');
+            editContent.innerHTML = `
+                <h2>✏️ עריכת תשובה</h2>
+                <div class="form-group">
+                    <label>שם התשובה:</label>
+                    <input type="text" id="qaName" value="${key}">
+                </div>
+                
+                <div class="form-group">
+                    <label>מילות מפתח (מופרדות בפסיקים):</label>
+                    <input type="text" id="qaKeywords" placeholder="מבצע, הנחה, זול יותר">
+                </div>
+                
+                <div class="form-group">
+                    <label>תשובת הבוט:</label>
+                    <textarea id="qaResponse" placeholder="הכנס כאן את התשובה המלאה..."></textarea>
+                </div>
+                
+                <div class="edit-buttons">
+                    <button class="btn btn-primary" onclick="saveQuestion()">💾 שמור</button>
+                </div>
+            `;
+            
+            loadQuickRepliesManager();
+        }
+
+        // שמירת שאלה
+        function saveQuestion() {
+            const name = document.getElementById('qaName').value.trim();
+            const keywords = document.getElementById('qaKeywords').value.split(',').map(k => k.trim()).filter(k => k);
+            const response = document.getElementById('qaResponse').value.trim();
+            
+            if (!name || !keywords.length || !response) {
+                alert('אנא מלא את כל השדות');
+                return;
+            }
+
+            if (currentEditingKey && currentEditingKey !== name) {
+                delete chatbotData[currentEditingKey];
+            }
+
+            chatbotData[name] = {
+                response: response,
+                keywords: keywords
+            };
+
+            loadQuestionsList();
+            loadQuickRepliesManager();
+            
+            const saveBtn = event.target;
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '✅ נשמר!';
+            saveBtn.style.background = '#10b981';
+            
+            setTimeout(() => {
+                saveBtn.innerHTML = originalText;
+                saveBtn.style.background = '';
+            }, 2000);
+        }
+
+        // מחיקת שאלה
+        function deleteQuestion() {
+            if (currentEditingKey && confirm('האם אתה בטוח שברצונך למחוק את התשובה הזו?')) {
+                delete chatbotData[currentEditingKey];
+                loadQuestionsList();
+                loadQuickRepliesManager();
+                
+                const editContent = document.getElementById('editContent');
+                editContent.innerHTML = `
+                    <div class="empty-state">
+                        <h3>👈 בחר שאלה לעריכה</h3>
+                        <p>או לחץ על "שאלה חדשה" כדי להוסיף שאלה חדשה</p>
+                    </div>
+                `;
+                currentEditingKey = null;
+                
+                loadQuickRepliesManager();
+            }
+        }
+
+        // בדיקת הצ'אטבוט
+        function testChatbot() {
+            const input = document.getElementById('previewInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addPreviewMessage(message, 'user');
+            input.value = '';
+            input.style.height = 'auto';
+
+            setTimeout(() => {
+                const response = findResponse(message);
+                addPreviewMessage(response, 'bot');
+            }, 500);
+        }
+
+        // מוסיף הודעה לתצוגה מקדימה
+        function addPreviewMessage(text, sender) {
+            const messages = document.getElementById('previewMessages');
+            const div = document.createElement('div');
+            div.className = `preview-message ${sender}`;
+            
+            const content = document.createElement('div');
+            content.className = 'preview-message-content';
+            content.textContent = text;
+            div.appendChild(content);
+            
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // חיפוש תשובה
+        function findResponse(message) {
+            const lowerMessage = message.toLowerCase().trim();
+            
+            for (const [key, data] of Object.entries(chatbotData)) {
+                if (data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
+                    return data.response;
+                }
+            }
+            
+            return '🤔 אני לא בטוח שהבנתי את השאלה. נסה לשאול בצורה אחרת או צור קשר ישירות.';
+        }
+
+        // עדכון הצ'אטבוט - הפונקציה המקורית שלך נשארת בדיוק כמו שהיתה
+        function updateChatbot() {
+            console.log('🔍 מעדכן צ\'אטבוט דרך ורסל API...');
+            
+            const btn = document.getElementById('updateChatbotBtn');
+            const originalHTML = btn.innerHTML;
+            
+            btn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="animation: spin 1s linear infinite;">
+                    <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                </svg>
+                שולח עדכון...
+            `;
+            
+            try {
+                const dataToSend = {
+                    quickReplies: quickRepliesData,
+                    responses: chatbotData,
+                    lastUpdate: Date.now(),
+                    version: '1.0.0'
+                };
+                
+                console.log('📤 שולח נתונים ל-API:', dataToSend);
+                
+                fetch('https://wearablecode-pages.vercel.app/api/chatbot-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dataToSend)
+                })
+                .then(response => {
+                    console.log('📡 תגובה מהשרת:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('✅ תגובה מהשרת:', data);
+                    
+                    if (data.success) {
+                        btn.classList.add('success');
+                        btn.innerHTML = `
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                            עודכן בהצלחה!
+                        `;
+                        
+                        showSuccessNotification();
+                        updateConnectionStatus();
+                        
+                        localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(dataToSend));
+                        
+                        console.log('🚀 הצ\'אטבוט עודכן בהצלחה!');
+                    } else {
+                        throw new Error(data.message || 'שגיאה לא ידועה');
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ שגיאה בעדכון:', error);
+                    btn.innerHTML = `❌ שגיאה: ${error.message}`;
+                    
+                    try {
+                        localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(dataToSend));
+                        console.log('💾 נשמר ב-localStorage כ-fallback');
+                    } catch (e) {
+                        console.error('❌ גם localStorage נכשל:', e);
+                    }
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        btn.classList.remove('success');
+                        btn.innerHTML = originalHTML;
+                    }, 3000);
+                });
+                
+            } catch (error) {
+                console.error('❌ שגיאה כללית:', error);
+                btn.innerHTML = '❌ שגיאה בעדכון';
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                }, 3000);
+            }
+        }
+
+        // Auto-resize textarea בתצוגה מקדימה
+        function setupPreviewInput() {
+            const input = document.getElementById('previewInput');
+            if (input) {
+                input.addEventListener('input', () => {
+                    input.style.height = 'auto';
+                    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+                });
+            }
+        }
+
+        // Quick replies functionality
+        function setupQuickReplies() {
+            const quickReplies = document.getElementById('previewQuickReplies');
+            if (quickReplies) {
+                quickReplies.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('preview-quick-reply')) {
+                        const message = e.target.getAttribute('data-message');
+                        const input = document.getElementById('previewInput');
+                        input.value = message;
+                        testChatbot();
+                    }
+                });
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM נטען, מתחיל להגדיר...');
+            console.log('🔑 הסיסמה הנדרשת:', ADMIN_PASSWORD);
+            
+            const savedData = localStorage.getItem('wearablecode_chatbot_data');
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    if (parsedData.responses) {
+                        chatbotData = parsedData.responses;
+                    }
+                    if (parsedData.quickReplies) {
+                        quickRepliesData = parsedData.quickReplies;
+                    }
+                    console.log('✅ נתונים נטענו מהזיכרון');
+                } catch (e) {
+                    console.log('❌ שגיאה בטעינת נתונים שמורים');
+                }
+            }
+            
+            checkAuth();
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const loginScreen = document.getElementById('loginScreen');
+                    if (loginScreen && window.getComputedStyle(loginScreen).display !== 'none') {
+                        e.preventDefault();
+                        console.log('⌨️ Enter נלחץ - מתחבר');
+                        checkPassword();
+                    }
+                }
+            });
+            
+            setupPreviewInput();
+            setupQuickReplies();
+
+            const previewInput = document.getElementById('previewInput');
+            if (previewInput) {
+                previewInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        testChatbot();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>רדות בפסיקים):</label>
+                    <input type="text" id="qaKeywords" value="${data.keywords.join(', ')}">
+                </div>
+                
+                <div class="form-group">
+                    <label>תשובת הבוט:</label>
+                    <textarea id="qaResponse">${data.response}</textarea>
+                </div>
+                
+                <div class="edit-buttons">
+                    <button class="btn btn-primary" onclick="saveQuestion()">💾 שמור</button>
+                    <button class="btn btn-danger" onclick="deleteQuestion()">🗑️ מחק</button>
+                </div>
+            `;
+            
+            loadQuickRepliesManager();
+        }
+
+        // הוספת שאלה חדשה
+        function addNewQuestion() {
+            document.querySelectorAll('.question-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            currentEditingKey = null;
+
+            const editContent = document.getElementById('editContent');
+            editContent.innerHTML = `
+                <h2>➕ שאלה חדשה</h2>
+                <div class="form-group">
+                    <label>שם התשובה:</label>
+                    <input type="text" id="qaName" placeholder="לדוגמה: מבצעים">
+                </div>
+                
+                <div class="form-group">
+                    <label>מילות מפתח (מופ<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -637,6 +1499,7 @@
             gap: 8px;
             position: relative;
             overflow: hidden;
+            margin-bottom: 10px;
         }
 
         .update-btn:hover {
@@ -655,6 +1518,38 @@
         .update-btn.success:hover {
             background: #059669;
             border-color: #059669;
+        }
+
+        /* כפתור חדש לשמירה בשרת */
+        .server-save-btn {
+            width: 100%;
+            background: #059669;
+            color: #f1f5f9;
+            border: 1px solid #059669;
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .server-save-btn:hover {
+            background: #047857;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(5, 150, 105, 0.3);
+        }
+
+        .server-save-btn.success {
+            background: #10b981;
+            animation: successPulse 0.6s ease-out;
         }
 
         @keyframes successPulse {
@@ -936,789 +1831,4 @@
     <div class="app-container" id="mainApp">
         <div class="app-header">
             <h1>🤖 ניהול צ'אטבוט WearableCode</h1>
-            <button class="logout-btn" onclick="logout()">🚪 התנתק</button>
-        </div>
-
-        <div class="main-content">
-            <!-- Questions List -->
-            <div class="questions-panel">
-                <h2>📝 רשימת שאלות</h2>
-                <div id="questionsList">
-                    <!-- Questions will be loaded here -->
-                </div>
-                <button class="add-question-btn" onclick="addNewQuestion()">➕ שאלה חדשה</button>
-            </div>
-
-            <!-- Edit Panel -->
-            <div class="edit-panel">
-                <div id="editContent">
-                    <div class="empty-state">
-                        <h3>👈 בחר שאלה לעריכה</h3>
-                        <p>או לחץ על "שאלה חדשה" כדי להוסיף שאלה חדשה</p>
-                    </div>
-                </div>
-
-                <!-- Quick Replies Manager - תמיד נראה -->
-                <div class="quick-replies-section">
-                    <h3>🔘 ניהול כפתורי תגובה מהירה</h3>
-                    <div id="quickRepliesManager">
-                        <div class="quick-replies-list" id="quickRepliesList">
-                            <!-- כפתורים יתווספו כאן דינמית -->
-                        </div>
-                        <button class="btn btn-primary" onclick="addQuickReply()" style="width: 100%; margin-top: 10px;">
-                            ➕ הוסף כפתור חדש
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Preview Panel -->
-            <div class="preview-panel">
-                <h2>👀 תצוגה מקדימה</h2>
-                <div class="chatbot-preview">
-                    <div class="preview-header">
-                        <div class="status-indicator" id="statusIndicator"></div>
-                        <div class="preview-avatar">
-                            <img src="https://wearablecode-pages.vercel.app/assets/logos/wearablecode_favicon_48x48.png" alt="WearableCode Assistant" />
-                        </div>
-                        <div class="preview-assistant-info">
-                            <h3>עוזר WearableCode</h3>
-                            <p>כאן לעזור לך עם כל השאלות 🚀</p>
-                        </div>
-                    </div>
-                    <div class="preview-messages" id="previewMessages">
-                        <div class="preview-message bot">
-                            <div class="preview-message-content">שלום! איך אני יכול לעזור לך היום?</div>
-                        </div>
-                    </div>
-                    <div class="preview-quick-replies" id="previewQuickReplies">
-                        <!-- Quick replies will be loaded here -->
-                    </div>
-                    <div class="preview-input-container">
-                        <textarea class="preview-input" id="previewInput" placeholder="כתוב הודעה..." rows="1"></textarea>
-                        <button onclick="testChatbot()" class="preview-send-btn">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M22.01 3L2 10l7 2 2 7z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Update Section -->
-                <div class="update-section">
-                    <h3>🔄 עדכון הצ'אטבוט</h3>
-                    <button class="update-btn" id="updateChatbotBtn" onclick="updateChatbot()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                        </svg>
-                        עדכן מידע בצ'אט בוט
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // הסיסמה הנדרשת
-        const ADMIN_PASSWORD = 'Aawearableadmin';
-        const PASSWORD_KEY = 'wearablecode_admin_auth';
-        
-        // מאגר התשובות (נתונים התחלתיים)
-        let chatbotData = {
-            'מחירים': {
-                response: '💰 המחירים שלנו:\n• חולצה רגילה: ₪79-89\n• חולצה פרימיום: ₪99-109\n• מבצע ללקוחות חדשים: 15% הנחה!\n• משלוח חינם מעל ₪150',
-                keywords: ['מחיר', 'כמה עולה', 'עלות', 'כסף', '₪', 'זול', 'יקר']
-            },
-            'משלוח': {
-                response: '🚚 פרטי משלוח:\n• משלוח רגיל: ₪25 (3-5 ימי עסקים)\n• משלוח מהיר: ₪35 (1-2 ימי עסקים)\n• משלוח חינם מעל ₪150!\n• שליח עד הבית או לנקודת איסוף',
-                keywords: ['משלוח', 'דואר', 'הגעה', 'כמה זמן', 'שליח', 'איסוף']
-            },
-            'מעקב חבילה': {
-                response: '📦 למעקב אחר החבילה שלך:\n• היכנס לאזור האישי באתר\n• או שלח לנו את מספר ההזמנה בווטסאפ\n• נשלח לך קישור למעקב ישירות\n• זמן משלוח: 3-5 ימי עסקים',
-                keywords: ['חבילה', 'מעקב', 'איפה החבילה', 'הזמנה', 'משלוח', 'הגיע', 'מתי יגיע']
-            },
-            'מידות': {
-                response: '📏 המידות שלנו:\n• S - חזה 90-94 ס"מ\n• M - חזה 94-98 ס"מ\n• L - חזה 98-104 ס"מ\n• XL - חזה 104-110 ס"מ\n• XXL - חזה 110-116 ס"מ\n\nיש מדריך מידות מלא באתר!',
-                keywords: ['מידה', 'גודל', 'מידות', 'small', 'medium', 'large', 's', 'm', 'l', 'xl', 'xxl']
-            },
-            'החזרות': {
-                response: '🔄 מדיניות החזרות נדיבה:\n• החזרה תוך 30 יום\n• החלפת מידה חינם\n• החזר כספי מלא (לא כולל משלוח)\n• המוצר חייב להיות במצב חדש\n• פשוט ליצור קשר ונסדר!',
-                keywords: ['החזרה', 'החלפה', 'החזר', 'לא מתאים', 'מידה לא טובה', 'להחליף']
-            },
-            'צור קשר': {
-                response: '📞 אפשר ליצור קשר:\n• WhatsApp: 050-123-4567\n• מייל: hello@wearablecode.com\n• פייסבוק: WearableCode Israel\n• אינסטגרם: @wearablecode_il\n\nאנחנו כאן בשבילכם! 😊',
-                keywords: ['צור קשר', 'טלפון', 'מייל', 'פייסבוק', 'אינסטגרם', 'ווטסאפ', 'עזרה']
-            }
-        };
-
-        // נתוני כפתורים מהירים
-        let quickRepliesData = [
-            { text: 'מחירים', icon: '💰', topic: 'מחירים' },
-            { text: 'משלוח', icon: '🚚', topic: 'משלוח' },
-            { text: 'מעקב', icon: '📦', topic: 'מעקב חבילה' },
-            { text: 'צור קשר', icon: '📞', topic: 'צור קשר' }
-        ];
-
-        let currentEditingKey = null;
-
-        // בדיקת התחברות בעת טעינת הדף
-        function checkAuth() {
-            const stored = localStorage.getItem(PASSWORD_KEY);
-            console.log('🔍 בודק התחברות שמורה:', stored ? 'קיים' : 'לא קיים');
-            if (stored === 'authenticated') {
-                console.log('✅ התחברות אוטומטית מוצלחה');
-                showMainApp();
-            } else {
-                console.log('❌ נדרשת התחברות');
-                showLoginScreen();
-            }
-        }
-
-        // הצגת מסך התחברות
-        function showLoginScreen() {
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('passwordInput').focus();
-        }
-
-        // הצגת האפליקציה הראשית
-        function showMainApp() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            loadQuestionsList();
-            loadQuickRepliesManager(); // טען גם את הכפתורים המהירים
-            updatePreviewQuickReplies(); // עדכן התצוגה המקדימה
-            updateConnectionStatus();
-        }
-
-        // בדיקת סיסמה
-        function checkPassword() {
-            console.log('🔑 checkPassword נקראה');
-            const passwordInput = document.getElementById('passwordInput');
-            const password = passwordInput.value.trim();
-            const errorDiv = document.getElementById('errorMessage');
-            
-            console.log('הסיסמה שהוקלדה:', password);
-            console.log('הסיסמה הנדרשת:', ADMIN_PASSWORD);
-            console.log('אורך הסיסמה:', password.length);
-            
-            if (password === ADMIN_PASSWORD) {
-                console.log('✅ סיסמה נכונה! מתחבר...');
-                localStorage.setItem(PASSWORD_KEY, 'authenticated');
-                showMainApp();
-                errorDiv.textContent = '';
-                passwordInput.value = '';
-            } else {
-                console.log('❌ סיסמה שגויה');
-                console.log('השוואה:', `"${password}" === "${ADMIN_PASSWORD}"`, password === ADMIN_PASSWORD);
-                errorDiv.textContent = 'סיסמה שגויה! הסיסמה הנכונה היא: Aawearableadmin';
-                passwordInput.focus();
-                passwordInput.select();
-            }
-        }
-
-        // הצגה/הסתרה של הסיסמה
-        function togglePassword() {
-            console.log('👁️ togglePassword נקראה');
-            const passwordInput = document.getElementById('passwordInput');
-            const toggleBtn = document.querySelector('.toggle-password');
-            
-            if (passwordInput && toggleBtn) {
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    toggleBtn.innerHTML = '🙈';
-                    console.log('✅ סיסמה מוצגת');
-                } else {
-                    passwordInput.type = 'password';
-                    toggleBtn.innerHTML = '👁️';
-                    console.log('✅ סיסמה מוסתרת');
-                }
-            }
-        }
-
-        // התנתקות
-        function logout() {
-            localStorage.removeItem(PASSWORD_KEY);
-            showLoginScreen();
-            document.getElementById('passwordInput').value = '';
-        }
-
-        // עדכון סטטוס החיבור
-        function updateConnectionStatus() {
-            const statusIndicator = document.getElementById('statusIndicator');
-            const hasChatbotData = localStorage.getItem('wearablecode_chatbot_data');
-            
-            if (hasChatbotData) {
-                statusIndicator.classList.add('connected');
-                statusIndicator.title = 'הצ\'אטבוט מחובר ומעודכן';
-            } else {
-                statusIndicator.classList.remove('connected');
-                statusIndicator.title = 'הצ\'אטבוט טרם עודכן';
-            }
-        }
-
-        // הצגת הודעת הצלחה
-        function showSuccessNotification() {
-            const notification = document.getElementById('successNotification');
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        // טעינת רשימת השאלות
-        function loadQuestionsList() {
-            const questionsList = document.getElementById('questionsList');
-            questionsList.innerHTML = '';
-
-            for (const [key, data] of Object.entries(chatbotData)) {
-                const questionItem = document.createElement('div');
-                questionItem.className = 'question-item';
-                questionItem.onclick = () => selectQuestion(key);
-                questionItem.innerHTML = `
-                    <div class="question-title">${key}</div>
-                    <div class="question-keywords">${data.keywords.slice(0, 3).join(', ')}${data.keywords.length > 3 ? '...' : ''}</div>
-                `;
-                questionsList.appendChild(questionItem);
-            }
-        }
-
-        // יצירת אפשרויות נושאים
-        function generateTopicOptions(selectedTopic) {
-            const topics = Object.keys(chatbotData);
-            return topics.map(topic => 
-                `<option value="${topic}" ${topic === selectedTopic ? 'selected' : ''}>${topic}</option>`
-            ).join('');
-        }
-
-        // טעינת ניהול כפתורים מהירים
-        function loadQuickRepliesManager() {
-            const container = document.getElementById('quickRepliesList');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            quickRepliesData.forEach((reply, index) => {
-                const item = document.createElement('div');
-                item.className = 'quick-reply-item';
-                item.innerHTML = `
-                    <div class="quick-reply-controls">
-                        <div style="position: relative;">
-                            <input type="text" class="quick-reply-input icon" 
-                                   value="${reply.icon}" 
-                                   onchange="updateQuickReply(${index}, 'icon', this.value)"
-                                   onclick="showEmojiPicker(${index})"
-                                   placeholder="🔥" title="לחץ לבחירת אימוג'י" readonly>
-                            <div class="emoji-picker" id="emojiPicker${index}">
-                                ${generateEmojiOptions(index)}
-                            </div>
-                        </div>
-                        <input type="text" class="quick-reply-input text" 
-                               value="${reply.text}" 
-                               onchange="updateQuickReply(${index}, 'text', this.value)"
-                               placeholder="טקסט" title="טקסט הכפתור">
-                        <select class="quick-reply-input topic" 
-                                onchange="updateQuickReply(${index}, 'topic', this.value)"
-                                title="נושא">
-                            ${generateTopicOptions(reply.topic)}
-                        </select>
-                    </div>
-                    <div class="quick-reply-preview">${reply.icon} ${reply.text}</div>
-                    <button class="quick-reply-delete" onclick="deleteQuickReply(${index})" title="מחק">🗑️</button>
-                `;
-                container.appendChild(item);
-            });
-        }
-
-        // מאגר אימוג'ים לבחירה
-        const emojiCollection = [
-            '💰', '🚚', '📦', '📞', '🔄', '📏', '⭐', '❤️', 
-            '🎉', '🔥', '💎', '🌟', '⚡', '🎯', '🚀', '💡',
-            '📱', '💻', '🛒', '🎁', '🏆', '👕', '👔', '👗',
-            '💳', '🔐', '🌍', '🏠', '📍', '⏰', '📅', '📝',
-            '✅', '❌', '❓', '❗', '💬', '📢', '🔔', '🎵',
-            '😊', '😍', '🤔', '👍', '👎', '💪', '🙌', '👏'
-        ];
-
-        // יצירת אפשרויות אימוג'ים
-        function generateEmojiOptions(index) {
-            return emojiCollection.map(emoji => 
-                `<div class="emoji-option" onclick="selectEmoji(${index}, '${emoji}')">${emoji}</div>`
-            ).join('');
-        }
-
-        // הצגת בוחר האימוג'ים
-        function showEmojiPicker(index) {
-            // סגור את כל הבוחרים האחרים
-            document.querySelectorAll('.emoji-picker').forEach(picker => {
-                picker.classList.remove('show');
-            });
-            
-            // פתח את הבוחר הנוכחי
-            const picker = document.getElementById(`emojiPicker${index}`);
-            const iconInput = document.querySelector(`input[onclick*="showEmojiPicker(${index})"]`);
-            
-            if (picker && iconInput) {
-                // חישוב מיקום התיבה
-                const rect = iconInput.getBoundingClientRect();
-                const pickerWidth = 240;
-                const pickerHeight = 180;
-                
-                // מיקום בצד שמאל של השדה (עדיפות לשמאל)
-                let left = rect.left - pickerWidth - 5;
-                let top = rect.top;
-                
-                // בדיקה אם התיבה יוצאת מהמסך שמאלה - אז נעבור לצד ימין
-                if (left < 10) {
-                    left = rect.right + 5;
-                }
-                
-                // בדיקה אם עדיין יוצאת מהמסך ימינה - נמקם במרכז
-                if (left + pickerWidth > window.innerWidth - 10) {
-                    left = Math.max(10, (window.innerWidth - pickerWidth) / 2);
-                }
-                
-                // בדיקה אם התיבה יוצאת מהמסך למטה
-                if (top + pickerHeight > window.innerHeight - 10) {
-                    top = Math.max(10, window.innerHeight - pickerHeight - 10);
-                }
-                
-                // בדיקה אם התיבה יוצאת מהמסך למעלה
-                if (top < 10) {
-                    top = 10;
-                }
-                
-                console.log('🎯 מיקום בוחר אימוג\'י:', { left, top, pickerWidth, pickerHeight });
-                
-                picker.style.left = left + 'px';
-                picker.style.top = top + 'px';
-                picker.classList.add('show');
-                
-                // סגור בלחיצה מחוץ לבוחר
-                setTimeout(() => {
-                    document.addEventListener('click', function closeEmojiPicker(e) {
-                        if (!picker.contains(e.target) && !iconInput.contains(e.target)) {
-                            picker.classList.remove('show');
-                            document.removeEventListener('click', closeEmojiPicker);
-                        }
-                    });
-                }, 100);
-            }
-        }
-
-        // בחירת אימוג'י
-        function selectEmoji(index, emoji) {
-            if (quickRepliesData[index]) {
-                quickRepliesData[index].icon = emoji;
-                loadQuickRepliesManager();
-                updatePreviewQuickReplies();
-            }
-            
-            // סגור את הבוחר
-            const picker = document.getElementById(`emojiPicker${index}`);
-            if (picker) {
-                picker.classList.remove('show');
-            }
-        }
-
-        // עדכון כפתור מהיר
-        function updateQuickReply(index, field, value) {
-            if (quickRepliesData[index]) {
-                quickRepliesData[index][field] = value;
-                loadQuickRepliesManager();
-                updatePreviewQuickReplies();
-            }
-        }
-
-        // הוספת כפתור מהיר חדש
-        function addQuickReply() {
-            const availableTopics = Object.keys(chatbotData);
-            const newReply = {
-                text: 'חדש',
-                icon: '💬',
-                topic: availableTopics[0] || 'מחירים'
-            };
-            
-            quickRepliesData.push(newReply);
-            loadQuickRepliesManager();
-            updatePreviewQuickReplies();
-        }
-
-        // מחיקת כפתור מהיר
-        function deleteQuickReply(index) {
-            if (confirm('האם אתה בטוח שברצונך למחוק את הכפתור הזה?')) {
-                quickRepliesData.splice(index, 1);
-                loadQuickRepliesManager();
-                updatePreviewQuickReplies();
-            }
-        }
-
-        // עדכון התצוגה המקדימה של הכפתורים
-        function updatePreviewQuickReplies() {
-            const previewContainer = document.getElementById('previewQuickReplies');
-            if (!previewContainer) return;
-            
-            previewContainer.innerHTML = '';
-            
-            quickRepliesData.forEach(reply => {
-                const button = document.createElement('div');
-                button.className = 'preview-quick-reply';
-                button.setAttribute('data-message', reply.topic);
-                button.textContent = `${reply.icon} ${reply.text}`;
-                previewContainer.appendChild(button);
-            });
-        }
-
-        // בחירת שאלה לעריכה
-        function selectQuestion(key) {
-            // הסרת סימון מכל הפריטים
-            document.querySelectorAll('.question-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            // סימון הפריט הנוכחי
-            event.target.closest('.question-item').classList.add('active');
-
-            currentEditingKey = key;
-            const data = chatbotData[key];
-
-            const editContent = document.getElementById('editContent');
-            editContent.innerHTML = `
-                <h2>✏️ עריכת תשובה</h2>
-                <div class="form-group">
-                    <label>שם התשובה:</label>
-                    <input type="text" id="qaName" value="${key}">
-                </div>
-                
-                <div class="form-group">
-                    <label>מילות מפתח (מופרדות בפסיקים):</label>
-                    <input type="text" id="qaKeywords" value="${data.keywords.join(', ')}">
-                </div>
-                
-                <div class="form-group">
-                    <label>תשובת הבוט:</label>
-                    <textarea id="qaResponse">${data.response}</textarea>
-                </div>
-                
-                <div class="edit-buttons">
-                    <button class="btn btn-primary" onclick="saveQuestion()">💾 שמור</button>
-                    <button class="btn btn-danger" onclick="deleteQuestion()">🗑️ מחק</button>
-                </div>
-            `;
-            
-            // הבטח שהכפתורים המהירים נטענים
-            loadQuickRepliesManager();
-        }
-
-        // הוספת שאלה חדשה
-        function addNewQuestion() {
-            // הסרת סימון מכל הפריטים
-            document.querySelectorAll('.question-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            currentEditingKey = null;
-
-            const editContent = document.getElementById('editContent');
-            editContent.innerHTML = `
-                <h2>➕ שאלה חדשה</h2>
-                <div class="form-group">
-                    <label>שם התשובה:</label>
-                    <input type="text" id="qaName" placeholder="לדוגמה: מבצעים">
-                </div>
-                
-                <div class="form-group">
-                    <label>מילות מפתח (מופרדות בפסיקים):</label>
-                    <input type="text" id="qaKeywords" placeholder="מבצע, הנחה, זול יותר">
-                </div>
-                
-                <div class="form-group">
-                    <label>תשובת הבוט:</label>
-                    <textarea id="qaResponse" placeholder="הכנס כאן את התשובה המלאה..."></textarea>
-                </div>
-                
-                <div class="edit-buttons">
-                    <button class="btn btn-primary" onclick="saveQuestion()">💾 שמור</button>
-                </div>
-            `;
-            
-            // הבטח שהכפתורים המהירים נטענים
-            loadQuickRepliesManager();
-        }
-
-        // שמירת שאלה
-        function saveQuestion() {
-            const name = document.getElementById('qaName').value.trim();
-            const keywords = document.getElementById('qaKeywords').value.split(',').map(k => k.trim()).filter(k => k);
-            const response = document.getElementById('qaResponse').value.trim();
-            
-            if (!name || !keywords.length || !response) {
-                alert('אנא מלא את כל השדות');
-                return;
-            }
-
-            // אם עורכים, מוחקים את הישן
-            if (currentEditingKey && currentEditingKey !== name) {
-                delete chatbotData[currentEditingKey];
-            }
-
-            // מוסיפים את החדש
-            chatbotData[name] = {
-                response: response,
-                keywords: keywords
-            };
-
-            loadQuestionsList();
-            loadQuickRepliesManager(); // רענון האפשרויות בכפתורים
-            
-            // הצגת הודעת הצלחה
-            const saveBtn = event.target;
-            const originalText = saveBtn.innerHTML;
-            saveBtn.innerHTML = '✅ נשמר!';
-            saveBtn.style.background = '#10b981';
-            
-            setTimeout(() => {
-                saveBtn.innerHTML = originalText;
-                saveBtn.style.background = '';
-            }, 2000);
-        }
-
-        // מחיקת שאלה
-        function deleteQuestion() {
-            if (currentEditingKey && confirm('האם אתה בטוח שברצונך למחוק את התשובה הזו?')) {
-                delete chatbotData[currentEditingKey];
-                loadQuestionsList();
-                loadQuickRepliesManager();
-                
-                // חזור למצב ריק
-                const editContent = document.getElementById('editContent');
-                editContent.innerHTML = `
-                    <div class="empty-state">
-                        <h3>👈 בחר שאלה לעריכה</h3>
-                        <p>או לחץ על "שאלה חדשה" כדי להוסיף שאלה חדשה</p>
-                    </div>
-                `;
-                currentEditingKey = null;
-                
-                // הבטח שהכפתורים המהירים נטענים
-                loadQuickRepliesManager();
-            }
-        }
-
-        // בדיקת הצ'אטבוט
-        function testChatbot() {
-            const input = document.getElementById('previewInput');
-            const message = input.value.trim();
-            if (!message) return;
-
-            // הוסף הודעת משתמש
-            addPreviewMessage(message, 'user');
-            input.value = '';
-            input.style.height = 'auto';
-
-            // חפש תשובה
-            setTimeout(() => {
-                const response = findResponse(message);
-                addPreviewMessage(response, 'bot');
-            }, 500);
-        }
-
-        // מוסיף הודעה לתצוגה מקדימה
-        function addPreviewMessage(text, sender) {
-            const messages = document.getElementById('previewMessages');
-            const div = document.createElement('div');
-            div.className = `preview-message ${sender}`;
-            
-            const content = document.createElement('div');
-            content.className = 'preview-message-content';
-            content.textContent = text;
-            div.appendChild(content);
-            
-            messages.appendChild(div);
-            messages.scrollTop = messages.scrollHeight;
-        }
-
-        // חיפוש תשובה
-        function findResponse(message) {
-            const lowerMessage = message.toLowerCase().trim();
-            
-            for (const [key, data] of Object.entries(chatbotData)) {
-                if (data.keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))) {
-                    return data.response;
-                }
-            }
-            
-            return '🤔 אני לא בטוח שהבנתי את השאלה. נסה לשאול בצורה אחרת או צור קשר ישירות.';
-        }
-
-        // עדכון הצ'אטבוט
-        function updateChatbot() {
-            console.log('🔍 מעדכן צ\'אטבוט דרך ורסל API...');
-            
-            const btn = document.getElementById('updateChatbotBtn');
-            const originalHTML = btn.innerHTML;
-            
-            // הצגת מצב טעינה
-            btn.innerHTML = `
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="animation: spin 1s linear infinite;">
-                    <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                </svg>
-                שולח עדכון...
-            `;
-            
-            try {
-                const dataToSend = {
-                    quickReplies: quickRepliesData,
-                    responses: chatbotData,
-                    lastUpdate: Date.now(),
-                    version: '1.0.0'
-                };
-                
-                console.log('📤 שולח נתונים ל-API:', dataToSend);
-                
-                // שליחה לורסל API
-                fetch('https://wearablecode-pages.vercel.app/api/chatbot-data', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(dataToSend)
-                })
-                .then(response => {
-                    console.log('📡 תגובה מהשרת:', response.status);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('✅ תגובה מהשרת:', data);
-                    
-                    if (data.success) {
-                        // הצלחה!
-                        btn.classList.add('success');
-                        btn.innerHTML = `
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                            </svg>
-                            עודכן בהצלחה!
-                        `;
-                        
-                        showSuccessNotification();
-                        updateConnectionStatus();
-                        
-                        // שמירה מקומית גם כן
-                        localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(dataToSend));
-                        
-                        console.log('🚀 הצ\'אטבוט עודכן בהצלחה!');
-                    } else {
-                        throw new Error(data.message || 'שגיאה לא ידועה');
-                    }
-                })
-                .catch(error => {
-                    console.error('❌ שגיאה בעדכון:', error);
-                    btn.innerHTML = `❌ שגיאה: ${error.message}`;
-                    
-                    // ניסיון fallback עם localStorage
-                    try {
-                        localStorage.setItem('wearablecode_chatbot_data', JSON.stringify(dataToSend));
-                        console.log('💾 נשמר ב-localStorage כ-fallback');
-                    } catch (e) {
-                        console.error('❌ גם localStorage נכשל:', e);
-                    }
-                })
-                .finally(() => {
-                    // החזרת הכפתור למצב רגיל לאחר 3 שניות
-                    setTimeout(() => {
-                        btn.classList.remove('success');
-                        btn.innerHTML = originalHTML;
-                    }, 3000);
-                });
-                
-            } catch (error) {
-                console.error('❌ שגיאה כללית:', error);
-                btn.innerHTML = '❌ שגיאה בעדכון';
-                setTimeout(() => {
-                    btn.innerHTML = originalHTML;
-                }, 3000);
-            }
-        }
-
-        // Auto-resize textarea בתצוגה מקדימה
-        function setupPreviewInput() {
-            const input = document.getElementById('previewInput');
-            if (input) {
-                input.addEventListener('input', () => {
-                    input.style.height = 'auto';
-                    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
-                });
-            }
-        }
-
-        // Quick replies functionality
-        function setupQuickReplies() {
-            const quickReplies = document.getElementById('previewQuickReplies');
-            if (quickReplies) {
-                quickReplies.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('preview-quick-reply')) {
-                        const message = e.target.getAttribute('data-message');
-                        const input = document.getElementById('previewInput');
-                        input.value = message;
-                        testChatbot();
-                    }
-                });
-            }
-        }
-
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DOM נטען, מתחיל להגדיר...');
-            console.log('🔑 הסיסמה הנדרשת:', ADMIN_PASSWORD);
-            
-            // טען נתונים שמורים אם קיימים
-            const savedData = localStorage.getItem('wearablecode_chatbot_data');
-            if (savedData) {
-                try {
-                    const parsedData = JSON.parse(savedData);
-                    if (parsedData.responses) {
-                        chatbotData = parsedData.responses;
-                    }
-                    if (parsedData.quickReplies) {
-                        quickRepliesData = parsedData.quickReplies;
-                    }
-                    console.log('✅ נתונים נטענו מהזיכרון');
-                } catch (e) {
-                    console.log('❌ שגיאה בטעינת נתונים שמורים');
-                }
-            }
-            
-            checkAuth();
-            
-            // התחברות עם Enter
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    const loginScreen = document.getElementById('loginScreen');
-                    if (loginScreen && window.getComputedStyle(loginScreen).display !== 'none') {
-                        e.preventDefault();
-                        console.log('⌨️ Enter נלחץ - מתחבר');
-                        checkPassword();
-                    }
-                }
-            });
-            
-            // Setup preview components
-            setupPreviewInput();
-            setupQuickReplies();
-
-            // Enter בתצוגה מקדימה
-            const previewInput = document.getElementById('previewInput');
-            if (previewInput) {
-                previewInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        testChatbot();
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+            <button class="
