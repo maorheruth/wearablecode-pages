@@ -1,8 +1,14 @@
-// api/chatbot-store.js - Vercel KV Database API
-import { kv } from '@vercel/kv';
+// api/chatbot-store.js - Upstash Redis API
+import { Redis } from '@upstash/redis';
 
 const CHATBOT_KEY = 'wearablecode_chatbot_data';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Aawearableadmin';
+
+// Initialize Redis client
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL,
+  token: process.env.KV_REST_API_TOKEN,
+});
 
 export default async function handler(req, res) {
   // CORS headers
@@ -17,8 +23,8 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       // טעינת נתונים מהמסד
-      console.log('📖 טוען נתונים מ-KV...');
-      const data = await kv.get(CHATBOT_KEY);
+      console.log('📖 טוען נתונים מ-Upstash Redis...');
+      const data = await redis.get(CHATBOT_KEY);
       
       if (!data) {
         // נתונים ברירת מחדל אם אין כלום
@@ -51,13 +57,16 @@ export default async function handler(req, res) {
           version: '1.0.0'
         };
         
-        await kv.set(CHATBOT_KEY, defaultData);
+        await redis.set(CHATBOT_KEY, JSON.stringify(defaultData));
         console.log('🔧 נתונים ברירת מחדל נוצרו');
         return res.json({ success: true, data: defaultData });
       }
       
+      // Parse the data if it's a string
+      const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+      
       console.log('✅ נתונים נטענו בהצלחה');
-      return res.json({ success: true, data });
+      return res.json({ success: true, data: parsedData });
       
     } else if (req.method === 'POST') {
       // שמירת נתונים במסד
@@ -73,14 +82,14 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, message: 'אין נתונים לשמירה' });
       }
       
-      // שמירה ב-KV
+      // שמירה ב-Redis
       const dataToSave = {
         ...data,
         lastUpdate: Date.now()
       };
       
-      await kv.set(CHATBOT_KEY, dataToSave);
-      console.log('💾 נתונים נשמרו ב-KV');
+      await redis.set(CHATBOT_KEY, JSON.stringify(dataToSave));
+      console.log('💾 נתונים נשמרו ב-Upstash Redis');
       
       return res.json({ 
         success: true, 
