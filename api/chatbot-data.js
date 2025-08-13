@@ -1,6 +1,10 @@
 // api/chatbot-data.js
 // ורסל API endpoint לניהול נתוני הצ'אטבוט - גרסה דינמית עם CORS מתוקן
 
+// ⚡ זה הפתרון לבעיית הcache של ורסל!
+export const revalidate = 0; // מכביד את הcache לחלוטין
+export const dynamic = 'force-dynamic'; // מאלץ את הAPI להיות דינמי
+
 // נתונים שנשמרים בזיכרון - יתעדכנו רק מהפאנל אדמין
 let chatbotData = null;
 
@@ -52,10 +56,12 @@ export default function handler(req, res) {
     res.setHeader('Access-Control-Allow-Credentials', 'false');
     res.setHeader('Access-Control-Max-Age', '86400');
     
-    // הגדרת Cache headers
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    // הגדרת Cache headers - מחוזק יותר!
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
+    res.setHeader('Surrogate-Control', 'no-store');
+    res.setHeader('X-Vercel-Cache', 'MISS');
     
     console.log('🚀 API נקרא:', {
         method: req.method,
@@ -129,7 +135,8 @@ export default function handler(req, res) {
             ...(chatbotData || defaultData),
             timestamp: Date.now(),
             source: 'vercel-api',
-            dataSource: chatbotData ? 'admin-panel' : 'default'
+            dataSource: chatbotData ? 'admin-panel' : 'default',
+            cacheStatus: 'NO-CACHE' // מוסיף אינדיקטור שזה לא מcache
         };
 
         if (callback) {
