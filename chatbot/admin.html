@@ -273,6 +273,7 @@
             if (loginScreen && mainApp) {
                 loginScreen.style.display = 'none';
                 mainApp.style.display = 'block';
+                mainApp.style.visibility = 'visible'; // הוספה
                 console.log('✅ אפליקציה ראשית מוצגת');
                 
                 // נסה לטעון נתונים מהשרת
@@ -1030,7 +1031,6 @@
 
         /* Main App */
         .app-container {
-            display: none;
             height: 100vh;
             overflow: hidden;
         }
