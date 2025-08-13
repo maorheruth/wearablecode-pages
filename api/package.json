@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "firebase": "^10.7.1",
-    "@vercel/kv": "^1.0.1"
+    "@upstash/redis": "^1.25.1"
   }
 }
