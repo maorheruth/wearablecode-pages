@@ -230,8 +230,9 @@
 
         // כל שאר הקוד שלך נשאר בדיוק כמו שהיה...
         
-        // בדיקת התחברות בעת טעינת הדף
+        // בדיקת התחברות בעת טעינת הדף - תיקון
         function checkAuth() {
+            console.log('🔍 מתחיל בדיקת התחברות...');
             const stored = localStorage.getItem(PASSWORD_KEY);
             console.log('🔍 בודק התחברות שמורה:', stored ? 'קיים' : 'לא קיים');
             if (stored === 'authenticated') {
@@ -243,25 +244,62 @@
             }
         }
 
-        // הצגת מסך התחברות
+        // הצגת מסך התחברות - תיקון
         function showLoginScreen() {
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('passwordInput').focus();
+            console.log('🔑 מציג מסך התחברות');
+            const loginScreen = document.getElementById('loginScreen');
+            const mainApp = document.getElementById('mainApp');
+            
+            if (loginScreen && mainApp) {
+                loginScreen.style.display = 'flex';
+                mainApp.style.display = 'none';
+                console.log('✅ מסך התחברות מוצג');
+                
+                const passwordInput = document.getElementById('passwordInput');
+                if (passwordInput) {
+                    passwordInput.focus();
+                }
+            } else {
+                console.error('❌ לא מוצא את אלמנטי המסך');
+            }
         }
 
-        // הצגת האפליקציה הראשית - עודכן לטעון מהשרת
+        // הצגת האפליקציה הראשית - תיקון ועידכון לטעון מהשרת
         async function showMainApp() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
+            console.log('🚀 מציג אפליקציה ראשית');
+            const loginScreen = document.getElementById('loginScreen');
+            const mainApp = document.getElementById('mainApp');
             
-            // נסה לטעון נתונים מהשרת
-            await loadDataFromServer();
-            
-            loadQuestionsList();
-            loadQuickRepliesManager();
-            updatePreviewQuickReplies();
-            updateConnectionStatus();
+            if (loginScreen && mainApp) {
+                loginScreen.style.display = 'none';
+                mainApp.style.display = 'block';
+                console.log('✅ אפליקציה ראשית מוצגת');
+                
+                // נסה לטעון נתונים מהשרת
+                await loadDataFromServer();
+                
+                loadQuestionsList();
+                loadQuickRepliesManager();
+                updatePreviewQuickReplies();
+                updateConnectionStatus();
+                
+                // הוסף מאזין לכפתור שאלה חדשה
+                setTimeout(() => {
+                    const addBtn = document.getElementById('addQuestionBtn');
+                    if (addBtn) {
+                        addBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            console.log('🆕 לוחץ על כפתור שאלה חדשה');
+                            addNewQuestion();
+                        });
+                        console.log('✅ מאזין לכפתור הוגדר');
+                    } else {
+                        console.log('❌ לא מוצא כפתור שאלה חדשה');
+                    }
+                }, 500);
+            } else {
+                console.error('❌ לא מוצא את אלמנטי האפליקציה');
+            }
         }
 
         // בדיקת סיסמה
@@ -781,6 +819,12 @@
             console.log('🚀 DOM נטען, מתחיל להגדיר...');
             console.log('🔑 הסיסמה הנדרשת:', ADMIN_PASSWORD);
             
+            // בדיקה שהאלמנטים קיימים
+            const loginScreen = document.getElementById('loginScreen');
+            const mainApp = document.getElementById('mainApp');
+            console.log('🔍 loginScreen קיים:', !!loginScreen);
+            console.log('🔍 mainApp קיים:', !!mainApp);
+            
             const savedData = localStorage.getItem('wearablecode_chatbot_data');
             if (savedData) {
                 try {
@@ -823,21 +867,6 @@
                     }
                 });
             }
-
-            // תיקון: מאזין לכפתור שאלה חדשה
-            setTimeout(() => {
-                const addBtn = document.getElementById('addQuestionBtn');
-                if (addBtn) {
-                    addBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        console.log('🆕 לוחץ על כפתור שאלה חדשה');
-                        addNewQuestion();
-                    });
-                    console.log('✅ מאזין לכפתור הוגדר');
-                } else {
-                    console.log('❌ לא מוצא כפתור שאלה חדשה');
-                }
-            }, 1000);
         });
     </script>
 </body>
