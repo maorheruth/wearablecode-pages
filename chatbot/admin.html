@@ -8,7 +8,7 @@
                 <div id="questionsList">
                     <!-- Questions will be loaded here -->
                 </div>
-                <button class="add-question-btn" onclick="addNewQuestion()">➕ שאלה חדשה</button>
+                <button class="add-question-btn" id="addQuestionBtn">➕ שאלה חדשה</button>
             </div>
 
             <!-- Edit Panel -->
@@ -776,7 +776,7 @@
             }
         }
 
-        // Event listeners - תיקון
+        // Event listeners - תיקון מלא
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DOM נטען, מתחיל להגדיר...');
             console.log('🔑 הסיסמה הנדרשת:', ADMIN_PASSWORD);
@@ -824,27 +824,21 @@
                 });
             }
 
-            // תיקון: הוספת מאזין לכפתור שאלה חדשה
-            document.addEventListener('click', function(e) {
-                if (e.target && e.target.classList.contains('add-question-btn')) {
-                    e.preventDefault();
-                    console.log('🆕 לוחץ על כפתור שאלה חדשה');
-                    addNewQuestion();
+            // תיקון: מאזין לכפתור שאלה חדשה
+            setTimeout(() => {
+                const addBtn = document.getElementById('addQuestionBtn');
+                if (addBtn) {
+                    addBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('🆕 לוחץ על כפתור שאלה חדשה');
+                        addNewQuestion();
+                    });
+                    console.log('✅ מאזין לכפתור הוגדר');
+                } else {
+                    console.log('❌ לא מוצא כפתור שאלה חדשה');
                 }
-            });
+            }, 1000);
         });
-
-        // ווידוא שהפונקציה זמינה גלובלית
-        window.addNewQuestion = addNewQuestion;
-        window.selectQuestion = selectQuestion;
-        window.saveQuestion = saveQuestion;
-        window.deleteQuestion = deleteQuestion;
-        window.updateChatbot = updateChatbot;
-        window.saveToServer = saveToServer;
-        window.testChatbot = testChatbot;
-        window.checkPassword = checkPassword;
-        window.togglePassword = togglePassword;
-        window.logout = logout;
     </script>
 </body>
 </html>רדות בפסיקים):</label>
