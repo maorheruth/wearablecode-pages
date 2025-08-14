@@ -1,14 +1,16 @@
 // api/chatbot-data.js
-// ורסל API endpoint לניהול נתוני הצ'אטבוט - גרסה דינמית עם CORS מתוקן
+// ורסל API endpoint לניהול נתוני הצ'אטבוט - גרסה עם Upstash KV
 
-// ⚡ זה הפתרון לבעיית הcache של ורסל!
-export const revalidate = 0; // מכביד את הcache לחלוטין
-export const dynamic = 'force-dynamic'; // מאלץ את הAPI להיות דינמי
+import { kv } from '@vercel/kv';
 
-// נתונים שנשמרים בזיכרון - יתעדכנו רק מהפאנל אדמין
-let chatbotData = null;
+// ⚡ פתרון cache של ורסל
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
-// ברירות מחדל רק לפעם הראשונה (יימחקו אחרי העדכון הראשון)
+// מפתח לשמירה ב-KV
+const KV_KEY = 'wearablecode_chatbot_data';
+
+// ברירות מחדל
 const defaultData = {
     quickReplies: [
         { text: 'מחירים', icon: '💰', topic: 'מחירים' },
@@ -48,15 +50,49 @@ const defaultData = {
     version: '1.0.0'
 };
 
-export default function handler(req, res) {
-    // הגדרות CORS מיידיות - פתוח לכל הדומיינים
+// פונקציה לטעינת נתונים מ-KV
+async function loadDataFromKV() {
+    try {
+        console.log('📡 מנסה לטעון נתונים מ-KV...');
+        const data = await kv.get(KV_KEY);
+        
+        if (data && typeof data === 'object') {
+            console.log('✅ נתונים נטענו מ-KV בהצלחה!');
+            return data;
+        } else {
+            console.log('📝 נתונים לא נמצאו ב-KV, משתמש בברירת מחדל');
+            // שמור ברירת מחדל ב-KV
+            await saveDataToKV(defaultData);
+            return defaultData;
+        }
+    } catch (error) {
+        console.error('❌ שגיאה בטעינת נתונים מ-KV:', error);
+        return defaultData;
+    }
+}
+
+// פונקציה לשמירת נתונים ב-KV
+async function saveDataToKV(data) {
+    try {
+        console.log('💾 שומר נתונים ב-KV...');
+        await kv.set(KV_KEY, data);
+        console.log('✅ נתונים נשמרו ב-KV בהצלחה!');
+        return true;
+    } catch (error) {
+        console.error('❌ שגיאה בשמירת נתונים ב-KV:', error);
+        return false;
+    }
+}
+
+export default async function handler(req, res) {
+    // הגדרות CORS מיידיות
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', '*');
     res.setHeader('Access-Control-Allow-Credentials', 'false');
     res.setHeader('Access-Control-Max-Age', '86400');
     
-    // הגדרת Cache headers - מחוזק יותר!
+    // הגדרת Cache headers מחוזק
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
@@ -67,24 +103,19 @@ export default function handler(req, res) {
         method: req.method,
         url: req.url,
         query: req.query,
-        origin: req.headers.origin,
-        userAgent: req.headers['user-agent']?.slice(0, 50),
-        timestamp: new Date().toISOString(),
-        hasStoredData: chatbotData !== null
+        timestamp: new Date().toISOString()
     });
 
-    // טיפול ב-OPTIONS request (CORS preflight)
+    // טיפול ב-OPTIONS request
     if (req.method === 'OPTIONS') {
         console.log('✅ OPTIONS preflight handled');
         return res.status(200).end();
     }
 
     if (req.method === 'POST') {
-        // עדכון נתונים מהאדמין פאנל
         try {
             const newData = req.body;
             
-            // ולידציה בסיסית
             if (!newData || typeof newData !== 'object') {
                 console.log('❌ נתונים לא תקינים בPOST');
                 return res.status(400).json({
@@ -93,27 +124,35 @@ export default function handler(req, res) {
                 });
             }
 
-            // עדכון הנתונים המאוחסנים (יחליף את ברירת המחדל)
-            chatbotData = {
+            // הוסף timestamp לנתונים
+            const dataWithTimestamp = {
                 ...newData,
                 lastUpdate: Date.now()
             };
+
+            // שמור ב-KV Database
+            const saved = await saveDataToKV(dataWithTimestamp);
             
-            console.log('🔄 נתוני הצ\'אטבוט עודכנו מהפאנל אדמין:', {
-                timestamp: new Date().toISOString(),
-                responses: Object.keys(chatbotData.responses || {}).length,
-                quickReplies: (chatbotData.quickReplies || []).length,
-                dataSource: 'admin-panel'
-            });
-            
-            return res.status(200).json({ 
-                success: true, 
-                message: 'נתונים עודכנו בהצלחה מהפאנל אדמין',
-                timestamp: chatbotData.lastUpdate,
-                responses: Object.keys(chatbotData.responses || {}).length,
-                quickReplies: (chatbotData.quickReplies || []).length,
-                dataSource: 'admin-panel'
-            });
+            if (saved) {
+                console.log('🔄 נתוני הצ\'אטבוט עודכנו ונשמרו ב-KV:', {
+                    timestamp: new Date().toISOString(),
+                    responses: Object.keys(dataWithTimestamp.responses || {}).length,
+                    quickReplies: (dataWithTimestamp.quickReplies || []).length,
+                    dataSource: 'admin-panel'
+                });
+                
+                return res.status(200).json({ 
+                    success: true, 
+                    message: 'נתונים עודכנו ונשמרו בהצלחה ב-KV Database',
+                    timestamp: dataWithTimestamp.lastUpdate,
+                    responses: Object.keys(dataWithTimestamp.responses || {}).length,
+                    quickReplies: (dataWithTimestamp.quickReplies || []).length,
+                    dataSource: 'admin-panel',
+                    storage: 'kv-database'
+                });
+            } else {
+                throw new Error('שגיאה בשמירה ב-KV');
+            }
         } catch (error) {
             console.error('❌ שגיאה בעדכון נתונים:', error);
             return res.status(500).json({ 
@@ -124,31 +163,46 @@ export default function handler(req, res) {
     }
 
     if (req.method === 'GET') {
-        console.log('📡 בקשה לקריאת נתוני צ\'אטבוט:', new Date().toISOString());
-        
-        // בדיקה אם זה בקשת JSONP (עוקף CORS)
-        const callback = req.query.callback;
-        
-        // החזר נתונים מהפאנל אדמין אם קיימים, אחרת ברירת מחדל מעודכנת
-        const responseData = {
-            success: true,
-            ...(chatbotData || defaultData),
-            timestamp: Date.now(),
-            source: 'vercel-api',
-            dataSource: chatbotData ? 'admin-panel' : 'default',
-            cacheStatus: 'NO-CACHE' // מוסיף אינדיקטור שזה לא מcache
-        };
+        try {
+            console.log('📡 בקשה לקריאת נתוני צ\'אטבוט:', new Date().toISOString());
+            
+            // טען נתונים מ-KV Database
+            const savedData = await loadDataFromKV();
+            
+            const callback = req.query.callback;
+            
+            const responseData = {
+                success: true,
+                ...savedData,
+                timestamp: Date.now(),
+                source: 'vercel-api',
+                dataSource: 'kv-database',
+                cacheStatus: 'NO-CACHE'
+            };
 
-        if (callback) {
-            // JSONP response - עוקף בעיות CORS
-            console.log('🔄 מחזיר JSONP עם callback:', callback, '- מקור נתונים:', responseData.dataSource);
-            res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-            const jsonpResponse = `${callback}(${JSON.stringify(responseData)});`;
-            return res.status(200).send(jsonpResponse);
-        } else {
-            // JSON רגיל
-            console.log('📤 מחזיר JSON רגיל - מקור נתונים:', responseData.dataSource);
-            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            if (callback) {
+                console.log('🔄 מחזיר JSONP עם callback:', callback);
+                res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+                const jsonpResponse = `${callback}(${JSON.stringify(responseData)});`;
+                return res.status(200).send(jsonpResponse);
+            } else {
+                console.log('📤 מחזיר JSON רגיל מ-KV Database');
+                res.setHeader('Content-Type', 'application/json; charset=utf-8');
+                return res.status(200).json(responseData);
+            }
+        } catch (error) {
+            console.error('❌ שגיאה בקריאת נתונים:', error);
+            
+            // במקרה של שגיאה, החזר ברירת מחדל
+            const responseData = {
+                success: true,
+                ...defaultData,
+                timestamp: Date.now(),
+                source: 'vercel-api',
+                dataSource: 'default-fallback',
+                error: error.message
+            };
+            
             return res.status(200).json(responseData);
         }
     }
