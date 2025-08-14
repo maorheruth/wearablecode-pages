@@ -1,19 +1,14 @@
 // api/chatbot-data.js
-// ורסל API endpoint לניהול נתוני הצ'אטבוט - גרסה עם Upstash Redis
+// ורסל API endpoint לניהול נתוני הצ'אטבוט - גרסה דינמית עם CORS מתוקן
 
-import { Redis } from '@upstash/redis';
+// ⚡ זה הפתרון לבעיית הcache של ורסל!
+export const revalidate = 0; // מכביד את הcache לחלוטין
+export const dynamic = 'force-dynamic'; // מאלץ את הAPI להיות דינמי
 
-// ⚡ פתרון cache של ורסל
-export const revalidate = 0;
-export const dynamic = 'force-dynamic';
+// נתונים שנשמרים בזיכרון - יתעדכנו רק מהפאנל אדמין
+let chatbotData = null;
 
-// יצירת חיבור לUpstash Redis
-const redis = Redis.fromEnv();
-
-// מפתח לשמירה ב-Redis
-const REDIS_KEY = 'wearablecode_chatbot_data';
-
-// ברירות מחדל
+// ברירות מחדל רק לפעם הראשונה (יימחקו אחרי העדכון הראשון)
 const defaultData = {
     quickReplies: [
         { text: 'מחירים', icon: '💰', topic: 'מחירים' },
@@ -53,54 +48,116 @@ const defaultData = {
     version: '1.0.0'
 };
 
-// פונקציה לטעינת נתונים מ-Redis
-async function loadDataFromRedis() {
-    try {
-        console.log('📡 מנסה לטעון נתונים מ-Upstash Redis...');
-        const data = await redis.get(REDIS_KEY);
-        
-        if (data && typeof data === 'object') {
-            console.log('✅ נתונים נטענו מ-Redis בהצלחה!', {
-                responses: Object.keys(data.responses || {}).length,
-                quickReplies: (data.quickReplies || []).length,
-                lastUpdate: data.lastUpdate
-            });
-            return data;
-        } else {
-            console.log('📝 נתונים לא נמצאו ב-Redis, יוצר ברירת מחדל חדשה');
-            // שמור ברירת מחדל ב-Redis
-            await saveDataToRedis(defaultData);
-            return defaultData;
-        }
-    } catch (error) {
-        console.error('❌ שגיאה בטעינת נתונים מ-Redis:', error);
-        return defaultData;
-    }
-}
-
-// פונקציה לשמירת נתונים ב-Redis
-async function saveDataToRedis(data) {
-    try {
-        console.log('💾 שומר נתונים ב-Upstash Redis...', {
-            responses: Object.keys(data.responses || {}).length,
-            quickReplies: (data.quickReplies || []).length
-        });
-        
-        await redis.set(REDIS_KEY, data);
-        console.log('✅ נתונים נשמרו ב-Redis בהצלחה!');
-        return true;
-    } catch (error) {
-        console.error('❌ שגיאה בשמירת נתונים ב-Redis:', error);
-        return false;
-    }
-}
-
-export default async function handler(req, res) {
-    // הגדרות CORS מיידיות
+export default function handler(req, res) {
+    // הגדרות CORS מיידיות - פתוח לכל הדומיינים
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', '*');
     res.setHeader('Access-Control-Allow-Credentials', 'false');
     res.setHeader('Access-Control-Max-Age', '86400');
     
-    // הגדרת Cache headers מחוזק -
+    // הגדרת Cache headers - מחוזק יותר!
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('Surrogate-Control', 'no-store');
+    res.setHeader('X-Vercel-Cache', 'MISS');
+    
+    console.log('🚀 API נקרא:', {
+        method: req.method,
+        url: req.url,
+        query: req.query,
+        origin: req.headers.origin,
+        userAgent: req.headers['user-agent']?.slice(0, 50),
+        timestamp: new Date().toISOString(),
+        hasStoredData: chatbotData !== null
+    });
+
+    // טיפול ב-OPTIONS request (CORS preflight)
+    if (req.method === 'OPTIONS') {
+        console.log('✅ OPTIONS preflight handled');
+        return res.status(200).end();
+    }
+
+    if (req.method === 'POST') {
+        // עדכון נתונים מהאדמין פאנל
+        try {
+            const newData = req.body;
+            
+            // ולידציה בסיסית
+            if (!newData || typeof newData !== 'object') {
+                console.log('❌ נתונים לא תקינים בPOST');
+                return res.status(400).json({
+                    success: false,
+                    message: 'נתונים לא תקינים'
+                });
+            }
+
+            // עדכון הנתונים המאוחסנים (יחליף את ברירת המחדל)
+            chatbotData = {
+                ...newData,
+                lastUpdate: Date.now()
+            };
+            
+            console.log('🔄 נתוני הצ\'אטבוט עודכנו מהפאנל אדמין:', {
+                timestamp: new Date().toISOString(),
+                responses: Object.keys(chatbotData.responses || {}).length,
+                quickReplies: (chatbotData.quickReplies || []).length,
+                dataSource: 'admin-panel'
+            });
+            
+            return res.status(200).json({ 
+                success: true, 
+                message: 'נתונים עודכנו בהצלחה מהפאנל אדמין',
+                timestamp: chatbotData.lastUpdate,
+                responses: Object.keys(chatbotData.responses || {}).length,
+                quickReplies: (chatbotData.quickReplies || []).length,
+                dataSource: 'admin-panel'
+            });
+        } catch (error) {
+            console.error('❌ שגיאה בעדכון נתונים:', error);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'שגיאה בעדכון הנתונים: ' + error.message
+            });
+        }
+    }
+
+    if (req.method === 'GET') {
+        console.log('📡 בקשה לקריאת נתוני צ\'אטבוט:', new Date().toISOString());
+        
+        // בדיקה אם זה בקשת JSONP (עוקף CORS)
+        const callback = req.query.callback;
+        
+        // החזר נתונים מהפאנל אדמין אם קיימים, אחרת ברירת מחדל מעודכנת
+        const responseData = {
+            success: true,
+            ...(chatbotData || defaultData),
+            timestamp: Date.now(),
+            source: 'vercel-api',
+            dataSource: chatbotData ? 'admin-panel' : 'default',
+            cacheStatus: 'NO-CACHE' // מוסיף אינדיקטור שזה לא מcache
+        };
+
+        if (callback) {
+            // JSONP response - עוקף בעיות CORS
+            console.log('🔄 מחזיר JSONP עם callback:', callback, '- מקור נתונים:', responseData.dataSource);
+            res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+            const jsonpResponse = `${callback}(${JSON.stringify(responseData)});`;
+            return res.status(200).send(jsonpResponse);
+        } else {
+            // JSON רגיל
+            console.log('📤 מחזיר JSON רגיל - מקור נתונים:', responseData.dataSource);
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            return res.status(200).json(responseData);
+        }
+    }
+
+    // Method לא נתמך
+    console.log('❌ שיטה לא נתמכת:', req.method);
+    res.status(405).json({ 
+        error: 'Method not allowed',
+        allowedMethods: ['GET', 'POST', 'OPTIONS'],
+        received: req.method
+    });
+}
