@@ -1,14 +1,17 @@
 // api/chatbot-data.js
-// ורסל API endpoint לניהול נתוני הצ'אטבוט - גרסה עם Upstash KV
+// ורסל API endpoint לניהול נתוני הצ'אטבוט - גרסה עם Upstash Redis
 
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 
 // ⚡ פתרון cache של ורסל
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
 
-// מפתח לשמירה ב-KV
-const KV_KEY = 'wearablecode_chatbot_data';
+// יצירת חיבור לUpstash Redis
+const redis = Redis.fromEnv();
+
+// מפתח לשמירה ב-Redis
+const REDIS_KEY = 'wearablecode_chatbot_data';
 
 // ברירות מחדל
 const defaultData = {
@@ -50,36 +53,44 @@ const defaultData = {
     version: '1.0.0'
 };
 
-// פונקציה לטעינת נתונים מ-KV
-async function loadDataFromKV() {
+// פונקציה לטעינת נתונים מ-Redis
+async function loadDataFromRedis() {
     try {
-        console.log('📡 מנסה לטעון נתונים מ-KV...');
-        const data = await kv.get(KV_KEY);
+        console.log('📡 מנסה לטעון נתונים מ-Upstash Redis...');
+        const data = await redis.get(REDIS_KEY);
         
         if (data && typeof data === 'object') {
-            console.log('✅ נתונים נטענו מ-KV בהצלחה!');
+            console.log('✅ נתונים נטענו מ-Redis בהצלחה!', {
+                responses: Object.keys(data.responses || {}).length,
+                quickReplies: (data.quickReplies || []).length,
+                lastUpdate: data.lastUpdate
+            });
             return data;
         } else {
-            console.log('📝 נתונים לא נמצאו ב-KV, משתמש בברירת מחדל');
-            // שמור ברירת מחדל ב-KV
-            await saveDataToKV(defaultData);
+            console.log('📝 נתונים לא נמצאו ב-Redis, יוצר ברירת מחדל חדשה');
+            // שמור ברירת מחדל ב-Redis
+            await saveDataToRedis(defaultData);
             return defaultData;
         }
     } catch (error) {
-        console.error('❌ שגיאה בטעינת נתונים מ-KV:', error);
+        console.error('❌ שגיאה בטעינת נתונים מ-Redis:', error);
         return defaultData;
     }
 }
 
-// פונקציה לשמירת נתונים ב-KV
-async function saveDataToKV(data) {
+// פונקציה לשמירת נתונים ב-Redis
+async function saveDataToRedis(data) {
     try {
-        console.log('💾 שומר נתונים ב-KV...');
-        await kv.set(KV_KEY, data);
-        console.log('✅ נתונים נשמרו ב-KV בהצלחה!');
+        console.log('💾 שומר נתונים ב-Upstash Redis...', {
+            responses: Object.keys(data.responses || {}).length,
+            quickReplies: (data.quickReplies || []).length
+        });
+        
+        await redis.set(REDIS_KEY, data);
+        console.log('✅ נתונים נשמרו ב-Redis בהצלחה!');
         return true;
     } catch (error) {
-        console.error('❌ שגיאה בשמירת נתונים ב-KV:', error);
+        console.error('❌ שגיאה בשמירת נתונים ב-Redis:', error);
         return false;
     }
 }
@@ -92,126 +103,4 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Credentials', 'false');
     res.setHeader('Access-Control-Max-Age', '86400');
     
-    // הגדרת Cache headers מחוזק
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-    res.setHeader('Surrogate-Control', 'no-store');
-    res.setHeader('X-Vercel-Cache', 'MISS');
-    
-    console.log('🚀 API נקרא:', {
-        method: req.method,
-        url: req.url,
-        query: req.query,
-        timestamp: new Date().toISOString()
-    });
-
-    // טיפול ב-OPTIONS request
-    if (req.method === 'OPTIONS') {
-        console.log('✅ OPTIONS preflight handled');
-        return res.status(200).end();
-    }
-
-    if (req.method === 'POST') {
-        try {
-            const newData = req.body;
-            
-            if (!newData || typeof newData !== 'object') {
-                console.log('❌ נתונים לא תקינים בPOST');
-                return res.status(400).json({
-                    success: false,
-                    message: 'נתונים לא תקינים'
-                });
-            }
-
-            // הוסף timestamp לנתונים
-            const dataWithTimestamp = {
-                ...newData,
-                lastUpdate: Date.now()
-            };
-
-            // שמור ב-KV Database
-            const saved = await saveDataToKV(dataWithTimestamp);
-            
-            if (saved) {
-                console.log('🔄 נתוני הצ\'אטבוט עודכנו ונשמרו ב-KV:', {
-                    timestamp: new Date().toISOString(),
-                    responses: Object.keys(dataWithTimestamp.responses || {}).length,
-                    quickReplies: (dataWithTimestamp.quickReplies || []).length,
-                    dataSource: 'admin-panel'
-                });
-                
-                return res.status(200).json({ 
-                    success: true, 
-                    message: 'נתונים עודכנו ונשמרו בהצלחה ב-KV Database',
-                    timestamp: dataWithTimestamp.lastUpdate,
-                    responses: Object.keys(dataWithTimestamp.responses || {}).length,
-                    quickReplies: (dataWithTimestamp.quickReplies || []).length,
-                    dataSource: 'admin-panel',
-                    storage: 'kv-database'
-                });
-            } else {
-                throw new Error('שגיאה בשמירה ב-KV');
-            }
-        } catch (error) {
-            console.error('❌ שגיאה בעדכון נתונים:', error);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'שגיאה בעדכון הנתונים: ' + error.message
-            });
-        }
-    }
-
-    if (req.method === 'GET') {
-        try {
-            console.log('📡 בקשה לקריאת נתוני צ\'אטבוט:', new Date().toISOString());
-            
-            // טען נתונים מ-KV Database
-            const savedData = await loadDataFromKV();
-            
-            const callback = req.query.callback;
-            
-            const responseData = {
-                success: true,
-                ...savedData,
-                timestamp: Date.now(),
-                source: 'vercel-api',
-                dataSource: 'kv-database',
-                cacheStatus: 'NO-CACHE'
-            };
-
-            if (callback) {
-                console.log('🔄 מחזיר JSONP עם callback:', callback);
-                res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-                const jsonpResponse = `${callback}(${JSON.stringify(responseData)});`;
-                return res.status(200).send(jsonpResponse);
-            } else {
-                console.log('📤 מחזיר JSON רגיל מ-KV Database');
-                res.setHeader('Content-Type', 'application/json; charset=utf-8');
-                return res.status(200).json(responseData);
-            }
-        } catch (error) {
-            console.error('❌ שגיאה בקריאת נתונים:', error);
-            
-            // במקרה של שגיאה, החזר ברירת מחדל
-            const responseData = {
-                success: true,
-                ...defaultData,
-                timestamp: Date.now(),
-                source: 'vercel-api',
-                dataSource: 'default-fallback',
-                error: error.message
-            };
-            
-            return res.status(200).json(responseData);
-        }
-    }
-
-    // Method לא נתמך
-    console.log('❌ שיטה לא נתמכת:', req.method);
-    res.status(405).json({ 
-        error: 'Method not allowed',
-        allowedMethods: ['GET', 'POST', 'OPTIONS'],
-        received: req.method
-    });
-}
+    // הגדרת Cache headers מחוזק -
